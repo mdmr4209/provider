@@ -1,0 +1,17 @@
+flutter_native_splash:
+  android: true
+  ios: true
+  web: true
+
+  color: "#624C2A"
+  image: "assets/image/logo2.png"
+
+  color_dark: "#624C2A"
+  image_dark: "assets/image/logo2.png"
+
+  android_12:
+    color: "#624C2A"
+    image: "assets/image/logo.png"
+
+    color_dark: "#624C2A"
+    image_dark: "assets/image/logo.png"
