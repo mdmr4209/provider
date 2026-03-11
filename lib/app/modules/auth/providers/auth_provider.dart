@@ -12,13 +12,11 @@ import '../../../../res/components/base_client.dart';
 import '../../../../widgets/custom_snack_bar.dart';
 import '../../../routes/app_router.dart';
 
-
 /// Pure ChangeNotifier — zero BuildContext, zero Navigator.
 /// Navigation is done via GoRouter using the routerKey set in main.dart.
 class AuthProvider extends ChangeNotifier {
   final ApiService apiService;
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
-
 
   /// Set this from main.dart: AuthProvider.routerKey = _routerKey;
   static GlobalKey<NavigatorState>? routerKey;
@@ -32,54 +30,65 @@ class AuthProvider extends ChangeNotifier {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   // ── State ──────────────────────────────────────────────────────────────────
-  bool _isOtpVerified      = false;
-  bool _isLoading          = false;
-  bool _isCheckingToken    = true;
-  bool _isLoggedIn         = false;
-  bool _isSignedIn         = false;
-  bool _isRemembered       = false;
-  bool _isPasswordVisible  = true;
+  bool _isOtpVerified = false;
+  bool _isLoading = false;
+  bool _isCheckingToken = true;
+  bool _isLoggedIn = false;
+  bool _isSignedIn = false;
+  bool _isRemembered = false;
+  bool _isPasswordVisible = true;
 
   String _errorMessage = '';
-  String _signupEmail  = '';
-  String _accessToken  = '';
+  String _signupEmail = '';
+  String _accessToken = '';
   String _refreshToken = '';
-  String _id           = '';
+  String _id = '';
 
-  int    _secondsRemaining = 60;
-  String _formattedTime    = '01:00';
+  int _secondsRemaining = 60;
+  String _formattedTime = '01:00';
   Timer? _timer;
 
   // ── Text controllers ───────────────────────────────────────────────────────
-  final TextEditingController emailController         = TextEditingController();
-  final TextEditingController passwordController      = TextEditingController();
-  final TextEditingController setPasswordController   = TextEditingController();
-  final TextEditingController signupEmailController   = TextEditingController();
-  final TextEditingController forgetEmailController   = TextEditingController();
-  final TextEditingController otpController           = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController setPasswordController = TextEditingController();
+  final TextEditingController signupEmailController = TextEditingController();
+  final TextEditingController forgetEmailController = TextEditingController();
+  final TextEditingController otpController = TextEditingController();
 
   // ── Getters ────────────────────────────────────────────────────────────────
-  bool   get isOtpVerified      => _isOtpVerified;
-  bool   get isLoading          => _isLoading;
-  bool   get isCheckingToken    => _isCheckingToken;
-  bool   get isLoggedIn         => _isLoggedIn;
-  bool   get isSignedIn         => _isSignedIn;
-  bool   get isRemembered       => _isRemembered;
-  bool   get isPasswordVisible  => _isPasswordVisible;
-  String get errorMessage       => _errorMessage;
-  String get signupEmail        => _signupEmail;
-  String get accessToken        => _accessToken;
-  String get refreshToken       => _refreshToken;
-  String get id                 => _id;
-  int    get secondsRemaining   => _secondsRemaining;
-  String get formattedTime      => _formattedTime;
+  bool get isOtpVerified => _isOtpVerified;
+  bool get isLoading => _isLoading;
+  bool get isCheckingToken => _isCheckingToken;
+  bool get isLoggedIn => _isLoggedIn;
+  bool get isSignedIn => _isSignedIn;
+  bool get isRemembered => _isRemembered;
+  bool get isPasswordVisible => _isPasswordVisible;
+  String get errorMessage => _errorMessage;
+  String get signupEmail => _signupEmail;
+  String get accessToken => _accessToken;
+  String get refreshToken => _refreshToken;
+  String get id => _id;
+  int get secondsRemaining => _secondsRemaining;
+  String get formattedTime => _formattedTime;
 
   // ── Toggle helpers ─────────────────────────────────────────────────────────
-  void toggleRemembered()       { _isRemembered      = !_isRemembered;      notifyListeners(); }
-  void togglePasswordVisibility(){ _isPasswordVisible = !_isPasswordVisible; notifyListeners(); }
+  void toggleRemembered() {
+    _isRemembered = !_isRemembered;
+    notifyListeners();
+  }
+
+  void togglePasswordVisibility() {
+    _isPasswordVisible = !_isPasswordVisible;
+    notifyListeners();
+  }
 
   void updateOtp(String value) {
-    _isOtpVerified = value.length == 6;
+    if (value.length == 6) {
+      _isOtpVerified = true;
+    } else {
+      _isOtpVerified = false;
+    }
     notifyListeners();
   }
 
@@ -87,7 +96,7 @@ class AuthProvider extends ChangeNotifier {
   void startTimer() {
     stopTimer();
     _secondsRemaining = 60;
-    _formattedTime    = '01:00';
+    _formattedTime = '01:00';
     notifyListeners();
     _timer = Timer.periodic(const Duration(seconds: 1), (t) {
       if (_secondsRemaining > 0) {
@@ -120,13 +129,13 @@ class AuthProvider extends ChangeNotifier {
       _isCheckingToken = true;
       notifyListeners();
 
-      final token  = await BaseClient.getAccessToken();
+      final token = await BaseClient.getAccessToken();
       final verify = await BaseClient.getStored(key: 'verify');
 
       if (token != null && token.isNotEmpty) {
         _accessToken = token;
-        _isLoggedIn  = verify == 'yes';
-        _isSignedIn  = true;
+        _isLoggedIn = verify == 'yes';
+        _isSignedIn = true;
       } else {
         _isLoggedIn = false;
       }
@@ -145,10 +154,12 @@ class AuthProvider extends ChangeNotifier {
     try {
       final response = await apiService.refreshToken(refresh);
       if (response['statusCode'] == 200) {
-        _accessToken  = response['data']['access']   as String;
-        _refreshToken = response['data']['refresh']  as String;
+        _accessToken = response['data']['access'] as String;
+        _refreshToken = response['data']['refresh'] as String;
         await BaseClient.storeTokens(
-            accessToken: _accessToken, refreshToken: _refreshToken);
+          accessToken: _accessToken,
+          refreshToken: _refreshToken,
+        );
         notifyListeners();
         return true;
       }
@@ -165,8 +176,9 @@ class AuthProvider extends ChangeNotifier {
       _setLoading(true);
       final result = await FacebookAuth.instance.login();
       if (result.status == LoginStatus.success && result.accessToken != null) {
-        final credential =
-            FacebookAuthProvider.credential(result.accessToken!.tokenString);
+        final credential = FacebookAuthProvider.credential(
+          result.accessToken!.tokenString,
+        );
         final uc = await FirebaseAuth.instance.signInWithCredential(credential);
         debugPrint('FB user: ${uc.user?.email}');
       }
@@ -185,7 +197,7 @@ class AuthProvider extends ChangeNotifier {
       final googleAuth = await googleUser.authentication;
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
-        idToken:     googleAuth.idToken,
+        idToken: googleAuth.idToken,
       );
       final uc = await _firebaseAuth.signInWithCredential(credential);
       debugPrint('Google user: ${uc.user?.email}');
@@ -198,7 +210,7 @@ class AuthProvider extends ChangeNotifier {
 
   // ── Core auth methods (no BuildContext) ────────────────────────────────────
   Future<void> login() async {
-    final email    = emailController.text.trim();
+    final email = emailController.text.trim();
     final password = passwordController.text;
     debugPrint('login: $email');
 
@@ -247,11 +259,14 @@ class AuthProvider extends ChangeNotifier {
         _signupEmail = email;
         notifyListeners();
         showSuccessSnackBar(
-            message: response['data']['message'] ?? 'OTP sent to your email');
+          message: response['data']['message'] ?? 'OTP sent to your email',
+        );
         _go(AppRoutes.otpVerify, extra: 'Signup');
       } else {
-        _errorMessage = response['data']['error'] ??
-            response['data']['message'] ?? 'Signup failed';
+        _errorMessage =
+            response['data']['error'] ??
+            response['data']['message'] ??
+            'Signup failed';
         showErrorSnackBar(message: 'Signup failed: $_errorMessage');
         notifyListeners();
       }
@@ -272,18 +287,21 @@ class AuthProvider extends ChangeNotifier {
       if (response['statusCode'] == 201) {
         _signupEmail = email;
         notifyListeners();
-        showSuccessSnackBar(
-            message: response['data']['message'] ?? 'OTP sent');
+        showSuccessSnackBar(message: response['data']['message'] ?? 'OTP sent');
         _go(AppRoutes.otpVerify, extra: 'Forget');
       } else {
-        _errorMessage = response['data']['error'] ??
-            response['data']['message'] ?? 'Request failed';
+        _errorMessage =
+            response['data']['error'] ??
+            response['data']['message'] ??
+            'Request failed';
         showErrorSnackBar(message: _errorMessage);
         notifyListeners();
+        _go(AppRoutes.otpVerify, extra: 'Forget');
       }
     } catch (e) {
       debugPrint('forget error: $e');
       showErrorSnackBar(message: 'Request failed: $e');
+      _go(AppRoutes.otpVerify, extra: 'Forget');
     } finally {
       _setLoading(false);
     }
@@ -291,7 +309,7 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> verifyOtp({String? origin}) async {
     final email = _signupEmail;
-    final otp   = otpController.text.trim();
+    final otp = otpController.text.trim();
     debugPrint('verifyOtp email=$email otp=$otp');
     try {
       _setLoading(true);
@@ -300,8 +318,10 @@ class AuthProvider extends ChangeNotifier {
         showSuccessSnackBar(message: 'Verified. Now set your password.');
         _go(AppRoutes.changePass, extra: origin ?? 'Signup');
       } else {
-        _errorMessage = response['data']['error'] ??
-            response['data']['message'] ?? 'Invalid OTP';
+        _errorMessage =
+            response['data']['error'] ??
+            response['data']['message'] ??
+            'Invalid OTP';
         showErrorSnackBar(message: 'OTP verification failed: $_errorMessage');
         notifyListeners();
       }
@@ -314,17 +334,17 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> setPassword({String? origin}) async {
-    final email    = _signupEmail;
+    final email = _signupEmail;
     final password = setPasswordController.text;
     debugPrint('setPassword email=$email');
     try {
       _setLoading(true);
       final response = await apiService.setPassword(email, password);
       if (response['statusCode'] == 201) {
-        final data    = response['data'];
-        final access  = data['access_token']  as String?;
+        final data = response['data'];
+        final access = data['access_token'] as String?;
         final refresh = data['refresh_token'] as String?;
-        final verify  = data['verify']  ?? 'no';
+        final verify = data['verify'] ?? 'no';
         final message = data['message'] ?? 'Password set successfully';
 
         if (access == null || access.isEmpty) {
@@ -332,11 +352,13 @@ class AuthProvider extends ChangeNotifier {
         }
 
         await BaseClient.storeTokens(
-            accessToken: access, refreshToken: refresh ?? '');
+          accessToken: access,
+          refreshToken: refresh ?? '',
+        );
         await BaseClient.store(key: 'verify', value: verify);
-        _accessToken  = access;
+        _accessToken = access;
         _refreshToken = refresh ?? '';
-        _isSignedIn   = true;
+        _isSignedIn = true;
         notifyListeners();
         showSuccessSnackBar(message: message);
         await registerFcmToken();
@@ -348,8 +370,10 @@ class AuthProvider extends ChangeNotifier {
           notifyListeners(); // GoRouter redirect → /home
         }
       } else {
-        _errorMessage = response['data']['error'] ??
-            response['data']['message'] ?? 'Failed to set password';
+        _errorMessage =
+            response['data']['error'] ??
+            response['data']['message'] ??
+            'Failed to set password';
         showErrorSnackBar(message: 'Failed to set password: $_errorMessage');
         notifyListeners();
       }
@@ -392,11 +416,13 @@ class AuthProvider extends ChangeNotifier {
   // ── FCM ────────────────────────────────────────────────────────────────────
   Future<void> registerFcmToken() async {
     try {
-      final fcm    = await BaseClient.getStored(key: 'fcm_token');
+      final fcm = await BaseClient.getStored(key: 'fcm_token');
       final access = await BaseClient.getAccessToken();
       if (fcm == null || access == null) return;
       final response = await apiService.registerFcmToken(
-          accessToken: access, fcmToken: fcm);
+        accessToken: access,
+        fcmToken: fcm,
+      );
       debugPrint('FCM register: ${response['statusCode']}');
     } catch (e) {
       debugPrint('registerFcmToken error: $e');
@@ -405,19 +431,19 @@ class AuthProvider extends ChangeNotifier {
 
   // ── Clear ──────────────────────────────────────────────────────────────────
   void clear() {
-    _signupEmail      = '';
-    _accessToken      = '';
-    _refreshToken     = '';
-    _id               = '';
-    _isOtpVerified    = false;
-    _isSignedIn       = false;
-    _isLoggedIn       = false;
-    _errorMessage     = '';
-    _isRemembered     = false;
+    _signupEmail = '';
+    _accessToken = '';
+    _refreshToken = '';
+    _id = '';
+    _isOtpVerified = false;
+    _isSignedIn = false;
+    _isLoggedIn = false;
+    _errorMessage = '';
+    _isRemembered = false;
     _isPasswordVisible = true;
     stopTimer();
     _secondsRemaining = 60;
-    _formattedTime    = '01:00';
+    _formattedTime = '01:00';
     emailController.clear();
     passwordController.clear();
     setPasswordController.clear();

@@ -107,7 +107,7 @@ class _OtpVerifyViewState extends State<OtpVerifyView> {
                     ),
                     SizedBox(height: 16.h),
                     Text(
-                      'An SMS has been sent to ${auth.signupEmail} containing a code to activate your account',
+                      'An SMS has been sent to ${widget.origin=='forget'?auth.forgetEmailController.text:auth.signupEmail} containing a code to activate your account',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: const Color(0xFF666666),
@@ -156,7 +156,7 @@ class _OtpVerifyViewState extends State<OtpVerifyView> {
                     keyboardType: TextInputType.number,
                     controller: _otpController,
                     focusNode: _pinFocusNode,
-                    onChanged: (v) { auth.otpController.text = v; },
+                    onChanged: (v) { auth.otpController.text = v; auth.updateOtp(v);},
                     onCompleted: auth.updateOtp,
                   ),
                 ),

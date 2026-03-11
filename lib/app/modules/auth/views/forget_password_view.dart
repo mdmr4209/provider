@@ -7,6 +7,7 @@ import '../../../../res/assets/image_assets.dart';
 import '../../../../res/colors/app_color.dart';
 import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/input_text_widget.dart';
+import '../../../routes/app_router.dart';
 import '../providers/auth_provider.dart';
 
 class ForgetPasswordView extends StatelessWidget {
@@ -65,12 +66,12 @@ class ForgetPasswordView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 30),
-              auth.isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : CustomButton(
-                      onPress: () async {
+              CustomButton(
+                onPress: auth.isLoading
+                    ? null
+                    : () async {
                         if (auth.forgetEmailController.text.isNotEmpty) {
-                          await auth.forget();
+                         context.push(AppRoutes.otpVerify,extra: "forget");
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -80,9 +81,10 @@ class ForgetPasswordView extends StatelessWidget {
                           );
                         }
                       },
-                      title: 'Continue',
-                      fontWeight: FontWeight.w700,
-                    ),
+                loading: auth.isLoading,
+                title: 'Continue',
+                fontWeight: FontWeight.w700,
+              ),
             ],
           ),
         ),
