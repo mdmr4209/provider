@@ -1,17 +1,18 @@
 flutter_native_splash:
-  android: true
-  ios: true
-  web: true
-
-  color: "#624C2A"
+  color: "#FCEDEA"
   image: "assets/image/logo2.png"
 
-  color_dark: "#624C2A"
-  image_dark: "assets/image/logo2.png"
+  # This allows the splash to use the full screen area
+  fullscreen: true
+
+  # On older Android versions, this stretches the image
+  android_gravity: fill
+  # On iOS, this stretches the image
+  ios_content_mode: scaleAspectFill
 
   android_12:
-    color: "#624C2A"
+    color: "#FCEDEA"
     image: "assets/image/logo.png"
+    icon_background_color: "#FCEDEA"
 
-    color_dark: "#624C2A"
-    image_dark: "assets/image/logo.png"
+  web: true

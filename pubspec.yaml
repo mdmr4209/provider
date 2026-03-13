@@ -88,7 +88,7 @@ flutter_launcher_icons:
   ios: true
   image_path: "assets/image/splash.png"
   adaptive_icon_foreground: "assets/image/splash.png"
-  adaptive_icon_background: "#624C2A"
+  adaptive_icon_background: "#FCEDEA"
 
 dev_dependencies:
   flutter_test:
@@ -117,6 +117,7 @@ flutter:
     - assets/image/splash.png
     - assets/image/logo2.png
     - assets/image/logo.png
+    - assets/image/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

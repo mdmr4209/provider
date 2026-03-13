@@ -2,25 +2,42 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class AppColor {
-  static const Color defaultColor = Color(0xFF0B2088);
-  static const Color yellowColor = Color(0xFFEEA100);
+  static const Color defaultColor = Color(0xFFD05278);
+  static const Color backgroundColor = Color(0xFFFCEDEA);
+
+
+  static const Color textColor = Color(0xFF222222);
+  static const Color textColor2 = Color(0xFF666666);
+  static const Color indicatorColor = Color(0xFFF4CED3);
+  static const Color hintTextColor = Color(0xFF6A6A6A);
+  static const Color buttonColor = Color(0xFFAF48FF);
+
+  static const Color whiteColor = Color(0xFFFFFFFF);
+  static const Color blackColor = Color(0xFF000000);
+  static const Color redColor = Color(0xFFFF0000);
+
+
   static const Color warningColor = Color(0xFFFF710B);
+
+
+
+
+
+
+
+
+  static const Color yellowColor = Color(0xFFEEA100);
   static const Color defaultColor1 = Color(0x4D0B2088);
   static const Color redAlphaColor = Color(0xCCF44336);
   static const Color black20Color = Color(0x33000000);
   static const Color defaultDeepColor = Color(0xFF0A1C79);
   static const Color defaultLightColor = Color(0xFFC3D0FF);
   static const Color defaultLightColor2 = Color(0xFFE3E9FF);
-  static const Color textColor = Color(0xFF0E0E0E);
-  static const Color textColor2 = Color(0xFF333333);
   static const Color alphaColor = Color(0x1E000000);
   static const Color textColor1 = Color(0xFF515F84);
   static const Color greyColor = Color(0xFF4D4D4D);
-  static const Color backgroundColor = Color(0xFFF6F8FF);
   static const Color backgroundColor1 = Color(0xB3F6F8FF);
   static const Color chatColor = Color(0xFFE7E9F5);
-  static const Color hintTextColor = Color(0xFF6A6A6A);
-  static const Color buttonColor = Color(0xFF002AFF);
   static const Color seeAllColor = Color(0xFF2E47C7);
   static const Color savedColor = Color(0xFF040C35);
   static const Color linearColor = Color(0xFF000F5B);
@@ -38,7 +55,6 @@ class AppColor {
   static const Color otpColor = Color(0xFFDBDEEF);
   static const Color orangeColor = Color(0xFFB26E20);
   static const Color greenColor = Color(0xFF129201);
-  static const Color blackColor = Color(0xFF000000);
   static const Color greenLightColor = Color(0x8E9AFFB8);
   static const Color blueColor = Color(0xFF1D2B86);
   static const Color deepRedColor = Color(0xFF960808);
@@ -47,7 +63,6 @@ class AppColor {
   static const Color textAreaColor2 = Color(0xFFE8EBF0);
   static const Color containerColor4 = Color(0xFF929292);
 
-  static const Color redColor = Color(0xFFFF0000);
   static const Color orangeColor1 = Color(0xFFFB7065);
   static const Color textGreyColor = Color(0xFF85899D);
   static const Color heightBorderColor = Color(0xFFE0E0E0);
@@ -62,7 +77,6 @@ class AppColor {
   static const Color aboutDetailsColor = Color(0xFFF0F2F7);
   static const Color subTitleColor = Color(0xFFB5B6B9);
   static const Color backColor = Color(0xFF9095AC);
-  static const Color whiteColor = Color(0xFFFFFFFF);
   static const Color toggleColor = Color(0xFFE8EAF0);
   static const Color inactiveScroll = Color(0xFFAFAFAF);
 

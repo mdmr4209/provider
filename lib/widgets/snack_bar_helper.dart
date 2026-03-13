@@ -9,8 +9,13 @@ import '../../res/colors/app_color.dart';
 class SnackBarHelper {
   static GlobalKey<NavigatorState>? navigatorKey;
 
-  static BuildContext? get _context =>
-      navigatorKey?.currentState?.overlay?.context;
+  static BuildContext? get _context {
+    if (navigatorKey == null) {
+      debugPrint('SnackBarHelper: navigatorKey is not set yet');
+      return null;
+    }
+    return navigatorKey?.currentState?.overlay?.context;
+  }
 }
 
 // ── Types ──────────────────────────────────────────────────────────────────────
@@ -132,9 +137,9 @@ void showAppSnackBar({
     );
     overlay.insert(entry);
     Future.delayed(cfg.duration + const Duration(milliseconds: 300),
-        () {
-      if (entry.mounted) entry.remove();
-    });
+            () {
+          if (entry.mounted) entry.remove();
+        });
   });
 }
 

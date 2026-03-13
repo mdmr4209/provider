@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../res/assets/image_assets.dart';
@@ -20,170 +22,209 @@ class AuthView extends StatelessWidget {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
+        backgroundColor: AppColor.whiteColor,
         body: SafeArea(
-          child: Stack(
-            children: [
-              AnimatedPositioned(
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.easeIn,
-                top: isKeyboardOpen ? 50.h : 290.h,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: Consumer<AuthProvider>(
-                  builder: (context, auth, _) => ListView(
-                    padding: EdgeInsets.symmetric(horizontal: 35.w),
-                    children: [
-                      SizedBox(height: 20.h),
-                      Text(
-                        'Welcome back!',
-                        style: TextStyle(
-                          color: AppColor.textColor,
-                          fontSize: 27,
-                          fontFamily: 'Roboto',
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 1.20,
-                        ),
-                        textAlign: TextAlign.center,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  children: [
+                    Spacer(),
+                    Text(
+                      'Sign in',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.tenorSans(
+                        color: AppColor.textColor,
+                        fontSize: 18.w,
+                        fontWeight: FontWeight.w400,
                       ),
-                      SizedBox(height: 5.h),
-                      Text(
-                        'Login to your account',
-                        style: TextStyle(
-                          color: AppColor.textGreyColor,
-                          fontSize: 16,
-                          fontFamily: 'Roboto',
-                          fontWeight: FontWeight.w400,
-                          letterSpacing: 0.70,
-                        ),
-                        textAlign: TextAlign.center,
+                    ),
+                    Spacer(),
+                  ],
+                ),
+                SizedBox(height: 10.h),
+                Expanded(
+                  child: Container(
+                    width: 335.w,
+                    height: 677.h,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(ImageAssets.background),
+                        fit: BoxFit.cover,
                       ),
-                      SizedBox(height: 20.h),
-                      InputTextWidget(
-                        hintText: 'user@mail.com',
-                        textEditingController: auth.emailController,
-                        onChanged: (_) {},
-                        leading: true,
-                        leadingIcon: ImageAssets.mail,
-                        keyboardType: TextInputType.emailAddress,
-                      ),
-                      SizedBox(height: 17.h),
-                      InputTextWidget(
-                        hintText: 'Password',
-                        obscureText: true,
-                        textEditingController: auth.passwordController,
-                        onChanged: (_) {},
-                        leading: true,
-                        leadingIcon: ImageAssets.password,
-                        leadingHeight: 18,
-                        leadingWidth: 14,
-                      ),
-                      SizedBox(height: 16.h),
-                      Padding(
-                        padding: EdgeInsets.only(right: 15.w),
-                        child: Row(
-                          children: [
-                            GestureDetector(
-                              onTap: auth.toggleRemembered,
-                              child: Container(
-                                width: 17,
-                                height: 17,
-                                decoration: BoxDecoration(
-                                  color: auth.isRemembered
-                                      ? AppColor.defaultColor
-                                      : Colors.transparent,
-                                  border: Border.all(
-                                    color: auth.isRemembered
-                                        ? Colors.transparent
-                                        : AppColor.textGreyColor,
+                    ),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        AnimatedPositioned(
+                          duration: Duration(milliseconds: 200),
+                          curve: Curves.easeIn,
+                          top: isKeyboardOpen ? -150.h : 50.h,
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          child: Consumer<AuthProvider>(
+                            builder: (context, auth, _) => ListView(
+                              padding: EdgeInsets.symmetric(horizontal: 20.w),
+                              children: [
+                                SvgPicture.asset(ImageAssets.title),
+                                SizedBox(height: 20.h),
+                                Text(
+                                  'Welcome Back!',
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.tenorSans(
+                                    color: AppColor.textColor,
+                                    fontSize: 32.sp,
+                                    fontWeight: FontWeight.w400,
+                                    height: 1.20,
                                   ),
                                 ),
-                                child: Center(
-                                  child: Icon(Icons.check,
-                                      color: auth.isRemembered
-                                          ? AppColor.textWhiteColor
-                                          : Colors.transparent,
-                                      size: 14),
+                                SizedBox(height: 20.h),
+                                SizedBox(
+                                  width: 266.w,
+                                  child: Text(
+                                    'Use social networks or your email',
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.lato(
+                                      color: AppColor.textColor2,
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.w400,
+                                      height: 1.70,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            const Text(
-                              'Remember me',
-                              style: TextStyle(
-                                color: AppColor.textColor,
-                                fontSize: 12,
-                                fontFamily: 'Roboto',
-                                fontWeight: FontWeight.w500,
-                                letterSpacing: 0.50,
-                              ),
-                            ),
-                            const Spacer(),
-                            InkWell(
-                              onTap: () =>
-                                  context.push(AppRoutes.forgetPass),
-                              child: const Text(
-                                'Forget Password?',
-                                style: TextStyle(
-                                  color: AppColor.defaultColor,
-                                  fontSize: 12,
-                                  fontFamily: 'Roboto',
-                                  fontWeight: FontWeight.w600,
-                                  decoration: TextDecoration.underline,
-                                  letterSpacing: 0.50,
+                                SizedBox(height: 110.h),
+                                InputTextWidget(
+                                  hintText: 'Enter your email',
+                                  textEditingController: auth.emailController,
+                                  onChanged: (_) {},
+                                  keyboardType: TextInputType.emailAddress,
                                 ),
-                              ),
+                                SizedBox(height: 17.h),
+                                InputTextWidget(
+                                  hintText: 'Enter your password',
+                                  obscureText: true,
+                                  textEditingController:
+                                      auth.passwordController,
+                                  onChanged: (_) {},
+                                  leadingHeight: 18,
+                                  leadingWidth: 14,
+                                ),
+                                SizedBox(height: 16.h),
+                                Row(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: auth.toggleRemembered,
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            width: 18.r,
+                                            height: 18.r,
+                                            decoration: BoxDecoration(
+                                              color: auth.isRemembered
+                                                  ? AppColor.defaultColor
+                                                  : AppColor.whiteColor,
+                                              border: Border.all(
+                                                color: auth.isRemembered
+                                                    ? Colors.transparent
+                                                    : AppColor.whiteColor,
+                                              ),
+                                            ),
+                                            child: Center(
+                                              child: Icon(
+                                                Icons.check,
+                                                color: auth.isRemembered
+                                                    ? AppColor.textWhiteColor
+                                                    : Colors.transparent,
+                                                size: 14,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(width: 10.w),
+                                          Text(
+                                            'Remember me',
+                                            textAlign: TextAlign.right,
+                                            style: GoogleFonts.lato(
+                                              color: AppColor.textColor2,
+                                              fontSize: 16.sp,
+                                              fontWeight: FontWeight.w400,
+                                              height: 1.70,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Spacer(),
+                                    InkWell(
+                                      onTap: () {
+                                        print(
+                                          "Forget Password Clicked",
+                                        ); // Add this to debug
+                                        context.push(AppRoutes.forgetPass);
+                                      },
+                                      child: Text(
+                                        'Lost your password?',
+                                        textAlign: TextAlign.right,
+                                        style: GoogleFonts.lato(
+                                          color: AppColor.defaultColor,
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w400,
+                                          height: 1.70,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 50.h),
+                                CustomButton(
+                                  height: 60,
+                                  title: 'SIGN IN',
+                                  onPress: auth.isLoading ? null : auth.login,
+                                  loading: auth.isLoading,
+                                ),
+                                SizedBox(height: 20.h),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "No account? ",
+                                      style: GoogleFonts.lato(
+                                        color: AppColor.textColor2,
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.w400,
+                                        height: 1.70,
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () =>
+                                          context.push(AppRoutes.signup),
+                                      child: Text(
+                                        'Register now',
+                                        style: GoogleFonts.lato(
+                                          color: AppColor.defaultColor,
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w400,
+                                          height: 1.70,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 20.h),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 50.h),
-                      CustomButton(
-                        title: 'Login',
-                        onPress: auth.isLoading ? null : auth.login,
-                        loading: auth.isLoading,
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w700,
-                        radius: 30.r,
-                      ),
-                      SizedBox(height: 20.h),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "Don't have account?",
-                            style: TextStyle(
-                              color: AppColor.textColor,
-                              fontSize: 14,
-                              fontFamily: 'Roboto',
-                              fontWeight: FontWeight.w500,
-                              letterSpacing: 0.60,
-                            ),
-                          ),
-                          SizedBox(width: 12.w),
-                          GestureDetector(
-                            onTap: () => context.push(AppRoutes.signup),
-                            child: const Text(
-                              'Register',
-                              style: TextStyle(
-                                color: AppColor.defaultColor,
-                                fontSize: 16,
-                                fontFamily: 'Roboto',
-                                fontWeight: FontWeight.w600,
-                                decoration: TextDecoration.underline,
-                                decorationColor: AppColor.defaultColor,
-                                letterSpacing: 0.70,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20.h),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

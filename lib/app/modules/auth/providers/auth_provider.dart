@@ -32,6 +32,7 @@ class AuthProvider extends ChangeNotifier {
   // ── State ──────────────────────────────────────────────────────────────────
   bool _isOtpVerified = false;
   bool _isLoading = false;
+  bool _isHomeLoading = false;
   bool _isCheckingToken = true;
   bool _isLoggedIn = false;
   bool _isSignedIn = false;
@@ -49,6 +50,7 @@ class AuthProvider extends ChangeNotifier {
   Timer? _timer;
 
   // ── Text controllers ───────────────────────────────────────────────────────
+  final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController setPasswordController = TextEditingController();
@@ -59,6 +61,7 @@ class AuthProvider extends ChangeNotifier {
   // ── Getters ────────────────────────────────────────────────────────────────
   bool get isOtpVerified => _isOtpVerified;
   bool get isLoading => _isLoading;
+  bool get isHomeLoading => _isHomeLoading;
   bool get isCheckingToken => _isCheckingToken;
   bool get isLoggedIn => _isLoggedIn;
   bool get isSignedIn => _isSignedIn;
@@ -84,7 +87,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   void updateOtp(String value) {
-    if (value.length == 6) {
+    if (value.length == 5) {
       _isOtpVerified = true;
     } else {
       _isOtpVerified = false;
@@ -316,7 +319,7 @@ class AuthProvider extends ChangeNotifier {
       final response = await apiService.verifyOtp(email, otp);
       if (response['statusCode'] == 200) {
         showSuccessSnackBar(message: 'Verified. Now set your password.');
-        _go(AppRoutes.changePass, extra: origin ?? 'Signup');
+
       } else {
         _errorMessage =
             response['data']['error'] ??
@@ -325,7 +328,7 @@ class AuthProvider extends ChangeNotifier {
         showErrorSnackBar(message: 'OTP verification failed: $_errorMessage');
         notifyListeners();
       }
-    } catch (e) {
+    } catch (e) {  _go(AppRoutes.changePass, extra: origin ?? 'Signup');
       debugPrint('verifyOtp error: $e');
       showErrorSnackBar(message: 'OTP verification failed: $e');
     } finally {

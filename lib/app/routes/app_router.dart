@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:newproject/app/modules/auth/views/go_to_home.dart';
 
 import '../modules/auth/providers/auth_provider.dart';
 import '../modules/auth/views/auth_view.dart';
@@ -7,60 +8,91 @@ import '../modules/auth/views/change_password_view.dart';
 import '../modules/auth/views/forget_password_view.dart';
 import '../modules/auth/views/otp_verify_view.dart';
 import '../modules/auth/views/sign_up_view.dart';
-
+import '../modules/splash/views/splash_view.dart';
+import '../onboarding/providers/onboarding_provider.dart';
+import '../onboarding/views/onboarding_view.dart';
 
 // ── Route name constants ────────────────────────────────────────────────────
 abstract class AppRoutes {
-  static const login      = '/login';
-  static const signup     = '/signup';
+  static const login = '/login';
+  static const signup = '/signup';
   static const forgetPass = '/forget-password';
-  static const otpVerify  = '/otp-verify';
+  static const otpVerify = '/otp-verify';
   static const changePass = '/change-password';
-  static const home       = '/home';
+  static const home = '/home';
+  static const onboarding = '/onboarding';
+  static const goToHome = '/go-home';
 }
 
 // ── Router factory ──────────────────────────────────────────────────────────
 class AppRouter {
   /// Pass the [AuthProvider] so the router can listen to auth state changes
   /// and auto-redirect without any manual navigation calls inside the provider.
-  static GoRouter create(AuthProvider authProvider) {
+  static GoRouter create(
+    AuthProvider auth,
+    OnboardingProvider onboard,
+    GlobalKey<NavigatorState> navigatorKey,
+  ) {
     return GoRouter(
-      initialLocation: AppRoutes.login,
-      debugLogDiagnostics: true,
-      // Rebuild redirect whenever provider calls notifyListeners()
-      refreshListenable: authProvider,
+      navigatorKey: navigatorKey, // Add this line
+      initialLocation: AppRoutes.onboarding,
+      // Listen to both for changes
+      refreshListenable: Listenable.merge([auth, onboard]),
 
-      // ── Global auth guard ─────────────────────────────────────────────────
       redirect: (context, state) {
-        final isChecking   = authProvider.isCheckingToken;
-        final isLoggedIn   = authProvider.isLoggedIn;
-        final loc          = state.matchedLocation;
-        final onAuthScreen = loc == AppRoutes.login     ||
-                             loc == AppRoutes.signup    ||
-                             loc == AppRoutes.forgetPass ||
-                             loc == AppRoutes.otpVerify  ||
-                             loc == AppRoutes.changePass;
+        if (onboard.isLoading || auth.isCheckingToken) return null;
 
-        if (isChecking) return null;                             // token check in progress
-        if (isLoggedIn && onAuthScreen) return AppRoutes.home;  // already logged in
-        if (!isLoggedIn && !onAuthScreen) return AppRoutes.login; // not logged in
+        final bool hasOnboarded = onboard.hasCompletedOnboarding;
+        final bool isLoggedIn = auth.isLoggedIn;
+        final String loc = state.matchedLocation;
+
+        // 1. Force Onboarding if not done
+        if (!hasOnboarded && loc != AppRoutes.onboarding) {
+          return AppRoutes.onboarding;
+        }
+
+        // 2. If finished onboarding but on onboarding page, go to login/home
+        if (hasOnboarded && loc == AppRoutes.onboarding) {
+          return isLoggedIn ? AppRoutes.home : AppRoutes.login;
+        }
+
+        // 3. Standard Auth Guard
+        final onAuthScreen =
+            loc == AppRoutes.login ||
+            loc == AppRoutes.signup ||
+            loc == AppRoutes.forgetPass ||
+            loc == AppRoutes.otpVerify ||
+            loc == AppRoutes.home ||
+            loc == AppRoutes.goToHome ||
+            loc == AppRoutes.changePass; // etc
+        if (isLoggedIn && onAuthScreen) return AppRoutes.home;
+        if (!isLoggedIn && !onAuthScreen && hasOnboarded) {
+          return AppRoutes.login;
+        }
 
         return null;
       },
-
       routes: [
+        GoRoute(
+          path: AppRoutes.onboarding,
+          builder: (context, state) => const OnboardingView(),
+        ),
         // ── Auth ──────────────────────────────────────────────────────────────
+        GoRoute(
+          path: AppRoutes.onboarding,
+          name: 'splash',
+          // Usage: context.go(AppRoutes.changePass, extra: 'Forget')
+          pageBuilder: (_, __) => const MaterialPage(child: SplashView()),
+        ),
         GoRoute(
           path: AppRoutes.login,
           name: 'login',
-          pageBuilder: (_, __) =>
-              const NoTransitionPage(child: AuthView()),
+          pageBuilder: (_, __) => const NoTransitionPage(child: AuthView()),
         ),
         GoRoute(
           path: AppRoutes.signup,
           name: 'signup',
-          pageBuilder: (_, __) =>
-              const MaterialPage(child: SignUpView()),
+          pageBuilder: (_, __) => const MaterialPage(child: SignUpView()),
         ),
         GoRoute(
           path: AppRoutes.forgetPass,
@@ -81,7 +113,15 @@ class AppRouter {
           name: 'changePassword',
           // Usage: context.go(AppRoutes.changePass, extra: 'Forget')
           pageBuilder: (_, state) => MaterialPage(
-            child: ChangePasswordView(origin: state.extra as String?),
+            child: ChangePasswordView(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.goToHome,
+          name: 'goToHome',
+          // Usage: context.go(AppRoutes.changePass, extra: 'Forget')
+          pageBuilder: (_, state) => MaterialPage(
+            child: GoToHome(origin: state.extra as String?),
           ),
         ),
 

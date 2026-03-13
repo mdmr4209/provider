@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../res/colors/app_color.dart';
 
@@ -15,7 +16,7 @@ class CustomButton extends StatelessWidget {
     this.trailingColor = false,
     this.borderShadowColor = const Color(0x1E000000),
     required this.onPress,
-    this.height = 56,
+    this.height = 50,
     this.leadingIconHeight = 25,
     this.leadingIconWeight = 25,
     this.leadingPaddingLeft = 8,
@@ -33,10 +34,10 @@ class CustomButton extends StatelessWidget {
     this.leadingIcon = '',
     this.trailingIcon = '',
     required this.title,
-    this.fontSize = 16,
-    this.fontWeight = FontWeight.w600,
+    this.fontSize = 14,
+    this.fontWeight = FontWeight.w900,
     this.fontFamily = 'Proxima Nova',
-    this.radius = 10,
+    this.radius = 0,
     this.subtitle = '',
     this.subfontSize = 12,
     this.horizontal = 16,
@@ -126,11 +127,10 @@ class CustomButton extends StatelessWidget {
                                   ),
                                 Text(
                                   title,
-                                  style: TextStyle(
+                                  style: GoogleFonts.lato(
                                     color: textColor,
                                     fontSize: fontSize.sp,
                                     fontWeight: fontWeight,
-                                    fontFamily: fontFamily,
                                   ),
                                 ),
                               ],

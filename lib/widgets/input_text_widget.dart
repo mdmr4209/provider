@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../res/assets/image_assets.dart';
 import '../res/colors/app_color.dart';
@@ -34,20 +35,20 @@ class InputTextWidget extends StatefulWidget {
     this.shadow = false,
     this.linearGradient = false,
     this.passwordIcon = ImageAssets.obsecure,
-    this.borderRadius = 4.0,
-    this.borderColor = AppColor.defaultDeepColor,
+    this.borderRadius = 0.0,
+    this.borderColor = AppColor.whiteColor,
     this.hintTextColor = AppColor.hintTextColor,
-    this.borderShadowColor = AppColor.boxShadowColor,
+    this.borderShadowColor = AppColor.whiteColor,
     this.textColor = AppColor.textColor,
     this.leadingHeight = 14.0,
     this.leadingWidth = 17.0,
-    this.height = 46.0,
+    this.height = 60.0,
     this.width = double.infinity,
     this.hintfontFamily = 'Roboto',
     this.hintfontSize = 14.0,
     this.hintfontWeight = FontWeight.w300,
     this.fontSize = 16.0,
-    this.fontWeight = FontWeight.w500,
+    this.fontWeight = FontWeight.w400,
     this.fontFamily = 'Roboto',
     this.vertical = 14.0,
     this.horizontal = 15.0,
@@ -57,7 +58,7 @@ class InputTextWidget extends StatefulWidget {
     this.backimagewidth = 24.0,
     this.backimageheight = 24.0,
     this.borderWidth = .5,
-    this.backgroundColor = AppColor.textAreaColor,
+    this.backgroundColor = AppColor.whiteColor,
     this.leadingColor = AppColor.hintTextColor,
     this.maxLines = 1,
     this.textEditingController,
@@ -142,7 +143,9 @@ class _InputTextWidgetState extends State<InputTextWidget> {
               color: widget.backgroundColor,
               shape: RoundedRectangleBorder(
                 side: BorderSide(
-                    width: widget.borderWidth.w, color: widget.borderColor),
+                  width: widget.borderWidth.w,
+                  color: widget.borderColor,
+                ),
                 borderRadius: BorderRadius.circular(widget.borderRadius.r),
               ),
               shadows: [
@@ -157,7 +160,9 @@ class _InputTextWidgetState extends State<InputTextWidget> {
               color: widget.backgroundColor,
               shape: RoundedRectangleBorder(
                 side: BorderSide(
-                    width: widget.borderWidth.w, color: widget.borderColor),
+                  width: widget.borderWidth.w,
+                  color: widget.borderColor,
+                ),
                 borderRadius: BorderRadius.circular(widget.borderRadius.r),
               ),
             ),
@@ -179,7 +184,9 @@ class _InputTextWidgetState extends State<InputTextWidget> {
                   width: widget.leadingWidth.w,
                   height: widget.leadingHeight.h,
                   colorFilter: ColorFilter.mode(
-                      widget.leadingColor, BlendMode.srcIn),
+                    widget.leadingColor,
+                    BlendMode.srcIn,
+                  ),
                 ),
               ),
 
@@ -191,18 +198,16 @@ class _InputTextWidgetState extends State<InputTextWidget> {
                 onTap: widget.onTap,
                 readOnly: widget.readOnly,
                 maxLines: widget.maxLines,
-                textAlign:
-                    widget.textAlign ? TextAlign.right : TextAlign.left,
+                textAlign: widget.textAlign ? TextAlign.right : TextAlign.left,
                 obscureText: _isObscured,
                 keyboardType: widget.keyboardType,
                 decoration: InputDecoration(
                   isDense: true,
                   hintText: widget.hintText,
-                  hintStyle: TextStyle(
+                  hintStyle: GoogleFonts.lato(
                     color: widget.hintTextColor,
                     fontSize: widget.hintfontSize.sp,
                     fontWeight: widget.hintfontWeight,
-                    fontFamily: widget.hintfontFamily,
                   ),
                   border: InputBorder.none,
                   contentPadding: widget.contentPadding || widget.maxLines > 1
@@ -212,12 +217,11 @@ class _InputTextWidgetState extends State<InputTextWidget> {
                         )
                       : EdgeInsets.symmetric(horizontal: widget.horizontal.w),
                 ),
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      fontSize: widget.fontSize.sp,
-                      fontWeight: widget.fontWeight,
-                      fontFamily: widget.fontFamily,
-                      color: widget.textColor,
-                    ),
+                style: GoogleFonts.lato(
+                  fontSize: widget.fontSize.sp,
+                  fontWeight: widget.fontWeight,
+                  color: widget.textColor,
+                ),
               ),
             ),
 
@@ -228,7 +232,9 @@ class _InputTextWidgetState extends State<InputTextWidget> {
                 child: GestureDetector(
                   onTap: _toggleObscure,
                   child: Icon(
-                    _isObscured ? Icons.visibility_off : Icons.visibility,
+                    _isObscured
+                        ? Icons.visibility_off_outlined
+                        : Icons.visibility_outlined,
                     size: 22.sp,
                     color: widget.hintTextColor,
                   ),
@@ -241,7 +247,8 @@ class _InputTextWidgetState extends State<InputTextWidget> {
                 padding: EdgeInsets.only(left: 10.w),
                 child: GestureDetector(
                   onTap: widget.backicontap,
-                  child: widget.settingsIconWidget ??
+                  child:
+                      widget.settingsIconWidget ??
                       SvgPicture.asset(widget.imageIcon),
                 ),
               ),

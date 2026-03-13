@@ -1,7 +1,10 @@
 class ImageAssets {
 
   //Icons
-  static const String check = 'assets/icons/check.svg';
+  static const String title = 'assets/image/title.svg';
+  static const String background = 'assets/image/bg.png';
+  static const String background2 = 'assets/image/bg2.png';
+  static const String background3 = 'assets/image/bg3.png';
 
   //AUTH
   static const String line = 'assets/icons/auth/Line.svg';

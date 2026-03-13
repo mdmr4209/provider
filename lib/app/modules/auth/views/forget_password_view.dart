@@ -7,6 +7,21 @@ import '../../../../res/assets/image_assets.dart';
 import '../../../../res/colors/app_color.dart';
 import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/input_text_widget.dart';
+import '../../../../widgets/snack_bar_helper.dart';
+import '../../../routes/app_router.dart';
+import '../providers/auth_provider.dart';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+
+import '../../../../res/assets/image_assets.dart';
+import '../../../../res/colors/app_color.dart';
+import '../../../../widgets/custom_button.dart';
+import '../../../../widgets/input_text_widget.dart';
 import '../../../routes/app_router.dart';
 import '../providers/auth_provider.dart';
 
@@ -15,77 +30,109 @@ class ForgetPasswordView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () => context.pop(),
-          icon: const Icon(Icons.arrow_back),
-        ),
-        title: const Text('Forget Password', style: TextStyle(fontSize: 25)),
-        centerTitle: true,
-      ),
-      body: Consumer<AuthProvider>(
-        builder: (context, auth, _) => Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 30),
-              SvgPicture.asset(ImageAssets.mail, width: 80, height: 80),
-              const SizedBox(height: 10),
-              const Text(
-                'Enter your email address to reset your password',
-                style: TextStyle(
-                  fontSize: 18,
-                  letterSpacing: 1.2,
-                  fontWeight: FontWeight.w400,
+    final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom != 0;
+
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        backgroundColor: AppColor.whiteColor,
+        body: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Icon(Icons.arrow_back_ios_new),
+                    ),
+                    Spacer(),
+                    Text(
+                      'Forgot password',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.tenorSans(
+                        color: AppColor.textColor,
+                        fontSize: 18.w,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    Spacer(),
+                    SizedBox(width: 20.w),
+                  ],
                 ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
-              InputTextWidget(
-                hintText: 'user@mail.com',
-                leading: true,
-                leadingIcon: ImageAssets.mail,
-                textEditingController: auth.forgetEmailController,
-                onChanged: (v) => auth.forgetEmailController.text = v,
-                keyboardType: TextInputType.emailAddress,
-              ),
-              const SizedBox(height: 20),
-              const Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  'We will send an email to verify.....',
-                  style: TextStyle(
-                    color: AppColor.textColor,
-                    fontSize: 14,
-                    fontFamily: 'Roboto',
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 0.60,
+                SizedBox(height: 10.h),
+                Container(
+                  width: 335.w,
+                  height: 331.h,
+                  clipBehavior: Clip.antiAlias,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(ImageAssets.background2),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Consumer<AuthProvider>(
+                        builder: (context, auth, _) => ListView(
+                          padding: EdgeInsets.symmetric(horizontal: 20.w),
+                          children: [
+                            SizedBox(height: 30.h,),
+                            SizedBox(
+                              width: 295.w,
+                              child: Text(
+                                'Please enter your email address. You will receive a link to create a new password via email.',
+                                style: GoogleFonts.lato(
+                                  color: AppColor.textColor2,
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w400,
+                                  height: 1.70,
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 30.h),
+                            InputTextWidget(
+                              hintText: 'Enter your email',
+                              textEditingController:
+                                  auth.forgetEmailController,
+                              onChanged: (v) =>
+                                  auth.forgetEmailController.text = v,
+                              keyboardType: TextInputType.emailAddress,
+                            ),
+                            SizedBox(height: 20.h),
+                            CustomButton(
+                              onPress: auth.isLoading
+                                  ? null
+                                  : () async {
+                                if (auth.forgetEmailController.text.isNotEmpty) {
+                                  context.push(
+                                    AppRoutes.otpVerify,
+                                    extra: "forget",
+                                  );
+                                } else {
+                                  showWarningSnackBar(
+                                    message: 'Please enter an email',
+                                  );
+                                }
+                              },
+                              loading: auth.isLoading,
+                              title: 'Continue',
+                              fontWeight: FontWeight.w700,
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-              const SizedBox(height: 30),
-              CustomButton(
-                onPress: auth.isLoading
-                    ? null
-                    : () async {
-                        if (auth.forgetEmailController.text.isNotEmpty) {
-                         context.push(AppRoutes.otpVerify,extra: "forget");
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Please enter an email'),
-                              backgroundColor: Colors.red,
-                            ),
-                          );
-                        }
-                      },
-                loading: auth.isLoading,
-                title: 'Continue',
-                fontWeight: FontWeight.w700,
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
