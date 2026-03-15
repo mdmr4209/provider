@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 class AppColor {
   static const Color defaultColor = Color(0xFFD05278);
   static const Color backgroundColor = Color(0xFFFCEDEA);
-
+  static const Color ratingColor = Color(0xFFCFC819);
+  static const Color ratingColor2 = Color(0xFFFFBE00);
 
   static const Color textColor = Color(0xFF222222);
   static const Color textColor2 = Color(0xFF666666);
+  static const Color textColor3 = Color(0xFF999999);
+  static const Color whiteTextColor = Color(0xFFEEEEEE);
   static const Color indicatorColor = Color(0xFFF4CED3);
   static const Color hintTextColor = Color(0xFF6A6A6A);
   static const Color buttonColor = Color(0xFFAF48FF);
@@ -15,16 +18,9 @@ class AppColor {
   static const Color whiteColor = Color(0xFFFFFFFF);
   static const Color blackColor = Color(0xFF000000);
   static const Color redColor = Color(0xFFFF0000);
-
+  static const Color greenColor =  Color(0xFF00824B);
 
   static const Color warningColor = Color(0xFFFF710B);
-
-
-
-
-
-
-
 
   static const Color yellowColor = Color(0xFFEEA100);
   static const Color defaultColor1 = Color(0x4D0B2088);
@@ -54,7 +50,6 @@ class AppColor {
   static const Color disableColor = Color(0xEEEEEEFF);
   static const Color otpColor = Color(0xFFDBDEEF);
   static const Color orangeColor = Color(0xFFB26E20);
-  static const Color greenColor = Color(0xFF129201);
   static const Color greenLightColor = Color(0x8E9AFFB8);
   static const Color blueColor = Color(0xFF1D2B86);
   static const Color deepRedColor = Color(0xFF960808);
@@ -90,7 +85,6 @@ class AppColor {
   static const Color textGreyColor2 = Color(0xFF676360);
   static const Color textGreyColor3 = Color(0xFFAEAEB2);
   static const Color textSendColor = Color(0xFF806E6A);
-  static const Color whiteTextColor = Color(0xFFEEEEEE);
   static const Color textareaColor = Color(0xFFFDFDFE);
   static const Color borderareaColor = Color(0xFFE7E9ED);
   static const Color background1Color = Color(0xFFEAEAEA);

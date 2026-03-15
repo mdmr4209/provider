@@ -68,7 +68,7 @@ class GoToHome extends StatelessWidget {
                       ? null
                       : () async {
                           auth.clear();
-                          context.go(AppRoutes.home);
+                          context.push(AppRoutes.home);
                         },
                   loading: auth.isHomeLoading,
                 ),

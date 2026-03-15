@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:newproject/res/colors/app_color.dart';
 import 'package:provider/provider.dart';
 
 import 'app/modules/auth/providers/auth_provider.dart';
@@ -87,7 +88,9 @@ class _MyAppState extends State<MyApp> {
     if (_router == null) {
       return MaterialApp(
         navigatorKey: SnackBarHelper.navigatorKey,
-        home: const Scaffold(body: SizedBox.shrink()),
+        home: const Scaffold(
+            backgroundColor: AppColor.backgroundColor,
+            body: SizedBox.shrink()),
       );
     }
 

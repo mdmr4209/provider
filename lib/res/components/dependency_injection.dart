@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:newproject/app/modules/home/providers/home_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../../app/modules/profile/providers/profile_provider.dart';
 import '../../app/modules/splash/providers/splash_provider.dart';
 import '../../app/onboarding/providers/onboarding_provider.dart';
 import 'api_service.dart';
@@ -26,6 +28,8 @@ Widget appProviders({required Widget child}) {
       ),
 
       ChangeNotifierProvider(create: (_) => SplashProvider()),
+      ChangeNotifierProvider(create: (_) => HomeProvider()),
+      ChangeNotifierProvider(create: (_) => ProfileProvider()),
     ],
     child: child,
   );

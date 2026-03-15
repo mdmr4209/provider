@@ -1,10 +1,37 @@
 class ImageAssets {
-
   //Icons
   static const String title = 'assets/image/title.svg';
   static const String background = 'assets/image/bg.png';
   static const String background2 = 'assets/image/bg2.png';
   static const String background3 = 'assets/image/bg3.png';
+  static const String home = 'assets/image/home.svg';
+  static const String home2 = 'assets/image/home2.svg';
+  static const String cart = 'assets/image/cart.svg';
+  static const String search = 'assets/image/search.svg';
+  static const String wishlist = 'assets/image/wishlist.svg';
+  static const String profile = 'assets/image/profile.svg';
+  static const String selected = 'assets/image/selected.svg';
+  static const String homeBg = 'assets/image/homeBg.png';
+  static const String filter = 'assets/image/filter.svg';
+  static const String banner = 'assets/image/img_2.png';
+  static const String addReview = 'assets/image/addReview.png';
+  static const String love = 'assets/image/love.svg';
+  static const String edit = 'assets/image/edit.svg';
+  static const String points = 'assets/image/points.svg';
+  static const String trackOrder = 'assets/image/trackOrder.svg';
+  static const String promoCode = 'assets/image/promoCode.svg';
+  static const String address = 'assets/image/address.svg';
+  static const String paymentMethod = 'assets/image/paymentMethod.svg';
+  static const String orderHistory = 'assets/image/orderHistory.svg';
+  static const String logout = 'assets/image/logout.svg';
+  static const String camera = 'assets/image/camera.svg';
+  static const String card1 = 'assets/image/card1.svg';
+  static const String card2 = 'assets/image/card2.svg';
+  static const String card3 = 'assets/image/card3.svg';
+  static const String add = 'assets/image/add.svg';
+  static const String addressBg = 'assets/image/addressBg.png';
+  static const String icon = 'assets/image/icon.png';
+  // static const String  = 'assets/image/.svg';
 
   //AUTH
   static const String line = 'assets/icons/auth/Line.svg';
@@ -23,7 +50,6 @@ class ImageAssets {
   static const String completed = 'assets/icons/home/completed.svg';
   static const String accepted = 'assets/icons/home/accepted.svg';
   static const String location = 'assets/icons/home/location.svg';
-  static const String home = 'assets/icons/home/home.svg';
   static const String message = 'assets/icons/home/message.svg';
   static const String more = 'assets/icons/home/more.svg';
   static const String locat = 'assets/icons/home/locat.svg';
@@ -44,13 +70,11 @@ class ImageAssets {
   static const String ac = 'assets/icons/home/ac.svg';
   static const String cancellation = 'assets/icons/home/cancellation.svg';
   static const String limit = 'assets/icons/home/limit.svg';
-  static const String love = 'assets/icons/home/love.svg';
   static const String luggage = 'assets/icons/home/luggage.svg';
   static const String passenger = 'assets/icons/home/passenger.svg';
   static const String cross1 = 'assets/icons/home/cross.svg';
   static const String line1 = 'assets/icons/home/line.svg';
   static const String select = 'assets/icons/home/select.svg';
-  static const String selected = 'assets/icons/home/selected.svg';
   static const String select1 = 'assets/icons/home/select1.svg';
   static const String selected1 = 'assets/icons/home/selected1.svg';
   static const String settings = 'assets/icons/home/settings.svg';
@@ -67,7 +91,6 @@ class ImageAssets {
   static const String down = 'assets/icons/home/down.svg';
 
   //Chats
-  static const String search = 'assets/icons/chats/search.svg';
   static const String request = 'assets/icons/chats/request.svg';
   static const String active = 'assets/icons/chats/active.svg';
   static const String imageSend = 'assets/icons/chats/imageSend.svg';
@@ -75,15 +98,11 @@ class ImageAssets {
   static const String send = 'assets/icons/chats/send.svg';
   static const String voice = 'assets/icons/chats/voice.svg';
 
-
   //More
   static const String forward = 'assets/icons/more/forward.svg';
-  static const String logout = 'assets/icons/more/logout.svg';
   static const String support = 'assets/icons/more/support.svg';
   static const String wallet = 'assets/icons/more/wallet.svg';
   static const String error = 'assets/icons/more/error.svg';
-  static const String camera = 'assets/icons/more/camera.svg';
-  static const String edit = 'assets/icons/more/edit.svg';
   static const String safe = 'assets/icons/more/safe.svg';
   static const String age = 'assets/icons/more/age.svg';
   static const String avatar2 = 'assets/icons/more/avatar.svg';
@@ -114,7 +133,6 @@ class ImageAssets {
   //Onboarding
   static const String avatar = 'assets/icons/onboarding/avatar.svg';
 
-
   // Splash & Onboarding Screen
   static const String splash = 'assets/images/splash/splash.png';
   static const String logo = 'assets/images/splash/logo.png';
@@ -124,7 +142,6 @@ class ImageAssets {
   static const String driver = 'assets/images/auth/driver.png';
   static const String otp = 'assets/images/auth/otp.png';
   static const String avatar1 = 'assets/images/auth/avatar.jpg';
-
 
   //Onboarding
   static const String idCard = 'assets/images/onboarding/idCard1.png';
@@ -136,20 +153,17 @@ class ImageAssets {
   static const String homeMap = 'assets/images/home/logo.png';
   static const String client = 'assets/images/home/logo2.png';
   static const String poster = 'assets/images/home/img_2.png';
-  static const String cars = 'assets/images/home/img_3.png';
+  static const String cars = 'assets/images/home/addReview.png';
   static const String map2 = 'assets/images/home/img_4.png';
-  static const String fuel = 'assets/images/home/img_5.png';
+  static const String fuel = 'assets/images/home/addressBg.png';
 
   //More
   static const String iMessage = 'assets/images/more/logo.png';
   static const String whatsapp = 'assets/images/more/logo2.png';
   static const String gmail = 'assets/images/more/img_2.png';
-  static const String instagram = 'assets/images/more/img_3.png';
+  static const String instagram = 'assets/images/more/addReview.png';
   static const String visa = 'assets/images/more/img_4.png';
-  static const String calender = 'assets/images/more/img_5.png';
-
-
-
+  static const String calender = 'assets/images/more/addressBg.png';
 
   static const String microphone = 'assets/images/chats/microphone.png';
   static const String female = 'assets/images/onboarding/female.png';
