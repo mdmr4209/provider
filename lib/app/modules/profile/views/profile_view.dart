@@ -11,6 +11,7 @@ import '../../../../widgets/custom_button.dart';
 import '../../../routes/app_router.dart';
 import '../providers/profile_provider.dart';
 import 'logout.dart';
+import 'point_view.dart' hide AppColor;
 
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});

@@ -13,6 +13,7 @@ import 'package:newproject/app/modules/profile/views/edit_view.dart';
 import 'package:newproject/app/modules/profile/views/order_history.dart';
 import 'package:newproject/app/modules/profile/views/logout.dart';
 import 'package:newproject/app/modules/profile/views/payment_view.dart';
+import 'package:newproject/app/modules/profile/views/promo_code_view.dart';
 import 'package:newproject/app/modules/profile/views/track_order.dart';
 
 import '../modules/auth/providers/auth_provider.dart';
@@ -23,6 +24,8 @@ import '../modules/auth/views/otp_verify_view.dart';
 import '../modules/auth/views/sign_up_view.dart';
 import '../modules/home/views/navigation.dart';
 import '../modules/profile/views/my_address.dart';
+import '../modules/profile/views/order_view.dart';
+import '../modules/profile/views/point_view.dart';
 import '../modules/splash/views/splash_view.dart';
 import '../onboarding/providers/onboarding_provider.dart';
 import '../onboarding/views/onboarding_view.dart';
@@ -53,6 +56,10 @@ abstract class AppRoutes {
   static const addCard = '/addCard';
   static const addAddress = '/addAddress';
   static const editProfile = '/editProfile';
+  static const order = '/order';
+  static const payment = '/payment';
+  static const shipping = '/shipping';
+  static const checkout = '/checkout';
   // static const  = '/';
 }
 
@@ -112,6 +119,10 @@ class AppRouter {
             loc == AppRoutes.paymentMethod ||
             loc == AppRoutes.addAddress ||
             loc == AppRoutes.addCard ||
+            loc == AppRoutes.payment ||
+            loc == AppRoutes.shipping ||
+            loc == AppRoutes.checkout ||
+            loc == AppRoutes.order ||
             loc == AppRoutes.goToHome; // etc
         if (isLoggedIn && onAuthScreen) return AppRoutes.home;
         if (!isLoggedIn && !onAuthScreen && hasOnboarded) {
@@ -264,7 +275,7 @@ class AppRouter {
           name: 'promoCode',
           pageBuilder: (_, __) => const MaterialPage(
             // child: NavBar(),  // swap in your home widget
-            child: MyAddress(),
+            child: PromoCodeView(),
           ),
         ),
         GoRoute(
@@ -297,7 +308,46 @@ class AppRouter {
             // child: NavBar(),  // swap in your home widget
             child: AddNewAddress(),
           ),
+        ),GoRoute(
+          path: AppRoutes.points,
+          name: 'points',
+          pageBuilder: (_, __) => const MaterialPage(
+            // child: NavBar(),  // swap in your home widget
+            child: PointView(),
+          ),
+        ),GoRoute(
+          path: AppRoutes.order,
+          name: 'order',
+          pageBuilder: (_, __) => const MaterialPage(
+            // child: NavBar(),  // swap in your home widget
+            child: OrderScreen(),
+          ),
+        ),GoRoute(
+          path: AppRoutes.payment,
+          name: 'payment',
+          pageBuilder: (_, __) => const MaterialPage(
+            // child: NavBar(),  // swap in your home widget
+            child: PaymentMethodScreen(),
+          ),
+        ),GoRoute(
+          path: AppRoutes.shipping,
+          name: 'shipping',
+          pageBuilder: (_, __) => const MaterialPage(
+            // child: NavBar(),  // swap in your home widget
+            child: ShippingDetailsScreen(),
+          ),
+        ),GoRoute(
+          path: AppRoutes.checkout,
+          name: 'checkout',
+          pageBuilder: (_, __) => const MaterialPage(
+            // child: NavBar(),  // swap in your home widget
+            child: CheckoutScreen(),
+          ),
         ),
+        // '/order': (_) => const OrderScreen(),
+        //     '/checkout': (_) => const CheckoutScreen(),
+        //     '/shipping': (_) => const ShippingDetailsScreen(),
+        //     '/payment': (_) => const PaymentMethodScreen(),
       ],
 
       // ── 404 ───────────────────────────────────────────────────────────────

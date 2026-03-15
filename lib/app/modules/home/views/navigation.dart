@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:newproject/app/modules/profile/views/order_view.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../res/colors/app_color.dart';
@@ -22,7 +23,7 @@ class Navbar extends StatelessWidget {
     final List<Widget> pages = [
       const HomeView(),
       const SearchView(),
-      const AddView(),
+      const OrderScreen(),
       const WishlistView(),
       const ProfileView(),
     ];

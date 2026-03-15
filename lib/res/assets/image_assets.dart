@@ -31,6 +31,9 @@ class ImageAssets {
   static const String add = 'assets/image/add.svg';
   static const String addressBg = 'assets/image/addressBg.png';
   static const String icon = 'assets/image/icon.png';
+  static const String promo = 'assets/image/promo.svg';
+  static const String copy = 'assets/image/copy.svg';
+  static const String memberId = 'assets/image/memberId.svg';
   // static const String  = 'assets/image/.svg';
 
   //AUTH
