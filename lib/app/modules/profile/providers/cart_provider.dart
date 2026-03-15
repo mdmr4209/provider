@@ -37,6 +37,8 @@ class CreditCard {
 
 // ─── Provider ────────────────────────────────────────────────────────
 class CartProvider extends ChangeNotifier {
+  /// Set this from main.dart: HomeProvider.routerKey = _routerKey;
+  static GlobalKey<NavigatorState>? routerKey;
   // Cart items
   final List<CartItem> _items = [
     CartItem(

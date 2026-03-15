@@ -3,6 +3,7 @@ import 'package:newproject/app/modules/home/providers/home_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../app/modules/profile/providers/profile_provider.dart';
+import '../../app/modules/profile/providers/cart_provider.dart';
 import '../../app/modules/splash/providers/splash_provider.dart';
 import '../../app/onboarding/providers/onboarding_provider.dart';
 import 'api_service.dart';
@@ -24,12 +25,14 @@ Widget appProviders({required Widget child}) {
 
       ChangeNotifierProxyProvider<ApiService, AuthProvider>(
         create: (ctx) => AuthProvider(apiService: ctx.read<ApiService>()),
-        update: (_, apiService, previous) => previous ?? AuthProvider(apiService: apiService),
+        update: (_, apiService, previous) =>
+            previous ?? AuthProvider(apiService: apiService),
       ),
 
       ChangeNotifierProvider(create: (_) => SplashProvider()),
       ChangeNotifierProvider(create: (_) => HomeProvider()),
       ChangeNotifierProvider(create: (_) => ProfileProvider()),
+      ChangeNotifierProvider(create: (_) => CartProvider()),
     ],
     child: child,
   );

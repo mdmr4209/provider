@@ -54,12 +54,14 @@ class _OrderScreenState extends State<OrderScreen> {
                     children: [
                       SizedBox(height: 12.h),
                       // Cart items
-                      ...cart.items.map((item) => _CartItemCard(
-                            item: item,
-                            onIncrement: () => cart.increment(item.id),
-                            onDecrement: () => cart.decrement(item.id),
-                            onDelete: () => cart.removeItem(item.id),
-                          )),
+                      ...cart.items.map(
+                        (item) => _CartItemCard(
+                          item: item,
+                          onIncrement: () => cart.increment(item.id),
+                          onDecrement: () => cart.decrement(item.id),
+                          onDelete: () => cart.removeItem(item.id),
+                        ),
+                      ),
                       SizedBox(height: 16.h),
 
                       // Promo section
@@ -100,7 +102,6 @@ class _OrderScreenState extends State<OrderScreen> {
               ),
             ],
           ),
-          bottomNavigationBar: _BottomNav(currentIndex: 2),
         );
       },
     );
@@ -115,9 +116,14 @@ class _OrderScreenState extends State<OrderScreen> {
         onPressed: () => Navigator.maybePop(context),
         icon: Icon(Icons.arrow_back_ios_new, size: 18.r, color: AC.text),
       ),
-      title: Text('Order',
-          style: GoogleFonts.tenorSans(
-              color: AC.text, fontSize: 20.sp, fontWeight: FontWeight.w400)),
+      title: Text(
+        'Order',
+        style: GoogleFonts.tenorSans(
+          color: AC.text,
+          fontSize: 20.sp,
+          fontWeight: FontWeight.w400,
+        ),
+      ),
       actions: [
         Padding(
           padding: EdgeInsets.only(right: 16.w),
@@ -125,8 +131,12 @@ class _OrderScreenState extends State<OrderScreen> {
             alignment: Alignment.centerLeft,
             children: [
               Container(
-                padding:
-                    EdgeInsets.only(left: 28.w, right: 8.w, top: 6.h, bottom: 6.h),
+                padding: EdgeInsets.only(
+                  left: 28.w,
+                  right: 8.w,
+                  top: 6.h,
+                  bottom: 6.h,
+                ),
                 decoration: BoxDecoration(
                   color: AC.primary,
                   borderRadius: BorderRadius.circular(20.r),
@@ -134,13 +144,13 @@ class _OrderScreenState extends State<OrderScreen> {
                 child: Text(
                   '\$${cart.badgeTotal.toStringAsFixed(2)}',
                   style: GoogleFonts.lato(
-                      color: Colors.white,
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w700),
+                    color: Colors.white,
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
-              Icon(Icons.shopping_basket_outlined,
-                  color: AC.text, size: 22.r),
+              Icon(Icons.shopping_basket_outlined, color: AC.text, size: 22.r),
             ],
           ),
         ),
@@ -180,11 +190,14 @@ class _CartItemCard extends StatelessWidget {
               children: [
                 Icon(Icons.delete_outline, color: Colors.white, size: 24.r),
                 SizedBox(height: 4.h),
-                Text('DELETE',
-                    style: GoogleFonts.lato(
-                        color: Colors.white,
-                        fontSize: 11.sp,
-                        fontWeight: FontWeight.w700)),
+                Text(
+                  'DELETE',
+                  style: GoogleFonts.lato(
+                    color: Colors.white,
+                    fontSize: 11.sp,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
               ],
             ),
           ),
@@ -205,19 +218,21 @@ class _CartItemCard extends StatelessWidget {
               // Sale badge
               if (item.isOnSale)
                 Container(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.h),
+                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.h),
                   margin: EdgeInsets.only(right: 10.w),
                   decoration: BoxDecoration(
                     color: AC.sale,
                     borderRadius: BorderRadius.circular(2.r),
                   ),
-                  child: Text('SALE',
-                      style: GoogleFonts.lato(
-                          color: Colors.white,
-                          fontSize: 10.sp,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 0.5)),
+                  child: Text(
+                    'SALE',
+                    style: GoogleFonts.lato(
+                      color: Colors.white,
+                      fontSize: 10.sp,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
                 ),
 
               // Name + price
@@ -225,11 +240,14 @@ class _CartItemCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(item.name,
-                        style: GoogleFonts.tenorSans(
-                            color: AC.text,
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w400)),
+                    Text(
+                      item.name,
+                      style: GoogleFonts.tenorSans(
+                        color: AC.text,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
                     SizedBox(height: 4.h),
                     Row(
                       children: [
@@ -275,15 +293,17 @@ class _CartItemCard extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(16.r))),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
+      ),
       builder: (_) => Padding(
         padding: EdgeInsets.all(24.w),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Remove "${item.name}"?',
-                style: GoogleFonts.tenorSans(
-                    fontSize: 16.sp, color: AC.text)),
+            Text(
+              'Remove "${item.name}"?',
+              style: GoogleFonts.tenorSans(fontSize: 16.sp, color: AC.text),
+            ),
             SizedBox(height: 20.h),
             Row(
               children: [
@@ -294,10 +314,13 @@ class _CartItemCard extends StatelessWidget {
                       side: const BorderSide(color: AC.border),
                       padding: EdgeInsets.symmetric(vertical: 12.h),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(4.r)),
+                        borderRadius: BorderRadius.circular(4.r),
+                      ),
                     ),
-                    child: Text('Cancel',
-                        style: GoogleFonts.lato(color: AC.text, fontSize: 14.sp)),
+                    child: Text(
+                      'Cancel',
+                      style: GoogleFonts.lato(color: AC.text, fontSize: 14.sp),
+                    ),
                   ),
                 ),
                 SizedBox(width: 12.w),
@@ -312,13 +335,17 @@ class _CartItemCard extends StatelessWidget {
                       padding: EdgeInsets.symmetric(vertical: 12.h),
                       elevation: 0,
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(4.r)),
+                        borderRadius: BorderRadius.circular(4.r),
+                      ),
                     ),
-                    child: Text('Delete',
-                        style: GoogleFonts.lato(
-                            color: Colors.white,
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w700)),
+                    child: Text(
+                      'Delete',
+                      style: GoogleFonts.lato(
+                        color: Colors.white,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -335,21 +362,34 @@ class _CartItemCard extends StatelessWidget {
           context: context,
           builder: (_) => AlertDialog(
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.r)),
-            title: Text('Remove item?',
-                style: GoogleFonts.tenorSans(fontSize: 16.sp)),
-            content: Text('Remove "${item.name}" from cart?',
-                style: GoogleFonts.lato(fontSize: 13.sp, color: AC.textLight)),
+              borderRadius: BorderRadius.circular(8.r),
+            ),
+            title: Text(
+              'Remove item?',
+              style: GoogleFonts.tenorSans(fontSize: 16.sp),
+            ),
+            content: Text(
+              'Remove "${item.name}" from cart?',
+              style: GoogleFonts.lato(fontSize: 13.sp, color: AC.textLight),
+            ),
             actions: [
               TextButton(
-                  onPressed: () => Navigator.pop(context, false),
-                  child: Text('Cancel',
-                      style: GoogleFonts.lato(color: AC.textLight))),
+                onPressed: () => Navigator.pop(context, false),
+                child: Text(
+                  'Cancel',
+                  style: GoogleFonts.lato(color: AC.textLight),
+                ),
+              ),
               TextButton(
-                  onPressed: () => Navigator.pop(context, true),
-                  child: Text('Delete',
-                      style: GoogleFonts.lato(
-                          color: AC.primary, fontWeight: FontWeight.w700))),
+                onPressed: () => Navigator.pop(context, true),
+                child: Text(
+                  'Delete',
+                  style: GoogleFonts.lato(
+                    color: AC.primary,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
             ],
           ),
         ) ??
@@ -376,11 +416,14 @@ class _QuantityStepper extends StatelessWidget {
         _StepBtn(icon: Icons.add, onTap: onIncrement),
         Padding(
           padding: EdgeInsets.symmetric(vertical: 8.h),
-          child: Text('$quantity',
-              style: GoogleFonts.lato(
-                  fontSize: 14.sp,
-                  color: AC.text,
-                  fontWeight: FontWeight.w600)),
+          child: Text(
+            '$quantity',
+            style: GoogleFonts.lato(
+              fontSize: 14.sp,
+              color: AC.text,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ),
         _StepBtn(icon: Icons.remove, onTap: onDecrement),
       ],
@@ -437,7 +480,8 @@ class _PromoInputRow extends StatelessWidget {
                   height: 52.h,
                   decoration: BoxDecoration(
                     border: Border.all(
-                        color: hasError ? Colors.redAccent : AC.border),
+                      color: hasError ? Colors.redAccent : AC.border,
+                    ),
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(4.r),
                       bottomLeft: Radius.circular(4.r),
@@ -446,15 +490,15 @@ class _PromoInputRow extends StatelessWidget {
                   child: TextField(
                     controller: controller,
                     textCapitalization: TextCapitalization.characters,
-                    style: GoogleFonts.lato(
-                        fontSize: 14.sp, color: AC.text),
+                    style: GoogleFonts.lato(fontSize: 14.sp, color: AC.text),
                     decoration: InputDecoration(
                       hintText: 'Enter promocode',
                       hintStyle: GoogleFonts.lato(
-                          fontSize: 14.sp, color: AC.textLight),
+                        fontSize: 14.sp,
+                        color: AC.textLight,
+                      ),
                       border: InputBorder.none,
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: 14.w),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 14.w),
                     ),
                   ),
                 ),
@@ -473,12 +517,15 @@ class _PromoInputRow extends StatelessWidget {
                     color: Colors.white,
                   ),
                   child: Center(
-                    child: Text('APPLY',
-                        style: GoogleFonts.lato(
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w900,
-                            color: AC.text,
-                            letterSpacing: 0.5)),
+                    child: Text(
+                      'APPLY',
+                      style: GoogleFonts.lato(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w900,
+                        color: AC.text,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -487,9 +534,13 @@ class _PromoInputRow extends StatelessWidget {
           if (hasError)
             Padding(
               padding: EdgeInsets.only(top: 6.h, left: 4.w),
-              child: Text('Invalid promocode. Try DISCOUNT23',
-                  style: GoogleFonts.lato(
-                      fontSize: 11.sp, color: Colors.redAccent)),
+              child: Text(
+                'Invalid promocode. Try DISCOUNT23',
+                style: GoogleFonts.lato(
+                  fontSize: 11.sp,
+                  color: Colors.redAccent,
+                ),
+              ),
             ),
         ],
       ),
@@ -510,11 +561,14 @@ class _PromoAppliedBadge extends StatelessWidget {
         children: [
           Icon(Icons.check_circle, color: AC.green, size: 20.r),
           SizedBox(width: 8.w),
-          Text('Promocode applied',
-              style: GoogleFonts.tenorSans(
-                  color: AC.text,
-                  fontSize: 15.sp,
-                  fontWeight: FontWeight.w400)),
+          Text(
+            'Promocode applied',
+            style: GoogleFonts.tenorSans(
+              color: AC.text,
+              fontSize: 15.sp,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
           const Spacer(),
           GestureDetector(
             onTap: onRemove,
@@ -544,28 +598,28 @@ class _SummaryCard extends StatelessWidget {
         child: Column(
           children: [
             _SummaryRow(
-                label: 'Subtotal',
-                value: '\$${cart.subtotal.toStringAsFixed(2)}'),
+              label: 'Subtotal',
+              value: '\$${cart.subtotal.toStringAsFixed(2)}',
+            ),
             if (cart.promoApplied) ...[
               SizedBox(height: 10.h),
               _SummaryRow(
-                  label: 'Discount',
-                  value: '-\$${cart.discountAmount.toStringAsFixed(2)}',
-                  valueColor: AC.textLight),
+                label: 'Discount',
+                value: '-\$${cart.discountAmount.toStringAsFixed(2)}',
+                valueColor: AC.textLight,
+              ),
             ],
             SizedBox(height: 10.h),
-            _SummaryRow(
-                label: 'Delivery',
-                value: 'Free',
-                valueColor: AC.green),
+            _SummaryRow(label: 'Delivery', value: 'Free', valueColor: AC.green),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 12.h),
               child: const Divider(color: AC.text, height: 1, thickness: 1),
             ),
             _SummaryRow(
-                label: 'Total',
-                value: '\$${cart.total.toStringAsFixed(2)}',
-                isBold: true),
+              label: 'Total',
+              value: '\$${cart.total.toStringAsFixed(2)}',
+              isBold: true,
+            ),
           ],
         ),
       ),
@@ -591,18 +645,22 @@ class _SummaryRow extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label,
-            style: GoogleFonts.lato(
-                fontSize: 14.sp,
-                color: isBold ? AC.text : AC.textLight,
-                fontWeight:
-                    isBold ? FontWeight.w700 : FontWeight.w400)),
-        Text(value,
-            style: GoogleFonts.lato(
-                fontSize: 14.sp,
-                color: valueColor ?? AC.text,
-                fontWeight:
-                    isBold ? FontWeight.w700 : FontWeight.w400)),
+        Text(
+          label,
+          style: GoogleFonts.lato(
+            fontSize: 14.sp,
+            color: isBold ? AC.text : AC.textLight,
+            fontWeight: isBold ? FontWeight.w700 : FontWeight.w400,
+          ),
+        ),
+        Text(
+          value,
+          style: GoogleFonts.lato(
+            fontSize: 14.sp,
+            color: valueColor ?? AC.text,
+            fontWeight: isBold ? FontWeight.w700 : FontWeight.w400,
+          ),
+        ),
       ],
     );
   }
@@ -622,78 +680,14 @@ class _CheckoutButton extends StatelessWidget {
         width: double.infinity,
         color: AC.purple,
         padding: EdgeInsets.symmetric(vertical: 18.h),
-        child: Text(label,
-            textAlign: TextAlign.center,
-            style: GoogleFonts.lato(
-                color: Colors.white,
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w900,
-                letterSpacing: 1.0)),
-      ),
-    );
-  }
-}
-
-// ─── Bottom Nav ───────────────────────────────────────────────────────
-class _BottomNav extends StatelessWidget {
-  final int currentIndex;
-  const _BottomNav({required this.currentIndex});
-
-  @override
-  Widget build(BuildContext context) {
-    final items = [
-      ('HOME', Icons.home_outlined),
-      ('SEARCH', Icons.search),
-      ('CART', Icons.shopping_basket_outlined),
-      ('WISHLIST', Icons.favorite_outline),
-      ('PROFILE', Icons.person_outline),
-    ];
-
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border(top: BorderSide(color: AC.divider)),
-      ),
-      child: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 8.h),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: items.asMap().entries.map((e) {
-              final i = e.key;
-              final item = e.value;
-              final isActive = i == currentIndex;
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Stack(
-                    children: [
-                      Icon(item.$2,
-                          size: 24.r,
-                          color: isActive ? AC.primary : AC.textLight),
-                      if (isActive && i == 2)
-                        Positioned(
-                          right: 0,
-                          top: 0,
-                          child: Container(
-                            width: 8.w,
-                            height: 8.w,
-                            decoration: const BoxDecoration(
-                                color: AC.primary, shape: BoxShape.circle),
-                          ),
-                        ),
-                    ],
-                  ),
-                  SizedBox(height: 3.h),
-                  Text(item.$1,
-                      style: GoogleFonts.lato(
-                          fontSize: 9.sp,
-                          color: isActive ? AC.primary : AC.textLight,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0.5)),
-                ],
-              );
-            }).toList(),
+        child: Text(
+          label,
+          textAlign: TextAlign.center,
+          style: GoogleFonts.lato(
+            color: Colors.white,
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w900,
+            letterSpacing: 1.0,
           ),
         ),
       ),
@@ -721,21 +715,25 @@ class CheckoutScreen extends StatelessWidget {
             centerTitle: true,
             leading: IconButton(
               onPressed: () => Navigator.pop(context),
-              icon: Icon(Icons.arrow_back_ios_new,
-                  size: 18.r, color: AC.text),
+              icon: Icon(Icons.arrow_back_ios_new, size: 18.r, color: AC.text),
             ),
-            title: Text('Checkout',
-                style: GoogleFonts.tenorSans(
-                    color: AC.text,
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.w400)),
+            title: Text(
+              'Checkout',
+              style: GoogleFonts.tenorSans(
+                color: AC.text,
+                fontSize: 20.sp,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
           ),
           body: Column(
             children: [
               Expanded(
                 child: SingleChildScrollView(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16.w,
+                    vertical: 16.h,
+                  ),
                   child: Column(
                     children: [
                       // Order summary card
@@ -743,24 +741,28 @@ class CheckoutScreen extends StatelessWidget {
                         child: Column(
                           children: [
                             _CheckoutCardHeader(
-                                label: 'My order',
-                                value:
-                                    '\$${cart.total.toStringAsFixed(2)}'),
+                              label: 'My order',
+                              value: '\$${cart.total.toStringAsFixed(2)}',
+                            ),
                             SizedBox(height: 12.h),
-                            ...cart.items.map((item) => _CheckoutItemRow(
-                                  name: item.name,
-                                  qty: item.quantity,
-                                  price: item.price,
-                                )),
+                            ...cart.items.map(
+                              (item) => _CheckoutItemRow(
+                                name: item.name,
+                                qty: item.quantity,
+                                price: item.price,
+                              ),
+                            ),
                             if (cart.promoApplied)
                               _CheckoutDetailRow(
-                                  label: 'Discount',
-                                  value:
-                                      '-\$${cart.discountAmount.toStringAsFixed(2)}'),
+                                label: 'Discount',
+                                value:
+                                    '-\$${cart.discountAmount.toStringAsFixed(2)}',
+                              ),
                             _CheckoutDetailRow(
-                                label: 'Delivery',
-                                value: 'Free',
-                                valueColor: AC.green),
+                              label: 'Delivery',
+                              value: 'Free',
+                              valueColor: AC.green,
+                            ),
                           ],
                         ),
                       ),
@@ -769,21 +771,23 @@ class CheckoutScreen extends StatelessWidget {
 
                       // Shipping details
                       _CheckoutCard(
-                        onTap: () =>
-                            Navigator.pushNamed(context, '/shipping'),
+                        onTap: () => Navigator.pushNamed(context, '/shipping'),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             _CheckoutCardHeader(
-                                label: 'Shipping details',
-                                hasArrow: true,
-                                onTap: () => Navigator.pushNamed(
-                                    context, '/shipping')),
+                              label: 'Shipping details',
+                              hasArrow: true,
+                              onTap: () =>
+                                  Navigator.pushNamed(context, '/shipping'),
+                            ),
                             SizedBox(height: 10.h),
                             Text(
                               cart.selectedAddress.address,
                               style: GoogleFonts.lato(
-                                  fontSize: 13.sp, color: AC.textLight),
+                                fontSize: 13.sp,
+                                color: AC.textLight,
+                              ),
                             ),
                           ],
                         ),
@@ -793,21 +797,23 @@ class CheckoutScreen extends StatelessWidget {
 
                       // Payment method
                       _CheckoutCard(
-                        onTap: () =>
-                            Navigator.pushNamed(context, '/payment'),
+                        onTap: () => Navigator.pushNamed(context, '/payment'),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             _CheckoutCardHeader(
-                                label: 'Payment method',
-                                hasArrow: true,
-                                onTap: () => Navigator.pushNamed(
-                                    context, '/payment')),
+                              label: 'Payment method',
+                              hasArrow: true,
+                              onTap: () =>
+                                  Navigator.pushNamed(context, '/payment'),
+                            ),
                             SizedBox(height: 10.h),
                             Text(
                               cart.selectedCard.masked,
                               style: GoogleFonts.lato(
-                                  fontSize: 13.sp, color: AC.textLight),
+                                fontSize: 13.sp,
+                                color: AC.textLight,
+                              ),
                             ),
                           ],
                         ),
@@ -826,11 +832,15 @@ class CheckoutScreen extends StatelessWidget {
                           onChanged: cart.setComment,
                           maxLines: 4,
                           style: GoogleFonts.lato(
-                              fontSize: 14.sp, color: AC.text),
+                            fontSize: 14.sp,
+                            color: AC.text,
+                          ),
                           decoration: InputDecoration(
                             hintText: 'Enter your comment',
                             hintStyle: GoogleFonts.lato(
-                                fontSize: 14.sp, color: AC.textLight),
+                              fontSize: 14.sp,
+                              color: AC.textLight,
+                            ),
                             border: InputBorder.none,
                             contentPadding: EdgeInsets.all(14.w),
                           ),
@@ -860,18 +870,23 @@ class CheckoutScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.r),
+        ),
         title: Row(
           children: [
             Icon(Icons.check_circle, color: AC.green, size: 24.r),
             SizedBox(width: 8.w),
-            Text('Order Confirmed!',
-                style: GoogleFonts.tenorSans(fontSize: 18.sp)),
+            Text(
+              'Order Confirmed!',
+              style: GoogleFonts.tenorSans(fontSize: 18.sp),
+            ),
           ],
         ),
-        content: Text('Your order has been placed successfully.',
-            style: GoogleFonts.lato(fontSize: 13.sp, color: AC.textLight)),
+        content: Text(
+          'Your order has been placed successfully.',
+          style: GoogleFonts.lato(fontSize: 13.sp, color: AC.textLight),
+        ),
         actions: [
           ElevatedButton(
             onPressed: () {
@@ -880,13 +895,19 @@ class CheckoutScreen extends StatelessWidget {
                 ..popUntil(ModalRoute.withName('/order'));
             },
             style: ElevatedButton.styleFrom(
-                backgroundColor: AC.purple,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4.r)),
-                elevation: 0),
-            child: Text('Done',
-                style: GoogleFonts.lato(
-                    color: Colors.white, fontWeight: FontWeight.w700)),
+              backgroundColor: AC.purple,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(4.r),
+              ),
+              elevation: 0,
+            ),
+            child: Text(
+              'Done',
+              style: GoogleFonts.lato(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
           ),
         ],
       ),
@@ -937,19 +958,25 @@ class _CheckoutCardHeader extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(label,
-                style: GoogleFonts.tenorSans(
-                    fontSize: 16.sp,
-                    color: AC.text,
-                    fontWeight: FontWeight.w400)),
+            Text(
+              label,
+              style: GoogleFonts.tenorSans(
+                fontSize: 16.sp,
+                color: AC.text,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
             Row(
               children: [
                 if (value != null)
-                  Text(value!,
-                      style: GoogleFonts.lato(
-                          fontSize: 14.sp,
-                          color: AC.text,
-                          fontWeight: FontWeight.w600)),
+                  Text(
+                    value!,
+                    style: GoogleFonts.lato(
+                      fontSize: 14.sp,
+                      color: AC.text,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 if (hasArrow) ...[
                   SizedBox(width: 4.w),
                   Icon(Icons.chevron_right, size: 20.r, color: AC.textLight),
@@ -969,8 +996,11 @@ class _CheckoutItemRow extends StatelessWidget {
   final String name;
   final int qty;
   final double price;
-  const _CheckoutItemRow(
-      {required this.name, required this.qty, required this.price});
+  const _CheckoutItemRow({
+    required this.name,
+    required this.qty,
+    required this.price,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -980,13 +1010,15 @@ class _CheckoutItemRow extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
-            child: Text(name,
-                style:
-                    GoogleFonts.lato(fontSize: 13.sp, color: AC.textLight)),
+            child: Text(
+              name,
+              style: GoogleFonts.lato(fontSize: 13.sp, color: AC.textLight),
+            ),
           ),
-          Text('$qty x \$${price.toStringAsFixed(2)}',
-              style: GoogleFonts.lato(
-                  fontSize: 13.sp, color: AC.textLight)),
+          Text(
+            '$qty x \$${price.toStringAsFixed(2)}',
+            style: GoogleFonts.lato(fontSize: 13.sp, color: AC.textLight),
+          ),
         ],
       ),
     );
@@ -997,8 +1029,11 @@ class _CheckoutDetailRow extends StatelessWidget {
   final String label;
   final String value;
   final Color? valueColor;
-  const _CheckoutDetailRow(
-      {required this.label, required this.value, this.valueColor});
+  const _CheckoutDetailRow({
+    required this.label,
+    required this.value,
+    this.valueColor,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -1007,13 +1042,17 @@ class _CheckoutDetailRow extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label,
-              style: GoogleFonts.lato(
-                  fontSize: 13.sp, color: AC.textLight)),
-          Text(value,
-              style: GoogleFonts.lato(
-                  fontSize: 13.sp,
-                  color: valueColor ?? AC.textLight)),
+          Text(
+            label,
+            style: GoogleFonts.lato(fontSize: 13.sp, color: AC.textLight),
+          ),
+          Text(
+            value,
+            style: GoogleFonts.lato(
+              fontSize: 13.sp,
+              color: valueColor ?? AC.textLight,
+            ),
+          ),
         ],
       ),
     );
@@ -1038,14 +1077,16 @@ class ShippingDetailsScreen extends StatelessWidget {
             centerTitle: true,
             leading: IconButton(
               onPressed: () => Navigator.pop(context),
-              icon: Icon(Icons.arrow_back_ios_new,
-                  size: 18.r, color: AC.text),
+              icon: Icon(Icons.arrow_back_ios_new, size: 18.r, color: AC.text),
             ),
-            title: Text('Shipping Details',
-                style: GoogleFonts.tenorSans(
-                    color: AC.text,
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.w400)),
+            title: Text(
+              'Shipping Details',
+              style: GoogleFonts.tenorSans(
+                color: AC.text,
+                fontSize: 20.sp,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
           ),
           body: Column(
             children: [
@@ -1057,16 +1098,13 @@ class ShippingDetailsScreen extends StatelessWidget {
                 child: Stack(
                   children: [
                     // Map visual representation
-                    Positioned.fill(
-                      child: CustomPaint(painter: _MapPainter()),
-                    ),
+                    Positioned.fill(child: CustomPaint(painter: _MapPainter())),
                     // Map pin
                     Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.location_on,
-                              color: AC.green, size: 36.r),
+                          Icon(Icons.location_on, color: AC.green, size: 36.r),
                         ],
                       ),
                     ),
@@ -1088,31 +1126,37 @@ class ShippingDetailsScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       ...cart.addresses.asMap().entries.map(
-                            (e) => _AddressOption(
-                              index: e.key,
-                              address: e.value,
-                              isSelected:
-                                  cart.selectedAddressIndex == e.key,
-                              onSelect: () {
-                                cart.selectAddress(e.key);
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ),
+                        (e) => _AddressOption(
+                          index: e.key,
+                          address: e.value,
+                          isSelected: cart.selectedAddressIndex == e.key,
+                          onSelect: () {
+                            cart.selectAddress(e.key);
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ),
                       // Use current location
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: 20.w, vertical: 14.h),
+                          horizontal: 20.w,
+                          vertical: 14.h,
+                        ),
                         child: Row(
                           children: [
-                            Icon(Icons.check,
-                                size: 16.r,
-                                color: AC.textLight.withOpacity(0.5)),
+                            Icon(
+                              Icons.check,
+                              size: 16.r,
+                              color: AC.textLight.withOpacity(0.5),
+                            ),
                             SizedBox(width: 8.w),
-                            Text('Use current location',
-                                style: GoogleFonts.lato(
-                                    fontSize: 14.sp,
-                                    color: AC.textLight)),
+                            Text(
+                              'Use current location',
+                              style: GoogleFonts.lato(
+                                fontSize: 14.sp,
+                                color: AC.textLight,
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -1151,7 +1195,9 @@ class _AddressOption extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           border: Border.all(
-              color: isSelected ? AC.primary : AC.border, width: 1),
+            color: isSelected ? AC.primary : AC.border,
+            width: 1,
+          ),
           borderRadius: BorderRadius.circular(4.r),
         ),
         child: Row(
@@ -1161,12 +1207,17 @@ class _AddressOption extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (address.label.isNotEmpty)
-                  Text(address.label,
-                      style: GoogleFonts.tenorSans(
-                          fontSize: 15.sp, color: AC.text)),
-                Text(address.address,
-                    style: GoogleFonts.lato(
-                        fontSize: 13.sp, color: AC.textLight)),
+                  Text(
+                    address.label,
+                    style: GoogleFonts.tenorSans(
+                      fontSize: 15.sp,
+                      color: AC.text,
+                    ),
+                  ),
+                Text(
+                  address.address,
+                  style: GoogleFonts.lato(fontSize: 13.sp, color: AC.textLight),
+                ),
               ],
             ),
             // Radio button
@@ -1176,8 +1227,9 @@ class _AddressOption extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                    color: isSelected ? AC.primary : Colors.grey.shade400,
-                    width: 1.5),
+                  color: isSelected ? AC.primary : Colors.grey.shade400,
+                  width: 1.5,
+                ),
               ),
               child: isSelected
                   ? Center(
@@ -1185,7 +1237,9 @@ class _AddressOption extends StatelessWidget {
                         width: 12.w,
                         height: 12.w,
                         decoration: const BoxDecoration(
-                            color: AC.primary, shape: BoxShape.circle),
+                          color: AC.primary,
+                          shape: BoxShape.circle,
+                        ),
                       ),
                     )
                   : null,
@@ -1229,17 +1283,21 @@ class _MapPainter extends CustomPainter {
     // Green patches
     final green = Paint()..color = const Color(0xFFA5D6A7).withOpacity(0.4);
     canvas.drawOval(
-        Rect.fromCenter(
-            center: Offset(size.width * 0.15, size.height * 0.7),
-            width: 80,
-            height: 60),
-        green);
+      Rect.fromCenter(
+        center: Offset(size.width * 0.15, size.height * 0.7),
+        width: 80,
+        height: 60,
+      ),
+      green,
+    );
     canvas.drawOval(
-        Rect.fromCenter(
-            center: Offset(size.width * 0.8, size.height * 0.2),
-            width: 60,
-            height: 50),
-        green);
+      Rect.fromCenter(
+        center: Offset(size.width * 0.8, size.height * 0.2),
+        width: 60,
+        height: 50,
+      ),
+      green,
+    );
   }
 
   @override
@@ -1264,18 +1322,19 @@ class PaymentMethodScreen extends StatelessWidget {
             centerTitle: true,
             leading: IconButton(
               onPressed: () => Navigator.pop(context),
-              icon: Icon(Icons.arrow_back_ios_new,
-                  size: 18.r, color: AC.text),
+              icon: Icon(Icons.arrow_back_ios_new, size: 18.r, color: AC.text),
             ),
-            title: Text('Payment Method',
-                style: GoogleFonts.tenorSans(
-                    color: AC.text,
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.w400)),
+            title: Text(
+              'Payment Method',
+              style: GoogleFonts.tenorSans(
+                color: AC.text,
+                fontSize: 20.sp,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
           ),
           body: Padding(
-            padding:
-                EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
             child: Container(
               padding: EdgeInsets.all(16.w),
               decoration: BoxDecoration(
@@ -1287,24 +1346,27 @@ class PaymentMethodScreen extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Credit Cards',
-                      style: GoogleFonts.tenorSans(
-                          fontSize: 18.sp,
-                          color: AC.text,
-                          fontWeight: FontWeight.w400)),
+                  Text(
+                    'Credit Cards',
+                    style: GoogleFonts.tenorSans(
+                      fontSize: 18.sp,
+                      color: AC.text,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
                   SizedBox(height: 6.h),
                   const Divider(color: AC.text, height: 1, thickness: 1),
                   SizedBox(height: 4.h),
                   ...cart.creditCards.asMap().entries.map(
-                        (e) => _CardOption(
-                          card: e.value,
-                          isSelected: cart.selectedCardIndex == e.key,
-                          onSelect: () {
-                            cart.selectCard(e.key);
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ),
+                    (e) => _CardOption(
+                      card: e.value,
+                      isSelected: cart.selectedCardIndex == e.key,
+                      onSelect: () {
+                        cart.selectCard(e.key);
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -1335,17 +1397,19 @@ class _CardOption extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(card.masked,
-                style: GoogleFonts.lato(
-                    fontSize: 14.sp, color: AC.textLight)),
+            Text(
+              card.masked,
+              style: GoogleFonts.lato(fontSize: 14.sp, color: AC.textLight),
+            ),
             Container(
               width: 22.w,
               height: 22.w,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                    color: isSelected ? AC.primary : Colors.grey.shade400,
-                    width: 1.5),
+                  color: isSelected ? AC.primary : Colors.grey.shade400,
+                  width: 1.5,
+                ),
               ),
               child: isSelected
                   ? Center(
@@ -1353,7 +1417,9 @@ class _CardOption extends StatelessWidget {
                         width: 12.w,
                         height: 12.w,
                         decoration: const BoxDecoration(
-                            color: AC.primary, shape: BoxShape.circle),
+                          color: AC.primary,
+                          shape: BoxShape.circle,
+                        ),
                       ),
                     )
                   : null,
