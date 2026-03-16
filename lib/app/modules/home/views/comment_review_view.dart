@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:newproject/res/assets/image_assets.dart';
-import 'package:newproject/res/colors/app_color.dart';
-import 'package:newproject/widgets/custom_button.dart';
-import 'package:newproject/widgets/input_text_widget.dart';
+
+import '../../../../res/assets/image_assets.dart';
+import '../../../../res/colors/app_color.dart';
+import '../../../../widgets/custom_button.dart';
+import '../../../../widgets/input_text_widget.dart';
 
 class CommentReviewView extends StatelessWidget {
   const CommentReviewView({super.key});
@@ -17,12 +18,11 @@ class CommentReviewView extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: AppColor.backgroundColor,
         title: Text(
-          'Leave a review',
+          'Leave A Review',
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: GoogleFonts.tenorSans(
             color: AppColor.textColor,
             fontSize: 18.sp,
-            fontFamily: 'Tenor Sans',
             fontWeight: FontWeight.w400,
             height: 1.20,
           ),
@@ -44,9 +44,10 @@ class CommentReviewView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(
-                        height: 349.50.h,
+                        height: 220.h,
                         child: Image.asset(ImageAssets.addReview),
                       ),
+                      SizedBox(height: 10.h),
                       SizedBox(
                         width: 303.w,
                         child: Text(
@@ -108,7 +109,8 @@ class CommentReviewView extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 30.h),
-                      InputTextWidget(maxLines: 10,
+                      InputTextWidget(
+                        maxLines: 10,
                         onChanged: (onChanged) {},
                         height: 130.h,
                         hintText: 'Enter your comment',

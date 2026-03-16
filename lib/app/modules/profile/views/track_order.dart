@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 
 import '../../../../res/assets/image_assets.dart';
 import '../../../../res/colors/app_color.dart';
-import '../../../routes/app_router.dart';
 import '../providers/profile_provider.dart';
 
 class TrackOrder extends StatelessWidget {
@@ -15,7 +14,6 @@ class TrackOrder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final count = 2;
     return Scaffold(
       backgroundColor: AppColor.backgroundColor,
       appBar: AppBar(
@@ -26,7 +24,7 @@ class TrackOrder extends StatelessWidget {
         backgroundColor: AppColor.backgroundColor,
         elevation: 0,
         centerTitle: true,
-        title:  Text(
+        title: Text(
           'Track Your Order',
           textAlign: TextAlign.center,
           style: GoogleFonts.tenorSans(
@@ -46,8 +44,17 @@ class TrackOrder extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(
-                    height: 349.50.h,
-                    child: Image.asset(ImageAssets.addReview),
+                    height: 220.h,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Image.asset(ImageAssets.bgIcon),
+                        Positioned(
+                          bottom: 0,
+                          child: SvgPicture.asset(ImageAssets.bgOrder),
+                        ),
+                      ],
+                    ),
                   ),
                   SizedBox(height: 10.h),
                   Text(
@@ -61,7 +68,8 @@ class TrackOrder extends StatelessWidget {
                       height: 1.20,
                     ),
                   ),
-                  SizedBox(height: 4.h),Text(
+                  SizedBox(height: 4.h),
+                  Text(
                     '#205479',
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -72,7 +80,8 @@ class TrackOrder extends StatelessWidget {
                       height: 1.70,
                     ),
                   ),
-                  SizedBox(height: 10.h),_orderTrackingTimeline(),
+                  SizedBox(height: 10.h),
+                  _orderTrackingTimeline(),
                   SizedBox(height: 10.h),
                 ],
               ),
@@ -82,6 +91,7 @@ class TrackOrder extends StatelessWidget {
       ),
     );
   }
+
   Widget _orderTrackingTimeline() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -141,9 +151,12 @@ class TrackOrder extends StatelessWidget {
                   shape: BoxShape.circle,
                   color: isCompleted || isActive
                       ? AppColor.defaultColor
-                      : const Color(0xFFEEEEEE),
+                      : AppColor.whiteTextColor,
                   border: isActive
-                      ? Border.all(color: AppColor.defaultColor.withOpacity(0.3), width: 4.r)
+                      ? Border.all(
+                          color: AppColor.defaultColor.withAlpha(77),
+                          width: 4.r,
+                        )
                       : null,
                 ),
                 child: isCompleted
@@ -155,7 +168,9 @@ class TrackOrder extends StatelessWidget {
                 Expanded(
                   child: Container(
                     width: 2.w,
-                    color: isCompleted ? AppColor.defaultColor : const Color(0xFFEEEEEE),
+                    color: isCompleted
+                        ? AppColor.defaultColor
+                        : AppColor.whiteTextColor,
                   ),
                 ),
             ],
@@ -176,7 +191,9 @@ class TrackOrder extends StatelessWidget {
                         style: GoogleFonts.tenorSans(
                           color: AppColor.textColor,
                           fontSize: 16.sp,
-                          fontWeight: isActive ? FontWeight.w700 : FontWeight.w400,
+                          fontWeight: isActive
+                              ? FontWeight.w700
+                              : FontWeight.w400,
                         ),
                       ),
                       if (time.isNotEmpty)
@@ -193,7 +210,7 @@ class TrackOrder extends StatelessWidget {
                   Text(
                     subtitle,
                     style: GoogleFonts.lato(
-                      color: const Color(0xFF666666),
+                      color: AppColor.textColor2,
                       fontSize: 13.sp,
                       height: 1.4,
                     ),
@@ -206,79 +223,6 @@ class TrackOrder extends StatelessWidget {
       ),
     );
   }
-  // Reusable Menu Tile Widget
-  Widget _profileMenuTile({
-    required String icon,
-    required String title,
-    required VoidCallback onTap,
-    bool isLogout = false,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
-        child: Row(
-          children: [
-            // Icon Box
-            Container(
-              width: 50.r,
-              height: 50.r,
-              decoration: ShapeDecoration(
-                color: const Color(0xFFFAF9FF),
-                shape: RoundedRectangleBorder(
-                  side: BorderSide(width: 1.w, color: const Color(0xFFEEEEEE)),
-                  borderRadius: BorderRadius.circular(10.r),
-                ),
-              ),
-              child: Center(
-                child: SvgPicture.asset(
-                  icon,
-                  width: 20.r,
-                  height: 20.r,
-                  // Flavor: turn logout icon red if desired
-                  colorFilter: isLogout
-                      ? const ColorFilter.mode(
-                    Colors.redAccent,
-                    BlendMode.srcIn,
-                  )
-                      : ColorFilter.mode(AppColor.textColor, BlendMode.srcIn),
-                ),
-              ),
-            ),
-            SizedBox(width: 15.w),
-            // Title
-            Expanded(
-              child: Text(
-                title,
-                style: GoogleFonts.tenorSans(
-                  color: isLogout ? Colors.redAccent : const Color(0xFF222222),
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ),
-            // Arrow Icon
-            if (!isLogout)
-              Icon(
-                Icons.arrow_forward_ios,
-                size: 16.r,
-                color: const Color(0xFF999999),
-              ),
-          ],
-        ),
-      ),
-    );
-  }
 
-  Widget _headerIcon(String asset, {required VoidCallback onTap}) {
-    return InkWell(
-      onTap: onTap,
-      child: SvgPicture.asset(
-        asset,
-        width: 24.w,
-        height: 24.h,
-        colorFilter: ColorFilter.mode(AppColor.blackColor, BlendMode.srcIn),
-      ),
-    );
-  }
+
 }

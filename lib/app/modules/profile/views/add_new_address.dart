@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:newproject/app/modules/profile/providers/profile_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../res/assets/image_assets.dart';
 import '../../../../res/colors/app_color.dart';
 import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/input_text_widget.dart';
-import '../../../routes/app_router.dart';
+import '../providers/profile_provider.dart';
 
 class AddNewAddress extends StatelessWidget {
   const AddNewAddress({super.key});

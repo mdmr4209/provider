@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../res/assets/image_assets.dart';
 import '../../../../res/colors/app_color.dart';
 import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/input_text_widget.dart';
-import '../../../routes/app_router.dart';
 
 class AddNewCardView extends StatelessWidget {
   const AddNewCardView({super.key});
@@ -73,13 +71,26 @@ class AddNewCardView extends StatelessWidget {
                           SizedBox(height: 30.h),
                           _inputCard('Enter your full name'),
                           SizedBox(height: 10.h),
-                          _inputCard('xxxx xxxx xxxx xxxx',keyboardType: TextInputType.number),
+                          _inputCard(
+                            'xxxx xxxx xxxx xxxx',
+                            keyboardType: TextInputType.number,
+                          ),
                           SizedBox(height: 10.h),
                           Row(
                             children: [
-                              Expanded(child: _inputCard('MM/YY',keyboardType: TextInputType.datetime)),
+                              Expanded(
+                                child: _inputCard(
+                                  'MM/YY',
+                                  keyboardType: TextInputType.datetime,
+                                ),
+                              ),
                               SizedBox(width: 10.w),
-                              Expanded(child: _inputCard('CVV',keyboardType: TextInputType.number)),
+                              Expanded(
+                                child: _inputCard(
+                                  'CVV',
+                                  keyboardType: TextInputType.number,
+                                ),
+                              ),
                             ],
                           ),
                           SizedBox(height: 20.h),

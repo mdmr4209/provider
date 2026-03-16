@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:newproject/res/colors/app_color.dart';
-import 'package:newproject/widgets/input_text_widget.dart';
 
 import '../../../../res/assets/image_assets.dart';
+import '../../../../res/colors/app_color.dart';
+import '../../../../widgets/input_text_widget.dart';
 import '../../../routes/app_router.dart';
 
 class SearchView extends StatelessWidget {
@@ -20,7 +19,7 @@ class SearchView extends StatelessWidget {
         children: [
           Container(
             width: double.infinity,
-            decoration: BoxDecoration(color: const Color(0xFFFCEDEA)),
+            decoration: BoxDecoration(color: AppColor.backgroundColor),
             child: SafeArea(
               child: SizedBox(
                 height: 47.h,

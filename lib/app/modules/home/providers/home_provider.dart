@@ -1,17 +1,6 @@
-import 'dart:async';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:go_router/go_router.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../../res/assets/image_assets.dart';
-import '../../../../res/components/api_service.dart';
-import '../../../../res/components/base_client.dart';
-import '../../../../widgets/custom_snack_bar.dart';
-import '../../../routes/app_router.dart';
 import '../models/product_model.dart';
 
 /// Pure ChangeNotifier — zero BuildContext, zero Navigator.

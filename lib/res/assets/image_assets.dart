@@ -34,6 +34,16 @@ class ImageAssets {
   static const String promo = 'assets/image/promo.svg';
   static const String copy = 'assets/image/copy.svg';
   static const String memberId = 'assets/image/memberId.svg';
+  static const String bgIcon = 'assets/image/bgIcon.png';
+  static const String account = 'assets/image/account.svg';
+  static const String password = 'assets/image/password.svg';
+  static const String bgCart = 'assets/image/bgCart.svg';
+  static const String bgLogout = 'assets/image/bgLogout.svg';
+  static const String bgOrder = 'assets/image/bgOrder.svg';
+  static const String bgPromo = 'assets/image/bgPromo.svg';
+  static const String bgService = 'assets/image/bgService.svg';
+  static const String bgThank = 'assets/image/bgThank.svg';
+  static const String bgSorry = 'assets/image/bgSorry.svg';
   // static const String  = 'assets/image/.svg';
 
   //AUTH
@@ -174,7 +184,6 @@ class ImageAssets {
   static const String auth = 'assets/icons/auth/Line.svg';
   static const String login = 'assets/icons/auth/login.svg';
   static const String obsecure = 'assets/icons/auth/obsecure.svg';
-  static const String password = 'assets/icons/auth/password.svg';
   static const String hide = 'assets/icons/auth/hide.svg';
   static const String fb = 'assets/icons/auth/facebook.svg';
   static const String ggl = 'assets/icons/auth/google.svg';

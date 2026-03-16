@@ -1,15 +1,14 @@
-
 import 'package:flutter/material.dart';
 
-import '../models/point_model.dart';
 import '../models/point_transaction.dart';
+
 /// Pure ChangeNotifier — zero BuildContext, zero Navigator.
 /// Navigation is done via GoRouter using the routerKey set in main.dart.
-/// 
-/// 
+///
+///
 
 enum PromoStatus { current, used }
- 
+
 class PromoCode {
   final String id;
   final String company;
@@ -18,7 +17,7 @@ class PromoCode {
   final String validUntil;
   final String code;
   final PromoStatus status;
- 
+
   const PromoCode({
     required this.id,
     required this.company,
@@ -28,7 +27,7 @@ class PromoCode {
     required this.code,
     required this.status,
   });
- 
+
   PromoCode copyWith({PromoStatus? status}) {
     return PromoCode(
       id: id,
@@ -42,7 +41,6 @@ class PromoCode {
   }
 }
 
-
 class RewardTier {
   final String name;
   final double spend;
@@ -55,7 +53,7 @@ class RewardTier {
   final bool tenDollarCoupon;
   final bool exclusiveDeals;
   final bool fullSizeDiamondGift;
- 
+
   const RewardTier({
     required this.name,
     required this.spend,
@@ -70,22 +68,22 @@ class RewardTier {
     required this.fullSizeDiamondGift,
   });
 }
- 
+
 class RedemptionOption {
   final int points;
   final String label;
   final bool canClaim;
- 
+
   const RedemptionOption({
     required this.points,
     required this.label,
     required this.canClaim,
   });
 }
+
 class ProfileProvider extends ChangeNotifier {
   /// Set this from main.dart: HomeProvider.routerKey = _routerKey;
   static GlobalKey<NavigatorState>? routerKey;
-
 
   bool _isCurrent = false;
   bool get isCurrent => _isCurrent;
@@ -93,7 +91,6 @@ class ProfileProvider extends ChangeNotifier {
     _isCurrent = !_isCurrent;
     notifyListeners();
   }
-
 
   String? _expandedOrderId;
   String? get expandedOrderId => _expandedOrderId;
@@ -106,7 +103,6 @@ class ProfileProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
-
 
   List<PointTransaction> _history = [];
   List<PointTransaction> get history => _history;
@@ -122,49 +118,68 @@ class ProfileProvider extends ChangeNotifier {
     // Dummy Details
     await Future.delayed(const Duration(seconds: 1));
     _history = [
-    PointTransaction(title: 'Daily Check-in', date: '25 Jan 2026', points: 10),
-    PointTransaction(title: 'Refund - Car Rental', date: '24 Jan 2026', points: 150),
-    PointTransaction(title: 'Ride Completed', date: '22 Jan 2026', points: 45),
-    PointTransaction(title: 'Discount Applied', date: '20 Jan 2026', points: 20, isCredit: false),
-  ];
+      PointTransaction(
+        title: 'Daily Check-in',
+        date: '25 Jan 2026',
+        points: 10,
+      ),
+      PointTransaction(
+        title: 'Refund - Car Rental',
+        date: '24 Jan 2026',
+        points: 150,
+      ),
+      PointTransaction(
+        title: 'Ride Completed',
+        date: '22 Jan 2026',
+        points: 45,
+      ),
+      PointTransaction(
+        title: 'Discount Applied',
+        date: '20 Jan 2026',
+        points: 20,
+        isCredit: false,
+      ),
+    ];
 
     _isLoading = false;
     notifyListeners();
-  }// Dummy Details
+  } // Dummy Details
 
-  int get totalPoints => _history.fold(0, (sum, item) => item.isCredit ? sum + item.points : sum - item.points);
+  int get totalPoints => _history.fold(
+    0,
+    (sum, item) => item.isCredit ? sum + item.points : sum - item.points,
+  );
 
- 
   // Member info
   final String memberName = 'Billie Groves';
   final String joinedDate = 'Joined 09/02/2017';
   final String memberTier = 'Member';
- 
+
   // Points info
   int currentPoints = 112;
   double pointsValue = 3.00;
- 
+
   // Tier progress
   double get tierProgressPercent => (currentPoints / 500).clamp(0.0, 1.0);
   double amountToReachPlatinum = 500;
   double amountToGo = 500;
   String earningRate = '1 pt per \$1';
- 
+
   // Tab state
   int selectedTab = 0;
- 
+
   void selectTab(int index) {
     selectedTab = index;
     notifyListeners();
   }
- 
+
   // Progress milestones
   final List<Map<String, dynamic>> milestones = [
     {'label': '\$3', 'pts': '100 pts', 'value': 100},
     {'label': '\$6', 'pts': '200 pts', 'value': 200},
     {'label': '\$8', 'pts': '250 pts', 'value': 250},
   ];
- 
+
   // Reward tiers
   final List<RewardTier> tiers = const [
     RewardTier(
@@ -207,24 +222,24 @@ class ProfileProvider extends ChangeNotifier {
       fullSizeDiamondGift: true,
     ),
   ];
- 
+
   // Redemption options
   final List<RedemptionOption> redemptionOptions = const [
     RedemptionOption(points: 2000, label: '\$75 off', canClaim: false),
     RedemptionOption(points: 3000, label: '\$100 off', canClaim: false),
   ];
- 
+
   Future<void> fetchPointHistory() async {
     _isLoading = true;
     notifyListeners();
- 
+
     // Simulate network delay
     await Future.delayed(const Duration(milliseconds: 800));
- 
+
     _isLoading = false;
     notifyListeners();
   }
- 
+
   void claimReward(RedemptionOption option) {
     if (currentPoints >= option.points) {
       currentPoints -= option.points;
@@ -234,8 +249,7 @@ class ProfileProvider extends ChangeNotifier {
 
   int _selectedTab1 = 0;
   int get selectedTab1 => _selectedTab1;
- 
- 
+
   final List<PromoCode> _promoCodes = [
     const PromoCode(
       id: '1',
@@ -283,21 +297,21 @@ class ProfileProvider extends ChangeNotifier {
       status: PromoStatus.used,
     ),
   ];
- 
+
   List<PromoCode> get currentCodes =>
       _promoCodes.where((p) => p.status == PromoStatus.current).toList();
- 
+
   List<PromoCode> get usedCodes =>
       _promoCodes.where((p) => p.status == PromoStatus.used).toList();
- 
+
   List<PromoCode> get displayedCodes =>
       _selectedTab1 == 0 ? currentCodes : usedCodes;
- 
+
   Future<void> selectTab1(int index) async {
     _selectedTab1 = index;
     notifyListeners();
   }
- 
+
   void addPromoCode({
     required String company,
     required String code,
@@ -317,7 +331,7 @@ class ProfileProvider extends ChangeNotifier {
     _promoCodes.add(newCode);
     notifyListeners();
   }
- 
+
   void copyCode(String code, BuildContext context) {
     // In real app: Clipboard.setData(ClipboardData(text: code));
     ScaffoldMessenger.of(context).showSnackBar(
@@ -330,7 +344,33 @@ class ProfileProvider extends ChangeNotifier {
     );
   }
 
+  final promoCodeCtrl = TextEditingController();
 
+  @override
+  void dispose() {
+    promoCodeCtrl.dispose();
+    super.dispose();
+  }
 
+  bool _isAddPromo = false;
+  bool get isAddPromo => _isAddPromo;
+  void toggleAddPromo() {
+    _isAddPromo = !_isAddPromo;
+    notifyListeners();
+  }
 
+  void addPromo() {
+    if (promoCodeCtrl.text.isNotEmpty) {
+      toggleAddPromo();
+      addPromoCode(
+        company: 'MD MR',
+        code: promoCodeCtrl.text.trim(),
+        discount: '20% off',
+        discountColor: Colors.greenAccent,
+        validUntil: 'No expiry',
+      );
+      promoCodeCtrl.clear();
+      toggleAddPromo();
+    }
+  }
 }

@@ -3,17 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../res/colors/app_color.dart';
 
-/// Pure-Flutter CustomDropdown.
-/// Instead of RxString / RxList, pass plain ValueNotifier<String> or
-/// ValueNotifier<List<String>> as the [controller].
-///
-/// Single-select example:
-///   final selected = ValueNotifier<String>('');
-///   CustomDropdown(controller: selected, items: [...], title: 'Role')
-///
-/// Multi-select example:
-///   final selected = ValueNotifier<List<String>>([]);
-///   CustomDropdown(controller: selected, items: [...], title: 'Skills', multiSelect: true)
 class CustomDropdown extends StatefulWidget {
   // controller must be ValueNotifier<String> (single) or ValueNotifier<List<String>> (multi)
   final ValueNotifier<dynamic> controller;

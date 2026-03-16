@@ -37,10 +37,14 @@ class WishlistView extends StatelessWidget {
             padding: EdgeInsets.only(right: 20.w),
             child: Center(
               child: Badge(
-                alignment: Alignment.topRight,
-                label: Text(count.toString()),
+                alignment: Alignment.bottomLeft,
+                label: Text(
+                  count.toString(),
+                  style: TextStyle(fontSize: 10.sp),
+                ),
                 isLabelVisible: count > 0,
                 backgroundColor: AppColor.defaultColor,
+                offset: Offset(-5.w, -10.h),
                 child: _headerIcon(ImageAssets.cart, onTap: () {}),
               ),
             ),

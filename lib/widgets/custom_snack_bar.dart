@@ -79,7 +79,6 @@ class _C {
   static const double margin = 16;
   static const double msgAlpha = 0.9;
   static const Duration animIn = Duration(milliseconds: 300);
-  static const Duration animOut = Duration(milliseconds: 300);
 }
 
 // ── Queue — same singleton behaviour as before ─────────────────────────────

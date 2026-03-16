@@ -69,7 +69,7 @@ class Dropdown extends StatelessWidget {
               boxShadow: shadow
                   ? [
                 BoxShadow(
-                  color: AppColor.boxShadowColor.withOpacity(0.1),
+                  color: AppColor.boxShadowColor.withAlpha(27),
                   blurRadius: 4.r,
                   offset: Offset(0, 2.h),
                 ),
@@ -95,7 +95,7 @@ class Dropdown extends StatelessWidget {
       throw Exception('Controller must be RxString for single selection');
     }
     return DropdownButtonFormField<String>(
-      value: controller.value.isEmpty ? null : controller.value,
+      initialValue: controller.value.isEmpty ? null : controller.value,
       decoration: InputDecoration(
         border: InputBorder.none,
         hintText: hintText ?? 'select_option'.tr,

@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../res/colors/app_color.dart';
-import '../models/product_model.dart';
 import '../providers/home_provider.dart';
 
 class FilterView extends StatefulWidget {
@@ -147,7 +146,7 @@ class _FilterViewState extends State<FilterView> {
       title: Text(
         'Filter',
         style: GoogleFonts.tenorSans(
-          color: const Color(0xFF222222),
+          color: AppColor.textColor,
           fontSize: 20.sp,
           fontWeight: FontWeight.w400,
         ),
@@ -178,7 +177,7 @@ class _FilterViewState extends State<FilterView> {
                 option,
                 style: GoogleFonts.tenorSans(
                   fontSize: 14.sp,
-                  color: const Color(0xFF666666),
+                  color:AppColor.textColor2,
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -205,7 +204,7 @@ class _FilterViewState extends State<FilterView> {
           style: GoogleFonts.tenorSans(
             fontSize: 16.sp,
             fontWeight: FontWeight.w400,
-            color: const Color(0xFF222222),
+            color: AppColor.textColor,
           ),
         ),
         SizedBox(height: 16.h),
@@ -228,7 +227,7 @@ class _FilterViewState extends State<FilterView> {
                   color: Color(int.parse(color.replaceFirst('#', '0xFF'))),
                   borderRadius: BorderRadius.circular(4.r),
                   border: isSelected
-                      ? Border.all(color: const Color(0xFFDD8560), width: 2.5.w)
+                      ? Border.all(color: AppColor.primaryColor, width: 2.5.w)
                       : Border.all(color: Colors.transparent, width: 2.5.w),
                 ),
               ),
@@ -248,7 +247,7 @@ class _FilterViewState extends State<FilterView> {
           style: GoogleFonts.tenorSans(
             fontSize: 16.sp,
             fontWeight: FontWeight.w400,
-            color: const Color(0xFF222222),
+            color: AppColor.textColor,
           ),
         ),
         SizedBox(height: 20.h),
@@ -256,7 +255,7 @@ class _FilterViewState extends State<FilterView> {
           values: _priceRange,
           min: 0,
           max: 200,
-          activeColor: const Color(0xFFDD8560),
+          activeColor: AppColor.primaryColor,
           inactiveColor: const Color(0xFFE8E8E8),
           onChanged: (RangeValues values) {
             setState(() {
@@ -273,7 +272,7 @@ class _FilterViewState extends State<FilterView> {
               style: GoogleFonts.lato(
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w700,
-                color: const Color(0xFF222222),
+                color: AppColor.textColor,
               ),
             ),
             Text(
@@ -281,7 +280,7 @@ class _FilterViewState extends State<FilterView> {
               style: GoogleFonts.lato(
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w700,
-                color: const Color(0xFF222222),
+                color: AppColor.textColor,
               ),
             ),
           ],
@@ -323,10 +322,10 @@ class _FilterViewState extends State<FilterView> {
                           }
                         });
                       },
-                      activeColor: const Color(0xFFDD8560),
+                      activeColor: AppColor.primaryColor,
                       side: BorderSide(
                         color: isSelected
-                            ? const Color(0xFFDD8560)
+                            ? AppColor.primaryColor
                             : const Color(0xFFDDDDDD),
                         width: 1.5.w,
                       ),
@@ -393,10 +392,10 @@ class _FilterViewState extends State<FilterView> {
                           }
                         });
                       },
-                      activeColor: const Color(0xFFDD8560),
+                      activeColor: AppColor.primaryColor,
                       side: BorderSide(
                         color: isSelected
-                            ? const Color(0xFFDD8560)
+                            ? AppColor.primaryColor
                             : const Color(0xFFDDDDDD),
                         width: 1.5.w,
                       ),
@@ -439,7 +438,7 @@ class _FilterViewState extends State<FilterView> {
           style: GoogleFonts.tenorSans(
             fontSize: 16.sp,
             fontWeight: FontWeight.w400,
-            color: const Color(0xFF222222),
+            color: AppColor.textColor,
           ),
         ),
         SizedBox(height: 16.h),
@@ -462,8 +461,8 @@ class _FilterViewState extends State<FilterView> {
                 padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
                 decoration: BoxDecoration(
                   border: isSelected
-                      ? Border.all(color: const Color(0xFFDD8560), width: 2.w)
-                      : Border.all(color: const Color(0xFFE0E0E0), width: 1.w),
+                      ? Border.all(color: AppColor.primaryColor, width: 2.w)
+                      : Border.all(color: AppColor.lightGrey, width: 1.w),
                   borderRadius: BorderRadius.circular(8.r),
                   color: isSelected
                       ? const Color(0xFFFFF5F3)
@@ -475,8 +474,8 @@ class _FilterViewState extends State<FilterView> {
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w400,
                     color: isSelected
-                        ? const Color(0xFFDD8560)
-                        : const Color(0xFF666666),
+                        ? AppColor.primaryColor
+                        : AppColor.textColor2,
                   ),
                 ),
               ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../res/assets/image_assets.dart';
@@ -11,27 +12,11 @@ import '../../../../widgets/snack_bar_helper.dart';
 import '../../../routes/app_router.dart';
 import '../providers/auth_provider.dart';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-
-import '../../../../res/assets/image_assets.dart';
-import '../../../../res/colors/app_color.dart';
-import '../../../../widgets/custom_button.dart';
-import '../../../../widgets/input_text_widget.dart';
-import '../../../routes/app_router.dart';
-import '../providers/auth_provider.dart';
-
 class ForgetPasswordView extends StatelessWidget {
   const ForgetPasswordView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom != 0;
-
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
@@ -83,7 +68,7 @@ class ForgetPasswordView extends StatelessWidget {
                         builder: (context, auth, _) => ListView(
                           padding: EdgeInsets.symmetric(horizontal: 20.w),
                           children: [
-                            SizedBox(height: 30.h,),
+                            SizedBox(height: 30.h),
                             SizedBox(
                               width: 295.w,
                               child: Text(
@@ -99,8 +84,7 @@ class ForgetPasswordView extends StatelessWidget {
                             SizedBox(height: 30.h),
                             InputTextWidget(
                               hintText: 'Enter your email',
-                              textEditingController:
-                                  auth.forgetEmailController,
+                              textEditingController: auth.forgetEmailController,
                               onChanged: (v) =>
                                   auth.forgetEmailController.text = v,
                               keyboardType: TextInputType.emailAddress,
@@ -110,21 +94,24 @@ class ForgetPasswordView extends StatelessWidget {
                               onPress: auth.isLoading
                                   ? null
                                   : () async {
-                                if (auth.forgetEmailController.text.isNotEmpty) {
-                                  context.push(
-                                    AppRoutes.otpVerify,
-                                    extra: "forget",
-                                  );
-                                } else {
-                                  showWarningSnackBar(
-                                    message: 'Please enter an email',
-                                  );
-                                }
-                              },
+                                      if (auth
+                                          .forgetEmailController
+                                          .text
+                                          .isNotEmpty) {
+                                        context.push(
+                                          AppRoutes.otpVerify,
+                                          extra: "forget",
+                                        );
+                                      } else {
+                                        showWarningSnackBar(
+                                          message: 'Please enter an email',
+                                        );
+                                      }
+                                    },
                               loading: auth.isLoading,
                               title: 'Continue',
                               fontWeight: FontWeight.w700,
-                            )
+                            ),
                           ],
                         ),
                       ),

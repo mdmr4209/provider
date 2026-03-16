@@ -2,39 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:newproject/res/assets/image_assets.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../res/assets/image_assets.dart';
+import '../../../../res/colors/app_color.dart';
 import '../providers/profile_provider.dart';
-
-// ─── Color constants ────────────────────────────────────────────────
-class AppColor {
-  static const Color background = Color(0xFFFCEDEA);
-  static const Color text = Color(0xFF222222);
-  static const Color primary = Color(0xFFD05278);
-  static const Color primaryLight = Color(0xFFFFD7E3);
-  static const Color progressFilled = Color(0xFFD05278);
-  static const Color progressEmpty = Color(0xFFE0E0E0);
-  static const Color divider = Color(0xFFEEEEEE);
-  static const Color heartRed = Color(0xFFD05278);
-}
-
-// ─── Entry point (for standalone testing) ───────────────────────────
-void main() {
-  runApp(
-    ChangeNotifierProvider(
-      create: (_) => ProfileProvider(),
-      child: ScreenUtilInit(
-        designSize: const Size(375, 812),
-        minTextAdapt: true,
-        builder: (_, __) => const MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home: PointView(),
-        ),
-      ),
-    ),
-  );
-}
 
 // ─── Main View ──────────────────────────────────────────────────────
 class PointView extends StatefulWidget {
@@ -62,7 +34,9 @@ class _PointViewState extends State<PointView> {
           appBar: _buildAppBar(context),
           body: provider.isLoading
               ? const Center(
-                  child: CircularProgressIndicator(color: AppColor.primary),
+                  child: CircularProgressIndicator(
+                    color: AppColor.defaultColor,
+                  ),
                 )
               : SingleChildScrollView(
                   child: Column(
@@ -91,17 +65,21 @@ class _PointViewState extends State<PointView> {
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return AppBar(
-      backgroundColor: AppColor.background,
+      backgroundColor: AppColor.backgroundColor,
       elevation: 0,
       centerTitle: true,
       leading: IconButton(
         onPressed: () => Navigator.maybePop(context),
-        icon: Icon(Icons.arrow_back_ios_new, size: 18.r, color: AppColor.text),
+        icon: Icon(
+          Icons.arrow_back_ios_new,
+          size: 18.r,
+          color: AppColor.textColor,
+        ),
       ),
       title: Text(
         'My Points',
         style: GoogleFonts.tenorSans(
-          color: AppColor.text,
+          color: AppColor.textColor,
           fontSize: 18.sp,
           fontWeight: FontWeight.w400,
           letterSpacing: 1.5,
@@ -119,7 +97,7 @@ class _TabBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColor.background,
+      color: AppColor.backgroundColor,
       padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: Row(
         children: [
@@ -160,8 +138,8 @@ class _TabItem extends StatelessWidget {
           border: Border(
             bottom: BorderSide(
               color: isSelected
-                  ? AppColor.text
-                  : AppColor.text.withOpacity(0.25),
+                  ? AppColor.textColor
+                  : AppColor.textColor.withAlpha(67),
               width: 2,
             ),
           ),
@@ -171,7 +149,7 @@ class _TabItem extends StatelessWidget {
           child: Text(
             label,
             style: GoogleFonts.tenorSans(
-              color: AppColor.text,
+              color: AppColor.textColor,
               fontSize: 18.sp,
               fontWeight: FontWeight.w400,
             ),
@@ -199,7 +177,7 @@ class _MemberInfoSection extends StatelessWidget {
           Text(
             provider.memberTier,
             style: GoogleFonts.tenorSans(
-              color: AppColor.text,
+              color: AppColor.textColor,
               fontSize: 22.sp,
               fontWeight: FontWeight.w400,
             ),
@@ -210,7 +188,7 @@ class _MemberInfoSection extends StatelessWidget {
               Text(
                 provider.memberName,
                 style: GoogleFonts.lato(
-                  color: AppColor.text,
+                  color: AppColor.textColor,
                   fontSize: 13.sp,
                   fontWeight: FontWeight.w700,
                 ),
@@ -219,7 +197,7 @@ class _MemberInfoSection extends StatelessWidget {
               Text(
                 provider.joinedDate,
                 style: GoogleFonts.lato(
-                  color: AppColor.text.withOpacity(0.6),
+                  color: AppColor.textColor.withAlpha(152),
                   fontSize: 11.sp,
                 ),
               ),
@@ -256,16 +234,16 @@ class _CircularProgressSection extends StatelessWidget {
                     child: CircularProgressIndicator(
                       value: provider.tierProgressPercent,
                       strokeWidth: 8.w,
-                      backgroundColor: AppColor.progressEmpty,
+                      backgroundColor: AppColor.lightGrey,
                       valueColor: const AlwaysStoppedAnimation<Color>(
-                        AppColor.progressFilled,
+                        AppColor.defaultColor,
                       ),
                     ),
                   ),
                   Text(
                     '$percent%',
                     style: GoogleFonts.tenorSans(
-                      color: AppColor.text,
+                      color: AppColor.textColor,
                       fontSize: 32.sp,
                       fontWeight: FontWeight.w400,
                     ),
@@ -277,7 +255,7 @@ class _CircularProgressSection extends StatelessWidget {
             Text(
               'Towards Platinum',
               style: GoogleFonts.lato(
-                color: AppColor.text.withOpacity(0.6),
+                color: AppColor.textColor.withAlpha(152),
                 fontSize: 13.sp,
                 letterSpacing: 0.5,
               ),
@@ -304,14 +282,14 @@ class _TierInfoSection extends StatelessWidget {
             label: 'To reach Platinum',
             value: '\$${provider.amountToReachPlatinum.toStringAsFixed(0)}',
           ),
-          Divider(color: AppColor.divider, height: 1),
+          Divider(color: AppColor.whiteTextColor, height: 1),
           _TierInfoRow(
             label: 'Amount to go',
             value: '\$${provider.amountToGo.toStringAsFixed(0)}',
           ),
-          Divider(color: AppColor.divider, height: 1),
+          Divider(color: AppColor.whiteTextColor, height: 1),
           _TierInfoRow(label: "You're earning", value: provider.earningRate),
-          Divider(color: AppColor.divider, height: 1),
+          Divider(color: AppColor.whiteTextColor, height: 1),
         ],
       ),
     );
@@ -332,13 +310,13 @@ class _TierInfoRow extends StatelessWidget {
         children: [
           Text(
             label,
-            style: GoogleFonts.lato(fontSize: 13.sp, color: AppColor.text),
+            style: GoogleFonts.lato(fontSize: 13.sp, color: AppColor.textColor),
           ),
           Text(
             value,
             style: GoogleFonts.lato(
               fontSize: 13.sp,
-              color: AppColor.text,
+              color: AppColor.textColor,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -357,7 +335,7 @@ class _MemberIdButton extends StatelessWidget {
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          border: Border.all(color: AppColor.text.withOpacity(0.3)),
+          border: Border.all(color: AppColor.textColor.withAlpha(77)),
           borderRadius: BorderRadius.circular(2.r),
         ),
         padding: EdgeInsets.symmetric(vertical: 14.h),
@@ -369,7 +347,7 @@ class _MemberIdButton extends StatelessWidget {
             Text(
               'MEMBER ID',
               style: GoogleFonts.lato(
-                color: AppColor.text,
+                color: AppColor.textColor,
                 fontSize: 13.sp,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 1.5,
@@ -397,7 +375,7 @@ class _PointsActivitySection extends StatelessWidget {
           Text(
             'POINTS ACTIVITY',
             style: GoogleFonts.tenorSans(
-              color: AppColor.text.withOpacity(0.5),
+              color: AppColor.textColor.withAlpha(127),
               fontSize: 12.sp,
               fontWeight: FontWeight.w400,
               letterSpacing: 1.5,
@@ -412,7 +390,7 @@ class _PointsActivitySection extends StatelessWidget {
                   Text(
                     '${provider.currentPoints}',
                     style: GoogleFonts.tenorSans(
-                      color: AppColor.text,
+                      color: AppColor.textColor,
                       fontSize: 30.sp,
                       fontWeight: FontWeight.w400,
                     ),
@@ -421,7 +399,7 @@ class _PointsActivitySection extends StatelessWidget {
                     'Points',
                     style: GoogleFonts.tenorSans(
                       fontSize: 11.sp,
-                      color: AppColor.text.withOpacity(0.5),
+                      color: AppColor.textColor.withAlpha(127),
                     ),
                   ),
                 ],
@@ -433,7 +411,7 @@ class _PointsActivitySection extends StatelessWidget {
                   Text(
                     '\$${provider.pointsValue.toStringAsFixed(2)}',
                     style: GoogleFonts.tenorSans(
-                      color: AppColor.text,
+                      color: AppColor.textColor,
                       fontSize: 30.sp,
                       fontWeight: FontWeight.w400,
                     ),
@@ -442,7 +420,7 @@ class _PointsActivitySection extends StatelessWidget {
                     'Value',
                     style: GoogleFonts.tenorSans(
                       fontSize: 11.sp,
-                      color: AppColor.text.withOpacity(0.5),
+                      color: AppColor.textColor.withAlpha(127),
                     ),
                   ),
                 ],
@@ -471,7 +449,7 @@ class _ProgressBarSection extends StatelessWidget {
               Container(
                 height: 6.h,
                 decoration: BoxDecoration(
-                  color: AppColor.progressEmpty,
+                  color: AppColor.lightGrey,
                   borderRadius: BorderRadius.circular(10.r),
                 ),
               ),
@@ -480,7 +458,7 @@ class _ProgressBarSection extends StatelessWidget {
                 child: Container(
                   height: 6.h,
                   decoration: BoxDecoration(
-                    color: AppColor.progressFilled,
+                    color: AppColor.defaultColor,
                     borderRadius: BorderRadius.circular(10.r),
                   ),
                 ),
@@ -497,7 +475,7 @@ class _ProgressBarSection extends StatelessWidget {
                     m['label'],
                     style: GoogleFonts.tenorSans(
                       fontSize: 10.sp,
-                      color: AppColor.text,
+                      color: AppColor.textColor,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
@@ -505,7 +483,7 @@ class _ProgressBarSection extends StatelessWidget {
                     m['pts'],
                     style: GoogleFonts.tenorSans(
                       fontSize: 10.sp,
-                      color: AppColor.text.withOpacity(0.5),
+                      color: AppColor.textColor.withAlpha(127),
                       fontWeight: FontWeight.w400,
                     ),
                   ),
@@ -534,7 +512,7 @@ class _RewardsLoveSection extends StatelessWidget {
           Text(
             'Rewards Love',
             style: GoogleFonts.tenorSans(
-              color: AppColor.text,
+              color: AppColor.textColor,
               fontSize: 20.sp,
               fontWeight: FontWeight.w400,
             ),
@@ -544,7 +522,7 @@ class _RewardsLoveSection extends StatelessWidget {
             'THE PERKS GET ELIXIER-369 AT EVERY MEMBER LEVEL',
             textAlign: TextAlign.center,
             style: GoogleFonts.tenorSans(
-              color: AppColor.text.withOpacity(0.5),
+              color: AppColor.textColor.withAlpha(127),
               fontSize: 10.sp,
               letterSpacing: 1.0,
             ),
@@ -622,7 +600,7 @@ class _TableHeaderRow extends StatelessWidget {
             style: GoogleFonts.tenorSans(
               fontSize: 10.sp,
               fontWeight: FontWeight.w700,
-              color: AppColor.text.withOpacity(0.5),
+              color: AppColor.textColor.withAlpha(127),
               letterSpacing: 0.5,
             ),
           ),
@@ -636,7 +614,7 @@ class _TableHeaderRow extends StatelessWidget {
                 style: GoogleFonts.tenorSans(
                   fontSize: 9.sp,
                   fontWeight: FontWeight.w700,
-                  color: AppColor.text,
+                  color: AppColor.textColor,
                   letterSpacing: 0.5,
                   height: 1.4,
                 ),
@@ -664,7 +642,7 @@ class _SectionLabel extends StatelessWidget {
           style: GoogleFonts.tenorSans(
             fontSize: 10.sp,
             fontWeight: FontWeight.w700,
-            color: AppColor.text.withOpacity(0.45),
+            color: AppColor.textColor.withAlpha(115),
             letterSpacing: 1.5,
           ),
         ),
@@ -689,7 +667,9 @@ class _TableDataRow extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 12.h),
       decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: AppColor.divider, width: 0.8)),
+        border: Border(
+          bottom: BorderSide(color: AppColor.whiteTextColor, width: 0.8),
+        ),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -700,7 +680,7 @@ class _TableDataRow extends StatelessWidget {
               label,
               style: GoogleFonts.tenorSans(
                 fontSize: 12.sp,
-                color: AppColor.text,
+                color: AppColor.textColor,
                 height: 1.4,
               ),
             ),
@@ -714,7 +694,7 @@ class _TableDataRow extends StatelessWidget {
                         style: GoogleFonts.tenorSans(
                           fontSize: 12.sp,
                           fontWeight: FontWeight.w600,
-                          color: AppColor.text,
+                          color: AppColor.textColor,
                         ),
                       )
                     : (v == true
@@ -744,14 +724,14 @@ class _PointsRedeemedSection extends StatelessWidget {
       children: [
         Container(
           width: double.infinity,
-          color: AppColor.background,
+          color: AppColor.backgroundColor,
           padding: EdgeInsets.symmetric(vertical: 20.h),
           child: Column(
             children: [
               Text(
                 'Points Redeemed',
                 style: GoogleFonts.tenorSans(
-                  color: AppColor.text,
+                  color: AppColor.textColor,
                   fontSize: 22.sp,
                   fontWeight: FontWeight.w400,
                 ),
@@ -798,13 +778,13 @@ class _RedemptionCard extends StatelessWidget {
       height: 132.h,
       margin: EdgeInsets.only(right: 12.w),
       decoration: BoxDecoration(
-        color: AppColor.primary,
+        color: AppColor.defaultColor,
         borderRadius: BorderRadius.circular(2.r),
       ),
       child: Stack(
         alignment: Alignment.center,
         children: [
-          // Background overlay
+          // backgroundColor overlay
           Positioned.fill(
             child: Opacity(
               opacity: 0.08,
@@ -817,7 +797,7 @@ class _RedemptionCard extends StatelessWidget {
               Text(
                 '${option.points} PTS',
                 style: GoogleFonts.tenorSans(
-                  color: AppColor.primaryLight,
+                  color: AppColor.defaultLightColor,
                   fontSize: 12.sp,
                   letterSpacing: 1.2,
                 ),
@@ -826,7 +806,7 @@ class _RedemptionCard extends StatelessWidget {
               Text(
                 option.label,
                 style: GoogleFonts.tenorSans(
-                  color: const Color(0xFFFCEDEA),
+                  color: AppColor.backgroundColor,
                   fontSize: 36.sp,
                   fontWeight: FontWeight.w400,
                 ),
@@ -855,7 +835,8 @@ class _RedemptionCard extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 10.h),],
+              SizedBox(height: 10.h),
+            ],
           ),
         ],
       ),

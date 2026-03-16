@@ -24,8 +24,6 @@ class ApiService extends GetxService {
       );
 
       // Log the raw response for debugging
-      print('API Response Status: ${response.statusCode}');
-      print('API Response Body: ${response.body}');
 
       if (response.body.isEmpty) {
         return {
@@ -49,7 +47,6 @@ class ApiService extends GetxService {
         'data': responseData as Map<String, dynamic>,
       };
     } catch (e) {
-      print('API Error: $e');
       throw Exception('Failed to fetch company: $e');
     }
   }

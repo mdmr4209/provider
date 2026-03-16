@@ -161,9 +161,7 @@ class AuthView extends StatelessWidget {
                                     Spacer(),
                                     InkWell(
                                       onTap: () {
-                                        print(
-                                          "Forget Password Clicked",
-                                        ); // Add this to debug
+                                        // Add this to debug
                                         context.push(AppRoutes.forgetPass);
                                       },
                                       child: Text(

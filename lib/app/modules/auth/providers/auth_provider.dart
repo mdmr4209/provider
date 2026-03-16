@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -16,7 +15,6 @@ import '../../../routes/app_router.dart';
 /// Navigation is done via GoRouter using the routerKey set in main.dart.
 class AuthProvider extends ChangeNotifier {
   final ApiService apiService;
-  final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
   /// Set this from main.dart: AuthProvider.routerKey = _routerKey;
   static GlobalKey<NavigatorState>? routerKey;
@@ -32,7 +30,7 @@ class AuthProvider extends ChangeNotifier {
   // ── State ──────────────────────────────────────────────────────────────────
   bool _isOtpVerified = false;
   bool _isLoading = false;
-  bool _isHomeLoading = false;
+  final bool _isHomeLoading = false;
   bool _isCheckingToken = true;
   bool _isLoggedIn = false;
   bool _isSignedIn = false;
@@ -214,7 +212,6 @@ class AuthProvider extends ChangeNotifier {
   // ── Core auth methods (no BuildContext) ────────────────────────────────────
   Future<void> login() async {
     final email = emailController.text.trim();
-    final password = passwordController.text;
     debugPrint('login: $email');
 
     // try {

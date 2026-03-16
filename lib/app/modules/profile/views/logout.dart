@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 
 import '../../../../res/assets/image_assets.dart';
 import '../../../../res/colors/app_color.dart';
 import '../../../../widgets/custom_button.dart';
+import '../../../routes/app_router.dart';
 
 class Logout extends StatelessWidget {
   const Logout({super.key});
@@ -15,7 +16,7 @@ class Logout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.r)),
-      backgroundColor: const Color(0xFFFCEDEA), // Your light red/pink color
+      backgroundColor: AppColor.backgroundColor, // Your light red/pink color
       child: Padding(
         padding: EdgeInsets.all(20.r),
         child: Column(
@@ -24,9 +25,15 @@ class Logout extends StatelessWidget {
             // Image/Illustration
             SizedBox(
               height: 180.h,
-              child: Image.asset(
-                ImageAssets.addReview, // Ensure this asset path is correct
-                fit: BoxFit.contain,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Image.asset(ImageAssets.bgIcon),
+                  Positioned(
+                    bottom: 0,
+                    child: SvgPicture.asset(ImageAssets.bgLogout),
+                  ),
+                ],
               ),
             ),
             SizedBox(height: 20.h),
@@ -54,9 +61,10 @@ class Logout extends StatelessWidget {
                     onPress: () async {
                       // Call your clear/logout logic
                       // context.read<AuthProvider>().clear();
+                      context.go(AppRoutes.login);
                     },
                     textColor: AppColor.textColor,
-                    borderColor: AppColor.whiteColor,
+                    buttonColor: AppColor.whiteColor,
                     title: 'SURE',
                   ),
                 ),
@@ -68,6 +76,7 @@ class Logout extends StatelessWidget {
                     onPress: () async {
                       // Call your clear/logout logic
                       // context.read<AuthProvider>().clear();
+                      context.pop();
                     },
                     title: 'CANCEL',
                   ),

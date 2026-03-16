@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 class AppColor {
   static const Color defaultColor = Color(0xFFD05278);
   static const Color backgroundColor = Color(0xFFFCEDEA);
+  static const Color defaultLightColor = Color(0xFFFFD7E3);
   static const Color ratingColor = Color(0xFFCFC819);
   static const Color ratingColor2 = Color(0xFFFFBE00);
+  static const Color primaryColor = Color(0xFFDD8560);
 
   static const Color textColor = Color(0xFF222222);
   static const Color textColor2 = Color(0xFF666666);
@@ -14,11 +16,15 @@ class AppColor {
   static const Color indicatorColor = Color(0xFFF4CED3);
   static const Color hintTextColor = Color(0xFF6A6A6A);
   static const Color buttonColor = Color(0xFFAF48FF);
+  static const Color containerColor = Color(0xFFFAF9FF);
+  static const Color containerColor2 = Color(0xFFF5F5F5);
+  static const Color cardBorderColor = Color(0xFFE8E8E8);
 
   static const Color whiteColor = Color(0xFFFFFFFF);
   static const Color blackColor = Color(0xFF000000);
   static const Color redColor = Color(0xFFFF0000);
   static const Color greenColor =  Color(0xFF00824B);
+  static const Color lightGrey = Color(0xFFE0E0E0);
 
   static const Color warningColor = Color(0xFFFF710B);
 
@@ -27,7 +33,6 @@ class AppColor {
   static const Color redAlphaColor = Color(0xCCF44336);
   static const Color black20Color = Color(0x33000000);
   static const Color defaultDeepColor = Color(0xFF0A1C79);
-  static const Color defaultLightColor = Color(0xFFC3D0FF);
   static const Color defaultLightColor2 = Color(0xFFE3E9FF);
   static const Color alphaColor = Color(0x1E000000);
   static const Color textColor1 = Color(0xFF515F84);
@@ -40,11 +45,9 @@ class AppColor {
   static const Color linearLightColor = Color(0xFF6294FF);
   static const Color linearShadowColor = Color(0x3F000000);
   static const Color buttonColor1 = Color(0xFF021681);
-  static const Color containerColor = Color(0xFFE8E9F0);
   static const Color borderColor = Color(0xFFDAD9D9);
   static const Color boxShadowColor = Color(0x3F000000);
   static const Color boxShadowColor2 = Color(0x26000000);
-  static const Color containerColor2 = Color(0xFFB4BBDF);
   static const Color containerColor3 = Color(0xFFE0E4F2);
   static const Color containerBorderColor = Color(0xFFB5B5B5);
   static const Color disableColor = Color(0xEEEEEEFF);
@@ -108,7 +111,6 @@ class AppColor {
   static const Color palePink = Color(0xFFD7AFB9);
   static const Color black12 = Color(0x1F000000);
   static const Color veryLightGray = Color(0xFFFDFDFE);
-  static const Color lightGrey = Color(0xFFE0E0E0);
   static const Color softBlueGrey = Color(0xFFA8AAB9);
   static const Color lightBlueBackground = Color(0xFFF0F2F8);
 }

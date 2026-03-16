@@ -7,11 +7,9 @@ import 'package:provider/provider.dart';
 
 import '../../../../res/assets/image_assets.dart';
 import '../../../../res/colors/app_color.dart';
-import '../../../../widgets/custom_button.dart';
 import '../../../routes/app_router.dart';
 import '../providers/profile_provider.dart';
 import 'logout.dart';
-import 'point_view.dart' hide AppColor;
 
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
@@ -39,10 +37,14 @@ class ProfileView extends StatelessWidget {
             padding: EdgeInsets.only(right: 20.w),
             child: Center(
               child: Badge(
-                alignment: Alignment.topRight,
-                label: Text(count.toString()),
+                alignment: Alignment.bottomLeft,
+                label: Text(
+                  count.toString(),
+                  style: TextStyle(fontSize: 10.sp),
+                ),
                 isLabelVisible: count > 0,
                 backgroundColor: AppColor.defaultColor,
+                offset: Offset(-5.w, -10.h),
                 child: _headerIcon(ImageAssets.cart, onTap: () {}),
               ),
             ),
@@ -212,7 +214,7 @@ class ProfileView extends StatelessWidget {
               width: 50.r,
               height: 50.r,
               decoration: ShapeDecoration(
-                color: const Color(0xFFFAF9FF),
+                color:AppColor.containerColor,
                 shape: RoundedRectangleBorder(
                   side: BorderSide(width: 1.w, color: AppColor.whiteTextColor),
                   borderRadius: BorderRadius.circular(10.r),
@@ -239,7 +241,7 @@ class ProfileView extends StatelessWidget {
               child: Text(
                 title,
                 style: GoogleFonts.tenorSans(
-                  color: isLogout ? Colors.redAccent : const Color(0xFF222222),
+                  color: isLogout ? Colors.redAccent : AppColor.textColor,
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w400,
                 ),
@@ -250,7 +252,7 @@ class ProfileView extends StatelessWidget {
               Icon(
                 Icons.arrow_forward_ios,
                 size: 16.r,
-                color: const Color(0xFF999999),
+                color: AppColor.textColor3,
               ),
           ],
         ),

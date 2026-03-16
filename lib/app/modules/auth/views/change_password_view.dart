@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import '../../../../res/assets/image_assets.dart';
 import '../../../../res/colors/app_color.dart';
 import '../../../../widgets/custom_button.dart';
-import '../../../../widgets/custom_snack_bar.dart';
 import '../../../../widgets/input_text_widget.dart';
 import '../../../routes/app_router.dart';
 import '../providers/auth_provider.dart';
@@ -31,10 +30,12 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
   String? _validate(String password, String confirm) {
     if (password != confirm) return 'Passwords do not match.';
     if (password.length < 8) return 'Password must be at least 8 characters.';
-    if (!RegExp(r'[A-Z]').hasMatch(password))
+    if (!RegExp(r'[A-Z]').hasMatch(password)) {
       return 'Must contain an uppercase letter.';
-    if (!RegExp(r'[a-z]').hasMatch(password))
+    }
+    if (!RegExp(r'[a-z]').hasMatch(password)) {
       return 'Must contain a lowercase letter.';
+    }
     if (!RegExp(r'[0-9]').hasMatch(password)) return 'Must contain a digit.';
     if (!RegExp(r'[!@#\$%^&*(),.?":{}|<>]').hasMatch(password)) {
       return 'Must contain a special character.';

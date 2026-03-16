@@ -1,34 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:newproject/app/modules/auth/views/go_to_home.dart';
-import 'package:newproject/app/modules/home/views/comment_review_view.dart';
-import 'package:newproject/app/modules/home/views/filter_view.dart';
-import 'package:newproject/app/modules/home/views/product_view.dart';
-import 'package:newproject/app/modules/home/views/review_view.dart';
-import 'package:newproject/app/modules/home/views/search_view.dart';
-import 'package:newproject/app/modules/home/views/wishlist_view.dart';
-import 'package:newproject/app/modules/profile/views/add_new_address.dart';
-import 'package:newproject/app/modules/profile/views/add_new_card_view.dart';
-import 'package:newproject/app/modules/profile/views/edit_view.dart';
-import 'package:newproject/app/modules/profile/views/order_history.dart';
-import 'package:newproject/app/modules/profile/views/logout.dart';
-import 'package:newproject/app/modules/profile/views/payment_view.dart';
-import 'package:newproject/app/modules/profile/views/promo_code_view.dart';
-import 'package:newproject/app/modules/profile/views/track_order.dart';
 
 import '../modules/auth/providers/auth_provider.dart';
 import '../modules/auth/views/auth_view.dart';
 import '../modules/auth/views/change_password_view.dart';
 import '../modules/auth/views/forget_password_view.dart';
+import '../modules/auth/views/go_to_home.dart';
 import '../modules/auth/views/otp_verify_view.dart';
 import '../modules/auth/views/sign_up_view.dart';
+import '../modules/cart/view/checkout.dart';
+import '../modules/cart/view/confirm_order_view.dart';
+import '../modules/cart/view/order_history.dart';
+import '../modules/cart/view/order_view.dart';
+import '../modules/cart/view/payment_method.dart';
+import '../modules/cart/view/shipping_details.dart';
+import '../modules/home/views/comment_review_view.dart';
+import '../modules/home/views/filter_view.dart';
+import '../modules/home/views/home_view.dart';
 import '../modules/home/views/navigation.dart';
+import '../modules/home/views/product_view.dart';
+import '../modules/home/views/review_view.dart';
+import '../modules/home/views/search_view.dart';
+import '../modules/home/views/wishlist_view.dart';
+import '../modules/onboarding/providers/onboarding_provider.dart';
+import '../modules/onboarding/views/onboarding_view.dart';
+import '../modules/profile/views/add_new_address.dart';
+import '../modules/profile/views/add_new_card_view.dart';
+import '../modules/profile/views/add_promo_code_view.dart';
+import '../modules/profile/views/edit_view.dart';
+import '../modules/profile/views/logout.dart';
 import '../modules/profile/views/my_address.dart';
-import '../modules/profile/views/order_view.dart';
+import '../modules/profile/views/payment_view.dart';
 import '../modules/profile/views/point_view.dart';
-import '../modules/splash/views/splash_view.dart';
-import '../onboarding/providers/onboarding_provider.dart';
-import '../onboarding/views/onboarding_view.dart';
+import '../modules/profile/views/profile_view.dart';
+import '../modules/profile/views/promo_code_view.dart';
+import '../modules/profile/views/track_order.dart';
 
 // ── Route name constants ────────────────────────────────────────────────────
 abstract class AppRoutes {
@@ -59,7 +65,10 @@ abstract class AppRoutes {
   static const order = '/order';
   static const payment = '/payment';
   static const shipping = '/shipping';
+  static const profile = '/profile';
+  static const confirm = '/confirm';
   static const checkout = '/checkout';
+  static const addPromoCodeView = '/addPromoCodeView';
   // static const  = '/';
 }
 
@@ -105,9 +114,11 @@ class AppRouter {
             loc == AppRoutes.home ||
             loc == AppRoutes.wishlist ||
             loc == AppRoutes.search ||
+            loc == AppRoutes.addPromoCodeView ||
             loc == AppRoutes.review ||
             loc == AppRoutes.product ||
             loc == AppRoutes.filter ||
+            loc == AppRoutes.profile ||
             loc == AppRoutes.commentReview ||
             loc == AppRoutes.editProfile ||
             loc == AppRoutes.logout ||
@@ -115,6 +126,7 @@ class AppRouter {
             loc == AppRoutes.trackOrder ||
             loc == AppRoutes.promoCode ||
             loc == AppRoutes.address ||
+            loc == AppRoutes.confirm ||
             loc == AppRoutes.orderHistory ||
             loc == AppRoutes.paymentMethod ||
             loc == AppRoutes.addAddress ||
@@ -132,17 +144,61 @@ class AppRouter {
         return null;
       },
       routes: [
+        StatefulShellRoute.indexedStack(
+          builder: (context, state, navigationShell) {
+            // navigationShell contains the currentIndex and the sub-page
+            return Navbar(navigationShell: navigationShell);
+          },
+          branches: [
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: AppRoutes.home,
+                  builder: (context, state) => const HomeView(),
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: AppRoutes.search,
+                  builder: (context, state) => const SearchView(),
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: AppRoutes.order,
+                  builder: (context, state) => const OrderScreen(),
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: AppRoutes.wishlist,
+                  builder: (context, state) => const WishlistView(),
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: AppRoutes.profile, // Define a simple profile path
+                  builder: (context, state) => const ProfileView(),
+                ),
+              ],
+            ),
+          ],
+        ),
+
         GoRoute(
           path: AppRoutes.onboarding,
           builder: (context, state) => const OnboardingView(),
         ),
+
         // ── Auth ──────────────────────────────────────────────────────────────
-        GoRoute(
-          path: AppRoutes.onboarding,
-          name: 'splash',
-          // Usage: context.go(AppRoutes.changePass, extra: 'Forget')
-          pageBuilder: (_, __) => const MaterialPage(child: SplashView()),
-        ),
         GoRoute(
           path: AppRoutes.login,
           name: 'login',
@@ -182,14 +238,14 @@ class AppRouter {
         ),
 
         // ── Protected ─────────────────────────────────────────────────────────
-        GoRoute(
-          path: AppRoutes.home,
-          name: 'home',
-          pageBuilder: (_, __) => const MaterialPage(
-            // child: NavBar(),  // swap in your home widget
-            child: Navbar(),
-          ),
-        ),
+        // GoRoute(
+        //   path: AppRoutes.home,
+        //   name: 'home',
+        //   pageBuilder: (_, __) => const MaterialPage(
+        //     // child: NavBar(),  // swap in your home widget
+        //     child: Navbar(),
+        //   ),
+        // ),
         GoRoute(
           path: AppRoutes.wishlist,
           name: 'wishlist',
@@ -259,7 +315,7 @@ class AppRouter {
           name: 'paymentMethod',
           pageBuilder: (_, __) => const MaterialPage(
             // child: NavBar(),  // swap in your home widget
-            child:PaymentView(),
+            child: PaymentView(),
           ),
         ),
         GoRoute(
@@ -301,47 +357,69 @@ class AppRouter {
             // child: NavBar(),  // swap in your home widget
             child: AddNewCardView(),
           ),
-        ),GoRoute(
+        ),
+        GoRoute(
           path: AppRoutes.addAddress,
           name: 'addAddress',
           pageBuilder: (_, __) => const MaterialPage(
             // child: NavBar(),  // swap in your home widget
             child: AddNewAddress(),
           ),
-        ),GoRoute(
+        ),
+        GoRoute(
           path: AppRoutes.points,
           name: 'points',
           pageBuilder: (_, __) => const MaterialPage(
             // child: NavBar(),  // swap in your home widget
             child: PointView(),
           ),
-        ),GoRoute(
+        ),
+        GoRoute(
           path: AppRoutes.order,
           name: 'order',
           pageBuilder: (_, __) => const MaterialPage(
             // child: NavBar(),  // swap in your home widget
             child: OrderScreen(),
           ),
-        ),GoRoute(
+        ),
+        GoRoute(
           path: AppRoutes.payment,
           name: 'payment',
           pageBuilder: (_, __) => const MaterialPage(
             // child: NavBar(),  // swap in your home widget
             child: PaymentMethodScreen(),
           ),
-        ),GoRoute(
+        ),
+        GoRoute(
           path: AppRoutes.shipping,
           name: 'shipping',
           pageBuilder: (_, __) => const MaterialPage(
             // child: NavBar(),  // swap in your home widget
             child: ShippingDetailsScreen(),
           ),
-        ),GoRoute(
+        ),
+        GoRoute(
           path: AppRoutes.checkout,
           name: 'checkout',
           pageBuilder: (_, __) => const MaterialPage(
             // child: NavBar(),  // swap in your home widget
             child: CheckoutScreen(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.addPromoCodeView,
+          name: 'addPromoCodeView',
+          pageBuilder: (_, __) => const MaterialPage(
+            // child: NavBar(),  // swap in your home widget
+            child: AddPromoCodeView(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.confirm,
+          name: 'confirm',
+          pageBuilder: (_, state) => MaterialPage(
+            // child: NavBar(),  // swap in your home widget
+            child: ConfirmOrderView(origin: state.extra as bool?),
           ),
         ),
         // '/order': (_) => const OrderScreen(),

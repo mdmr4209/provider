@@ -3,11 +3,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:newproject/res/assets/image_assets.dart';
-import 'package:newproject/res/colors/app_color.dart';
-import 'package:newproject/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../res/assets/image_assets.dart';
+import '../../../../res/colors/app_color.dart';
+import '../../../../widgets/custom_button.dart';
 import '../../../routes/app_router.dart';
 import '../models/product_model.dart';
 import '../providers/home_provider.dart';
@@ -36,9 +36,13 @@ class HomeView extends StatelessWidget {
                         SvgPicture.asset(ImageAssets.title),
                         Badge(
                           alignment: Alignment.bottomLeft,
-                          label: Text(count.toString()),
+                          label: Text(
+                            count.toString(),
+                            style: TextStyle(fontSize: 10.sp),
+                          ),
                           isLabelVisible: count > 0,
                           backgroundColor: AppColor.defaultColor,
+                          offset: Offset(-5.w, -10.h),
                           child: _headerIcon(ImageAssets.cart, onTap: () {}),
                         ),
                       ],
@@ -104,10 +108,11 @@ class HomeView extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final product = home.dummyProducts[index];
                         return InkWell(
-                            onTap: () {
-                              context.push(AppRoutes.product);
-                            },
-                            child: _productCard(product));
+                          onTap: () {
+                            context.push(AppRoutes.product);
+                          },
+                          child: _productCard(product),
+                        );
                       },
                     ),
                   ),
@@ -314,7 +319,7 @@ class HomeView extends StatelessWidget {
         borderRadius: BorderRadius.circular(20.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withAlpha(10),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -456,7 +461,7 @@ class HomeView extends StatelessWidget {
                   children: [
                     if (product.updatePrice != '0')
                       Text(
-                        product.updatePrice!,
+                        product.updatePrice,
                         style: GoogleFonts.lato(
                           color: AppColor.textColor3,
                           fontSize: 10.sp,

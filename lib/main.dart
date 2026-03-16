@@ -3,13 +3,13 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:newproject/res/colors/app_color.dart';
 import 'package:provider/provider.dart';
 
 import 'app/modules/auth/providers/auth_provider.dart';
-import 'app/onboarding/providers/onboarding_provider.dart';
+import 'app/modules/onboarding/providers/onboarding_provider.dart';
 import 'app/routes/app_router.dart';
 import 'firebase_options.dart';
+import 'res/colors/app_color.dart';
 import 'res/components/base_client.dart';
 import 'res/components/dependency_injection.dart';
 import 'res/components/notification_service.dart';

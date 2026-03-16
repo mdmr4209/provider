@@ -3,12 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:newproject/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../../res/assets/image_assets.dart';
 import '../../../../res/colors/app_color.dart';
+import '../../../../widgets/custom_button.dart';
 import '../../../routes/app_router.dart';
 import '../providers/home_provider.dart';
 
@@ -40,7 +40,6 @@ class _ProductViewState extends State<ProductView> {
 
   @override
   Widget build(BuildContext context) {
-    final count = 2;
     return Scaffold(
       backgroundColor: AppColor.whiteColor,
       appBar: _buildAppBar(),
@@ -104,7 +103,7 @@ class _ProductViewState extends State<ProductView> {
                                 dotWidth: 8.r,
                                 dotHeight: 8.r,
                                 activeDotColor: Colors.white,
-                                dotColor: Colors.white.withOpacity(0.5),
+                                dotColor: Colors.white.withAlpha(127),
                               ),
                             ),
                           ),
@@ -135,7 +134,7 @@ class _ProductViewState extends State<ProductView> {
                                 Container(
                                   width: 100.w,
                                   height: 120.h,
-                                  color: Colors.black.withOpacity(0.2),
+                                  color: Colors.black.withAlpha(54),
                                   child: Icon(
                                     Icons.arrow_forward_ios,
                                     color: Colors.white,
@@ -170,7 +169,7 @@ class _ProductViewState extends State<ProductView> {
                                 title: 'EXPLORE',
                                 width: 150.w,
                                 height: 45.h,
-                                buttonColor: Colors.black.withOpacity(0.4),
+                                buttonColor: Colors.black.withAlpha(104),
                               ),
                             ],
                           ),
@@ -242,7 +241,7 @@ class _ProductViewState extends State<ProductView> {
                                 Text(
                                   'IN STOCK',
                                   style: GoogleFonts.lato(
-                                    color: const Color(0xFF00824B),
+                                    color: AppColor.greenColor,
                                     fontSize: 12.sp,
                                     fontWeight: FontWeight.w400,
                                     height: 1.50,
@@ -287,7 +286,7 @@ class _ProductViewState extends State<ProductView> {
                                   height: 40.h,
                                   clipBehavior: Clip.antiAlias,
                                   decoration: ShapeDecoration(
-                                    color: const Color(0xFFFAF9FF),
+                                    color: AppColor.containerColor,
                                     shape: RoundedRectangleBorder(
                                       side: BorderSide(
                                         width: 1.w,
@@ -410,10 +409,9 @@ class _ProductViewState extends State<ProductView> {
                 width: 30.r,
                 height: 30.r,
                 decoration: const BoxDecoration(
-                  color: Color(0xFFFCEDEA),
+                  color: AppColor.backgroundColor,
                   shape: BoxShape.circle,
                 ),
-                // Add child: Image.asset(...) or Text(...) for the avatar content
               ),
               SizedBox(width: 14.w),
               // Name and Date
@@ -449,7 +447,7 @@ class _ProductViewState extends State<ProductView> {
                   Icon(
                     Icons.star,
                     size: 14.r,
-                    color: const Color(0xFFDD8560), // Theme primary color
+                    color: AppColor.primaryColor, // Theme primary color
                   ),
                   SizedBox(width: 4.w),
                   Text(
@@ -480,7 +478,7 @@ class _ProductViewState extends State<ProductView> {
                 child: Text(
                   'Consequat ut ea dolor aliqua laborum tempor Lorem culpa. Commodo veniam sint est mollit proident commodo.',
                   style: GoogleFonts.lato(
-                    color: const Color(0xFF666666),
+                    color: AppColor.textColor2,
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w400,
                     height: 1.50,
@@ -548,9 +546,13 @@ class _ProductViewState extends State<ProductView> {
               ),
               Badge(
                 alignment: Alignment.bottomLeft,
-                label: Text(count.toString()),
+                label: Text(
+                  count.toString(),
+                  style: TextStyle(fontSize: 10.sp),
+                ),
                 isLabelVisible: count > 0,
                 backgroundColor: AppColor.defaultColor,
+                offset: Offset(-5.w, -10.h),
                 child: _headerIcon(ImageAssets.cart, onTap: () {}),
               ),
             ],
@@ -605,7 +607,7 @@ class _ProductViewState extends State<ProductView> {
                   color: Color(int.parse(color.replaceFirst('#', '0xFF'))),
                   borderRadius: BorderRadius.circular(4.r),
                   border: isSelected
-                      ? Border.all(color: const Color(0xFFDD8560), width: 2.5.w)
+                      ? Border.all(color: AppColor.primaryColor, width: 2.5.w)
                       : Border.all(color: Colors.transparent, width: 2.5.w),
                 ),
               ),

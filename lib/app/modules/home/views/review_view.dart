@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:newproject/app/routes/app_router.dart';
 
 import '../../../../res/colors/app_color.dart';
 import '../../../../widgets/custom_button.dart';
+import '../../../routes/app_router.dart';
 
 class ReviewView extends StatelessWidget {
   const ReviewView({super.key});
@@ -16,7 +16,7 @@ class ReviewView extends StatelessWidget {
       backgroundColor: AppColor.whiteColor,
       appBar: AppBar(
         backgroundColor: AppColor.backgroundColor,
-        leading:  IconButton(
+        leading: IconButton(
           onPressed: () => context.pop(),
           icon: Icon(Icons.arrow_back_ios_new),
         ),
@@ -54,7 +54,12 @@ class ReviewView extends StatelessWidget {
                   ),
                 ),
               ),
-              CustomButton(onPress: () async {context.push(AppRoutes.commentReview);}, title: '+ ADD REVIEW'),
+              CustomButton(
+                onPress: () async {
+                  context.push(AppRoutes.commentReview);
+                },
+                title: '+ ADD REVIEW',
+              ),
             ],
           ),
         ),
@@ -83,7 +88,7 @@ class ReviewView extends StatelessWidget {
                 width: 30.r,
                 height: 30.r,
                 decoration: const BoxDecoration(
-                  color: Color(0xFFFCEDEA),
+                  color: AppColor.backgroundColor,
                   shape: BoxShape.circle,
                 ),
                 // Add child: Image.asset(...) or Text(...) for the avatar content
@@ -122,7 +127,7 @@ class ReviewView extends StatelessWidget {
                   Icon(
                     Icons.star,
                     size: 14.r,
-                    color: const Color(0xFFDD8560), // Theme primary color
+                    color: AppColor.primaryColor, // Theme primary color
                   ),
                   SizedBox(width: 4.w),
                   Text(
@@ -153,7 +158,7 @@ class ReviewView extends StatelessWidget {
                 child: Text(
                   'Consequat ut ea dolor aliqua laborum tempor Lorem culpa. Commodo veniam sint est mollit proident commodo.',
                   style: GoogleFonts.lato(
-                    color: const Color(0xFF666666),
+                    color: AppColor.textColor2,
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w400,
                     height: 1.50,

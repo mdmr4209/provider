@@ -7,9 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../../app/modules/chats/views/personal_chat.dart';
 import '../../main.dart';
-import '../app_url/app_url.dart';
 import 'api_service.dart';
 
 
@@ -397,13 +395,13 @@ class NotificationService extends GetxService {
     try {
       final roomId = int.tryParse(data['chat_room_id']?.toString() ?? '') ?? 0;
       final name = data['sender_name']?.toString() ?? 'Unknown';
-      final image = "${Api.imageUrl}${data['sender_profile_image']?.toString()}";
+      // final image = "${Api.imageUrl}${data['sender_profile_image']?.toString()}";
 
       if (roomId > 0) {
-        Get.to(
-              () => PersonalChat(name: name, roomId: roomId, image: image),
-          transition: Transition.rightToLeft,
-        );
+        // Get.to(
+        //       () => PersonalChat(name: name, roomId: roomId, image: image),
+        //   transition: Transition.rightToLeft,
+        // );
         debugPrint('✅ Navigated to PersonalChat: $roomId - $name');
       } else {
         debugPrint('⚠️ Invalid chat notification payload: $data');

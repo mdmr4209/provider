@@ -22,12 +22,12 @@ void showCustomSnackBar({
               ? [
                   AppColor.defaultColor,
                   AppColor.defaultColor.withValues(alpha: 0.8),
-                  // AppColor.defaultColor.withOpacity(0.8),
+                  // AppColor.defaultColor.withAlpha(198),
                 ]
               : [
                   AppColor.redColor,
                   AppColor.redAlphaColor,
-                  // Colors.red.withOpacity(0.8)
+                  // Colors.red.withAlpha(198)
                 ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,

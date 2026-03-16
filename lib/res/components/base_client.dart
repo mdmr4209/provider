@@ -98,12 +98,12 @@ class BaseClient {
 
   static Future<String?> getStored({required String key}) async {
     final v = await _storage.read(key: key);
-    return v == null ? null : v.toString();
+    return v?.toString();
   }
 
   static Future<String?> getStoredRole() async {
     final v = await _storage.read(key: 'user_role');
-    return v == null ? null : v.toString();
+    return v?.toString();
   }
 
   static Future<int?> getStoredId() async {
