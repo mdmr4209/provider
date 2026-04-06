@@ -15,7 +15,7 @@ import 'res/components/dependency_injection.dart';
 import 'res/components/notification_service.dart';
 import 'widgets/snack_bar_helper.dart';
 
-// ── Background FCM handler ─────────────────────────────────────────────────
+
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   try {
