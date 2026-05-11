@@ -9,8 +9,9 @@ import '../../../../res/colors/app_color.dart';
 import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/input_text_widget.dart';
 import '../../../../widgets/snack_bar_helper.dart';
+import '../controllers/auth_controller.dart';
+import '../../localization/localization_extension.dart';
 import '../../../routes/app_router.dart';
-import '../providers/auth_provider.dart';
 
 class ForgetPasswordView extends StatelessWidget {
   const ForgetPasswordView({super.key});
@@ -20,7 +21,7 @@ class ForgetPasswordView extends StatelessWidget {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        backgroundColor: AppColor.whiteColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
@@ -34,17 +35,13 @@ class ForgetPasswordView extends StatelessWidget {
                       onTap: () {
                         Navigator.pop(context);
                       },
-                      child: Icon(Icons.arrow_back_ios_new),
+                      child: Icon(Icons.arrow_back_ios_new, color: Theme.of(context).iconTheme.color),
                     ),
                     Spacer(),
                     Text(
-                      'Forgot password',
+                      context.watchTr('forgot_password'),
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.tenorSans(
-                        color: AppColor.textColor,
-                        fontSize: 18.w,
-                        fontWeight: FontWeight.w400,
-                      ),
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                     Spacer(),
                     SizedBox(width: 20.w),
@@ -64,26 +61,21 @@ class ForgetPasswordView extends StatelessWidget {
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      Consumer<AuthProvider>(
+                      Consumer<AuthController>(
                         builder: (context, auth, _) => ListView(
                           padding: EdgeInsets.symmetric(horizontal: 20.w),
                           children: [
                             SizedBox(height: 30.h),
                             SizedBox(
                               width: 295.w,
-                              child: Text(
-                                'Please enter your email address. You will receive a link to create a new password via email.',
-                                style: GoogleFonts.lato(
-                                  color: AppColor.textColor2,
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w400,
-                                  height: 1.70,
+                                child: Text(
+                                  context.watchTr('forget_pass_msg'),
+                                  style: Theme.of(context).textTheme.bodyMedium,
                                 ),
-                              ),
                             ),
                             SizedBox(height: 30.h),
                             InputTextWidget(
-                              hintText: 'Enter your email',
+                               hintText: context.watchTr('enter_your_email'),
                               textEditingController: auth.forgetEmailController,
                               onChanged: (v) =>
                                   auth.forgetEmailController.text = v,
@@ -109,7 +101,7 @@ class ForgetPasswordView extends StatelessWidget {
                                       }
                                     },
                               loading: auth.isLoading,
-                              title: 'Continue',
+                               title: context.watchTr('continue_button'),
                               fontWeight: FontWeight.w700,
                             ),
                           ],

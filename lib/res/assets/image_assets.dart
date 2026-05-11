@@ -13,6 +13,7 @@ class ImageAssets {
   static const String selected = 'assets/image/selected.svg';
   static const String homeBg = 'assets/image/homeBg.png';
   static const String filter = 'assets/image/filter.svg';
+  static const String settings = 'assets/image/promoCode.svg'; // Fallback to promoCode since settings.svg is missing
   static const String banner = 'assets/image/img_2.png';
   static const String addReview = 'assets/image/addReview.png';
   static const String love = 'assets/image/love.svg';
@@ -90,7 +91,6 @@ class ImageAssets {
   static const String select = 'assets/icons/home/select.svg';
   static const String select1 = 'assets/icons/home/select1.svg';
   static const String selected1 = 'assets/icons/home/selected1.svg';
-  static const String settings = 'assets/icons/home/settings.svg';
   static const String electric = 'assets/icons/home/electric.svg';
   static const String petrol = 'assets/icons/home/petrol.svg';
   static const String automatic = 'assets/icons/home/automatic.svg';

@@ -4,33 +4,30 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../models/credit_card.dart';
-import '../providers/cart_provider.dart';
+import '../controllers/cart_controller.dart';
 import 'order_view.dart';
+import '../../localization/localization_extension.dart';
 
 class PaymentMethodScreen extends StatelessWidget {
   const PaymentMethodScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<CartProvider>(
+    return Consumer<CartController>(
       builder: (context, cart, _) {
         return Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           appBar: AppBar(
-            backgroundColor: AC.bg,
+            backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
             elevation: 0,
             centerTitle: true,
             leading: IconButton(
               onPressed: () => Navigator.pop(context),
-              icon: Icon(Icons.arrow_back_ios_new, size: 18.r, color: AC.text),
+              icon: Icon(Icons.arrow_back_ios_new, size: 18.r, color: Theme.of(context).iconTheme.color),
             ),
             title: Text(
-              'Payment Method',
-              style: GoogleFonts.tenorSans(
-                color: AC.text,
-                fontSize: 20.sp,
-                fontWeight: FontWeight.w400,
-              ),
+              context.watchTr('payment_method'),
+              style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
           body: Padding(
@@ -38,24 +35,20 @@ class PaymentMethodScreen extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.all(16.w),
               decoration: BoxDecoration(
-                color: AC.cardBg,
-                borderRadius: BorderRadius.circular(4.r),
-                border: Border.all(color: AC.border, width: 0.5),
+                color: Theme.of(context).cardTheme.color,
+                borderRadius: BorderRadius.circular(12.r),
+                border: Border.all(color: Theme.of(context).dividerColor, width: 0.5),
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Credit Cards',
-                    style: GoogleFonts.tenorSans(
-                      fontSize: 18.sp,
-                      color: AC.text,
-                      fontWeight: FontWeight.w400,
-                    ),
+                    context.watchTr('credit_cards'),
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                   SizedBox(height: 6.h),
-                  const Divider(color: AC.text, height: 1, thickness: 1),
+                  Divider(color: Theme.of(context).dividerColor, height: 1, thickness: 1),
                   SizedBox(height: 4.h),
                   ...cart.creditCards.asMap().entries.map(
                     (e) => _CardOption(
@@ -99,7 +92,7 @@ class _CardOption extends StatelessWidget {
           children: [
             Text(
               card.masked,
-              style: GoogleFonts.lato(fontSize: 14.sp, color: AC.textLight),
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
             Container(
               width: 22.w,
@@ -107,7 +100,7 @@ class _CardOption extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: isSelected ? AC.primary : Colors.grey.shade400,
+                  color: isSelected ? Theme.of(context).colorScheme.primary : Colors.grey.shade400,
                   width: 1.5,
                 ),
               ),
@@ -116,8 +109,8 @@ class _CardOption extends StatelessWidget {
                       child: Container(
                         width: 12.w,
                         height: 12.w,
-                        decoration: const BoxDecoration(
-                          color: AC.primary,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.primary,
                           shape: BoxShape.circle,
                         ),
                       ),

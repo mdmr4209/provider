@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import '../../app/modules/localization/localization_extension.dart';
 
 import '../colors/app_color.dart';
 
@@ -26,7 +26,7 @@ class _InternetExceptionsWidgetState extends State<InternetExceptionsWidget> {
             padding: const EdgeInsets.only(top: 30.0),
             child: Center(
               child: Text(
-                'internet_exception'.tr,
+                context.watchTr('internet_exception'),
                 style: TextStyle(color: const Color.fromARGB(255, 12, 0, 2), fontSize: 20),
                 textAlign: TextAlign.center,
               ),

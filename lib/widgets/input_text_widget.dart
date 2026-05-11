@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 
 import '../res/assets/image_assets.dart';
 import '../res/colors/app_color.dart';
@@ -135,35 +135,52 @@ class _InputTextWidgetState extends State<InputTextWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final inputTheme = theme.inputDecorationTheme;
+
+    // Resolve effective colors
+    final effectiveBackgroundColor = widget.backgroundColor == AppColor.whiteColor
+        ? (inputTheme.fillColor ?? widget.backgroundColor)
+        : widget.backgroundColor;
+    final effectiveBorderColor = widget.borderColor == AppColor.whiteColor
+        ? (theme.colorScheme.outline)
+        : widget.borderColor;
+    final effectiveTextColor = widget.textColor == AppColor.textColor
+        ? (theme.textTheme.bodyLarge?.color ?? widget.textColor)
+        : widget.textColor;
+    final effectiveHintColor = widget.hintTextColor == AppColor.hintTextColor
+        ? (inputTheme.hintStyle?.color ?? widget.hintTextColor)
+        : widget.hintTextColor;
+
     return Container(
       height: widget.height.h,
       width: widget.width == double.infinity ? double.infinity : widget.width.w,
       decoration: widget.shadow
           ? ShapeDecoration(
-              color: widget.backgroundColor,
+              color: effectiveBackgroundColor,
               shape: RoundedRectangleBorder(
                 side: BorderSide(
                   width: widget.borderWidth.w,
-                  color: widget.borderColor,
+                  color: effectiveBorderColor,
                 ),
-                borderRadius: BorderRadius.circular(widget.borderRadius.r),
+                borderRadius: BorderRadius.circular(widget.borderRadius == 0 ? 12.r : widget.borderRadius.r),
               ),
               shadows: [
                 BoxShadow(
-                  color: widget.borderShadowColor,
+                  color: widget.borderShadowColor == AppColor.whiteColor ? Colors.black12 : widget.borderShadowColor,
                   blurRadius: 4,
                   spreadRadius: 0,
                 ),
               ],
             )
           : ShapeDecoration(
-              color: widget.backgroundColor,
+              color: effectiveBackgroundColor,
               shape: RoundedRectangleBorder(
                 side: BorderSide(
                   width: widget.borderWidth.w,
-                  color: widget.borderColor,
+                  color: effectiveBorderColor,
                 ),
-                borderRadius: BorderRadius.circular(widget.borderRadius.r),
+                borderRadius: BorderRadius.circular(widget.borderRadius == 0 ? 12.r : widget.borderRadius.r),
               ),
             ),
       child: Padding(
@@ -184,7 +201,7 @@ class _InputTextWidgetState extends State<InputTextWidget> {
                   width: widget.leadingWidth.w,
                   height: widget.leadingHeight.h,
                   colorFilter: ColorFilter.mode(
-                    widget.leadingColor,
+                    widget.leadingColor == AppColor.hintTextColor ? theme.hintColor : widget.leadingColor,
                     BlendMode.srcIn,
                   ),
                 ),
@@ -204,12 +221,14 @@ class _InputTextWidgetState extends State<InputTextWidget> {
                 decoration: InputDecoration(
                   isDense: true,
                   hintText: widget.hintText,
-                  hintStyle: GoogleFonts.lato(
-                    color: widget.hintTextColor,
+                  hintStyle: theme.textTheme.bodyMedium?.copyWith(
+                    color: effectiveHintColor,
                     fontSize: widget.hintfontSize.sp,
                     fontWeight: widget.hintfontWeight,
                   ),
                   border: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
                   contentPadding: widget.contentPadding || widget.maxLines > 1
                       ? EdgeInsets.symmetric(
                           horizontal: widget.horizontal.w,
@@ -217,10 +236,10 @@ class _InputTextWidgetState extends State<InputTextWidget> {
                         )
                       : EdgeInsets.symmetric(horizontal: widget.horizontal.w),
                 ),
-                style: GoogleFonts.lato(
+                style: theme.textTheme.bodyLarge?.copyWith(
                   fontSize: widget.fontSize.sp,
                   fontWeight: widget.fontWeight,
-                  color: widget.textColor,
+                  color: effectiveTextColor,
                 ),
               ),
             ),
@@ -236,7 +255,7 @@ class _InputTextWidgetState extends State<InputTextWidget> {
                         ? Icons.visibility_off_outlined
                         : Icons.visibility_outlined,
                     size: 22.sp,
-                    color: widget.hintTextColor,
+                    color: effectiveHintColor,
                   ),
                 ),
               ),

@@ -8,8 +8,9 @@ import '../../../../res/assets/image_assets.dart';
 import '../../../../res/colors/app_color.dart';
 import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/input_text_widget.dart';
+import '../controllers/auth_controller.dart';
+import '../../localization/localization_extension.dart';
 import '../../../routes/app_router.dart';
-import '../providers/auth_provider.dart';
 
 class ChangePasswordView extends StatefulWidget {
   const ChangePasswordView({super.key,});
@@ -43,7 +44,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
     return null;
   }
 
-  Future<void> _onSave(AuthProvider auth) async {
+  Future<void> _onSave(AuthController auth) async {
     final error = _validate(
       auth.setPasswordController.text,
       _confirmController.text,
@@ -66,7 +67,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        backgroundColor: AppColor.whiteColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
@@ -80,16 +81,12 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                       onTap: () {
                         Navigator.pop(context);
                       },
-                      child: Icon(Icons.arrow_back_ios_new),
+                      child: Icon(Icons.arrow_back_ios_new, color: Theme.of(context).iconTheme.color),
                     ),
                     Spacer(),
                     Text( 'Reset Password',
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.tenorSans(
-                        color: AppColor.textColor,
-                        fontSize: 18.w,
-                        fontWeight: FontWeight.w400,
-                      ),
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                     Spacer(),
                     SizedBox(width: 20.w),
@@ -109,26 +106,21 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      Consumer<AuthProvider>(
+                      Consumer<AuthController>(
                         builder: (context, auth, _) => ListView(
                           padding: EdgeInsets.symmetric(horizontal: 20.w),
                           children: [
                             SizedBox(height: 30.h),
                             SizedBox(
                               width: 295.w,
-                              child: Text(
-                                'Enter new password and confirm.',
-                                style: GoogleFonts.lato(
-                                  color: AppColor.textColor2,
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w400,
-                                  height: 1.70,
+                                child: Text(
+                                  context.watchTr('reset_pass_msg'),
+                                  style: Theme.of(context).textTheme.bodyMedium,
                                 ),
-                              ),
                             ),
                             SizedBox(height: 30.h),
-                            InputTextWidget(
-                              hintText: 'Enter your password',
+                               InputTextWidget(
+                                 hintText: context.watchTr('enter_your_password'),
                               obscureText: true,
                               onChanged: (_) {},
                               textEditingController: auth.setPasswordController,
@@ -136,8 +128,8 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                               leadingWidth: 14,
                             ),
                             SizedBox(height: 20.h),
-                            InputTextWidget(
-                              hintText: 'Confirm your password',
+                             InputTextWidget(
+                               hintText: context.watchTr('confirm_your_password'),
                               obscureText: true,
                               onChanged: (_) {},
                               leadingHeight: 18,
@@ -146,8 +138,8 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                             ),
                             SizedBox(height: 20.h),
                             CustomButton(
-                              height: 60,
-                              title: 'CHANGE PASSWORD',
+                               height: 60,
+                               title: context.watchTr('change_password_caps'),
                               fontWeight: FontWeight.w900,
                               onPress: auth.isLoading
                                   ? null

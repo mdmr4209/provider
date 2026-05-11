@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class OnboardingProvider extends ChangeNotifier {
+class OnboardingController extends ChangeNotifier {
   bool _hasCompletedOnboarding = false;
   bool _isLoading = true;
 
   bool get hasCompletedOnboarding => _hasCompletedOnboarding;
   bool get isLoading => _isLoading;
 
-  OnboardingProvider() {
+  OnboardingController() {
     _loadOnboardingStatus();
   }
 

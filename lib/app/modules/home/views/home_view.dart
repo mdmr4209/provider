@@ -10,7 +10,8 @@ import '../../../../res/colors/app_color.dart';
 import '../../../../widgets/custom_button.dart';
 import '../../../routes/app_router.dart';
 import '../models/product_model.dart';
-import '../providers/home_provider.dart';
+import '../controllers/home_controller.dart';
+import '../../localization/localization_extension.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -19,8 +20,8 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     int count = 2;
     return Scaffold(
-      backgroundColor: AppColor.whiteColor,
-      body: Consumer<HomeProvider>(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: Consumer<HomeController>(
         builder: (context, home, _) => ListView(
           padding: EdgeInsets.zero,
           children: [
@@ -41,9 +42,9 @@ class HomeView extends StatelessWidget {
                             style: TextStyle(fontSize: 10.sp),
                           ),
                           isLabelVisible: count > 0,
-                          backgroundColor: AppColor.defaultColor,
+                          backgroundColor: Theme.of(context).colorScheme.primary,
                           offset: Offset(-5.w, -10.h),
-                          child: _headerIcon(ImageAssets.cart, onTap: () {}),
+                          child: _headerIcon(context, ImageAssets.cart, onTap: () {}),
                         ),
                       ],
                     ),
@@ -59,11 +60,8 @@ class HomeView extends StatelessWidget {
                       SizedBox(
                         width: 234.w,
                         child: Text(
-                          'Beauty & Care',
-                          style: GoogleFonts.tenorSans(
-                            color: AppColor.textColor,
-                            fontSize: 32.sp,
-                            fontWeight: FontWeight.w400,
+                          context.watchTr('beauty_and_care'),
+                          style: Theme.of(context).textTheme.displayLarge?.copyWith(
                             height: 1.20,
                           ),
                         ),
@@ -72,18 +70,15 @@ class HomeView extends StatelessWidget {
                       SizedBox(
                         width: 213.w,
                         child: Text(
-                          'Labore sunt culpa excepteur culpa ipsum.',
-                          style: GoogleFonts.tenorSans(
-                            color: AppColor.textColor2,
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w400,
+                          context.watchTr('onboarding_desc_1'), // Reusing a similar message
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             height: 1.70,
                           ),
                         ),
                       ),
                       CustomButton(
                         onPress: () async {},
-                        title: 'SHOP NOW',
+                        title: context.watchTr('shop_now'),
                         width: 130.w,
                         height: 50.h,
                       ),
@@ -96,7 +91,7 @@ class HomeView extends StatelessWidget {
             SafeArea(
               child: Column(
                 children: [
-                  _titleHeader('Trending Products'),
+                  _titleHeader(context, context.watchTr('trending_products')),
 
                   // Horizontal ListView section
                   SizedBox(
@@ -111,7 +106,7 @@ class HomeView extends StatelessWidget {
                           onTap: () {
                             context.push(AppRoutes.product);
                           },
-                          child: _productCard(product),
+                          child: _productCard(context, product),
                         );
                       },
                     ),
@@ -121,7 +116,7 @@ class HomeView extends StatelessWidget {
                   Container(
                     width: double.infinity,
                     height: 238.h,
-                    color: AppColor.backgroundColor,
+                    color: Theme.of(context).colorScheme.surfaceContainerHighest,
                     padding: EdgeInsets.all(20.w),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,29 +126,21 @@ class HomeView extends StatelessWidget {
                           TextSpan(
                             children: [
                               TextSpan(
-                                text: 'Get Your',
-                                style: GoogleFonts.tenorSans(
-                                  color: AppColor.textColor,
-                                  fontSize: 22.sp,
-                                  fontWeight: FontWeight.w400,
+                                text: context.watchTr('get_your'),
+                                style: Theme.of(context).textTheme.titleLarge?.copyWith(
                                   height: 1.20,
                                 ),
                               ),
                               TextSpan(
-                                text: ' 50% ',
-                                style: GoogleFonts.tenorSans(
-                                  color: AppColor.defaultColor,
-                                  fontSize: 22.sp,
-                                  fontWeight: FontWeight.w400,
+                                text: context.watchTr('discount_percent'),
+                                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                  color: Theme.of(context).colorScheme.secondary,
                                   height: 1.20,
                                 ),
                               ),
                               TextSpan(
-                                text: 'Off!',
-                                style: GoogleFonts.tenorSans(
-                                  color: AppColor.textColor,
-                                  fontSize: 22.sp,
-                                  fontWeight: FontWeight.w400,
+                                text: context.watchTr('off'),
+                                style: Theme.of(context).textTheme.titleLarge?.copyWith(
                                   height: 1.20,
                                 ),
                               ),
@@ -164,11 +151,8 @@ class HomeView extends StatelessWidget {
                         SizedBox(
                           width: 213.w,
                           child: Text(
-                            'Labore sunt culpa excepteur culpa ipsum.',
-                            style: GoogleFonts.lato(
-                              color: AppColor.textColor2,
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w400,
+                            context.watchTr('onboarding_desc_1'),
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               height: 1.70,
                             ),
                           ),
@@ -176,7 +160,7 @@ class HomeView extends StatelessWidget {
                         SizedBox(height: 20.h),
                         CustomButton(
                           onPress: () async {},
-                          title: 'SHOP NOW',
+                          title: context.watchTr('shop_now'),
                           width: 130.w,
                           height: 50.h,
                         ),
@@ -184,7 +168,7 @@ class HomeView extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 40.h),
-                  _titleHeader('New Arrivals'),
+                  _titleHeader(context, context.watchTr('new_arrivals')),
                   GridView.builder(
                     padding: EdgeInsets.symmetric(
                       horizontal: 16.w,
@@ -204,10 +188,10 @@ class HomeView extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final product = home.dummyProducts[index];
                       // Remove the horizontal margin from the card since GridView handles spacing
-                      return _productCard(product);
+                      return _productCard(context, product);
                     },
                   ),
-                  _titleHeader('MAN'),
+                  _titleHeader(context, context.watchTr('man')),
                   GridView.builder(
                     padding: EdgeInsets.symmetric(
                       horizontal: 16.w,
@@ -227,10 +211,10 @@ class HomeView extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final product = home.dummyProducts[index];
                       // Remove the horizontal margin from the card since GridView handles spacing
-                      return _productCard(product);
+                      return _productCard(context, product);
                     },
                   ),
-                  _titleHeader('WOMEN'),
+                  _titleHeader(context, context.watchTr('woman')),
                   GridView.builder(
                     padding: EdgeInsets.symmetric(
                       horizontal: 16.w,
@@ -250,7 +234,7 @@ class HomeView extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final product = home.dummyProducts[index];
                       // Remove the horizontal margin from the card since GridView handles spacing
-                      return _productCard(product);
+                      return _productCard(context, product);
                     },
                   ),
                   SizedBox(height: 120.h),
@@ -263,19 +247,19 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _headerIcon(String asset, {required VoidCallback onTap}) {
+  Widget _headerIcon(BuildContext context, String asset, {required VoidCallback onTap}) {
     return InkWell(
       onTap: onTap,
       child: SvgPicture.asset(
         asset,
         width: 24.w,
         height: 24.h,
-        colorFilter: ColorFilter.mode(AppColor.blackColor, BlendMode.srcIn),
+        colorFilter: ColorFilter.mode(Theme.of(context).iconTheme.color ?? Theme.of(context).colorScheme.onSurface, BlendMode.srcIn),
       ),
     );
   }
 
-  Widget _titleHeader(String title) {
+  Widget _titleHeader(BuildContext context, String title) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: Column(
@@ -285,37 +269,32 @@ class HomeView extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: GoogleFonts.tenorSans(
-                  color: AppColor.textColor,
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.w400,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   height: 1.20,
                 ),
               ),
               Text(
-                'View  all',
+                context.watchTr('view_all'),
                 textAlign: TextAlign.right,
-                style: GoogleFonts.lato(
-                  color: AppColor.defaultColor,
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w400,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
                   height: 1.50,
                 ),
               ),
             ],
           ),
-          Divider(thickness: 2.h, color: AppColor.blackColor, height: 10.h),
+          Divider(thickness: 2.h, color: Theme.of(context).dividerColor, height: 10.h),
         ],
       ),
     );
   }
 
-  Widget _productCard(ProductModel product) {
+  Widget _productCard(BuildContext context, ProductModel product) {
     return Container(
       width: 160.w,
       margin: EdgeInsets.only(right: 15.w),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardTheme.color,
         borderRadius: BorderRadius.circular(20.r),
         boxShadow: [
           BoxShadow(
@@ -334,7 +313,7 @@ class HomeView extends StatelessWidget {
                 height: 150.h,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: AppColor.whiteColor,
+                  color: Theme.of(context).colorScheme.surface,
                   borderRadius: BorderRadius.circular(5.r),
                 ),
                 child: ClipRRect(
@@ -362,12 +341,10 @@ class HomeView extends StatelessWidget {
                       Icon(Icons.star, color: AppColor.ratingColor),
                       Text(
                         '5.0',
-                        style: GoogleFonts.lato(
-                          color: AppColor.whiteColor,
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w900,
-                          height: 1.70,
-                        ),
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                           color: Colors.white,
+                           fontWeight: FontWeight.w900,
+                         ),
                       ),
                     ],
                   ),
@@ -449,11 +426,7 @@ class HomeView extends StatelessWidget {
                   product.title,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.tenorSans(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14.sp,
-                    color: AppColor.textColor,
-                  ),
+                  style: Theme.of(context).textTheme.titleSmall,
                 ),
                 SizedBox(height: 4.h),
                 Row(
@@ -462,24 +435,19 @@ class HomeView extends StatelessWidget {
                     if (product.updatePrice != '0')
                       Text(
                         product.updatePrice,
-                        style: GoogleFonts.lato(
-                          color: AppColor.textColor3,
-                          fontSize: 10.sp,
-                          fontWeight: FontWeight.w400,
-                          decoration: TextDecoration.lineThrough,
-                          height: 1.50,
-                        ),
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                           color: Theme.of(context).disabledColor,
+                           decoration: TextDecoration.lineThrough,
+                         ),
                       ),
 
                     Text(
                       product.price,
-                      style: GoogleFonts.lato(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 14.sp,
-                        color: product.updatePrice != '0'
-                            ? AppColor.defaultColor
-                            : AppColor.textColor,
-                      ),
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                         color: product.updatePrice != '0'
+                             ? Theme.of(context).colorScheme.primary
+                             : Theme.of(context).textTheme.titleMedium?.color,
+                       ),
                     ),
                   ],
                 ),

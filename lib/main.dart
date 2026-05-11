@@ -5,15 +5,20 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import 'app/modules/auth/providers/auth_provider.dart';
-import 'app/modules/onboarding/providers/onboarding_provider.dart';
+import 'app/modules/auth/controllers/auth_controller.dart';
+import 'app/modules/onboarding/controllers/onboarding_controller.dart';
 import 'app/routes/app_router.dart';
 import 'firebase_options.dart';
 import 'res/colors/app_color.dart';
 import 'res/components/base_client.dart';
 import 'res/components/dependency_injection.dart';
+import 'res/components/api_service.dart';
 import 'res/components/notification_service.dart';
 import 'widgets/snack_bar_helper.dart';
+import 'app/modules/theme/controllers/theme_controller.dart';
+import 'app/modules/localization/controllers/localization_controller.dart';
+import 'app/modules/localization/localization_extension.dart';
+import 'res/theme/app_theme.dart';
 
 
 @pragma('vm:entry-point')
@@ -40,6 +45,8 @@ Future<void> main() async {
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
     final initMsg = await FirebaseMessaging.instance.getInitialMessage();
     if (initMsg != null) NotificationService.initialMessage = initMsg;
+    final apiService = ApiService();
+    await NotificationService.instance.initialize(apiService: apiService);
     debugPrint('✅ Firebase initialized successfully');
   } catch (e) {
     debugPrint('❌ Firebase init error: $e');
@@ -67,13 +74,13 @@ class _MyAppState extends State<MyApp> {
 
     if (_router != null) return;
 
-    final auth = context.read<AuthProvider>();
-    final onboard = context.read<OnboardingProvider>();
+    final auth = context.read<AuthController>();
+    final onboard = context.read<OnboardingController>();
 
     // Remove this line - don't overwrite:
     // SnackBarHelper.navigatorKey = _routerKey;
 
-    AuthProvider.routerKey = widget.navigatorKey;  // Use the passed navigatorKey
+    AuthController.routerKey = widget.navigatorKey;  // Use the passed navigatorKey
     BaseClient.onUnauthorized = () {
       widget.navigatorKey.currentContext?.go(AppRoutes.login);  // Use the passed navigatorKey
     };
@@ -94,6 +101,9 @@ class _MyAppState extends State<MyApp> {
       );
     }
 
+    final themeController = context.watch<ThemeController>();
+    final localizationController = context.watch<LocalizationController>();
+
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       minTextAdapt: true,
@@ -101,7 +111,10 @@ class _MyAppState extends State<MyApp> {
       builder: (_, __) => MaterialApp.router(
         title: 'My App',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(fontFamily: 'Roboto', useMaterial3: true),
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        themeMode: themeController.themeMode,
+        locale: localizationController.locale,
         routerConfig: _router!,
       ),
     );

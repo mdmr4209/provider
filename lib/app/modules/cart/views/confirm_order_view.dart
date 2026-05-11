@@ -9,7 +9,8 @@ import '../../../../res/assets/image_assets.dart';
 import '../../../../res/colors/app_color.dart';
 import '../../../../widgets/custom_button.dart';
 import '../../../routes/app_router.dart';
-import '../providers/cart_provider.dart';
+import '../controllers/cart_controller.dart';
+import '../../localization/localization_extension.dart';
 
 class ConfirmOrderView extends StatelessWidget {
   final bool? origin;
@@ -20,7 +21,7 @@ class ConfirmOrderView extends StatelessWidget {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        backgroundColor: AppColor.backgroundColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -43,22 +44,17 @@ class ConfirmOrderView extends StatelessWidget {
                     ),
                   ],
                 ),
-                Consumer<CartProvider>(
+                Consumer<CartController>(
                   builder: (context, cart, _) => Expanded(
                     child: ListView(
                       children: [
                         SizedBox(height: 30.h),
                         Text(
                           origin == true
-                              ? 'Thank You For Your Order!'
-                              : 'Sorry! Your Order Has Failed!',
+                              ? context.watchTr('thank_you_order')
+                              : context.watchTr('order_failed'),
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.lato(
-                            color: AppColor.textColor,
-                            fontSize: 22.sp,
-                            fontWeight: FontWeight.w400,
-                            height: 1.70,
-                          ),
+                          style: Theme.of(context).textTheme.headlineMedium,
                         ),
                         SizedBox(height: 10.h),
                         origin == true
@@ -68,31 +64,18 @@ class ConfirmOrderView extends StatelessWidget {
                                   TextSpan(
                                     children: [
                                       TextSpan(
-                                        text: 'Congratulations! You get ',
-                                        style: GoogleFonts.lato(
-                                          color: AppColor.textColor3,
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.w400,
-                                          height: 1.70,
-                                        ),
+                                        text: context.watchTr('congrats_points'),
+                                        style: Theme.of(context).textTheme.bodyMedium,
                                       ),
                                       TextSpan(
-                                        text: '5 Points\n',
-                                        style: GoogleFonts.lato(
-                                          color: AppColor.textColor3,
-                                          fontSize: 16.sp,
+                                        text: ' 5 ${context.watchTr('points')}\n',
+                                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                           fontWeight: FontWeight.w700,
-                                          height: 1.70,
                                         ),
                                       ),
                                       TextSpan(
-                                        text: 'Thank you!',
-                                        style: GoogleFonts.lato(
-                                          color: AppColor.textColor3,
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.w400,
-                                          height: 1.70,
-                                        ),
+                                        text: context.watchTr('thank_you'),
+                                        style: Theme.of(context).textTheme.bodyMedium,
                                       ),
                                     ],
                                   ),
@@ -100,21 +83,16 @@ class ConfirmOrderView extends StatelessWidget {
                                 ),
                               )
                             : Text(
-                                'Something went wrong. Please try again\nto continue your order.',
+                                context.watchTr('something_went_wrong'),
                                 textAlign: TextAlign.center,
-                                style: GoogleFonts.lato(
-                                  color: AppColor.textColor2,
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w400,
-                                  height: 1.70,
-                                ),
+                                style: Theme.of(context).textTheme.bodyMedium,
                               ),
                         SizedBox(height: 30.h),
                         CustomButton(
                           height: 60,
                           title: origin == true
-                              ? 'VIEW ORDERS'
-                              : 'CONTINUE SHOPPING',
+                              ? context.watchTr('view_orders')
+                              : context.watchTr('continue_shopping'),
                           onPress: () async {
                             origin == true
                                 ? context.push(AppRoutes.orderHistory)
@@ -127,8 +105,8 @@ class ConfirmOrderView extends StatelessWidget {
                           textColor: AppColor.textColor,
                           buttonColor: AppColor.whiteColor,
                           title: origin == true
-                              ? 'TRY AGAIN'
-                              : 'GO TO MY PROFILE',
+                              ? context.watchTr('try_again')
+                              : context.watchTr('go_to_profile'),
                           onPress: () async {
                             origin == true
                                 ? context.go(AppRoutes.home)

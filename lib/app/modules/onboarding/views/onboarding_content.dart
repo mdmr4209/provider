@@ -28,23 +28,13 @@ class OnboardingContent extends StatelessWidget {
               Text(
                 title,
                 textAlign: TextAlign.center,
-                style: GoogleFonts.tenorSans(
-                  color: AppColor.textColor,
-                  fontSize: 32.sp,
-                  fontWeight: FontWeight.w500,
-                  height: 1.07,
-                ),
+                style: Theme.of(context).textTheme.displaySmall,
               ),
               SizedBox(height: 20.h),
               Text(
                 description,
                 textAlign: TextAlign.center,
-                style: GoogleFonts.lato(
-                  color: AppColor.textColor2,
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w400,
-                  height: 1.22,
-                ),
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
             ],
           ),

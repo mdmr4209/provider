@@ -7,35 +7,32 @@ import 'package:provider/provider.dart';
 import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/input_text_widget.dart';
 import '../../../routes/app_router.dart';
-import '../providers/cart_provider.dart';
+import '../controllers/cart_controller.dart';
 import 'order_view.dart';
+import '../../localization/localization_extension.dart';
 
 class CheckoutScreen extends StatelessWidget {
   const CheckoutScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<CartProvider>(
+    return Consumer<CartController>(
       builder: (context, cart, _) {
         final commentCtrl = TextEditingController(text: cart.comment);
 
         return Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           appBar: AppBar(
-            backgroundColor: AC.bg,
+            backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
             elevation: 0,
             centerTitle: true,
             leading: IconButton(
               onPressed: () => Navigator.pop(context),
-              icon: Icon(Icons.arrow_back_ios_new, size: 18.r, color: AC.text),
+              icon: Icon(Icons.arrow_back_ios_new, size: 18.r, color: Theme.of(context).iconTheme.color),
             ),
             title: Text(
-              'Checkout',
-              style: GoogleFonts.tenorSans(
-                color: AC.text,
-                fontSize: 20.sp,
-                fontWeight: FontWeight.w400,
-              ),
+              context.watchTr('checkout'),
+              style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
           body: SafeArea(
@@ -53,10 +50,10 @@ class CheckoutScreen extends StatelessWidget {
                         _CheckoutCard(
                           child: Column(
                             children: [
-                              _CheckoutCardHeader(
-                                label: 'My order',
-                                value: '\$${cart.total.toStringAsFixed(2)}',
-                              ),
+                                _CheckoutCardHeader(
+                                  label: context.watchTr('my_order'),
+                                  value: '\$${cart.total.toStringAsFixed(2)}',
+                                ),
                               SizedBox(height: 12.h),
                               ...cart.items.map(
                                 (item) => _CheckoutItemRow(
@@ -71,11 +68,11 @@ class CheckoutScreen extends StatelessWidget {
                                   value:
                                       '-\$${cart.discountAmount.toStringAsFixed(2)}',
                                 ),
-                              _CheckoutDetailRow(
-                                label: 'Delivery',
-                                value: 'Free',
-                                valueColor: AC.green,
-                              ),
+                                _CheckoutDetailRow(
+                                  label: context.watchTr('delivery'),
+                                  value: context.watchTr('free'),
+                                  valueColor: Colors.green,
+                                ),
                             ],
                           ),
                         ),
@@ -88,19 +85,16 @@ class CheckoutScreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              _CheckoutCardHeader(
-                                label: 'Shipping details',
-                                hasArrow: true,
-                                onTap: () => context.push(AppRoutes.shipping),
-                              ),
-                              SizedBox(height: 10.h),
-                              Text(
-                                cart.selectedAddress.address,
-                                style: GoogleFonts.lato(
-                                  fontSize: 13.sp,
-                                  color: AC.textLight,
+                                _CheckoutCardHeader(
+                                  label: context.watchTr('shipping_details'),
+                                  hasArrow: true,
+                                  onTap: () => context.push(AppRoutes.shipping),
                                 ),
-                              ),
+                              SizedBox(height: 10.h),
+                                Text(
+                                  cart.selectedAddress.address,
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
                             ],
                           ),
                         ),
@@ -113,19 +107,16 @@ class CheckoutScreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              _CheckoutCardHeader(
-                                label: 'Payment method',
-                                hasArrow: true,
-                                onTap: () => context.push(AppRoutes.payment),
-                              ),
-                              SizedBox(height: 10.h),
-                              Text(
-                                cart.selectedCard.masked,
-                                style: GoogleFonts.lato(
-                                  fontSize: 13.sp,
-                                  color: AC.textLight,
+                                _CheckoutCardHeader(
+                                  label: context.watchTr('payment_method'),
+                                  hasArrow: true,
+                                  onTap: () => context.push(AppRoutes.payment),
                                 ),
-                              ),
+                              SizedBox(height: 10.h),
+                                Text(
+                                  cart.selectedCard.masked,
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
                             ],
                           ),
                         ),
@@ -135,10 +126,10 @@ class CheckoutScreen extends StatelessWidget {
                         // Comment field
                         InputTextWidget(
                           height: 130,
-                          hintText: 'Enter your comment',
+                          hintText: context.watchTr('enter_your_comment'),
                           maxLines: 10,
-                          borderColor: AC.border,
-                          borderRadius: 4,
+                          borderColor: Theme.of(context).dividerColor,
+                          borderRadius: 12,
                           textEditingController: commentCtrl,
                           onChanged: cart.setComment,
                           borderWidth: 1,
@@ -159,7 +150,7 @@ class CheckoutScreen extends StatelessWidget {
                   ),
                   child: CustomButton(
                     title:
-                        'CONFIRM ORDER (\$${(cart.total + 1).toStringAsFixed(2)})',
+                        '${context.watchTr('confirm_order')} (\$${(cart.total + 1).toStringAsFixed(2)})',
                     onPress: () async =>
                         context.push(AppRoutes.confirm, extra: false),
                   ),
@@ -186,9 +177,9 @@ class _CheckoutCard extends StatelessWidget {
         width: double.infinity,
         padding: EdgeInsets.all(16.w),
         decoration: BoxDecoration(
-          color: AC.cardBg,
-          borderRadius: BorderRadius.circular(4.r),
-          border: Border.all(color: AC.border, width: 0.5),
+          color: Theme.of(context).cardTheme.color,
+          borderRadius: BorderRadius.circular(12.r),
+          border: Border.all(color: Theme.of(context).dividerColor, width: 0.5),
         ),
         child: child,
       ),
@@ -218,33 +209,25 @@ class _CheckoutCardHeader extends StatelessWidget {
           children: [
             Text(
               label,
-              style: GoogleFonts.tenorSans(
-                fontSize: 16.sp,
-                color: AC.text,
-                fontWeight: FontWeight.w400,
-              ),
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
             Row(
               children: [
                 if (value != null)
                   Text(
                     value!,
-                    style: GoogleFonts.lato(
-                      fontSize: 14.sp,
-                      color: AC.text,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                if (hasArrow) ...[
-                  SizedBox(width: 4.w),
-                  Icon(Icons.chevron_right, size: 20.r, color: AC.textLight),
-                ],
+                SizedBox(width: 4.w),
+                Icon(Icons.chevron_right, size: 20.r, color: Theme.of(context).iconTheme.color),
               ],
             ),
           ],
         ),
         SizedBox(height: 10.h),
-        const Divider(color: AC.text, height: 1, thickness: 1),
+        Divider(color: Theme.of(context).dividerColor, height: 1, thickness: 1),
       ],
     );
   }
@@ -270,12 +253,12 @@ class _CheckoutItemRow extends StatelessWidget {
           Expanded(
             child: Text(
               name,
-              style: GoogleFonts.lato(fontSize: 13.sp, color: AC.textLight),
+              style: Theme.of(context).textTheme.bodySmall,
             ),
           ),
           Text(
             '$qty x \$${price.toStringAsFixed(2)}',
-            style: GoogleFonts.lato(fontSize: 13.sp, color: AC.textLight),
+            style: Theme.of(context).textTheme.bodySmall,
           ),
         ],
       ),
@@ -302,13 +285,12 @@ class _CheckoutDetailRow extends StatelessWidget {
         children: [
           Text(
             label,
-            style: GoogleFonts.lato(fontSize: 13.sp, color: AC.textLight),
+            style: Theme.of(context).textTheme.bodySmall,
           ),
           Text(
             value,
-            style: GoogleFonts.lato(
-              fontSize: 13.sp,
-              color: valueColor ?? AC.textLight,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: valueColor ?? Theme.of(context).textTheme.bodySmall?.color,
             ),
           ),
         ],

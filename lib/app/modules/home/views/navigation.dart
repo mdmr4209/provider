@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../res/assets/image_assets.dart';
 import '../../../../res/colors/app_color.dart';
+import '../../localization/localization_extension.dart';
 
 class Navbar extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
@@ -19,7 +20,7 @@ class Navbar extends StatelessWidget {
       bottomNavigationBar: Container(
         height: 80.h,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
           boxShadow: [
             BoxShadow(
               color: Colors.black.withAlpha(12),
@@ -32,11 +33,11 @@ class Navbar extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _navItem(0, 'Home', ImageAssets.home),
-              _navItem(1, 'Search', ImageAssets.search),
-              _navItem(2, 'Cart', ImageAssets.cart),
-              _navItem(3, 'Wishlist', ImageAssets.wishlist),
-              _navItem(4, 'Profile', ImageAssets.profile),
+              _navItem(context, 0, context.watchTr('home'), ImageAssets.home),
+              _navItem(context, 1, context.watchTr('search'), ImageAssets.search),
+              _navItem(context, 2, context.watchTr('cart'), ImageAssets.cart),
+              _navItem(context, 3, context.watchTr('wishlist'), ImageAssets.wishlist),
+              _navItem(context, 4, context.watchTr('profile'), ImageAssets.profile),
             ],
           ),
         ),
@@ -44,7 +45,7 @@ class Navbar extends StatelessWidget {
     );
   }
 
-  Widget _navItem(int index, String label, String icon) {
+  Widget _navItem(BuildContext context, int index, String label, String icon) {
     // Check if this index is the one currently active in GoRouter
     final isSelected = navigationShell.currentIndex == index;
 
@@ -66,7 +67,9 @@ class Navbar extends StatelessWidget {
                 SvgPicture.asset(
                   icon,
                   colorFilter: ColorFilter.mode(
-                    isSelected ? AppColor.blackColor : AppColor.textColor2,
+                    isSelected 
+                        ? (Theme.of(context).bottomNavigationBarTheme.selectedIconTheme?.color ?? Theme.of(context).colorScheme.primary)
+                        : (Theme.of(context).bottomNavigationBarTheme.unselectedIconTheme?.color ?? Colors.grey),
                     BlendMode.srcIn,
                   ),
                   width: 24.r,
@@ -85,10 +88,13 @@ class Navbar extends StatelessWidget {
             SizedBox(height: 4.h),
             Text(
               label,
-              style: GoogleFonts.tenorSans(
-                color: isSelected ? AppColor.blackColor : AppColor.textColor2,
-                fontSize: 10.sp,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+              style: (isSelected
+                      ? Theme.of(context).bottomNavigationBarTheme.selectedLabelStyle
+                      : Theme.of(context).bottomNavigationBarTheme.unselectedLabelStyle)
+                  ?.copyWith(
+                color: isSelected
+                    ? Theme.of(context).bottomNavigationBarTheme.selectedItemColor
+                    : Theme.of(context).bottomNavigationBarTheme.unselectedItemColor,
               ),
             ),
           ],

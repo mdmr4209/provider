@@ -10,21 +10,11 @@ import '../../../../res/colors/app_color.dart';
 import '../../../../widgets/custom_button.dart';
 import '../../../routes/app_router.dart';
 import '../models/cart_item.dart';
-import '../providers/cart_provider.dart';
+import '../controllers/cart_controller.dart';
+import '../../localization/localization_extension.dart';
 
 // ─── Colors ──────────────────────────────────────────────────────────
-class AC {
-  static const bg = Color(0xFFFCEDEA);
-  static const text = Color(0xFF222222);
-  static const textLight = Color(0xFF888888);
-  static const primary = Color(0xFFD05278);
-  static const purple = Color(0xFF9B30F2);
-  static const green = Color(0xFF4CAF50);
-  static const sale = Color(0xFF81C784);
-  static const cardBg = Color(0xFFF7F5FA);
-  static const divider = Color(0xFFEEEEEE);
-  static const border = Color(0xFFE0E0E0);
-}
+// AC class removed in favor of Theme.of(context)
 
 class OrderScreen extends StatefulWidget {
   const OrderScreen({super.key});
@@ -44,14 +34,12 @@ class _OrderScreenState extends State<OrderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<CartProvider>(
+    return Consumer<CartController>(
       builder: (context, cart, _) {
         final isEmpty = cart.items.isEmpty;
 
         return Scaffold(
-          backgroundColor: isEmpty
-              ? AppColor.backgroundColor
-              : AppColor.whiteColor,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           appBar: _appBar(context, cart),
           body: SafeArea(
             child: isEmpty
@@ -83,27 +71,19 @@ class _OrderScreenState extends State<OrderScreen> {
             ),
             SizedBox(height: 24.h),
             Text(
-              'Your Cart Is Empty',
+              context.watchTr('your_cart_is_empty'),
               textAlign: TextAlign.center,
-              style: GoogleFonts.tenorSans(
-                color: AppColor.textColor,
-                fontSize: 20.sp,
-                fontWeight: FontWeight.w400,
-              ),
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             SizedBox(height: 12.h),
             Text(
-              'Looks like you haven\'t made\nyour order yet.',
+              context.watchTr('cart_empty_msg'),
               textAlign: TextAlign.center,
-              style: GoogleFonts.lato(
-                color: AppColor.textColor3,
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w400,
-              ),
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
             SizedBox(height: 32.h),
             CustomButton(
-              title: 'SHOP NOW',
+              title: context.watchTr('shop_now'),
               onPress: () async => context.go(AppRoutes.home),
             ),
           ],
@@ -113,7 +93,7 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 
   // --- UI FOR ACTIVE CART ---
-  Widget _buildCartContent(CartProvider cart) {
+  Widget _buildCartContent(CartController cart) {
     return Column(
       children: [
         Expanded(
@@ -163,7 +143,7 @@ class _OrderScreenState extends State<OrderScreen> {
         Padding(
           padding: EdgeInsets.fromLTRB(20.w, 0, 20.w, 10.h),
           child: CustomButton(
-            title: 'PROCEED TO CHECKOUT',
+            title: context.watchTr('proceed_to_checkout'),
             onPress: () => context.push(AppRoutes.checkout),
           ),
         ),
@@ -171,19 +151,15 @@ class _OrderScreenState extends State<OrderScreen> {
     );
   }
 
-  PreferredSizeWidget _appBar(BuildContext context, CartProvider cart) {
+  PreferredSizeWidget _appBar(BuildContext context, CartController cart) {
     final count = 2;
     return AppBar(
-      backgroundColor: AC.bg,
+      backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
       elevation: 0,
       centerTitle: true,
       title: Text(
-        'Order',
-        style: GoogleFonts.tenorSans(
-          color: AC.text,
-          fontSize: 20.sp,
-          fontWeight: FontWeight.w400,
-        ),
+        context.watchTr('order'),
+        style: Theme.of(context).textTheme.titleLarge,
       ),
       actions: [
         Padding(
@@ -193,7 +169,7 @@ class _OrderScreenState extends State<OrderScreen> {
               alignment: Alignment.bottomLeft,
               label: Text(count.toString(), style: TextStyle(fontSize: 10.sp)),
               isLabelVisible: count > 0,
-              backgroundColor: AppColor.defaultColor,
+              backgroundColor: Theme.of(context).colorScheme.primary,
               offset: Offset(-5.w, -10.h),
               child: _headerIcon(ImageAssets.cart, onTap: () {}),
             ),
@@ -210,7 +186,7 @@ class _OrderScreenState extends State<OrderScreen> {
         asset,
         width: 24.w,
         height: 24.h,
-        colorFilter: ColorFilter.mode(AppColor.blackColor, BlendMode.srcIn),
+        colorFilter: ColorFilter.mode(Theme.of(context).iconTheme.color ?? Colors.black, BlendMode.srcIn),
       ),
     );
   }
@@ -239,7 +215,7 @@ class _CartItemCard extends StatelessWidget {
         direction: DismissDirection.endToStart,
         background: Container(
           alignment: Alignment.centerRight,
-          color: AC.primary,
+          color: Theme.of(context).colorScheme.primary,
           child: Padding(
             padding: EdgeInsets.only(right: 20.w),
             child: Column(
@@ -265,9 +241,9 @@ class _CartItemCard extends StatelessWidget {
           margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 6.h),
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
           decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: AC.border, width: 1),
-            borderRadius: BorderRadius.circular(4.r),
+            color: Theme.of(context).cardTheme.color,
+            border: Border.all(color: Theme.of(context).dividerColor, width: 1),
+            borderRadius: BorderRadius.circular(12.r),
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -278,7 +254,7 @@ class _CartItemCard extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.h),
                   margin: EdgeInsets.only(right: 10.w),
                   decoration: BoxDecoration(
-                    color: AC.sale,
+                    color: Theme.of(context).colorScheme.secondary,
                     borderRadius: BorderRadius.circular(2.r),
                   ),
                   child: Text(
@@ -299,11 +275,7 @@ class _CartItemCard extends StatelessWidget {
                   children: [
                     Text(
                       item.name,
-                      style: GoogleFonts.tenorSans(
-                        color: AC.text,
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w400,
-                      ),
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     SizedBox(height: 4.h),
                     Row(
@@ -311,9 +283,7 @@ class _CartItemCard extends StatelessWidget {
                         if (item.originalPrice != null) ...[
                           Text(
                             '\$${item.originalPrice!.toStringAsFixed(2)}',
-                            style: GoogleFonts.lato(
-                              color: AC.textLight,
-                              fontSize: 13.sp,
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               decoration: TextDecoration.lineThrough,
                             ),
                           ),
@@ -321,9 +291,8 @@ class _CartItemCard extends StatelessWidget {
                         ],
                         Text(
                           '\$${item.price.toStringAsFixed(2)}',
-                          style: GoogleFonts.lato(
-                            color: item.isOnSale ? AC.primary : AC.text,
-                            fontSize: 14.sp,
+                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            color: item.isOnSale ? Theme.of(context).colorScheme.primary : Theme.of(context).textTheme.bodyLarge?.color,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
@@ -359,7 +328,7 @@ class _CartItemCard extends StatelessWidget {
           children: [
             Text(
               'Remove "${item.name}"?',
-              style: GoogleFonts.tenorSans(fontSize: 16.sp, color: AC.text),
+              style: GoogleFonts.tenorSans(fontSize: 16.sp, color: Theme.of(context).textTheme.bodyLarge?.color),
             ),
             SizedBox(height: 20.h),
             Row(
@@ -368,15 +337,15 @@ class _CartItemCard extends StatelessWidget {
                   child: OutlinedButton(
                     onPressed: () => Navigator.pop(context),
                     style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: AC.border),
+                      side: BorderSide(color: Theme.of(context).dividerColor),
                       padding: EdgeInsets.symmetric(vertical: 12.h),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(4.r),
                       ),
                     ),
                     child: Text(
-                      'Cancel',
-                      style: GoogleFonts.lato(color: AC.text, fontSize: 14.sp),
+                      context.watchTr('cancel'),
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
                 ),
@@ -388,7 +357,7 @@ class _CartItemCard extends StatelessWidget {
                       onDelete();
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AC.primary,
+                      backgroundColor: Theme.of(context).colorScheme.primary,
                       padding: EdgeInsets.symmetric(vertical: 12.h),
                       elevation: 0,
                       shape: RoundedRectangleBorder(
@@ -427,22 +396,22 @@ class _CartItemCard extends StatelessWidget {
             ),
             content: Text(
               'Remove "${item.name}" from cart?',
-              style: GoogleFonts.lato(fontSize: 13.sp, color: AC.textLight),
+              style: GoogleFonts.lato(fontSize: 13.sp, color: Theme.of(context).disabledColor),
             ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context, false),
                 child: Text(
                   'Cancel',
-                  style: GoogleFonts.lato(color: AC.textLight),
+                  style: GoogleFonts.lato(color: Theme.of(context).disabledColor),
                 ),
               ),
               TextButton(
                 onPressed: () => Navigator.pop(context, true),
                 child: Text(
-                  'Delete',
-                  style: GoogleFonts.lato(
-                    color: AC.primary,
+                  context.watchTr('delete'),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -477,7 +446,7 @@ class _QuantityStepper extends StatelessWidget {
             '$quantity',
             style: GoogleFonts.lato(
               fontSize: 14.sp,
-              color: AC.text,
+              color: Theme.of(context).textTheme.bodyLarge?.color,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -501,11 +470,11 @@ class _StepBtn extends StatelessWidget {
         width: 36.w,
         height: 36.w,
         decoration: BoxDecoration(
-          border: Border.all(color: AC.border),
+          border: Border.all(color: Theme.of(context).dividerColor),
           borderRadius: BorderRadius.circular(4.r),
-          color: Colors.white,
+          color: Theme.of(context).cardTheme.color,
         ),
-        child: Icon(icon, size: 16.r, color: AC.text),
+        child: Icon(icon, size: 16.r, color: Theme.of(context).iconTheme.color),
       ),
     );
   }
@@ -537,7 +506,7 @@ class _PromoInputRow extends StatelessWidget {
                   height: 52.h,
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: hasError ? Colors.redAccent : AC.border,
+                      color: hasError ? Colors.redAccent : Theme.of(context).dividerColor,
                     ),
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(4.r),
@@ -547,12 +516,12 @@ class _PromoInputRow extends StatelessWidget {
                   child: TextField(
                     controller: controller,
                     textCapitalization: TextCapitalization.characters,
-                    style: GoogleFonts.lato(fontSize: 14.sp, color: AC.text),
+                    style: GoogleFonts.lato(fontSize: 14.sp, color: Theme.of(context).textTheme.bodyLarge?.color),
                     decoration: InputDecoration(
                       hintText: 'Enter promocode',
                       hintStyle: GoogleFonts.lato(
                         fontSize: 14.sp,
-                        color: AC.textLight,
+                        color: Theme.of(context).disabledColor,
                       ),
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.symmetric(horizontal: 14.w),
@@ -566,12 +535,12 @@ class _PromoInputRow extends StatelessWidget {
                   height: 52.h,
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   decoration: BoxDecoration(
-                    border: Border.all(color: AC.border),
+                    border: Border.all(color: Theme.of(context).dividerColor),
                     borderRadius: BorderRadius.only(
                       topRight: Radius.circular(4.r),
                       bottomRight: Radius.circular(4.r),
                     ),
-                    color: Colors.white,
+                    color: Theme.of(context).cardTheme.color,
                   ),
                   child: Center(
                     child: Text(
@@ -579,7 +548,7 @@ class _PromoInputRow extends StatelessWidget {
                       style: GoogleFonts.lato(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w900,
-                        color: AC.text,
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
                         letterSpacing: 0.5,
                       ),
                     ),
@@ -593,8 +562,7 @@ class _PromoInputRow extends StatelessWidget {
               padding: EdgeInsets.only(top: 6.h, left: 4.w),
               child: Text(
                 'Invalid promocode. Try DISCOUNT23',
-                style: GoogleFonts.lato(
-                  fontSize: 11.sp,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Colors.redAccent,
                 ),
               ),
@@ -616,20 +584,16 @@ class _PromoAppliedBadge extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: Row(
         children: [
-          Icon(Icons.check_circle, color: AC.green, size: 20.r),
+          Icon(Icons.check_circle, color: Colors.green, size: 20.r),
           SizedBox(width: 8.w),
           Text(
             'Promocode applied',
-            style: GoogleFonts.tenorSans(
-              color: AC.text,
-              fontSize: 15.sp,
-              fontWeight: FontWeight.w400,
-            ),
+            style: Theme.of(context).textTheme.bodyLarge,
           ),
           const Spacer(),
           GestureDetector(
             onTap: onRemove,
-            child: Icon(Icons.close, color: AC.textLight, size: 18.r),
+            child: Icon(Icons.close, color: Theme.of(context).disabledColor, size: 18.r),
           ),
         ],
       ),
@@ -639,7 +603,7 @@ class _PromoAppliedBadge extends StatelessWidget {
 
 // ─── Summary Card ─────────────────────────────────────────────────────
 class _SummaryCard extends StatelessWidget {
-  final CartProvider cart;
+  final CartController cart;
   const _SummaryCard({required this.cart});
 
   @override
@@ -649,8 +613,8 @@ class _SummaryCard extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(16.w),
         decoration: BoxDecoration(
-          color: AC.cardBg,
-          borderRadius: BorderRadius.circular(4.r),
+          color: Theme.of(context).cardTheme.color,
+          borderRadius: BorderRadius.circular(12.r),
         ),
         child: Column(
           children: [
@@ -663,14 +627,14 @@ class _SummaryCard extends StatelessWidget {
               _SummaryRow(
                 label: 'Discount',
                 value: '-\$${cart.discountAmount.toStringAsFixed(2)}',
-                valueColor: AC.textLight,
+                valueColor: Theme.of(context).disabledColor,
               ),
             ],
             SizedBox(height: 10.h),
-            _SummaryRow(label: 'Delivery', value: 'Free', valueColor: AC.green),
+            _SummaryRow(label: 'Delivery', value: 'Free', valueColor: Colors.green),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 12.h),
-              child: const Divider(color: AC.text, height: 1, thickness: 1),
+              child: Divider(color: Theme.of(context).dividerColor, height: 1, thickness: 1),
             ),
             _SummaryRow(
               label: 'Total',
@@ -704,9 +668,8 @@ class _SummaryRow extends StatelessWidget {
       children: [
         Text(
           label,
-          style: GoogleFonts.lato(
-            fontSize: 14.sp,
-            color: isBold ? AC.text : AC.textLight,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: isBold ? Theme.of(context).textTheme.bodyLarge?.color : Theme.of(context).textTheme.bodySmall?.color,
             fontWeight: isBold ? FontWeight.w700 : FontWeight.w400,
           ),
         ),
@@ -714,7 +677,7 @@ class _SummaryRow extends StatelessWidget {
           value,
           style: GoogleFonts.lato(
             fontSize: 14.sp,
-            color: valueColor ?? AC.text,
+            color: valueColor ?? Theme.of(context).textTheme.bodyLarge?.color,
             fontWeight: isBold ? FontWeight.w700 : FontWeight.w400,
           ),
         ),

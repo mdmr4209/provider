@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../res/assets/image_assets.dart';
 import '../../../../res/colors/app_color.dart';
-import '../providers/profile_provider.dart';
+import '../controllers/profile_controller.dart';
 
 class TrackOrder extends StatelessWidget {
   const TrackOrder({super.key});
@@ -35,7 +35,7 @@ class TrackOrder extends StatelessWidget {
           ),
         ),
       ),
-      body: Consumer<ProfileProvider>(
+      body: Consumer<ProfileController>(
         builder: (context, profile, _) => SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w),

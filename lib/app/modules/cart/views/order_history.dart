@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../res/colors/app_color.dart';
-import '../../profile/providers/profile_provider.dart';
+import '../../profile/controllers/profile_controller.dart';
+import '../../localization/localization_extension.dart';
 
 class OrderHistory extends StatelessWidget {
   const OrderHistory({super.key});
@@ -13,9 +13,9 @@ class OrderHistory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.whiteColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColor.backgroundColor,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
@@ -23,20 +23,15 @@ class OrderHistory extends StatelessWidget {
           icon: Icon(
             Icons.arrow_back_ios_new,
             size: 20.r,
-            color: AppColor.textColor,
+            color: Theme.of(context).iconTheme.color,
           ),
         ),
         title: Text(
-          'Order History',
-          style: GoogleFonts.tenorSans(
-            color: AppColor.textColor,
-            fontSize: 18.sp,
-            fontWeight: FontWeight.w400,
-            letterSpacing: 2,
-          ),
+          context.watchTr('order_history'),
+          style: Theme.of(context).appBarTheme.titleTextStyle,
         ),
       ),
-      body: Consumer<ProfileProvider>(
+      body: Consumer<ProfileController>(
         builder: (context, profile, _) => SafeArea(
           child: Column(
             children: [
@@ -48,6 +43,7 @@ class OrderHistory extends StatelessWidget {
 
                     // On its way
                     _orderCard(
+                      context: context,
                       orderId: '#205479',
                       status: 'On its way',
                       statusColor: const Color(0xFFFFBE00),
@@ -59,18 +55,20 @@ class OrderHistory extends StatelessWidget {
 
                     // Delivered (Expanded Example)
                     _orderCard(
+                      context: context,
                       orderId: '#198452',
                       status: 'Delivered',
-                      statusColor: AppColor.greenColor,
+                      statusColor: Colors.green,
                       date: 'Jun 26, 2022 at 3:16 PM',
                       price: '\$588.80',
                       isExpanded: profile.expandedOrderId == '#198452',
                       onTap: () => profile.toggleOrderExpansion('#198452'),
                     ),
                     _orderCard(
+                      context: context,
                       orderId: '#198454',
                       status: 'Delivered',
-                      statusColor: AppColor.greenColor,
+                      statusColor: Colors.green,
                       date: 'Jun 26, 2022 at 3:16 PM',
                       price: '\$428.80',
                       isExpanded: profile.expandedOrderId == '#198454',
@@ -79,6 +77,7 @@ class OrderHistory extends StatelessWidget {
 
                     // Canceled
                     _orderCard(
+                      context: context,
                       orderId: '#116878',
                       status: 'Canceled',
                       statusColor: const Color(0xFFD05278),
@@ -100,6 +99,7 @@ class OrderHistory extends StatelessWidget {
   }
 
   Widget _orderCard({
+    required BuildContext context,
     required String orderId,
     required String status,
     required Color statusColor,
@@ -115,10 +115,10 @@ class OrderHistory extends StatelessWidget {
         margin: EdgeInsets.only(bottom: 12.h),
         padding: EdgeInsets.all(20.r),
         decoration: BoxDecoration(
-          // Background turns light purple/grey only when expanded
-          color: isExpanded ?AppColor.containerColor : AppColor.whiteColor,
-          border: Border.all(color: AppColor.whiteTextColor),
-          borderRadius: BorderRadius.circular(8.r),
+          // Background turns surface color only when expanded
+          color: isExpanded ? Theme.of(context).colorScheme.surface : Theme.of(context).cardTheme.color,
+          border: Border.all(color: Theme.of(context).dividerColor),
+          borderRadius: BorderRadius.circular(12.r),
         ),
         child: Column(
           children: [
@@ -128,10 +128,7 @@ class OrderHistory extends StatelessWidget {
               children: [
                 Text(
                   orderId,
-                  style: GoogleFonts.tenorSans(
-                    color: AppColor.textColor,
-                    fontSize: 16.sp,
-                  ),
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 Row(
                   children: [
@@ -162,16 +159,11 @@ class OrderHistory extends StatelessWidget {
               children: [
                 Text(
                   date,
-                  style: GoogleFonts.lato(
-                    color: AppColor.textColor2,
-                    fontSize: 12.sp,
-                  ),
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
                 Text(
                   price,
-                  style: GoogleFonts.lato(
-                    color: AppColor.textColor,
-                    fontSize: 14.sp,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -180,22 +172,24 @@ class OrderHistory extends StatelessWidget {
 
             // CONDITIONAL DETAILS SECTION
             if (isExpanded) ...[
-              Divider(height: 30.h, color: AppColor.whiteTextColor),
-              _productLine('Foundation Beshop', '1 x \$401.90'),
-              _productLine('Hair mask with oat extract', '1 x \$125.95'),
-              _productLine('Spray balm with oat extract', '1 x \$60.95'),
+              Divider(height: 30.h, color: Theme.of(context).dividerColor),
+              _productLine(context, 'Foundation Beshop', '1 x \$401.90'),
+              _productLine(context, 'Hair mask with oat extract', '1 x \$125.95'),
+              _productLine(context, 'Spray balm with oat extract', '1 x \$60.95'),
               SizedBox(height: 20.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   _actionButton(
+                    context,
                     Icons.refresh,
-                    'Repeat order',
-                    AppColor.textColor,
+                    context.watchTr('repeat_order'),
+                    Theme.of(context).textTheme.bodyLarge?.color ?? Colors.black,
                   ),
                   _actionButton(
+                    context,
                     Icons.star_outline,
-                    'Leave a review',
+                    context.watchTr('leave_review'),
                     const Color(0xFFD05278),
                   ),
                 ],
@@ -207,7 +201,7 @@ class OrderHistory extends StatelessWidget {
     );
   }
 
-  Widget _productLine(String name, String qtyPrice) {
+  Widget _productLine(BuildContext context, String name, String qtyPrice) {
     return Padding(
       padding: EdgeInsets.only(bottom: 8.h),
       child: Row(
@@ -216,32 +210,26 @@ class OrderHistory extends StatelessWidget {
           Expanded(
             child: Text(
               name,
-              style: GoogleFonts.lato(
-                color: AppColor.textColor2,
-                fontSize: 14.sp,
-              ),
+              style: Theme.of(context).textTheme.bodySmall,
             ),
           ),
           Text(
             qtyPrice,
-            style: GoogleFonts.lato(
-              color: AppColor.textColor2,
-              fontSize: 14.sp,
-            ),
+            style: Theme.of(context).textTheme.bodySmall,
           ),
         ],
       ),
     );
   }
 
-  Widget _actionButton(IconData icon, String label, Color color) {
+  Widget _actionButton(BuildContext context, IconData icon, String label, Color color) {
     return Row(
       children: [
         Icon(icon, size: 16.r, color: color),
         SizedBox(width: 6.w),
         Text(
           label,
-          style: GoogleFonts.lato(color: color, fontSize: 14.sp),
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(color: color),
         ),
       ],
     );

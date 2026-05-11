@@ -8,8 +8,9 @@ import 'package:provider/provider.dart';
 import '../../../../res/assets/image_assets.dart';
 import '../../../../res/colors/app_color.dart';
 import '../../../routes/app_router.dart';
-import '../providers/profile_provider.dart';
+import '../controllers/profile_controller.dart';
 import 'logout.dart';
+import '../../localization/localization_extension.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
@@ -18,19 +19,15 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     final count = 2;
     return Scaffold(
-      backgroundColor: AppColor.whiteColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColor.backgroundColor,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         elevation: 0,
         centerTitle: true,
         automaticallyImplyLeading: false,
         title: Text(
-          'My profile',
-          style: GoogleFonts.tenorSans(
-            color: AppColor.textColor,
-            fontSize: 18.sp,
-            fontWeight: FontWeight.w400,
-          ),
+          context.watchTr('my_profile'),
+          style: Theme.of(context).textTheme.titleLarge,
         ),
         actions: [
           Padding(
@@ -51,7 +48,7 @@ class ProfileView extends StatelessWidget {
           ),
         ],
       ),
-      body: Consumer<ProfileProvider>(
+      body: Consumer<ProfileController>(
         builder: (context, profile, _) => SafeArea(
           child: SingleChildScrollView(
             child: Padding(
@@ -122,60 +119,63 @@ class ProfileView extends StatelessWidget {
                   Text(
                     'Kristin Watson',
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.tenorSans(
-                      color: AppColor.textColor,
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.w400,
-                      height: 1.20,
-                    ),
+                    style: Theme.of(context).textTheme.headlineLarge,
                   ),
                   SizedBox(height: 10.h),
                   Text(
                     'kristinwatson@mail.com',
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.lato(
-                      color: AppColor.textColor2,
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w400,
-                      height: 1.50,
-                    ),
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   SizedBox(height: 10.h),
                   Column(
                     children: [
                       _profileMenuTile(
+                        context,
                         icon: ImageAssets.orderHistory,
-                        title: 'Order history',
+                        title: context.watchTr('order_history'),
                         onTap: () => context.push(AppRoutes.orderHistory),
                       ),
                       _profileMenuTile(
+                        context,
                         icon: ImageAssets.paymentMethod,
-                        title: 'Payment method',
+                        title: context.watchTr('payment_method'),
                         onTap: () => context.push(AppRoutes.paymentMethod),
                       ),
                       _profileMenuTile(
+                        context,
                         icon: ImageAssets.address,
-                        title: 'My address',
+                        title: context.watchTr('my_address'),
                         onTap: () => context.push(AppRoutes.address),
                       ),
                       _profileMenuTile(
+                        context,
                         icon: ImageAssets.promoCode,
-                        title: 'My promocodes',
+                        title: context.watchTr('my_promocodes'),
                         onTap: () => context.push(AppRoutes.promoCode),
                       ),
                       _profileMenuTile(
+                        context,
                         icon: ImageAssets.trackOrder,
-                        title: 'Track my order',
+                        title: context.watchTr('track_my_order'),
                         onTap: () => context.push(AppRoutes.trackOrder),
                       ),
                       _profileMenuTile(
+                        context,
                         icon: ImageAssets.points,
-                        title: 'My Points',
+                        title: context.watchTr('my_points'),
                         onTap: () => context.push(AppRoutes.points),
                       ),
                       _profileMenuTile(
+                        context,
+                        icon: ImageAssets.settings,
+                        title: context.watchTr('settings'),
+                        onTap: () => context.push(AppRoutes.settings),
+                      ),
+                      _profileMenuTile(
+                        context,
                         icon: ImageAssets.logout,
-                        title: 'Sign out',
+                        title: context.watchTr('sign_out'),
                         isLogout: true,
                         onTap: () {
                           showDialog(
@@ -197,7 +197,8 @@ class ProfileView extends StatelessWidget {
   }
 
   // Reusable Menu Tile Widget
-  Widget _profileMenuTile({
+  Widget _profileMenuTile(
+    BuildContext context, {
     required String icon,
     required String title,
     required VoidCallback onTap,
@@ -214,9 +215,9 @@ class ProfileView extends StatelessWidget {
               width: 50.r,
               height: 50.r,
               decoration: ShapeDecoration(
-                color:AppColor.containerColor,
+                color: Theme.of(context).colorScheme.surface,
                 shape: RoundedRectangleBorder(
-                  side: BorderSide(width: 1.w, color: AppColor.whiteTextColor),
+                  side: BorderSide(width: 1.w, color: Theme.of(context).dividerColor),
                   borderRadius: BorderRadius.circular(10.r),
                 ),
               ),
@@ -231,7 +232,7 @@ class ProfileView extends StatelessWidget {
                           Colors.redAccent,
                           BlendMode.srcIn,
                         )
-                      : ColorFilter.mode(AppColor.textColor, BlendMode.srcIn),
+                      : ColorFilter.mode(Theme.of(context).iconTheme.color!, BlendMode.srcIn),
                 ),
               ),
             ),
@@ -240,10 +241,8 @@ class ProfileView extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: GoogleFonts.tenorSans(
-                  color: isLogout ? Colors.redAccent : AppColor.textColor,
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w400,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: isLogout ? Colors.redAccent : Theme.of(context).textTheme.bodyLarge?.color,
                 ),
               ),
             ),
@@ -252,7 +251,7 @@ class ProfileView extends StatelessWidget {
               Icon(
                 Icons.arrow_forward_ios,
                 size: 16.r,
-                color: AppColor.textColor3,
+                color: Theme.of(context).iconTheme.color?.withAlpha(127),
               ),
           ],
         ),

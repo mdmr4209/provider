@@ -10,7 +10,8 @@ import '../../../../res/assets/image_assets.dart';
 import '../../../../res/colors/app_color.dart';
 import '../../../../widgets/custom_button.dart';
 import '../../../routes/app_router.dart';
-import '../providers/home_provider.dart';
+import '../controllers/home_controller.dart';
+import '../../localization/localization_extension.dart';
 
 class ProductView extends StatefulWidget {
   const ProductView({super.key});
@@ -41,7 +42,7 @@ class _ProductViewState extends State<ProductView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.whiteColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: _buildAppBar(),
       body: Column(
         children: [
@@ -50,7 +51,7 @@ class _ProductViewState extends State<ProductView> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Consumer<HomeProvider>(
+                  Consumer<HomeController>(
                     builder: (context, home, _) => Stack(
                       children: [
                         // 1. FULL SCREEN IMAGE SLIDER
@@ -166,7 +167,7 @@ class _ProductViewState extends State<ProductView> {
                               SizedBox(height: 10.h),
                               CustomButton(
                                 onPress: () async {},
-                                title: 'EXPLORE',
+                                title: context.watchTr('explore'),
                                 width: 150.w,
                                 height: 45.h,
                                 buttonColor: Colors.black.withAlpha(104),
@@ -196,12 +197,7 @@ class _ProductViewState extends State<ProductView> {
                                   width: 280.w,
                                   child: Text(
                                     'Body Hair Depilatory Cream',
-                                    style: GoogleFonts.tenorSans(
-                                      color: AppColor.textColor,
-                                      fontSize: 20.sp,
-                                      fontWeight: FontWeight.w400,
-                                      height: 1.20,
-                                    ),
+                                    style: Theme.of(context).textTheme.titleLarge,
                                   ),
                                 ),
                                 Container(
@@ -239,12 +235,9 @@ class _ProductViewState extends State<ProductView> {
                               spacing: 10.w,
                               children: [
                                 Text(
-                                  'IN STOCK',
-                                  style: GoogleFonts.lato(
-                                    color: AppColor.greenColor,
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w400,
-                                    height: 1.50,
+                                  context.watchTr('in_stock'),
+                                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                                    color: Theme.of(context).colorScheme.secondary,
                                   ),
                                 ),
                                 Row(
@@ -257,12 +250,7 @@ class _ProductViewState extends State<ProductView> {
                                     ),
                                     Text(
                                       '5.0',
-                                      style: GoogleFonts.lato(
-                                        color: AppColor.textColor2,
-                                        fontSize: 12.sp,
-                                        fontWeight: FontWeight.w400,
-                                        height: 1.70,
-                                      ),
+                                      style: Theme.of(context).textTheme.bodySmall,
                                     ),
                                   ],
                                 ),
@@ -274,23 +262,18 @@ class _ProductViewState extends State<ProductView> {
                               children: [
                                 Text(
                                   '\$37.88',
-                                  style: GoogleFonts.lato(
-                                    color: AppColor.textColor,
-                                    fontSize: 20.sp,
-                                    fontWeight: FontWeight.w400,
-                                    height: 1.50,
-                                  ),
+                                  style: Theme.of(context).textTheme.titleLarge,
                                 ),
                                 Container(
                                   width: 114.w,
                                   height: 40.h,
                                   clipBehavior: Clip.antiAlias,
                                   decoration: ShapeDecoration(
-                                    color: AppColor.containerColor,
+                                    color: Theme.of(context).colorScheme.surfaceContainerHighest,
                                     shape: RoundedRectangleBorder(
                                       side: BorderSide(
                                         width: 1.w,
-                                        color: AppColor.whiteTextColor,
+                                        color: Theme.of(context).dividerColor,
                                       ),
                                     ),
                                   ),
@@ -306,12 +289,7 @@ class _ProductViewState extends State<ProductView> {
                                         width: 26.w,
                                         child: Text(
                                           '1',
-                                          style: GoogleFonts.lato(
-                                            color: AppColor.textColor2,
-                                            fontSize: 14.sp,
-                                            fontWeight: FontWeight.w400,
-                                            height: 1.50,
-                                          ),
+                                          style: Theme.of(context).textTheme.bodyMedium,
                                         ),
                                       ),
                                       IconButton(
@@ -333,23 +311,13 @@ class _ProductViewState extends State<ProductView> {
                             ),
                             SizedBox(height: 30.h),
                             Text(
-                              'Description',
-                              style: GoogleFonts.tenorSans(
-                                color: AppColor.textColor,
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w400,
-                                height: 1.20,
-                              ),
+                              context.watchTr('description'),
+                              style: Theme.of(context).textTheme.titleMedium,
                             ),
                             SizedBox(height: 14.h),
                             Text(
                               'Amet amet Lorem eu consectetur in deserunt nostrud dolor culpa ad sint amet. Nostrud deserunt consectetur culpa minim mollit veniam aliquip pariatur exercitation ullamco ea voluptate et. Pariatur ipsum mollit magna proident nisi ipsum.',
-                              style: GoogleFonts.lato(
-                                color: AppColor.textColor2,
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w400,
-                                height: 1.70,
-                              ),
+                              style: Theme.of(context).textTheme.bodyMedium,
                             ),
                             SizedBox(height: 30.h),
                             SizedBox(height: 30.h),
@@ -377,7 +345,7 @@ class _ProductViewState extends State<ProductView> {
           // ── Apply Filters Button ───────────────────────────────────
           Padding(
             padding: EdgeInsets.all(16.w),
-            child: CustomButton(onPress: () async {}, title: '+ ADD TO CART'),
+            child: CustomButton(onPress: () async {}, title: context.watchTr('add_to_cart')),
           ),
         ],
       ),
@@ -394,7 +362,7 @@ class _ProductViewState extends State<ProductView> {
       decoration: ShapeDecoration(
         color: Colors.white,
         shape: RoundedRectangleBorder(
-          side: BorderSide(width: 1.w, color: AppColor.whiteTextColor),
+          side: BorderSide(width: 1.w, color: Theme.of(context).dividerColor),
           borderRadius: BorderRadius.circular(8.r),
         ),
       ),
@@ -421,12 +389,7 @@ class _ProductViewState extends State<ProductView> {
                   children: [
                     Text(
                       'Annette Black',
-                      style: GoogleFonts.tenorSans(
-                        color: AppColor.textColor,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w400,
-                        height: 1.20,
-                      ),
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                     SizedBox(height: 4.h),
                     Text(
@@ -452,12 +415,7 @@ class _ProductViewState extends State<ProductView> {
                   SizedBox(width: 4.w),
                   Text(
                     '5.0',
-                    style: GoogleFonts.lato(
-                      color: AppColor.ratingColor,
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w400,
-                      height: 1.70,
-                    ),
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
               ),
@@ -477,12 +435,7 @@ class _ProductViewState extends State<ProductView> {
                 width: 248.w,
                 child: Text(
                   'Consequat ut ea dolor aliqua laborum tempor Lorem culpa. Commodo veniam sint est mollit proident commodo.',
-                  style: GoogleFonts.lato(
-                    color: AppColor.textColor2,
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w400,
-                    height: 1.50,
-                  ),
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ),
             ],
@@ -500,12 +453,7 @@ class _ProductViewState extends State<ProductView> {
           children: [
             Text(
               title,
-              style: GoogleFonts.tenorSans(
-                color: AppColor.textColor,
-                fontSize: 20.sp,
-                fontWeight: FontWeight.w400,
-                height: 1.20,
-              ),
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             InkWell(
               onTap: () {
@@ -514,11 +462,8 @@ class _ProductViewState extends State<ProductView> {
               child: Text(
                 'View  all',
                 textAlign: TextAlign.right,
-                style: GoogleFonts.lato(
-                  color: AppColor.defaultColor,
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w400,
-                  height: 1.50,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ),
             ),
@@ -532,7 +477,7 @@ class _ProductViewState extends State<ProductView> {
   AppBar _buildAppBar() {
     final count = 2;
     return AppBar(
-      backgroundColor: AppColor.whiteColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       automaticallyImplyLeading: false,
       flexibleSpace: SafeArea(
         child: Padding(
@@ -551,7 +496,7 @@ class _ProductViewState extends State<ProductView> {
                   style: TextStyle(fontSize: 10.sp),
                 ),
                 isLabelVisible: count > 0,
-                backgroundColor: AppColor.defaultColor,
+                backgroundColor: Theme.of(context).colorScheme.primary,
                 offset: Offset(-5.w, -10.h),
                 child: _headerIcon(ImageAssets.cart, onTap: () {}),
               ),
@@ -569,7 +514,7 @@ class _ProductViewState extends State<ProductView> {
         asset,
         width: 24.w,
         height: 24.h,
-        colorFilter: ColorFilter.mode(AppColor.blackColor, BlendMode.srcIn),
+        colorFilter: ColorFilter.mode(Theme.of(context).iconTheme.color!, BlendMode.srcIn),
       ),
     );
   }

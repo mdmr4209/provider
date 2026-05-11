@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import '../../../../res/assets/image_assets.dart';
 import '../../../../res/colors/app_color.dart';
 import '../../../routes/app_router.dart';
-import '../providers/profile_provider.dart';
+import '../controllers/profile_controller.dart';
 
 class MyAddress extends StatelessWidget {
   const MyAddress({super.key});
@@ -39,7 +39,7 @@ class MyAddress extends StatelessWidget {
           ),
         ),
       ),
-      body: Consumer<ProfileProvider>(
+      body: Consumer<ProfileController>(
         builder: (context, profile, _) => SafeArea(
           // Use ListView as the primary body to handle small screens/overflow
           child: Padding(

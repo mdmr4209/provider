@@ -13,13 +13,13 @@ import '../../../routes/app_router.dart';
 
 /// Pure ChangeNotifier — zero BuildContext, zero Navigator.
 /// Navigation is done via GoRouter using the routerKey set in main.dart.
-class AuthProvider extends ChangeNotifier {
+class AuthController extends ChangeNotifier {
   final ApiService apiService;
 
-  /// Set this from main.dart: AuthProvider.routerKey = _routerKey;
+  /// Set this from main.dart: AuthController.routerKey = _routerKey;
   static GlobalKey<NavigatorState>? routerKey;
 
-  AuthProvider({required this.apiService}) {
+  AuthController({required this.apiService}) {
     checkLoginStatus();
   }
 

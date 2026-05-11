@@ -8,6 +8,7 @@ import '../../../../res/assets/image_assets.dart';
 import '../../../../res/colors/app_color.dart';
 import '../../../../widgets/custom_button.dart';
 import '../../../routes/app_router.dart';
+import '../../localization/localization_extension.dart';
 
 class Logout extends StatelessWidget {
   const Logout({super.key});
@@ -16,7 +17,7 @@ class Logout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.r)),
-      backgroundColor: AppColor.backgroundColor, // Your light red/pink color
+      backgroundColor: Theme.of(context).colorScheme.surface, // Your light red/pink color
       child: Padding(
         padding: EdgeInsets.all(20.r),
         child: Column(
@@ -40,14 +41,9 @@ class Logout extends StatelessWidget {
 
             // Text Message
             Text(
-              'Are you sure you want to sign out?',
+              context.watchTr('sign_out_confirm'),
               textAlign: TextAlign.center,
-              style: GoogleFonts.tenorSans(
-                color: AppColor.textColor,
-                fontSize: 18.sp,
-                fontWeight: FontWeight.w400,
-                height: 1.3,
-              ),
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             SizedBox(height: 30.h),
 
@@ -63,9 +59,9 @@ class Logout extends StatelessWidget {
                       // context.read<AuthProvider>().clear();
                       context.go(AppRoutes.login);
                     },
-                    textColor: AppColor.textColor,
-                    buttonColor: AppColor.whiteColor,
-                    title: 'SURE',
+                    textColor: Theme.of(context).colorScheme.onSurface,
+                    buttonColor: Theme.of(context).colorScheme.surface,
+                    title: context.watchTr('sure'),
                   ),
                 ),
                 SizedBox(width: 15.w),
@@ -78,7 +74,7 @@ class Logout extends StatelessWidget {
                       // context.read<AuthProvider>().clear();
                       context.pop();
                     },
-                    title: 'CANCEL',
+                    title: context.watchTr('cancel'),
                   ),
                 ),
               ],

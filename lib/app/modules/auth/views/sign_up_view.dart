@@ -8,8 +8,9 @@ import '../../../../res/assets/image_assets.dart';
 import '../../../../res/colors/app_color.dart';
 import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/input_text_widget.dart';
+import '../controllers/auth_controller.dart';
+import '../../localization/localization_extension.dart';
 import '../../../routes/app_router.dart';
-import '../providers/auth_provider.dart';
 
 class SignUpView extends StatelessWidget {
   const SignUpView({super.key});
@@ -21,7 +22,7 @@ class SignUpView extends StatelessWidget {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        backgroundColor: AppColor.whiteColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
@@ -35,17 +36,13 @@ class SignUpView extends StatelessWidget {
                       onTap: () {
                         Navigator.pop(context);
                       },
-                      child: Icon(Icons.arrow_back_ios_new),
+                      child: Icon(Icons.arrow_back_ios_new, color: Theme.of(context).iconTheme.color),
                     ),
                     Spacer(),
                     Text(
-                      'Sign Up',
+                      context.watchTr('sign_up'),
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.tenorSans(
-                        color: AppColor.textColor,
-                        fontSize: 18.w,
-                        fontWeight: FontWeight.w400,
-                      ),
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                     Spacer(),
                     SizedBox(width: 20.w),
@@ -73,52 +70,42 @@ class SignUpView extends StatelessWidget {
                           left: 0,
                           right: 0,
                           bottom: 0,
-                          child: Consumer<AuthProvider>(
+                          child: Consumer<AuthController>(
                             builder: (context, auth, _) => ListView(
                               padding: EdgeInsets.symmetric(horizontal: 20.w),
                               children: [
                                 SizedBox(height: 20.h),
                                 Text(
-                                  'Sign up',
+                                  context.watchTr('sign_up_caps'),
                                   textAlign: TextAlign.center,
-                                  style: GoogleFonts.tenorSans(
-                                    color: AppColor.textColor,
-                                    fontSize: 32.sp,
-                                    fontWeight: FontWeight.w400,
-                                    height: 1.20,
-                                  ),
+                                  style: Theme.of(context).textTheme.displaySmall,
                                 ),
                                 SizedBox(height: 20.h),
                                 SizedBox(
                                   width: 266.w,
                                   child: Text(
-                                    'Use social networks or your email',
+                                    context.watchTr('auth_subtitle'),
                                     textAlign: TextAlign.center,
-                                    style: GoogleFonts.lato(
-                                      color: AppColor.textColor2,
-                                      fontSize: 16.sp,
-                                      fontWeight: FontWeight.w400,
-                                      height: 1.70,
-                                    ),
+                                    style: Theme.of(context).textTheme.bodyMedium,
                                   ),
                                 ),
                                 SizedBox(height: 110.h),
                                 InputTextWidget(
-                                  hintText: 'Enter your name',
+                                  hintText: context.watchTr('enter_your_name'),
                                   textEditingController: auth.nameController,
                                   onChanged: (_) {},
                                   keyboardType: TextInputType.name,
                                 ),
                                 SizedBox(height: 10.h),
                                 InputTextWidget(
-                                  hintText: 'Enter your email',
+                                  hintText: context.watchTr('enter_your_email'),
                                   textEditingController: auth.emailController,
                                   onChanged: (_) {},
                                   keyboardType: TextInputType.emailAddress,
                                 ),
                                 SizedBox(height: 10.h),
                                 InputTextWidget(
-                                  hintText: 'Enter your password',
+                                  hintText: context.watchTr('enter_your_password'),
                                   obscureText: true,
                                   textEditingController:
                                       auth.passwordController,
@@ -128,7 +115,7 @@ class SignUpView extends StatelessWidget {
                                 ),
                                 SizedBox(height: 10.h),
                                 InputTextWidget(
-                                  hintText: 'Confirm your password',
+                                  hintText: context.watchTr('confirm_your_password'),
                                   obscureText: true,
                                   textEditingController:
                                       auth.setPasswordController,
@@ -139,7 +126,7 @@ class SignUpView extends StatelessWidget {
                                 SizedBox(height: 20.h),
                                 CustomButton(
                                   height: 60,
-                                  title: 'SIGN UP',
+                                  title: context.watchTr('sign_up_button'),
                                   onPress: auth.isLoading ? null :()async {
                                     // auth.login
                                     context.push(AppRoutes.goToHome,extra:"Sign up");
@@ -151,24 +138,17 @@ class SignUpView extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "Already have an account? ",
-                                      style: GoogleFonts.lato(
-                                        color: AppColor.textColor2,
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.w400,
-                                        height: 1.70,
-                                      ),
+                                      "${context.watchTr('already_have_account')} ",
+                                      style: Theme.of(context).textTheme.bodyMedium,
                                     ),
                                     GestureDetector(
                                       onTap: () =>
                                           context.push(AppRoutes.login),
                                       child: Text(
-                                        'Sign in.',
-                                        style: GoogleFonts.lato(
-                                          color: AppColor.defaultColor,
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.w400,
-                                          height: 1.70,
+                                        context.watchTr('sign_in_dot'),
+                                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                          color: Theme.of(context).colorScheme.primary,
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                     ),

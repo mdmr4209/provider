@@ -8,8 +8,9 @@ import 'package:provider/provider.dart';
 import '../../../../res/assets/image_assets.dart';
 import '../../../../res/colors/app_color.dart';
 import '../../../../widgets/custom_button.dart';
+import '../controllers/auth_controller.dart';
+import '../../localization/localization_extension.dart';
 import '../../../routes/app_router.dart';
-import '../providers/auth_provider.dart';
 
 class GoToHome extends StatelessWidget {
   final String? origin;
@@ -20,7 +21,7 @@ class GoToHome extends StatelessWidget {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        backgroundColor: AppColor.backgroundColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -38,40 +39,30 @@ class GoToHome extends StatelessWidget {
                         child: SvgPicture.asset( origin == "Sign up"?ImageAssets.account:ImageAssets.password)),
                   ],
                 ),
-                Consumer<AuthProvider>(
+                Consumer<AuthController>(
                   builder: (context, auth, _) => Expanded(
                     child: ListView(
                       children: [
                         SizedBox(height: 30.h),
                         Text(
                           origin == "Sign up"
-                              ? 'Account Created!'
-                              : 'Your password has\nbeen reset!',
+                              ? context.watchTr('account_created')
+                              : context.watchTr('password_reset_success'),
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.lato(
-                            color: AppColor.textColor,
-                            fontSize: 22.sp,
-                            fontWeight: FontWeight.w400,
-                            height: 1.70,
-                          ),
+                          style: Theme.of(context).textTheme.headlineMedium,
                         ),
                         SizedBox(height: 10.h),
                         Text(
                           origin == "Sign up"
-                              ? 'Your account had beed created\nsuccessfully.'
-                              : 'Qui ex aute ipsum duis. Incididunt\nadipisicing voluptate laborum',
+                              ? context.watchTr('account_created_msg')
+                              : context.watchTr('password_reset_msg'),
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.lato(
-                            color: AppColor.textColor2,
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w400,
-                            height: 1.70,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium,
                         ),
                         SizedBox(height: 30.h),
                         CustomButton(
                           height: 60,
-                          title: origin == "Sign up" ? 'SHOP NOW' : 'DONE',
+                          title: origin == "Sign up" ? context.watchTr('shop_now') : context.watchTr('done'),
                           onPress: auth.isHomeLoading
                               ? null
                               : () async {

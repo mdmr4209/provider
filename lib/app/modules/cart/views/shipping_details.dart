@@ -4,33 +4,30 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../models/shipping_address.dart';
-import '../providers/cart_provider.dart';
+import '../controllers/cart_controller.dart';
 import 'order_view.dart';
+import '../../localization/localization_extension.dart';
 
 class ShippingDetailsScreen extends StatelessWidget {
   const ShippingDetailsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<CartProvider>(
+    return Consumer<CartController>(
       builder: (context, cart, _) {
         return Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           appBar: AppBar(
-            backgroundColor: Colors.white,
+            backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
             elevation: 0,
             centerTitle: true,
             leading: IconButton(
               onPressed: () => Navigator.pop(context),
-              icon: Icon(Icons.arrow_back_ios_new, size: 18.r, color: AC.text),
+              icon: Icon(Icons.arrow_back_ios_new, size: 18.r, color: Theme.of(context).iconTheme.color),
             ),
             title: Text(
-              'Shipping Details',
-              style: GoogleFonts.tenorSans(
-                color: AC.text,
-                fontSize: 20.sp,
-                fontWeight: FontWeight.w400,
-              ),
+              context.watchTr('shipping_details'),
+              style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
           body: Column(
@@ -49,7 +46,7 @@ class ShippingDetailsScreen extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.location_on, color: AC.green, size: 36.r),
+                          Icon(Icons.location_on, color: Colors.green, size: 36.r),
                         ],
                       ),
                     ),
@@ -60,9 +57,9 @@ class ShippingDetailsScreen extends StatelessWidget {
               // Address list
               Expanded(
                 child: Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    image: DecorationImage(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    image: const DecorationImage(
                       image: AssetImage('assets/bg_pattern.png'),
                       opacity: 0.05,
                       repeat: ImageRepeat.repeat,
@@ -92,15 +89,12 @@ class ShippingDetailsScreen extends StatelessWidget {
                             Icon(
                               Icons.check,
                               size: 16.r,
-                              color: AC.textLight.withAlpha(127),
+                              color: Theme.of(context).disabledColor.withAlpha(127),
                             ),
                             SizedBox(width: 8.w),
-                            Text(
-                              'Use current location',
-                              style: GoogleFonts.lato(
-                                fontSize: 14.sp,
-                                color: AC.textLight,
-                              ),
+                             Text(
+                              context.watchTr('use_current_location'),
+                              style: Theme.of(context).textTheme.bodySmall,
                             ),
                           ],
                         ),
@@ -138,12 +132,12 @@ class _AddressOption extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 14.h),
         margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).cardTheme.color,
           border: Border.all(
-            color: isSelected ? AC.primary : AC.border,
+            color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).dividerColor,
             width: 1,
           ),
-          borderRadius: BorderRadius.circular(4.r),
+          borderRadius: BorderRadius.circular(12.r),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -154,14 +148,11 @@ class _AddressOption extends StatelessWidget {
                 if (address.label.isNotEmpty)
                   Text(
                     address.label,
-                    style: GoogleFonts.tenorSans(
-                      fontSize: 15.sp,
-                      color: AC.text,
-                    ),
+                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 Text(
                   address.address,
-                  style: GoogleFonts.lato(fontSize: 13.sp, color: AC.textLight),
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
               ],
             ),
@@ -172,7 +163,7 @@ class _AddressOption extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: isSelected ? AC.primary : Colors.grey.shade400,
+                  color: isSelected ? Theme.of(context).colorScheme.primary : Colors.grey.shade400,
                   width: 1.5,
                 ),
               ),
@@ -181,8 +172,8 @@ class _AddressOption extends StatelessWidget {
                       child: Container(
                         width: 12.w,
                         height: 12.w,
-                        decoration: const BoxDecoration(
-                          color: AC.primary,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.primary,
                           shape: BoxShape.circle,
                         ),
                       ),

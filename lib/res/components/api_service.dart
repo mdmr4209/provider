@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import '../../widgets/snack_bar_helper.dart';
 import 'package:http/http.dart' as client;
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
@@ -11,7 +11,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../app_url/app_url.dart';
 
-class ApiService extends GetxService {
+class ApiService {
   Future<Map<String, dynamic>> fetchCompany(int id, String token) async {
     try {
       final url = Uri.parse('${Api.getCompanyUrl}$id');
@@ -429,10 +429,9 @@ class ApiService extends GetxService {
     try {
       bool hasPermission = await requestStoragePermission();
       if (!hasPermission) {
-        Get.snackbar(
-          "Permission Denied",
-          "Storage permission is required to download files.",
-          snackPosition: SnackPosition.BOTTOM,
+        showErrorSnackBar(
+          title: "Permission Denied",
+          message: "Storage permission is required to download files.",
         );
         return;
       }
@@ -452,20 +451,14 @@ class ApiService extends GetxService {
       Dio dio = Dio();
       await dio.download(url, filePath);
 
-      Get.snackbar(
-        "Download Complete",
-        "Saved to ${dir.path}",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.black87,
-        colorText: Colors.white,
+      showSuccessSnackBar(
+        title: "Download Complete",
+        message: "Saved to ${dir.path}",
       );
     } catch (e) {
-      Get.snackbar(
-        "Download Failed",
-        e.toString(),
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
+      showErrorSnackBar(
+        title: "Download Failed",
+        message: e.toString(),
       );
     }
   }

@@ -4,14 +4,13 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../main.dart';
 import 'api_service.dart';
 
 
-class NotificationService extends GetxService {
+class NotificationService {
   static RemoteMessage? initialMessage;
   NotificationService();
 
@@ -140,13 +139,10 @@ class NotificationService extends GetxService {
 
   NotificationService._();
   static final NotificationService instance = NotificationService._();
-  @override
-  void onReady() {
-    super.onReady();
-
+  void handleInitialMessage() {
     if (NotificationService.initialMessage != null) {
       final msg = NotificationService.initialMessage!;
-      NotificationService.instance._handleMessage(msg);
+      _handleMessage(msg);
 
       // clear so it won’t trigger twice
       NotificationService.initialMessage = null;
@@ -158,7 +154,7 @@ class NotificationService extends GetxService {
   final _storage = const FlutterSecureStorage();
   bool _isLocalNotificationsInitialized = false;
 
-  Future<void> initialize() async {
+  Future<void> initialize({ApiService? apiService}) async {
     try {
       FirebaseMessaging.onBackgroundMessage(
         firebaseMessagingBackgroundHandler,
@@ -170,16 +166,18 @@ class NotificationService extends GetxService {
 
       await _setupMessageHandlers();
 
+      handleInitialMessage();
+
       await Future.delayed(const Duration(milliseconds: 1000));
       debugPrint(
         'Delayed FCM registration to ensure ApiService availability at ${DateTime.now()}',
       );
-      await _registerFcmToken();
+      await _registerFcmToken(apiService: apiService);
 
       _messaging.onTokenRefresh.listen((newToken) async {
         debugPrint('FCM token refreshed: $newToken');
         _storage.write(key: 'fcm_token', value: newToken);
-        await _registerFcmToken(fcmToken: newToken);
+        await _registerFcmToken(fcmToken: newToken, apiService: apiService);
       });
     } catch (e, stackTrace) {
       debugPrint('NotificationService initialization error: $e');
@@ -207,7 +205,7 @@ class NotificationService extends GetxService {
     }
   }
 
-  Future<void> _registerFcmToken({String? fcmToken}) async {
+  Future<void> _registerFcmToken({String? fcmToken, ApiService? apiService}) async {
     try {
       final token = fcmToken ?? await _messaging.getToken();
       if (token == null) {
@@ -222,25 +220,8 @@ class NotificationService extends GetxService {
         return;
       }
 
-      ApiService? apiService;
-      for (int attempt = 1; attempt <= 3; attempt++) {
-        if (Get.isRegistered<ApiService>()) {
-          apiService = Get.find<ApiService>();
-          debugPrint(
-            'ApiService found on attempt $attempt at ${DateTime.now()}',
-          );
-          break;
-        }
-        debugPrint(
-          'ApiService not found on attempt $attempt. Retrying after 500ms...',
-        );
-        await Future.delayed(const Duration(milliseconds: 500));
-      }
-
       if (apiService == null) {
-        debugPrint(
-          'ApiService not found after 3 attempts. Ensure Get.put(ApiService()) is called in main.dart',
-        );
+        debugPrint('ApiService not provided for FCM registration');
         return;
       }
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 
 import '../res/colors/app_color.dart';
 
@@ -77,40 +77,44 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final buttonStyle = theme.elevatedButtonTheme.style;
+    
+    // Resolve colors from theme if they are defaults
+    final effectiveButtonColor = buttonColor == AppColor.buttonColor ? (buttonStyle?.backgroundColor?.resolve({}) ?? buttonColor) : buttonColor;
+    final effectiveTextColor = textColor == AppColor.textWhiteColor ? (buttonStyle?.foregroundColor?.resolve({}) ?? textColor) : textColor;
+
     return InkWell(
       onTap: (onPress != null && !loading) ? () => onPress!() : null,
       child: Container(
         height: height.h,
         width: width.w,
-        decoration:
-            linearGradient
-                ? ShapeDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment(1.00, -1.22),
-                    end: Alignment(-0.20, 2.10),
-                    colors: [buttonColor, buttonColor1],
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(radius.r),
-                  ),
-                )
-                : ShapeDecoration(
-                  color: buttonColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(radius.r),
-                    side: BorderSide(color: borderColor,width: 1.w),
-                  ),
+        decoration: linearGradient
+            ? ShapeDecoration(
+                gradient: LinearGradient(
+                  begin: const Alignment(1.00, -1.22),
+                  end: const Alignment(-0.20, 2.10),
+                  colors: [buttonColor, buttonColor1],
                 ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(radius == 0 ? 12.r : radius.r),
+                ),
+              )
+            : ShapeDecoration(
+                color: effectiveButtonColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(radius == 0 ? 12.r : radius.r),
+                  side: BorderSide(color: borderColor, width: 1.w),
+                ),
+              ),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: horizontal.w),
-          child:
-              loading
-                  ? Center(child: CircularProgressIndicator(color: textColor))
-                  : center
+          child: loading
+              ? Center(child: CircularProgressIndicator(color: effectiveTextColor))
+              : center
                   ? Center(
-                    child:
-                        subtitle.isEmpty
-                            ? Row(
+                      child: subtitle.isEmpty
+                          ? Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 if (leading)
@@ -127,15 +131,15 @@ class CustomButton extends StatelessWidget {
                                   ),
                                 Text(
                                   title,
-                                  style: GoogleFonts.lato(
-                                    color: textColor,
+                                  style: theme.textTheme.labelLarge?.copyWith(
+                                    color: effectiveTextColor,
                                     fontSize: fontSize.sp,
                                     fontWeight: fontWeight,
                                   ),
                                 ),
                               ],
                             )
-                            : Row(
+                          : Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 if (leading)
@@ -155,91 +159,86 @@ class CustomButton extends StatelessWidget {
                                   children: [
                                     Text(
                                       title,
-                                      style: TextStyle(
-                                        color: textColor,
+                                      style: theme.textTheme.labelLarge?.copyWith(
+                                        color: effectiveTextColor,
                                         fontSize: fontSize.sp,
                                         fontWeight: fontWeight,
-                                        fontFamily: fontFamily,
                                       ),
                                     ),
                                     Text(
                                       subtitle,
-                                      style: TextStyle(
+                                      style: theme.textTheme.bodySmall?.copyWith(
                                         color: subtextColor,
                                         fontSize: subfontSize.sp,
                                         fontWeight: subfontWeight,
-                                        fontFamily: subfontFamily,
                                       ),
                                     ),
                                   ],
                                 ),
                               ],
                             ),
-                  )
+                    )
                   : Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      if (leading)
-                        Padding(
-                          padding: EdgeInsets.only(
-                            left: leadingPaddingLeft,
-                            right: leadingPaddingRight,
-                          ),
-                          child: SvgPicture.asset(
-                            leadingIcon,
-                            width: leadingIconWeight,
-                            height: leadingIconHeight,
-                          ),
-                        ),
-                      SizedBox(width: 10.w),
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              title,
-                              style: TextStyle(
-                                color: textColor,
-                                fontSize: fontSize.sp,
-                                fontWeight: fontWeight,
-                                fontFamily: fontFamily,
-                              ),
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        if (leading)
+                          Padding(
+                            padding: EdgeInsets.only(
+                              left: leadingPaddingLeft,
+                              right: leadingPaddingRight,
                             ),
-                            if (subtitle.isNotEmpty)
+                            child: SvgPicture.asset(
+                              leadingIcon,
+                              width: leadingIconWeight,
+                              height: leadingIconHeight,
+                            ),
+                          ),
+                        SizedBox(width: 10.w),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
                               Text(
-                                subtitle,
-                                style: TextStyle(
-                                  color: subtextColor,
-                                  fontSize: subfontSize.sp,
-                                  fontWeight: subfontWeight,
-                                  fontFamily: subfontFamily,
+                                title,
+                                style: theme.textTheme.labelLarge?.copyWith(
+                                  color: effectiveTextColor,
+                                  fontSize: fontSize.sp,
+                                  fontWeight: fontWeight,
                                 ),
                               ),
-                          ],
-                        ),
-                      ),
-                      if (trailing)
-                        Padding(
-                          padding: EdgeInsets.only(
-                            left: trailingPaddingLeft,
-                            right: trailingPaddingRight,
+                              if (subtitle.isNotEmpty)
+                                Text(
+                                  subtitle,
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    color: subtextColor,
+                                    fontSize: subfontSize.sp,
+                                    fontWeight: subfontWeight,
+                                  ),
+                                ),
+                            ],
                           ),
-                          child: SvgPicture.asset(
-                            colorFilter:
-                                trailingColor
-                                    ? ColorFilter.mode(
-                                      AppColor.textColor,
+                        ),
+                        if (trailing)
+                          Padding(
+                            padding: EdgeInsets.only(
+                              left: trailingPaddingLeft,
+                              right: trailingPaddingRight,
+                            ),
+                            child: SvgPicture.asset(
+                              colorFilter: trailingColor
+                                  ? ColorFilter.mode(
+                                      theme.iconTheme.color!,
                                       BlendMode.srcIn,
                                     )
-                                    : null,
-                            trailingIcon,
-                            width: trailingIconWeight,
-                            height: trailingIconHeight,
+                                  : null,
+                              trailingIcon,
+                              width: trailingIconWeight,
+                              height: trailingIconHeight,
+                            ),
                           ),
-                        ),
-                    ],
-                  ),
+                      ],
+                    ),
         ),
       ),
     );

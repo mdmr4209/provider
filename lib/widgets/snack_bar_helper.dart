@@ -214,14 +214,7 @@ class _SnackBarOverlayState extends State<_SnackBarOverlay>
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  widget.config.backgroundColor,
-                  widget.config.accentColor,
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+              color: Theme.of(context).snackBarTheme.backgroundColor ?? widget.config.backgroundColor,
               borderRadius: BorderRadius.circular(12.r),
               boxShadow: [
                 BoxShadow(
@@ -234,7 +227,8 @@ class _SnackBarOverlayState extends State<_SnackBarOverlay>
             child: Row(
               children: [
                 Icon(widget.config.icon,
-                    color: widget.config.textColor, size: 20.w),
+                    color: Theme.of(context).snackBarTheme.contentTextStyle?.color ?? widget.config.textColor, 
+                    size: 20.w),
                 SizedBox(width: 12.w),
                 Expanded(
                   child: Column(
@@ -242,10 +236,8 @@ class _SnackBarOverlayState extends State<_SnackBarOverlay>
                     children: [
                       Text(
                         widget.title,
-                        style: TextStyle(
-                          color: widget.config.textColor,
-                          fontSize: 16.sp,
-                          fontFamily: 'Roboto',
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          color: Theme.of(context).snackBarTheme.contentTextStyle?.color ?? widget.config.textColor,
                           fontWeight: FontWeight.w600,
                         ),
                         maxLines: 1,
@@ -254,11 +246,8 @@ class _SnackBarOverlayState extends State<_SnackBarOverlay>
                       SizedBox(height: 4.h),
                       Text(
                         widget.message,
-                        style: TextStyle(
-                          color: widget.config.textColor
-                              .withValues(alpha: 0.9),
-                          fontSize: 14.sp,
-                          fontFamily: 'Roboto',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: (Theme.of(context).snackBarTheme.contentTextStyle?.color ?? widget.config.textColor).withValues(alpha: 0.9),
                           fontWeight: FontWeight.w400,
                         ),
                         maxLines: 2,

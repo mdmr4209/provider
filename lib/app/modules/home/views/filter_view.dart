@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import '../../localization/localization_extension.dart';
 
 import '../../../../res/colors/app_color.dart';
-import '../providers/home_provider.dart';
+import '../controllers/home_controller.dart';
 
 class FilterView extends StatefulWidget {
   const FilterView({super.key});
@@ -23,7 +24,8 @@ class _FilterViewState extends State<FilterView> {
   late Set<String> _selectedTags;
 
   // ── Sort Options ───────────────────────────────────────────────────────
-  final List<String> sortOptions = [
+  List<String> sortOptions(BuildContext context) => [
+    context.watchTr('luxury_fashion'), // Replace with actual sort keys if available
     'From expensive to cheap',
     'From cheap to expensive',
     'Newest',
@@ -72,7 +74,7 @@ class _FilterViewState extends State<FilterView> {
   void initState() {
     super.initState();
     // Initialize with default values
-    _selectedSort = 'From expensive to cheap';
+    _selectedSort = 'Newest';
     _selectedColors = {'#D4A5A0'};
     _priceRange = const RangeValues(30, 130);
     _selectedConditions = {'sale'};
@@ -83,7 +85,7 @@ class _FilterViewState extends State<FilterView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.whiteColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: _buildAppBar(),
       body: Column(
         children: [
@@ -137,19 +139,15 @@ class _FilterViewState extends State<FilterView> {
 
   AppBar _buildAppBar() {
     return AppBar(
-      backgroundColor: AppColor.whiteColor,
+      backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
       elevation: 0,
       leading: IconButton(
         icon: Icon(Icons.arrow_back, color: Colors.black, size: 24.sp),
         onPressed: () => Navigator.pop(context),
       ),
       title: Text(
-        'Filter',
-        style: GoogleFonts.tenorSans(
-          color: AppColor.textColor,
-          fontSize: 20.sp,
-          fontWeight: FontWeight.w400,
-        ),
+        context.watchTr('filter'),
+        style: Theme.of(context).textTheme.titleLarge,
       ),
       centerTitle: true,
     );
@@ -159,9 +157,9 @@ class _FilterViewState extends State<FilterView> {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        border: Border.all(color: const Color(0xFFE0E0E0)),
+        border: Border.all(color: Theme.of(context).dividerColor),
         borderRadius: BorderRadius.circular(8.r),
-        color: const Color(0xFFFAFAFA),
+        color: Theme.of(context).colorScheme.surface,
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -170,16 +168,12 @@ class _FilterViewState extends State<FilterView> {
           isExpanded: true,
           underline: const SizedBox(),
           icon: Icon(Icons.expand_more, size: 24.sp),
-          items: sortOptions.map((option) {
+          items: sortOptions(context).map((option) {
             return DropdownMenuItem(
               value: option,
               child: Text(
                 option,
-                style: GoogleFonts.tenorSans(
-                  fontSize: 14.sp,
-                  color:AppColor.textColor2,
-                  fontWeight: FontWeight.w400,
-                ),
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
             );
           }).toList(),
@@ -200,12 +194,8 @@ class _FilterViewState extends State<FilterView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Color',
-          style: GoogleFonts.tenorSans(
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w400,
-            color: AppColor.textColor,
-          ),
+          context.watchTr('color'),
+          style: Theme.of(context).textTheme.titleMedium,
         ),
         SizedBox(height: 16.h),
         Wrap(
@@ -227,7 +217,7 @@ class _FilterViewState extends State<FilterView> {
                   color: Color(int.parse(color.replaceFirst('#', '0xFF'))),
                   borderRadius: BorderRadius.circular(4.r),
                   border: isSelected
-                      ? Border.all(color: AppColor.primaryColor, width: 2.5.w)
+                      ? Border.all(color: Theme.of(context).colorScheme.primary, width: 2.5.w)
                       : Border.all(color: Colors.transparent, width: 2.5.w),
                 ),
               ),
@@ -243,20 +233,16 @@ class _FilterViewState extends State<FilterView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Price',
-          style: GoogleFonts.tenorSans(
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w400,
-            color: AppColor.textColor,
-          ),
+          context.watchTr('price'),
+          style: Theme.of(context).textTheme.titleMedium,
         ),
         SizedBox(height: 20.h),
         RangeSlider(
           values: _priceRange,
           min: 0,
           max: 200,
-          activeColor: AppColor.primaryColor,
-          inactiveColor: const Color(0xFFE8E8E8),
+          activeColor: Theme.of(context).colorScheme.primary,
+          inactiveColor: Theme.of(context).disabledColor.withAlpha(50),
           onChanged: (RangeValues values) {
             setState(() {
               _priceRange = values;
@@ -269,19 +255,11 @@ class _FilterViewState extends State<FilterView> {
           children: [
             Text(
               '\$${_priceRange.start.toInt()}',
-              style: GoogleFonts.lato(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w700,
-                color: AppColor.textColor,
-              ),
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
             Text(
               '\$${_priceRange.end.toInt()}',
-              style: GoogleFonts.lato(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w700,
-                color: AppColor.textColor,
-              ),
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ],
         ),
@@ -322,11 +300,11 @@ class _FilterViewState extends State<FilterView> {
                           }
                         });
                       },
-                      activeColor: AppColor.primaryColor,
+                      activeColor: Theme.of(context).colorScheme.primary,
                       side: BorderSide(
                         color: isSelected
-                            ? AppColor.primaryColor
-                            : const Color(0xFFDDDDDD),
+                            ? Theme.of(context).colorScheme.primary
+                            : Theme.of(context).dividerColor,
                         width: 1.5.w,
                       ),
                     ),
@@ -343,11 +321,7 @@ class _FilterViewState extends State<FilterView> {
                     ),
                     child: Text(
                       condition['label'],
-                      style: GoogleFonts.lato(
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
-                      ),
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(color: Colors.white),
                     ),
                   ),
                 ],
@@ -392,11 +366,11 @@ class _FilterViewState extends State<FilterView> {
                           }
                         });
                       },
-                      activeColor: AppColor.primaryColor,
+                      activeColor: Theme.of(context).colorScheme.primary,
                       side: BorderSide(
                         color: isSelected
-                            ? AppColor.primaryColor
-                            : const Color(0xFFDDDDDD),
+                            ? Theme.of(context).colorScheme.primary
+                            : Theme.of(context).dividerColor,
                         width: 1.5.w,
                       ),
                     ),
@@ -413,11 +387,7 @@ class _FilterViewState extends State<FilterView> {
                     ),
                     child: Text(
                       gender['label'],
-                      style: GoogleFonts.lato(
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
-                      ),
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(color: Colors.white),
                     ),
                   ),
                 ],
@@ -434,12 +404,8 @@ class _FilterViewState extends State<FilterView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Tags',
-          style: GoogleFonts.tenorSans(
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w400,
-            color: AppColor.textColor,
-          ),
+          context.watchTr('tags'),
+          style: Theme.of(context).textTheme.titleMedium,
         ),
         SizedBox(height: 16.h),
         Wrap(
@@ -461,21 +427,19 @@ class _FilterViewState extends State<FilterView> {
                 padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
                 decoration: BoxDecoration(
                   border: isSelected
-                      ? Border.all(color: AppColor.primaryColor, width: 2.w)
-                      : Border.all(color: AppColor.lightGrey, width: 1.w),
+                      ? Border.all(color: Theme.of(context).colorScheme.primary, width: 2.w)
+                      : Border.all(color: Theme.of(context).dividerColor, width: 1.w),
                   borderRadius: BorderRadius.circular(8.r),
                   color: isSelected
-                      ? const Color(0xFFFFF5F3)
-                      : const Color(0xFFFAFAFA),
+                      ? Theme.of(context).colorScheme.primary.withAlpha(20)
+                      : Theme.of(context).colorScheme.surface,
                 ),
                 child: Text(
                   tag,
-                  style: GoogleFonts.lato(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w400,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: isSelected
-                        ? AppColor.primaryColor
-                        : AppColor.textColor2,
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).textTheme.bodyMedium?.color,
                   ),
                 ),
               ),
@@ -500,14 +464,14 @@ class _FilterViewState extends State<FilterView> {
         debugPrint('Genders: $_selectedGenders');
         debugPrint('Tags: $_selectedTags');
 
-        // Update provider
-        final homeProvider = context.read<HomeProvider>();
-        homeProvider.setSortOption(_selectedSort);
-        homeProvider.setColors(_selectedColors);
-        homeProvider.setPriceRange(_priceRange);
-        homeProvider.setConditions(_selectedConditions);
-        homeProvider.setGenders(_selectedGenders);
-        homeProvider.setTags(_selectedTags);
+        // Update controller
+        final homeController = context.read<HomeController>();
+        homeController.setSortOption(_selectedSort);
+        homeController.setColors(_selectedColors);
+        homeController.setPriceRange(_priceRange);
+        homeController.setConditions(_selectedConditions);
+        homeController.setGenders(_selectedGenders);
+        homeController.setTags(_selectedTags);
 
         Navigator.pop(context);
       },
@@ -515,22 +479,17 @@ class _FilterViewState extends State<FilterView> {
         width: double.infinity,
         padding: EdgeInsets.symmetric(vertical: 16.h),
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
+          gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Color(0xFFAD4DB7), Color(0xFF8B39B8)],
+            colors: [Theme.of(context).colorScheme.primary, Theme.of(context).colorScheme.primary.withAlpha(200)],
           ),
           borderRadius: BorderRadius.circular(8.r),
         ),
         child: Center(
           child: Text(
-            'APPLY FILTERS',
-            style: GoogleFonts.lato(
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w700,
-              color: Colors.white,
-              letterSpacing: 0.5,
-            ),
+            context.watchTr('apply_filters'),
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.white),
           ),
         ),
       ),

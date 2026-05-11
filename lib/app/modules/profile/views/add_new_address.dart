@@ -7,7 +7,7 @@ import '../../../../res/assets/image_assets.dart';
 import '../../../../res/colors/app_color.dart';
 import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/input_text_widget.dart';
-import '../providers/profile_provider.dart';
+import '../controllers/profile_controller.dart';
 
 class AddNewAddress extends StatelessWidget {
   const AddNewAddress({super.key});
@@ -67,7 +67,7 @@ class AddNewAddress extends StatelessWidget {
                                 SizedBox(height: 20.h),
                                 _inputCard('Enter your address'),
                                 SizedBox(height: 20.h),
-                                Consumer<ProfileProvider>(
+                                Consumer<ProfileController>(
                                   builder: (context, profile, _) => Row(
                                     children: [
                                       GestureDetector(

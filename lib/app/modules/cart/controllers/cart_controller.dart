@@ -10,7 +10,7 @@ import '../models/shipping_address.dart';
 
 
 // ─── Provider ────────────────────────────────────────────────────────
-class CartProvider extends ChangeNotifier {
+class CartController extends ChangeNotifier {
   /// Set this from main.dart: HomeProvider.routerKey = _routerKey;
   static GlobalKey<NavigatorState>? routerKey;
   // Cart items

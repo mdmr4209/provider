@@ -11,8 +11,9 @@ import '../../../../res/assets/image_assets.dart';
 import '../../../../res/colors/app_color.dart';
 import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/snack_bar_helper.dart';
+import '../controllers/auth_controller.dart';
+import '../../localization/localization_extension.dart';
 import '../../../routes/app_router.dart';
-import '../providers/auth_provider.dart';
 
 class OtpVerifyView extends StatefulWidget {
   final String? origin;
@@ -76,7 +77,7 @@ class _OtpVerifyViewState extends State<OtpVerifyView> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        backgroundColor: AppColor.whiteColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
@@ -90,17 +91,13 @@ class _OtpVerifyViewState extends State<OtpVerifyView> {
                       onTap: () {
                         Navigator.pop(context);
                       },
-                      child: Icon(Icons.arrow_back_ios_new),
+                      child: Icon(Icons.arrow_back_ios_new, color: Theme.of(context).iconTheme.color),
                     ),
                     Spacer(),
                     Text(
-                      'Forgot password',
+                      context.watchTr('otp_verification'),
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.tenorSans(
-                        color: AppColor.textColor,
-                        fontSize: 18.w,
-                        fontWeight: FontWeight.w400,
-                      ),
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                     Spacer(),
                     SizedBox(width: 20.w),
@@ -120,7 +117,7 @@ class _OtpVerifyViewState extends State<OtpVerifyView> {
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      Consumer<AuthProvider>(
+                      Consumer<AuthController>(
                         builder: (context, auth, _) => ListView(
                           padding: EdgeInsets.symmetric(horizontal: 20.w),
                           children: [
@@ -129,23 +126,13 @@ class _OtpVerifyViewState extends State<OtpVerifyView> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Enter your OTP code here.',
-                                  style: GoogleFonts.lato(
-                                    color: AppColor.textColor2,
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.w400,
-                                    height: 1.70,
-                                  ),
+                                  context.watchTr('enter_otp_msg'),
+                                  style: Theme.of(context).textTheme.bodyLarge,
                                 ),
                                 SizedBox(height: 16.h),
                                 Text(
-                                  'An SMS has been sent to ${widget.origin == 'forget' ? auth.forgetEmailController.text : auth.signupEmail} containing a code to activate your account',
-                                  style: GoogleFonts.lato(
-                                    color: AppColor.textColor2,
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w400,
-                                    letterSpacing: 0.60,
-                                  ),
+                                  '${context.watchTr('sms_sent_msg')} ${widget.origin == 'forget' ? auth.forgetEmailController.text : auth.signupEmail} ${context.watchTr('containing_code_msg')}',
+                                  style: Theme.of(context).textTheme.bodySmall,
                                 ),
                                 SizedBox(height: 15.h),
                               ],
@@ -158,17 +145,18 @@ class _OtpVerifyViewState extends State<OtpVerifyView> {
                                 length: 5,
                                 textStyle: TextStyle(fontSize: 18.sp),
                                 animationType: AnimationType.fade,
-                                cursorColor: AppColor.textColor,
+                                cursorColor: Theme.of(context).colorScheme.primary,
                                 pinTheme: PinTheme(
                                   shape: PinCodeFieldShape.box,
                                   fieldHeight: 50.h,
                                   fieldWidth: 50.w,
-                                  activeColor: Colors.transparent,
-                                  activeFillColor: Colors.transparent,
-                                  selectedColor: AppColor.defaultColor,
-                                  selectedFillColor: AppColor.whiteColor,
-                                  inactiveColor: AppColor.whiteColor,
-                                  inactiveFillColor: AppColor.whiteColor,
+                                  activeColor: Theme.of(context).dividerColor,
+                                  activeFillColor: Theme.of(context).cardTheme.color,
+                                  selectedColor: Theme.of(context).colorScheme.primary,
+                                  selectedFillColor: Theme.of(context).cardTheme.color,
+                                  inactiveColor: Theme.of(context).dividerColor,
+                                  inactiveFillColor: Theme.of(context).cardTheme.color,
+                                  borderRadius: BorderRadius.circular(8.r),
                                 ),
                                 animationDuration: const Duration(
                                   milliseconds: 300,
@@ -193,31 +181,22 @@ class _OtpVerifyViewState extends State<OtpVerifyView> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        "Didn't receive a code? ",
-                                        style: TextStyle(
-                                          color: AppColor.textColor,
-                                          fontSize: 15.sp,
-                                          fontFamily: 'Roboto',
-                                          fontWeight: FontWeight.w600,
-                                          letterSpacing: 0.60,
-                                        ),
+                                        context.watchTr('did_not_receive_code'),
+                                        style: Theme.of(context).textTheme.bodySmall,
                                       ),
                                       InkWell(
                                         onTap: _secondsRemaining == 0
                                             ? _startTimer
                                             : null,
                                         child: Text(
-                                          'Resend',
-                                          style: TextStyle(
+                                          context.watchTr('resend'),
+                                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                             color: _secondsRemaining == 0
-                                                ? AppColor.defaultColor
-                                                : AppColor.textColor,
+                                                ? Theme.of(context).colorScheme.primary
+                                                : Theme.of(context).textTheme.bodySmall?.color,
                                             fontWeight: _secondsRemaining == 0
                                                 ? FontWeight.bold
                                                 : FontWeight.w600,
-                                            fontSize: 14.sp,
-                                            fontFamily: 'DM Sans',
-                                            letterSpacing: 0.60,
                                           ),
                                         ),
                                       ),
@@ -225,19 +204,15 @@ class _OtpVerifyViewState extends State<OtpVerifyView> {
                                   ),
                                   SizedBox(height: 5.h),
                                   Text(
-                                    'Resend available in $_formattedTime',
-                                    style: TextStyle(
-                                      color: AppColor.defaultColor,
-                                      fontSize: 15.sp,
-                                      fontFamily: 'DM Sans',
-                                      fontWeight: FontWeight.w600,
-                                      letterSpacing: 0.60,
+                                    '${context.watchTr('resend_available_in')} $_formattedTime',
+                                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: Theme.of(context).colorScheme.primary,
                                     ),
                                     textAlign: TextAlign.center,
                                   ),
                                   SizedBox(height: 20.h),
                                   CustomButton(
-                                    title: 'VERIFY',
+                                    title: context.watchTr('verify_caps'),
                                     buttonColor: auth.isOtpVerified
                                         ? AppColor.buttonColor
                                         : AppColor.subTitleColor,
@@ -259,7 +234,7 @@ class _OtpVerifyViewState extends State<OtpVerifyView> {
                                       } else {
                                         showWarningSnackBar(
                                           message:
-                                              'Please enter a valid 6-digit OTP',
+                                              context.watchTr('enter_valid_otp'),
                                         );
                                       }
                                     },

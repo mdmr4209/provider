@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../modules/auth/providers/auth_provider.dart';
+import '../modules/auth/controllers/auth_controller.dart';
 import '../modules/auth/views/auth_view.dart';
 import '../modules/auth/views/change_password_view.dart';
 import '../modules/auth/views/forget_password_view.dart';
 import '../modules/auth/views/go_to_home.dart';
 import '../modules/auth/views/otp_verify_view.dart';
 import '../modules/auth/views/sign_up_view.dart';
-import '../modules/cart/view/checkout.dart';
-import '../modules/cart/view/confirm_order_view.dart';
-import '../modules/cart/view/order_history.dart';
-import '../modules/cart/view/order_view.dart';
-import '../modules/cart/view/payment_method.dart';
-import '../modules/cart/view/shipping_details.dart';
+import '../modules/cart/views/checkout.dart';
+import '../modules/cart/views/confirm_order_view.dart';
+import '../modules/cart/views/order_history.dart';
+import '../modules/cart/views/order_view.dart';
+import '../modules/cart/views/payment_method.dart';
+import '../modules/cart/views/shipping_details.dart';
 import '../modules/home/views/comment_review_view.dart';
 import '../modules/home/views/filter_view.dart';
 import '../modules/home/views/home_view.dart';
@@ -22,7 +22,7 @@ import '../modules/home/views/product_view.dart';
 import '../modules/home/views/review_view.dart';
 import '../modules/home/views/search_view.dart';
 import '../modules/home/views/wishlist_view.dart';
-import '../modules/onboarding/providers/onboarding_provider.dart';
+import '../modules/onboarding/controllers/onboarding_controller.dart';
 import '../modules/onboarding/views/onboarding_view.dart';
 import '../modules/profile/views/add_new_address.dart';
 import '../modules/profile/views/add_new_card_view.dart';
@@ -34,6 +34,7 @@ import '../modules/profile/views/payment_view.dart';
 import '../modules/profile/views/point_view.dart';
 import '../modules/profile/views/profile_view.dart';
 import '../modules/profile/views/promo_code_view.dart';
+import '../modules/profile/views/settings_view.dart';
 import '../modules/profile/views/track_order.dart';
 
 // ── Route name constants ────────────────────────────────────────────────────
@@ -69,6 +70,7 @@ abstract class AppRoutes {
   static const confirm = '/confirm';
   static const checkout = '/checkout';
   static const addPromoCodeView = '/addPromoCodeView';
+  static const settings = '/settings';
   // static const  = '/';
 }
 
@@ -77,8 +79,8 @@ class AppRouter {
   /// Pass the [AuthProvider] so the router can listen to auth state changes
   /// and auto-redirect without any manual navigation calls inside the provider.
   static GoRouter create(
-    AuthProvider auth,
-    OnboardingProvider onboard,
+    AuthController auth,
+    OnboardingController onboard,
     GlobalKey<NavigatorState> navigatorKey,
   ) {
     return GoRouter(
@@ -135,6 +137,7 @@ class AppRouter {
             loc == AppRoutes.shipping ||
             loc == AppRoutes.checkout ||
             loc == AppRoutes.order ||
+            loc == AppRoutes.settings ||
             loc == AppRoutes.goToHome; // etc
         if (isLoggedIn && onAuthScreen) return AppRoutes.home;
         if (!isLoggedIn && !onAuthScreen && hasOnboarded) {
@@ -412,6 +415,13 @@ class AppRouter {
           pageBuilder: (_, __) => const MaterialPage(
             // child: NavBar(),  // swap in your home widget
             child: AddPromoCodeView(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.settings,
+          name: 'settings',
+          pageBuilder: (_, __) => const MaterialPage(
+            child: SettingsView(),
           ),
         ),
         GoRoute(

@@ -4,8 +4,9 @@ import 'package:provider/provider.dart';
 
 import '../../../../res/colors/app_color.dart';
 import '../../../../widgets/custom_button.dart';
-import '../providers/onboarding_provider.dart';
+import '../controllers/onboarding_controller.dart';
 import 'onboarding_content.dart';
+import '../../localization/localization_extension.dart';
 
 class OnboardingView extends StatefulWidget {
   const OnboardingView({super.key});
@@ -18,24 +19,21 @@ class _OnboardingViewState extends State<OnboardingView> {
   final PageController _pageController = PageController();
   double _currentPage = 0;
 
-  final List<Map<String, dynamic>> onboardingData = [
+  List<Map<String, dynamic>> onboardingData(BuildContext context) => [
     {
       "image": "assets/image/1.png",
-      "title": "Welcome to\nElixir-369 !",
-      "description":
-          "Labore sunt culpa excepteur culpa ipsum. Labore occaecat ex nisi mollit.",
+      "title": context.watchTr('onboarding_title_1'),
+      "description": context.watchTr('onboarding_desc_1'),
     },
     {
       "image": "assets/image/2.png",
-      "title": "Easy Track\nOrder!",
-      "description":
-          "Labore sunt culpa excepteur culpa ipsum. Labore occaecat ex nisi mollit.",
+      "title": context.watchTr('onboarding_title_2'),
+      "description": context.watchTr('onboarding_desc_2'),
     },
     {
       "image": "assets/image/3.png",
-      "title": "Door to Door\nDelivery!",
-      "description":
-          "Labore sunt culpa excepteur culpa ipsum. Labore occaecat ex nisi mollit.",
+      "title": context.watchTr('onboarding_title_3'),
+      "description": context.watchTr('onboarding_desc_3'),
     },
   ];
 
@@ -55,11 +53,12 @@ class _OnboardingViewState extends State<OnboardingView> {
             child: ValueListenableBuilder<int>(
               valueListenable: ValueNotifier<int>(_currentPage.toInt()),
               builder: (context, currentPage, child) {
+                final data = onboardingData(context);
                 return Container(
                   height: 538.h,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage(onboardingData[currentPage]['image']!),
+                      image: AssetImage(data[currentPage]['image']!),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -89,16 +88,19 @@ class _OnboardingViewState extends State<OnboardingView> {
                     height: 0.255.sh,
                     child: PageView.builder(
                       controller: _pageController,
-                      itemCount: onboardingData.length,
+                      itemCount: onboardingData(context).length,
                       onPageChanged: (int page) {
                         setState(() {
                           _currentPage = page.toDouble();
                         });
                       },
-                      itemBuilder: (context, index) => OnboardingContent(
-                        title: onboardingData[index]['title']!,
-                        description: onboardingData[index]['description']!,
-                      ),
+                      itemBuilder: (context, index) {
+                        final data = onboardingData(context);
+                        return OnboardingContent(
+                          title: data[index]['title']!,
+                          description: data[index]['description']!,
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -106,17 +108,17 @@ class _OnboardingViewState extends State<OnboardingView> {
                   bottom: 0,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(onboardingData.length, (index) {
+                    children: List.generate(onboardingData(context).length, (index) {
                       return Padding(
                         padding: EdgeInsets.symmetric(horizontal: 4.w),
                         child: Container(
                           width: index == _currentPage.toInt() ? 30.r : 10.r,
                           height: 10.r,
                           decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.circular(5.r),
                             color: index == _currentPage.toInt()
-                                ? AppColor.defaultColor
-                                : AppColor.indicatorColor,
+                                ? Theme.of(context).bottomNavigationBarTheme.selectedIconTheme?.color ?? Theme.of(context).colorScheme.primary
+                                : (Theme.of(context).bottomNavigationBarTheme.unselectedIconTheme?.color ?? Colors.grey).withAlpha(100),
                           ),
                         ),
                       );
@@ -137,43 +139,33 @@ class _OnboardingViewState extends State<OnboardingView> {
                     width: 343.w,
                     child: CustomButton(
                       onPress: () async {
-                        if (_currentPage < onboardingData.length - 1) {
+                        final data = onboardingData(context);
+                        if (_currentPage < data.length - 1) {
                           _pageController.nextPage(
                             duration: const Duration(milliseconds: 300),
                             curve: Curves.easeIn,
                           );
                         } else {
                           await context
-                              .read<OnboardingProvider>()
+                              .read<OnboardingController>()
                               .completeOnboarding();
                         }
                       },
-                      title: "NEXT",
+                      title: context.watchTr('next'),
                     ),
                   ),
                   SizedBox(height: 20.h),
                   GestureDetector(
                     onTap: () async {
                       await context
-                          .read<OnboardingProvider>()
+                          .read<OnboardingController>()
                           .completeOnboarding();
                     },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(color: AppColor.textColor),
-                        ),
-                      ),
-                      child: Text(
-                        'Skip',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: AppColor.textColor,
-                          fontSize: 18.sp,
-                          fontFamily: 'Satoshi',
-                          fontWeight: FontWeight.w400,
-                          height: 1.22,
-                        ),
+                    child: Text(
+                      context.watchTr('skip'),
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        decoration: TextDecoration.underline,
                       ),
                     ),
                   ),

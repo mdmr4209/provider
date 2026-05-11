@@ -9,8 +9,9 @@ import '../../../../res/assets/image_assets.dart';
 import '../../../../res/colors/app_color.dart';
 import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/input_text_widget.dart';
+import '../controllers/auth_controller.dart';
+import '../../localization/localization_extension.dart';
 import '../../../routes/app_router.dart';
-import '../providers/auth_provider.dart';
 
 class AuthView extends StatelessWidget {
   const AuthView({super.key});
@@ -22,7 +23,7 @@ class AuthView extends StatelessWidget {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        backgroundColor: AppColor.whiteColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
@@ -34,13 +35,9 @@ class AuthView extends StatelessWidget {
                   children: [
                     Spacer(),
                     Text(
-                      'Sign in',
+                      context.watchTr('sign_in'),
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.tenorSans(
-                        color: AppColor.textColor,
-                        fontSize: 18.w,
-                        fontWeight: FontWeight.w400,
-                      ),
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                     Spacer(),
                   ],
@@ -67,46 +64,36 @@ class AuthView extends StatelessWidget {
                           left: 0,
                           right: 0,
                           bottom: 0,
-                          child: Consumer<AuthProvider>(
+                          child: Consumer<AuthController>(
                             builder: (context, auth, _) => ListView(
                               padding: EdgeInsets.symmetric(horizontal: 20.w),
                               children: [
                                 SvgPicture.asset(ImageAssets.title),
                                 SizedBox(height: 20.h),
                                 Text(
-                                  'Welcome Back!',
+                                  context.watchTr('welcome_back'),
                                   textAlign: TextAlign.center,
-                                  style: GoogleFonts.tenorSans(
-                                    color: AppColor.textColor,
-                                    fontSize: 32.sp,
-                                    fontWeight: FontWeight.w400,
-                                    height: 1.20,
-                                  ),
+                                  style: Theme.of(context).textTheme.displaySmall,
                                 ),
                                 SizedBox(height: 20.h),
                                 SizedBox(
                                   width: 266.w,
                                   child: Text(
-                                    'Use social networks or your email',
+                                    context.watchTr('auth_subtitle'),
                                     textAlign: TextAlign.center,
-                                    style: GoogleFonts.lato(
-                                      color: AppColor.textColor2,
-                                      fontSize: 16.sp,
-                                      fontWeight: FontWeight.w400,
-                                      height: 1.70,
-                                    ),
+                                    style: Theme.of(context).textTheme.bodyMedium,
                                   ),
                                 ),
                                 SizedBox(height: 110.h),
                                 InputTextWidget(
-                                  hintText: 'Enter your email',
+                                  hintText: context.watchTr('enter_your_email'),
                                   textEditingController: auth.emailController,
                                   onChanged: (_) {},
                                   keyboardType: TextInputType.emailAddress,
                                 ),
                                 SizedBox(height: 17.h),
                                 InputTextWidget(
-                                  hintText: 'Enter your password',
+                                  hintText: context.watchTr('enter_your_password'),
                                   obscureText: true,
                                   textEditingController:
                                       auth.passwordController,
@@ -126,34 +113,28 @@ class AuthView extends StatelessWidget {
                                             height: 18.r,
                                             decoration: BoxDecoration(
                                               color: auth.isRemembered
-                                                  ? AppColor.defaultColor
-                                                  : AppColor.whiteColor,
+                                                  ? Theme.of(context).colorScheme.primary
+                                                  : Colors.transparent,
                                               border: Border.all(
-                                                color: auth.isRemembered
-                                                    ? Colors.transparent
-                                                    : AppColor.whiteColor,
+                                                color: Theme.of(context).dividerColor,
                                               ),
+                                              borderRadius: BorderRadius.circular(4.r),
                                             ),
                                             child: Center(
                                               child: Icon(
                                                 Icons.check,
                                                 color: auth.isRemembered
-                                                    ? AppColor.textWhiteColor
+                                                    ? Colors.white
                                                     : Colors.transparent,
-                                                size: 14,
+                                                size: 14.r,
                                               ),
                                             ),
                                           ),
                                           SizedBox(width: 10.w),
                                           Text(
-                                            'Remember me',
+                                            context.watchTr('remember_me'),
                                             textAlign: TextAlign.right,
-                                            style: GoogleFonts.lato(
-                                              color: AppColor.textColor2,
-                                              fontSize: 16.sp,
-                                              fontWeight: FontWeight.w400,
-                                              height: 1.70,
-                                            ),
+                                            style: Theme.of(context).textTheme.bodyMedium,
                                           ),
                                         ],
                                       ),
@@ -165,13 +146,10 @@ class AuthView extends StatelessWidget {
                                         context.push(AppRoutes.forgetPass);
                                       },
                                       child: Text(
-                                        'Lost your password?',
+                                        context.watchTr('lost_your_password'),
                                         textAlign: TextAlign.right,
-                                        style: GoogleFonts.lato(
-                                          color: AppColor.defaultColor,
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.w400,
-                                          height: 1.70,
+                                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                          color: Theme.of(context).colorScheme.primary,
                                         ),
                                       ),
                                     ),
@@ -180,7 +158,7 @@ class AuthView extends StatelessWidget {
                                 SizedBox(height: 50.h),
                                 CustomButton(
                                   height: 60,
-                                  title: 'SIGN IN',
+                                  title: context.watchTr('sign_in_caps'),
                                   onPress: auth.isLoading ? null : auth.login,
                                   loading: auth.isLoading,
                                 ),
@@ -189,24 +167,17 @@ class AuthView extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "No account? ",
-                                      style: GoogleFonts.lato(
-                                        color: AppColor.textColor2,
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.w400,
-                                        height: 1.70,
-                                      ),
+                                      "${context.watchTr('no_account')} ",
+                                      style: Theme.of(context).textTheme.bodyMedium,
                                     ),
                                     GestureDetector(
                                       onTap: () =>
                                           context.push(AppRoutes.signup),
                                       child: Text(
-                                        'Register now',
-                                        style: GoogleFonts.lato(
-                                          color: AppColor.defaultColor,
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.w400,
-                                          height: 1.70,
+                                        context.watchTr('register_now'),
+                                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                          color: Theme.of(context).colorScheme.primary,
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                     ),

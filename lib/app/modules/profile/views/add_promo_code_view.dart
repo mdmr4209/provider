@@ -9,7 +9,7 @@ import '../../../../res/assets/image_assets.dart';
 import '../../../../res/colors/app_color.dart';
 import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/input_text_widget.dart';
-import '../providers/profile_provider.dart';
+import '../controllers/profile_controller.dart';
 
 class AddPromoCodeView extends StatelessWidget {
   const AddPromoCodeView({super.key});
@@ -58,7 +58,7 @@ class AddPromoCodeView extends StatelessWidget {
                     ),
                   ],
                 ),
-                Consumer<ProfileProvider>(
+                Consumer<ProfileController>(
                   builder: (context, profile, _) => Column(
                     children: [
                       SizedBox(height: 30.h),

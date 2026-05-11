@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../res/assets/image_assets.dart';
 import '../../../../res/colors/app_color.dart';
-import '../providers/profile_provider.dart';
+import '../controllers/profile_controller.dart';
 
 // ─── Main View ──────────────────────────────────────────────────────
 class PointView extends StatefulWidget {
@@ -21,13 +21,13 @@ class _PointViewState extends State<PointView> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ProfileProvider>().fetchPointHistory();
+      context.read<ProfileController>().fetchPointHistory();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ProfileProvider>(
+    return Consumer<ProfileController>(
       builder: (context, provider, _) {
         return Scaffold(
           backgroundColor: Colors.white,
@@ -91,7 +91,7 @@ class _PointViewState extends State<PointView> {
 
 // ─── Tab Bar ────────────────────────────────────────────────────────
 class _TabBar extends StatelessWidget {
-  final ProfileProvider provider;
+  final ProfileController provider;
   const _TabBar({required this.provider});
 
   @override
@@ -162,7 +162,7 @@ class _TabItem extends StatelessWidget {
 
 // ─── Member Info ────────────────────────────────────────────────────
 class _MemberInfoSection extends StatelessWidget {
-  final ProfileProvider provider;
+  final ProfileController provider;
   const _MemberInfoSection({required this.provider});
 
   @override
@@ -211,7 +211,7 @@ class _MemberInfoSection extends StatelessWidget {
 
 // ─── Circular Progress ──────────────────────────────────────────────
 class _CircularProgressSection extends StatelessWidget {
-  final ProfileProvider provider;
+  final ProfileController provider;
   const _CircularProgressSection({required this.provider});
 
   @override
@@ -269,7 +269,7 @@ class _CircularProgressSection extends StatelessWidget {
 
 // ─── Tier Info Section ──────────────────────────────────────────────
 class _TierInfoSection extends StatelessWidget {
-  final ProfileProvider provider;
+  final ProfileController provider;
   const _TierInfoSection({required this.provider});
 
   @override
@@ -362,7 +362,7 @@ class _MemberIdButton extends StatelessWidget {
 
 // ─── Points Activity ────────────────────────────────────────────────
 class _PointsActivitySection extends StatelessWidget {
-  final ProfileProvider provider;
+  final ProfileController provider;
   const _PointsActivitySection({required this.provider});
 
   @override
@@ -435,7 +435,7 @@ class _PointsActivitySection extends StatelessWidget {
 
 // ─── Progress Bar ────────────────────────────────────────────────────
 class _ProgressBarSection extends StatelessWidget {
-  final ProfileProvider provider;
+  final ProfileController provider;
   const _ProgressBarSection({required this.provider});
 
   @override
@@ -499,7 +499,7 @@ class _ProgressBarSection extends StatelessWidget {
 
 // ─── Rewards Love Table ──────────────────────────────────────────────
 class _RewardsLoveSection extends StatelessWidget {
-  final ProfileProvider provider;
+  final ProfileController provider;
   const _RewardsLoveSection({required this.provider});
 
   @override
@@ -715,7 +715,7 @@ class _TableDataRow extends StatelessWidget {
 
 // ─── Points Redeemed ─────────────────────────────────────────────────
 class _PointsRedeemedSection extends StatelessWidget {
-  final ProfileProvider provider;
+  final ProfileController provider;
   const _PointsRedeemedSection({required this.provider});
 
   @override

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import '../../localization/localization_extension.dart';
 
 import '../../../../res/assets/image_assets.dart';
 import '../../../../res/colors/app_color.dart';
@@ -14,12 +15,12 @@ class SearchView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.whiteColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
         children: [
           Container(
             width: double.infinity,
-            decoration: BoxDecoration(color: AppColor.backgroundColor),
+            decoration: BoxDecoration(color: Theme.of(context).colorScheme.surfaceContainerHighest),
             child: SafeArea(
               child: SizedBox(
                 height: 47.h,
@@ -60,8 +61,8 @@ class SearchView extends StatelessWidget {
                             contentPadding: false,
                             horizontal: 0,
                             onChanged: (onChanged) {},
-                            hintText: 'Search',
-                            backgroundColor: AppColor.backgroundColor,
+                            hintText: context.watchTr('search'),
+                            backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
                           ),
                         ],
                       ),

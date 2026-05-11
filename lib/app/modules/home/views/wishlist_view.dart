@@ -9,7 +9,8 @@ import '../../../../res/assets/image_assets.dart';
 import '../../../../res/colors/app_color.dart';
 import '../../../routes/app_router.dart';
 import '../models/product_model.dart';
-import '../providers/home_provider.dart';
+import '../controllers/home_controller.dart';
+import '../../localization/localization_extension.dart';
 
 class WishlistView extends StatelessWidget {
   const WishlistView({super.key});
@@ -18,19 +19,15 @@ class WishlistView extends StatelessWidget {
   Widget build(BuildContext context) {
     final count = 2;
     return Scaffold(
-      backgroundColor: AppColor.whiteColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColor.backgroundColor,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         elevation: 0,
         centerTitle: true,
         automaticallyImplyLeading: false,
         title: Text(
-          'Wishlist',
-          style: GoogleFonts.tenorSans(
-            color: AppColor.textColor,
-            fontSize: 18.sp,
-            fontWeight: FontWeight.w400,
-          ),
+          context.watchTr('wishlist'),
+          style: Theme.of(context).textTheme.titleLarge,
         ),
         actions: [
           Padding(
@@ -43,15 +40,15 @@ class WishlistView extends StatelessWidget {
                   style: TextStyle(fontSize: 10.sp),
                 ),
                 isLabelVisible: count > 0,
-                backgroundColor: AppColor.defaultColor,
+                backgroundColor: Theme.of(context).colorScheme.primary,
                 offset: Offset(-5.w, -10.h),
-                child: _headerIcon(ImageAssets.cart, onTap: () {}),
+                child: _headerIcon(context, ImageAssets.cart, onTap: () {}),
               ),
             ),
           ),
         ],
       ),
-      body: Consumer<HomeProvider>(
+      body: Consumer<HomeController>(
         builder: (context, home, _) => SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -72,7 +69,7 @@ class WishlistView extends StatelessWidget {
                             },
                             child: Padding(
                               padding: EdgeInsets.only(bottom: 10.h),
-                              child: _productCard(product),
+                              child: _productCard(context, product),
                             ),
                           ),
                           InkWell(
@@ -81,7 +78,7 @@ class WishlistView extends StatelessWidget {
                             },
                             child: Padding(
                               padding: EdgeInsets.only(bottom: 10.h),
-                              child: _productCard(product),
+                              child: _productCard(context, product),
                             ),
                           ),
                         ],
@@ -98,25 +95,25 @@ class WishlistView extends StatelessWidget {
     );
   }
 
-  Widget _headerIcon(String asset, {required VoidCallback onTap}) {
+  Widget _headerIcon(BuildContext context, String asset, {required VoidCallback onTap}) {
     return InkWell(
       onTap: onTap,
       child: SvgPicture.asset(
         asset,
         width: 24.w,
         height: 24.h,
-        colorFilter: ColorFilter.mode(AppColor.blackColor, BlendMode.srcIn),
+        colorFilter: ColorFilter.mode(Theme.of(context).iconTheme.color ?? Theme.of(context).colorScheme.onSurface, BlendMode.srcIn),
       ),
     );
   }
 
-  Widget _productCard(ProductModel product) {
+  Widget _productCard(BuildContext context, ProductModel product) {
     return Container(
       padding: EdgeInsets.all(10.sp),
       height: 100.h,
       decoration: ShapeDecoration(
         shape: RoundedRectangleBorder(
-          side: BorderSide(width: 1.w, color: AppColor.whiteTextColor),
+          side: BorderSide(width: 1.w, color: Theme.of(context).dividerColor),
         ),
       ),
       child: Row(
@@ -131,7 +128,7 @@ class WishlistView extends StatelessWidget {
                   height: 150.h,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: AppColor.whiteColor,
+                    color: Theme.of(context).colorScheme.surface,
                     borderRadius: BorderRadius.circular(5.r),
                   ),
                   child: ClipRRect(
@@ -150,13 +147,8 @@ class WishlistView extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(color: const Color(0xFFA3D2A2)),
                       child: Text(
-                        'SALE',
-                        style: GoogleFonts.lato(
-                          color: Colors.white,
-                          fontSize: 10.sp,
-                          fontWeight: FontWeight.w700,
-                          height: 1.70,
-                        ),
+                        context.watchTr('sale'),
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(color: Colors.white),
                       ),
                     ),
                   ),
@@ -173,11 +165,7 @@ class WishlistView extends StatelessWidget {
                     product.title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.tenorSans(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 14.sp,
-                      color: AppColor.textColor,
-                    ),
+                    style: Theme.of(context).textTheme.titleSmall,
                   ),
                   SizedBox(height: 5.h),
                   Row(
@@ -186,22 +174,17 @@ class WishlistView extends StatelessWidget {
                       if (product.updatePrice != '0')
                         Text(
                           product.updatePrice,
-                          style: GoogleFonts.lato(
-                            color: AppColor.textColor3,
-                            fontSize: 10.sp,
-                            fontWeight: FontWeight.w400,
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             decoration: TextDecoration.lineThrough,
-                            height: 1.50,
+                            color: Theme.of(context).disabledColor,
                           ),
                         ),
                       Text(
                         product.price,
-                        style: GoogleFonts.lato(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 14.sp,
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           color: product.updatePrice != '0'
-                              ? AppColor.defaultColor
-                              : AppColor.textColor,
+                              ? Theme.of(context).colorScheme.primary
+                              : Theme.of(context).textTheme.titleMedium?.color,
                         ),
                       ),
                     ],
@@ -216,12 +199,7 @@ class WishlistView extends StatelessWidget {
                       Icon(Icons.star, color: AppColor.ratingColor),
                       Text(
                         '5.0',
-                        style: GoogleFonts.lato(
-                          color: AppColor.textColor2,
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w400,
-                          height: 1.70,
-                        ),
+                        style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ],
                   ),
@@ -244,7 +222,7 @@ class WishlistView extends StatelessWidget {
                 height: 40.h,
                 padding: EdgeInsets.all(10.r),
                 decoration: ShapeDecoration(
-                  color: AppColor.defaultColor,
+                  color: Theme.of(context).colorScheme.primary,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(50.r),
                   ),

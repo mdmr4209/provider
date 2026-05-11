@@ -5,8 +5,8 @@ import '../models/product_model.dart';
 
 /// Pure ChangeNotifier — zero BuildContext, zero Navigator.
 /// Navigation is done via GoRouter using the routerKey set in main.dart.
-class HomeProvider extends ChangeNotifier {
-  /// Set this from main.dart: HomeProvider.routerKey = _routerKey;
+class HomeController extends ChangeNotifier {
+  /// Set this from main.dart: HomeController.routerKey = _routerKey;
   static GlobalKey<NavigatorState>? routerKey;
 
   int _currentIndex = 0;
