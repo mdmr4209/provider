@@ -58,8 +58,7 @@ class SearchView extends StatelessWidget {
                           InputTextWidget(
                             width: 260.w,
                             height: 20.h,
-                            contentPadding: false,
-                            horizontal: 0,
+                            contentPadding: EdgeInsets.symmetric(horizontal: 0.w),
                             onChanged: (onChanged) {},
                             hintText: context.watchTr('search'),
                             backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,

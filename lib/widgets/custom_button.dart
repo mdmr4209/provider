@@ -2,70 +2,71 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-
 import '../res/colors/app_color.dart';
 
 class CustomButton extends StatelessWidget {
   const CustomButton({
     super.key,
+    required this.onPress,
+    required this.title,
+    this.subtitle = '',
     this.buttonColor = AppColor.buttonColor,
     this.buttonColor1 = AppColor.buttonColor1,
     this.textColor = AppColor.textWhiteColor,
     this.subtextColor = AppColor.textWhiteColor,
     this.borderColor = Colors.transparent,
-    this.trailingColor = false,
-    this.borderShadowColor = const Color(0x1E000000),
-    required this.onPress,
+    this.borderShadowColor = Colors.transparent,
     this.height = 50,
-    this.leadingIconHeight = 25,
-    this.leadingIconWeight = 25,
-    this.leadingPaddingLeft = 8,
-    this.leadingPaddingRight = 8,
-    this.trailingIconHeight = 25,
-    this.trailingIconWeight = 25,
-    this.trailingPaddingLeft = 8,
-    this.trailingPaddingRight = 8,
     this.width = double.infinity,
+    this.radius = 12,
+    this.fontSize = 14,
+    this.subfontSize = 12,
+    this.fontWeight = FontWeight.w900,
+    this.subfontWeight = FontWeight.w400,
+    this.fontFamily = 'Proxima Nova',
+    this.subfontFamily = 'Proxima Nova',
     this.loading = false,
     this.center = true,
-    this.leading = false,
-    this.trailing = false,
     this.linearGradient = false,
+    this.horizontalPadding = 16,
+
+    // Leading properties
     this.leadingIcon = '',
+    this.leadingWidget,
+    this.leadingIconHeight = 25,
+    this.leadingIconWidth = 25,
+    this.leadingPadding = const EdgeInsets.only(right: 8),
+    this.useLeadingColor = false,
+
+    // Trailing properties
     this.trailingIcon = '',
-    required this.title,
-    this.fontSize = 14,
-    this.fontWeight = FontWeight.w900,
-    this.fontFamily = 'Proxima Nova',
-    this.radius = 0,
-    this.subtitle = '',
-    this.subfontSize = 12,
-    this.horizontal = 16,
-    this.subfontWeight = FontWeight.w400,
-    this.subfontFamily = 'Proxima Nova',
+    this.trailingWidget,
+    this.trailingIconHeight = 25,
+    this.trailingIconWidth = 25,
+    this.trailingPadding = const EdgeInsets.only(left: 8),
+    this.useTrailingColor = false,
+
+    this.iconColor,
   });
 
-  final bool loading, center, leading, linearGradient, trailing, trailingColor;
   final String title,
       subtitle,
       fontFamily,
       subfontFamily,
       leadingIcon,
       trailingIcon;
+  final Widget? leadingWidget, trailingWidget;
   final double height,
-      fontSize,
-      radius,
-      subfontSize,
       width,
+      radius,
+      fontSize,
+      subfontSize,
       leadingIconHeight,
-      leadingIconWeight,
-      leadingPaddingLeft,
-      leadingPaddingRight,
+      leadingIconWidth,
       trailingIconHeight,
-      trailingIconWeight,
-      trailingPaddingLeft,
-      trailingPaddingRight,
-      horizontal;
+      trailingIconWidth,
+      horizontalPadding;
+  final EdgeInsetsGeometry leadingPadding, trailingPadding;
   final Future<void> Function()? onPress;
   final Color textColor,
       subtextColor,
@@ -73,174 +74,170 @@ class CustomButton extends StatelessWidget {
       buttonColor1,
       borderColor,
       borderShadowColor;
+  final Color? iconColor;
   final FontWeight fontWeight, subfontWeight;
+  final bool loading, center, linearGradient, useLeadingColor, useTrailingColor;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final buttonStyle = theme.elevatedButtonTheme.style;
-    
-    // Resolve colors from theme if they are defaults
-    final effectiveButtonColor = buttonColor == AppColor.buttonColor ? (buttonStyle?.backgroundColor?.resolve({}) ?? buttonColor) : buttonColor;
-    final effectiveTextColor = textColor == AppColor.textWhiteColor ? (buttonStyle?.foregroundColor?.resolve({}) ?? textColor) : textColor;
 
-    return InkWell(
-      onTap: (onPress != null && !loading) ? () => onPress!() : null,
-      child: Container(
-        height: height.h,
-        width: width.w,
-        decoration: linearGradient
-            ? ShapeDecoration(
-                gradient: LinearGradient(
-                  begin: const Alignment(1.00, -1.22),
-                  end: const Alignment(-0.20, 2.10),
-                  colors: [buttonColor, buttonColor1],
+    // Resolve colors from theme if they are defaults
+    final effectiveButtonColor = buttonColor == AppColor.buttonColor
+        ? (buttonStyle?.backgroundColor?.resolve({}) ?? buttonColor)
+        : buttonColor;
+    final effectiveTextColor = textColor == AppColor.textWhiteColor
+        ? (buttonStyle?.foregroundColor?.resolve({}) ?? textColor)
+        : textColor;
+    final effectiveIconColor = iconColor ?? effectiveTextColor;
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: (onPress != null && !loading) ? () => onPress!() : null,
+        borderRadius: BorderRadius.circular(radius.r),
+        child: Container(
+          height: height.h,
+          width: width.w,
+          decoration: ShapeDecoration(
+            color: linearGradient ? null : effectiveButtonColor,
+            gradient: linearGradient
+                ? LinearGradient(
+                    begin: const Alignment(1.00, -1.22),
+                    end: const Alignment(-0.20, 2.10),
+                    colors: [buttonColor, buttonColor1],
+                  )
+                : null,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(radius.r),
+              side: BorderSide(color: borderColor, width: 1.w),
+            ),
+            shadows: [
+              if (borderShadowColor != Colors.transparent)
+                BoxShadow(
+                  color: borderShadowColor,
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
                 ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(radius == 0 ? 12.r : radius.r),
-                ),
-              )
-            : ShapeDecoration(
-                color: effectiveButtonColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(radius == 0 ? 12.r : radius.r),
-                  side: BorderSide(color: borderColor, width: 1.w),
-                ),
-              ),
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: horizontal.w),
-          child: loading
-              ? Center(child: CircularProgressIndicator(color: effectiveTextColor))
-              : center
-                  ? Center(
-                      child: subtitle.isEmpty
-                          ? Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                if (leading)
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                      left: leadingPaddingLeft,
-                                      right: leadingPaddingRight,
-                                    ),
-                                    child: SvgPicture.asset(
-                                      leadingIcon,
-                                      width: leadingIconWeight,
-                                      height: leadingIconHeight,
-                                    ),
-                                  ),
-                                Text(
-                                  title,
-                                  style: theme.textTheme.labelLarge?.copyWith(
-                                    color: effectiveTextColor,
-                                    fontSize: fontSize.sp,
-                                    fontWeight: fontWeight,
-                                  ),
-                                ),
-                              ],
-                            )
-                          : Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                if (leading)
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                      left: leadingPaddingLeft,
-                                      right: leadingPaddingRight,
-                                    ),
-                                    child: SvgPicture.asset(
-                                      leadingIcon,
-                                      width: leadingIconWeight,
-                                      height: leadingIconHeight,
-                                    ),
-                                  ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      title,
-                                      style: theme.textTheme.labelLarge?.copyWith(
-                                        color: effectiveTextColor,
-                                        fontSize: fontSize.sp,
-                                        fontWeight: fontWeight,
-                                      ),
-                                    ),
-                                    Text(
-                                      subtitle,
-                                      style: theme.textTheme.bodySmall?.copyWith(
-                                        color: subtextColor,
-                                        fontSize: subfontSize.sp,
-                                        fontWeight: subfontWeight,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                    )
-                  : Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        if (leading)
-                          Padding(
-                            padding: EdgeInsets.only(
-                              left: leadingPaddingLeft,
-                              right: leadingPaddingRight,
-                            ),
-                            child: SvgPicture.asset(
-                              leadingIcon,
-                              width: leadingIconWeight,
-                              height: leadingIconHeight,
-                            ),
-                          ),
-                        SizedBox(width: 10.w),
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                title,
-                                style: theme.textTheme.labelLarge?.copyWith(
-                                  color: effectiveTextColor,
-                                  fontSize: fontSize.sp,
-                                  fontWeight: fontWeight,
-                                ),
-                              ),
-                              if (subtitle.isNotEmpty)
-                                Text(
-                                  subtitle,
-                                  style: theme.textTheme.bodySmall?.copyWith(
-                                    color: subtextColor,
-                                    fontSize: subfontSize.sp,
-                                    fontWeight: subfontWeight,
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ),
-                        if (trailing)
-                          Padding(
-                            padding: EdgeInsets.only(
-                              left: trailingPaddingLeft,
-                              right: trailingPaddingRight,
-                            ),
-                            child: SvgPicture.asset(
-                              colorFilter: trailingColor
-                                  ? ColorFilter.mode(
-                                      theme.iconTheme.color!,
-                                      BlendMode.srcIn,
-                                    )
-                                  : null,
-                              trailingIcon,
-                              width: trailingIconWeight,
-                              height: trailingIconHeight,
-                            ),
-                          ),
-                      ],
+            ],
+          ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: horizontalPadding.w),
+            child: loading
+                ? Center(
+                    child: SizedBox(
+                      height: 20.h,
+                      width: 20.h,
+                      child: CircularProgressIndicator(
+                        color: effectiveTextColor,
+                        strokeWidth: 2.w,
+                      ),
                     ),
+                  )
+                : _buildContent(
+                    context,
+                    effectiveTextColor,
+                    effectiveIconColor,
+                  ),
+          ),
         ),
       ),
+    );
+  }
+
+  Widget _buildContent(BuildContext context, Color textColor, Color iconColor) {
+    final theme = Theme.of(context);
+
+    final leading =
+        leadingWidget ??
+        (leadingIcon.isNotEmpty
+            ? _buildAsset(
+                leadingIcon,
+                leadingIconWidth,
+                leadingIconHeight,
+                useLeadingColor,
+                iconColor,
+              )
+            : null);
+
+    final trailing =
+        trailingWidget ??
+        (trailingIcon.isNotEmpty
+            ? _buildAsset(
+                trailingIcon,
+                trailingIconWidth,
+                trailingIconHeight,
+                useTrailingColor,
+                iconColor,
+              )
+            : null);
+
+    final textColumn = Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: center
+          ? CrossAxisAlignment.center
+          : CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          textAlign: center ? TextAlign.center : TextAlign.start,
+          style: theme.textTheme.labelLarge?.copyWith(
+            color: textColor,
+            fontSize: fontSize.sp,
+            fontWeight: fontWeight,
+            fontFamily: fontFamily,
+          ),
+        ),
+        if (subtitle.isNotEmpty)
+          Text(
+            subtitle,
+            textAlign: center ? TextAlign.center : TextAlign.start,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: subtextColor,
+              fontSize: subfontSize.sp,
+              fontWeight: subfontWeight,
+              fontFamily: subfontFamily,
+            ),
+          ),
+      ],
+    );
+
+    return Row(
+      mainAxisAlignment: center
+          ? MainAxisAlignment.center
+          : MainAxisAlignment.start,
+      children: [
+        if (leading != null) Padding(padding: leadingPadding, child: leading),
+        if (center) textColumn else Expanded(child: textColumn),
+        if (trailing != null)
+          Padding(padding: trailingPadding, child: trailing),
+      ],
+    );
+  }
+
+  Widget _buildAsset(
+    String path,
+    double width,
+    double height,
+    bool useColor,
+    Color color,
+  ) {
+    if (path.toLowerCase().endsWith('.svg')) {
+      return SvgPicture.asset(
+        path,
+        width: width.w,
+        height: height.h,
+        colorFilter: useColor ? ColorFilter.mode(color, BlendMode.srcIn) : null,
+      );
+    }
+    return Image.asset(
+      path,
+      width: width.w,
+      height: height.h,
+      color: useColor ? color : null,
+      fit: BoxFit.contain,
     );
   }
 }

@@ -6,28 +6,26 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import '../../../../res/components/api_service.dart';
+// Removed: import '../../../../res/components/api_service.dart';
 import '../../../../res/components/base_client.dart';
-import '../../../../widgets/custom_snack_bar.dart';
+import '../../../../res/app_url/app_url.dart'; // Import Api for URLs
+import '../../../../widgets/snack_bar_helper.dart';
 import '../../../routes/app_router.dart';
 
-/// Pure ChangeNotifier — zero BuildContext, zero Navigator.
-/// Navigation is done via GoRouter using the routerKey set in main.dart.
-class AuthController extends ChangeNotifier {
-  final ApiService apiService;
 
-  /// Set this from main.dart: AuthController.routerKey = _routerKey;
+class AuthController extends ChangeNotifier {
+  // Removed final ApiService apiService;
+
   static GlobalKey<NavigatorState>? routerKey;
 
-  AuthController({required this.apiService}) {
+  AuthController() {
     checkLoginStatus();
   }
 
-  // ── Firebase / Social ──────────────────────────────────────────────────────
+
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  // ── State ──────────────────────────────────────────────────────────────────
   bool _isOtpVerified = false;
   bool _isLoading = false;
   final bool _isHomeLoading = false;
@@ -153,10 +151,16 @@ class AuthController extends ChangeNotifier {
     final refresh = await BaseClient.getRefreshToken();
     if (refresh == null) return false;
     try {
-      final response = await apiService.refreshToken(refresh);
-      if (response['statusCode'] == 200) {
-        _accessToken = response['data']['access'] as String;
-        _refreshToken = response['data']['refresh'] as String;
+      _setLoading(true); // Added loading state for refresh
+      final response = await BaseClient.post(
+        api: Api.refreshTokenUrl,
+        data: {'refresh': refresh},
+      );
+
+      if (response != null && response.statusCode == 200) {
+        final data = response.data;
+        _accessToken = data['access'] as String? ?? data['access_token'] as String;
+        _refreshToken = data['refresh'] as String? ?? data['refresh_token'] as String;
         await BaseClient.storeTokens(
           accessToken: _accessToken,
           refreshToken: _refreshToken,
@@ -168,6 +172,8 @@ class AuthController extends ChangeNotifier {
     } catch (e) {
       debugPrint('refreshAccessToken error: $e');
       return false;
+    } finally {
+      _setLoading(false); // Ensure loading state is reset
     }
   }
 
@@ -212,41 +218,50 @@ class AuthController extends ChangeNotifier {
   // ── Core auth methods (no BuildContext) ────────────────────────────────────
   Future<void> login() async {
     final email = emailController.text.trim();
+    final password = passwordController.text;
     debugPrint('login: $email');
 
-    // try {
-    //   _setLoading(true);
-    //   final response = await apiService.login(email, password);
-    //   if (response['statusCode'] == 200) {
-    //     final data     = response['data'];
-    //     _accessToken   = data['access_token']  as String;
-    //     _refreshToken  = data['refresh_token'] ?? '';
-    //     _id            = data['user_id'].toString();
-    //     final verify   = data['verify']  ?? 'no';
-    //     final message  = data['message'] ?? 'Login successful';
-    //
-    //     await BaseClient.storeTokens(
-    //         accessToken: _accessToken, refreshToken: _refreshToken);
-    //     await BaseClient.store(key: 'verify',   value: verify);
-    //     await BaseClient.store(key: 'user_id',  value: _id);
-    //
-    //     showSuccessSnackBar(message: message);
-    //
-    //     if (verify == 'yes') {
-    //       _isLoggedIn = true;
-    //       notifyListeners(); // GoRouter redirect → /home
-    //     }
-    //   } else {
-    //     _errorMessage = response['data']['error'] ?? 'Invalid credentials';
-    //     showErrorSnackBar(message: _errorMessage);
-    //     notifyListeners();
-    //   }
-    // } catch (e) {
-    //   debugPrint('login error: $e');
-    //   showErrorSnackBar(message: 'Login failed: $e');
-    // } finally {
-    //   _setLoading(false);
-    // }
+    try {
+      _setLoading(true);
+      final response = await BaseClient.post(
+        api: Api.loginUrl,
+        data: {'email': email, 'password': password},
+      );
+
+      if (response != null && response.statusCode == 200) {
+        final data = response.data;
+        _accessToken = data['access_token'] as String;
+        _refreshToken = data['refresh_token'] as String? ?? '';
+        _id = data['user_id']?.toString() ?? '';
+        final verify = data['verify']?.toString() ?? 'no';
+        final message = data['message'] ?? 'Login successful';
+
+        await BaseClient.storeTokens(
+            accessToken: _accessToken, refreshToken: _refreshToken);
+        await BaseClient.store(key: 'verify', value: verify);
+        await BaseClient.store(key: 'user_id', value: _id);
+
+        showSuccessSnackBar(message: message);
+
+        if (verify == 'yes') {
+          _isLoggedIn = true;
+          _isSignedIn = true; // Also set isSignedIn on successful login
+          notifyListeners(); // GoRouter redirect → /home
+        } else {
+          // If not verified, maybe redirect to OTP or a verification screen
+          _go(AppRoutes.otpVerify, extra: 'Login'); // Assuming OTP verification is next
+        }
+      } else {
+        // Error message already shown by BaseClient's interceptor
+        _errorMessage = response?.data?['error']?.toString() ?? response?.data?['message']?.toString() ?? 'Invalid credentials';
+        notifyListeners();
+      }
+    } catch (e) {
+      debugPrint('login error: $e');
+      // SnackBar already shown by BaseClient's _handleDioError or _processResponse
+    } finally {
+      _setLoading(false);
+    }
   }
 
   Future<void> signup() async {
@@ -254,25 +269,24 @@ class AuthController extends ChangeNotifier {
     debugPrint('signup: $email');
     try {
       _setLoading(true);
-      final response = await apiService.signup(email);
-      if (response['statusCode'] == 201) {
+      final response = await BaseClient.post(
+        api: Api.signup,
+        data: {'email': email},
+      );
+
+      if (response != null && response.statusCode == 201) {
         _signupEmail = email;
         notifyListeners();
         showSuccessSnackBar(
-          message: response['data']['message'] ?? 'OTP sent to your email',
+          message: response.data?['message'] ?? 'OTP sent to your email',
         );
         _go(AppRoutes.otpVerify, extra: 'Signup');
       } else {
-        _errorMessage =
-            response['data']['error'] ??
-            response['data']['message'] ??
-            'Signup failed';
-        showErrorSnackBar(message: 'Signup failed: $_errorMessage');
+        _errorMessage = response?.data?['error']?.toString() ?? response?.data?['message']?.toString() ?? 'Signup failed';
         notifyListeners();
       }
     } catch (e) {
       debugPrint('signup error: $e');
-      showErrorSnackBar(message: 'Signup failed: $e');
     } finally {
       _setLoading(false);
     }
@@ -283,25 +297,26 @@ class AuthController extends ChangeNotifier {
     debugPrint('forget: $email');
     try {
       _setLoading(true);
-      final response = await apiService.forget(email);
-      if (response['statusCode'] == 201) {
+      final response = await BaseClient.post(
+        api: Api.forget,
+        data: {'email': email},
+      );
+
+      if (response != null && response.statusCode == 201) {
         _signupEmail = email;
         notifyListeners();
-        showSuccessSnackBar(message: response['data']['message'] ?? 'OTP sent');
+        showSuccessSnackBar(message: response.data?['message'] ?? 'OTP sent to your email');
         _go(AppRoutes.otpVerify, extra: 'Forget');
       } else {
-        _errorMessage =
-            response['data']['error'] ??
-            response['data']['message'] ??
-            'Request failed';
-        showErrorSnackBar(message: _errorMessage);
+        _errorMessage = response?.data?['error']?.toString() ?? response?.data?['message']?.toString() ?? 'Request failed';
         notifyListeners();
+        // Even on failure, if the server indicates OTP sent (or a client side error preventing it), still navigate.
+        // This is a design choice; if strict failure means no navigation, remove this line.
         _go(AppRoutes.otpVerify, extra: 'Forget');
       }
     } catch (e) {
       debugPrint('forget error: $e');
-      showErrorSnackBar(message: 'Request failed: $e');
-      _go(AppRoutes.otpVerify, extra: 'Forget');
+      _go(AppRoutes.otpVerify, extra: 'Forget'); // Still navigate to OTP view to give user a chance to input OTP
     } finally {
       _setLoading(false);
     }
@@ -313,21 +328,50 @@ class AuthController extends ChangeNotifier {
     debugPrint('verifyOtp email=$email otp=$otp');
     try {
       _setLoading(true);
-      final response = await apiService.verifyOtp(email, otp);
-      if (response['statusCode'] == 200) {
-        showSuccessSnackBar(message: 'Verified. Now set your password.');
+      final response = await BaseClient.post(
+        api: Api.verifyOtp,
+        data: {'email': email, 'otp': otp},
+      );
 
+      if (response != null && response.statusCode == 200) {
+        showSuccessSnackBar(message: 'OTP Verified. Now set your password.');
+        _isOtpVerified = true; // Mark OTP as verified
+        notifyListeners();
+        _go(AppRoutes.changePass, extra: origin ?? 'Signup');
       } else {
-        _errorMessage =
-            response['data']['error'] ??
-            response['data']['message'] ??
-            'Invalid OTP';
-        showErrorSnackBar(message: 'OTP verification failed: $_errorMessage');
+        _errorMessage = response?.data?['error']?.toString() ?? response?.data?['message']?.toString() ?? 'Invalid OTP';
         notifyListeners();
       }
-    } catch (e) {  _go(AppRoutes.changePass, extra: origin ?? 'Signup');
+    } catch (e) {
       debugPrint('verifyOtp error: $e');
-      showErrorSnackBar(message: 'OTP verification failed: $e');
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  Future<void> resendOtp() async {
+    final email = _signupEmail;
+    if (email.isEmpty) {
+      showErrorSnackBar(message: 'Email for OTP is missing.');
+      return;
+    }
+    debugPrint('resendOtp email=$email');
+    try {
+      _setLoading(true);
+      final response = await BaseClient.post(
+        api: Api.resendOtp,
+        data: {'email': email},
+      );
+
+      if (response != null && response.statusCode == 200) {
+        showSuccessSnackBar(message: response.data?['message'] ?? 'OTP resent successfully.');
+        startTimer(); // Restart the timer
+      } else {
+        _errorMessage = response?.data?['error']?.toString() ?? response?.data?['message']?.toString() ?? 'Failed to resend OTP.';
+        notifyListeners();
+      }
+    } catch (e) {
+      debugPrint('resendOtp error: $e');
     } finally {
       _setLoading(false);
     }
@@ -339,12 +383,16 @@ class AuthController extends ChangeNotifier {
     debugPrint('setPassword email=$email');
     try {
       _setLoading(true);
-      final response = await apiService.setPassword(email, password);
-      if (response['statusCode'] == 201) {
-        final data = response['data'];
+      final response = await BaseClient.post(
+        api: Api.setPassword,
+        data: {'email': email, 'password': password},
+      );
+
+      if (response != null && response.statusCode == 201) {
+        final data = response.data;
         final access = data['access_token'] as String?;
         final refresh = data['refresh_token'] as String?;
-        final verify = data['verify'] ?? 'no';
+        final verify = data['verify']?.toString() ?? 'no';
         final message = data['message'] ?? 'Password set successfully';
 
         if (access == null || access.isEmpty) {
@@ -359,27 +407,27 @@ class AuthController extends ChangeNotifier {
         _accessToken = access;
         _refreshToken = refresh ?? '';
         _isSignedIn = true;
+        _isLoggedIn = verify == 'yes'; // Update isLoggedIn based on verification
         notifyListeners();
         showSuccessSnackBar(message: message);
-        await registerFcmToken();
+        await registerFcmToken(); // Register FCM after setting password and logging in
 
-        if (origin == 'Signup' && verify == 'no') {
-          _go(AppRoutes.home); // or onboarding route
-        } else if (origin == 'Forget' && verify == 'yes') {
-          _isLoggedIn = true;
-          notifyListeners(); // GoRouter redirect → /home
+        if (origin == 'Signup') {
+          _go(AppRoutes.home); // Assuming home is the next step after signup & set password
+        } else if (origin == 'Forget') {
+          _isLoggedIn = true; // If forget and set password, they are logged in
+          notifyListeners();
+          _go(AppRoutes.home);
+        } else {
+          // Default navigation if origin is not specified
+          _go(AppRoutes.home);
         }
       } else {
-        _errorMessage =
-            response['data']['error'] ??
-            response['data']['message'] ??
-            'Failed to set password';
-        showErrorSnackBar(message: 'Failed to set password: $_errorMessage');
+        _errorMessage = response?.data?['error']?.toString() ?? response?.data?['message']?.toString() ?? 'Failed to set password';
         notifyListeners();
       }
     } catch (e) {
       debugPrint('setPassword error: $e');
-      showErrorSnackBar(message: 'Failed to set password: $e');
     } finally {
       _setLoading(false);
     }
@@ -419,11 +467,20 @@ class AuthController extends ChangeNotifier {
       final fcm = await BaseClient.getStored(key: 'fcm_token');
       final access = await BaseClient.getAccessToken();
       if (fcm == null || access == null) return;
-      final response = await apiService.registerFcmToken(
-        accessToken: access,
-        fcmToken: fcm,
+      
+      final response = await BaseClient.post(
+        api: Api.registerFcmTokenUrl,
+        data: {
+          'fcm_token': fcm,
+        },
+        auth: true, // This endpoint requires authentication
       );
-      debugPrint('FCM register: ${response['statusCode']}');
+
+      if (response != null && response.statusCode == 200) {
+         debugPrint('FCM register successful: ${response.statusCode}');
+      } else {
+         debugPrint('FCM register failed: ${response?.statusCode} - ${response?.data}');
+      }
     } catch (e) {
       debugPrint('registerFcmToken error: $e');
     }

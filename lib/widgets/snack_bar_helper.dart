@@ -40,41 +40,41 @@ class _SnackBarConfig {
     switch (type) {
       case SnackBarType.success:
         return _SnackBarConfig(
-          backgroundColor: AppColor.defaultColor,
-          accentColor: AppColor.defaultColor.withValues(alpha: 0.8),
+          backgroundColor: AppColor.greenColor,
+          accentColor: AppColor.greenColor.withValues(alpha: 0.4),
           textColor: AppColor.textWhiteColor,
           icon: Icons.check_circle_outline,
-          duration: const Duration(seconds: 2),
+          duration: const Duration(seconds: 3),
         );
       case SnackBarType.error:
         return _SnackBarConfig(
           backgroundColor: AppColor.redColor,
-          accentColor: AppColor.redAlphaColor,
+          accentColor: AppColor.redColor.withValues(alpha: 0.4),
           textColor: AppColor.textWhiteColor,
           icon: Icons.error_outline,
-          duration: const Duration(seconds: 3),
+          duration: const Duration(seconds: 4),
         );
       case SnackBarType.warning:
         return _SnackBarConfig(
           backgroundColor: AppColor.warningColor,
-          accentColor: AppColor.warningColor.withValues(alpha: 0.8),
+          accentColor: AppColor.warningColor.withValues(alpha: 0.4),
           textColor: AppColor.textWhiteColor,
-          icon: Icons.warning,
-          duration: const Duration(seconds: 2),
+          icon: Icons.warning_amber_rounded,
+          duration: const Duration(seconds: 3),
         );
       case SnackBarType.info:
         return _SnackBarConfig(
-          backgroundColor: AppColor.defaultColor,
-          accentColor: AppColor.defaultColor.withValues(alpha: 0.8),
+          backgroundColor: AppColor.seeAllColor,
+          accentColor: AppColor.seeAllColor.withValues(alpha: 0.4),
           textColor: AppColor.textWhiteColor,
           icon: Icons.info_outline,
-          duration: const Duration(seconds: 2),
+          duration: const Duration(seconds: 3),
         );
     }
   }
 }
 
-// ── Queue (no GetX) ───────────────────────────────────────────────────────────
+// ── Queue Management ─────────────────────────────────────────────────────────
 class _SnackBarQueue {
   static final _SnackBarQueue _instance = _SnackBarQueue._internal();
   factory _SnackBarQueue() => _instance;
@@ -92,7 +92,8 @@ class _SnackBarQueue {
     while (_queue.isNotEmpty) {
       _isShowing = true;
       _queue.removeAt(0)();
-      await Future.delayed(const Duration(milliseconds: 2500));
+      // Wait for duration + buffer for entrance and exit animations
+      await Future.delayed(const Duration(milliseconds: 5000));
     }
     _isShowing = false;
   }
@@ -103,20 +104,18 @@ void showAppSnackBar({
   required String title,
   required String message,
   SnackBarType type = SnackBarType.success,
-  Color? backgroundColor,
+ Color? backgroundColor,
+Color? accentColor,
   Color? textColor,
   Duration? duration,
 }) {
   final context = SnackBarHelper._context;
-  if (context == null) {
-    debugPrint('SnackBarHelper: no context available – $title: $message');
-    return;
-  }
+  if (context == null) return;
 
   final base = _SnackBarConfig.fromType(type);
   final cfg = _SnackBarConfig(
     backgroundColor: backgroundColor ?? base.backgroundColor,
-    accentColor: (backgroundColor ?? base.backgroundColor).withValues(alpha: 0.8),
+    accentColor: accentColor ?? base.accentColor,
     textColor: textColor ?? base.textColor,
     icon: base.icon,
     duration: duration ?? base.duration,
@@ -132,14 +131,12 @@ void showAppSnackBar({
         title: title,
         message: message,
         config: cfg,
-        onDismiss: () => entry.remove(),
+        onDismiss: () {
+          if (entry.mounted) entry.remove();
+        },
       ),
     );
     overlay.insert(entry);
-    Future.delayed(cfg.duration + const Duration(milliseconds: 300),
-            () {
-          if (entry.mounted) entry.remove();
-        });
   });
 }
 
@@ -175,88 +172,184 @@ class _SnackBarOverlay extends StatefulWidget {
 }
 
 class _SnackBarOverlayState extends State<_SnackBarOverlay>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _ctrl;
-  late final Animation<Offset> _slide;
+    with TickerProviderStateMixin {
+  late final AnimationController _slideCtrl;
+  late final AnimationController _progressCtrl;
+  late final AnimationController _iconPulseCtrl;
+  late final Animation<Offset> _slideAnim;
+  late final Animation<double> _iconScaleAnim;
+  bool _isExiting = false;
 
   @override
   void initState() {
     super.initState();
-    _ctrl = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 300));
-    _slide = Tween<Offset>(begin: const Offset(0, -1), end: Offset.zero)
-        .animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic));
-    _ctrl.forward();
+    
+    // Entrance/Exit Animation (Right to Left)
+    _slideCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
 
-    Future.delayed(widget.config.duration, () {
+    _slideAnim = Tween<Offset>(
+      begin: const Offset(1.5, 0), // Start off-screen right
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _slideCtrl, curve: Curves.easeOutBack));
+
+    // Progress Bar Animation (Timer)
+    _progressCtrl = AnimationController(
+      vsync: this,
+      duration: widget.config.duration,
+    );
+
+    // Icon Pulse Animation (Size Increase/Decrease)
+    _iconPulseCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    )..repeat(reverse: true);
+
+    _iconScaleAnim = Tween<double>(begin: 1.0, end: 1.25).animate(
+      CurvedAnimation(parent: _iconPulseCtrl, curve: Curves.easeInOut),
+    );
+
+    _slideCtrl.forward().then((_) {
       if (mounted) {
-        _ctrl.reverse().then((_) => widget.onDismiss());
+        _progressCtrl.forward().then((_) => _handleExit());
       }
     });
   }
 
+  void _handleExit() {
+    if (_isExiting) return;
+    _isExiting = true;
+    _slideCtrl.reverse().then((_) => widget.onDismiss());
+  }
+
   @override
   void dispose() {
-    _ctrl.dispose();
+    _slideCtrl.dispose();
+    _progressCtrl.dispose();
+    _iconPulseCtrl.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: 48.h,
-      left: 16.w,
+      top: 60.h,
       right: 16.w,
+      left: 16.w,
       child: SlideTransition(
-        position: _slide,
-        child: Material(
-          color: Colors.transparent,
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-            decoration: BoxDecoration(
-              color: Theme.of(context).snackBarTheme.backgroundColor ?? widget.config.backgroundColor,
-              borderRadius: BorderRadius.circular(12.r),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.12),
-                  blurRadius: 8.r,
-                  offset: Offset(0, 4.h),
+        position: _slideAnim,
+        child: Align(
+          alignment: Alignment.topRight,
+          child: Material(
+            color: Colors.transparent,
+            child: Container(
+              constraints: BoxConstraints(maxWidth: 0.9.sw),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [widget.config.backgroundColor, widget.config.accentColor],
                 ),
-              ],
-            ),
-            child: Row(
-              children: [
-                Icon(widget.config.icon,
-                    color: Theme.of(context).snackBarTheme.contentTextStyle?.color ?? widget.config.textColor, 
-                    size: 20.w),
-                SizedBox(width: 12.w),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.title,
-                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          color: Theme.of(context).snackBarTheme.contentTextStyle?.color ?? widget.config.textColor,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      SizedBox(height: 4.h),
-                      Text(
-                        widget.message,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: (Theme.of(context).snackBarTheme.contentTextStyle?.color ?? widget.config.textColor).withValues(alpha: 0.9),
-                          fontWeight: FontWeight.w400,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
+                borderRadius: BorderRadius.circular(16.r),
+                boxShadow: [
+                  BoxShadow(
+                    color: [widget.config.backgroundColor, widget.config.accentColor].first.withValues(alpha: 0.3),
+                    blurRadius: 15,
+                    offset: const Offset(0, 8),
                   ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16.r),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(16.w, 14.h, 8.w, 14.h),
+                      child: Row(
+                        children: [
+                          // Pulse Icon Animation
+                          ScaleTransition(
+                            scale: _iconScaleAnim,
+                            child: Container(
+                              padding: EdgeInsets.all(8.w),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.2),
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.white.withValues(alpha: 0.1),
+                                    blurRadius: 10,
+                                    spreadRadius: 2,
+                                  ),
+                                ],
+                              ),
+                              child: Icon(
+                                widget.config.icon,
+                                color: widget.config.textColor,
+                                size: 24.w,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 14.w),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  widget.title,
+                                  style: TextStyle(
+                                    color: widget.config.textColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14.sp,
+                                    letterSpacing: 0.5,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                SizedBox(height: 4.h),
+                                Text(
+                                  widget.message,
+                                  style: TextStyle(
+                                    color: widget.config.textColor.withValues(alpha: 0.9),
+                                    fontSize: 12.sp,
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: _handleExit,
+                            icon: Icon(Icons.close_rounded,
+                                color: widget.config.textColor.withValues(alpha: 0.8),
+                                size: 22.w),
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // Futuristic Progress Bar
+                    AnimatedBuilder(
+                      animation: _progressCtrl,
+                      builder: (context, child) {
+                        return LinearProgressIndicator(
+                          value: 1.0 - _progressCtrl.value, // Shrinks as time passes
+                          minHeight: 5.h,
+                          backgroundColor: Colors.black.withValues(alpha: 0.1),
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            widget.config.textColor.withValues(alpha: 0.5),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ),

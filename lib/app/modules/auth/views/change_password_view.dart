@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../res/assets/image_assets.dart';
+// Removed: import '../../../../res/assets/image_assets.dart';
 import '../../../../res/colors/app_color.dart';
 import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/input_text_widget.dart';
@@ -13,7 +13,7 @@ import '../../localization/localization_extension.dart';
 import '../../../routes/app_router.dart';
 
 class ChangePasswordView extends StatefulWidget {
-  const ChangePasswordView({super.key,});
+  const ChangePasswordView({super.key});
 
   @override
   State<ChangePasswordView> createState() => _ChangePasswordViewState();
@@ -81,10 +81,14 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                       onTap: () {
                         Navigator.pop(context);
                       },
-                      child: Icon(Icons.arrow_back_ios_new, color: Theme.of(context).iconTheme.color),
+                      child: Icon(
+                        Icons.arrow_back_ios_new,
+                        color: Theme.of(context).iconTheme.color,
+                      ),
                     ),
                     Spacer(),
-                    Text( 'Reset Password',
+                    Text(
+                      'Reset Password',
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
@@ -98,10 +102,11 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                   height: 331.h,
                   clipBehavior: Clip.antiAlias,
                   decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(ImageAssets.background2),
-                      fit: BoxFit.cover,
-                    ),
+                    // Removed: image: DecorationImage(
+                    // Removed:   image: AssetImage(ImageAssets.background2),
+                    // Removed:   fit: BoxFit.cover,
+                    // Removed: ),
+                    color: Theme.of(context).colorScheme.surface, // Placeholder color
                   ),
                   child: Stack(
                     alignment: Alignment.center,
@@ -113,40 +118,40 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                             SizedBox(height: 30.h),
                             SizedBox(
                               width: 295.w,
-                                child: Text(
-                                  context.watchTr('reset_pass_msg'),
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                ),
+                              child: Text(
+                                context.watchTr('reset_pass_msg'),
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
                             ),
                             SizedBox(height: 30.h),
-                               InputTextWidget(
-                                 hintText: context.watchTr('enter_your_password'),
+                            InputTextWidget(
+                              hintText: context.watchTr('enter_your_password'),
                               obscureText: true,
                               onChanged: (_) {},
-                              textEditingController: auth.setPasswordController,
-                              leadingHeight: 18,
-                              leadingWidth: 14,
+                              controller: auth.setPasswordController,
+                              leadingIconHeight: 18,
+                              leadingIconWidth: 14,
                             ),
                             SizedBox(height: 20.h),
-                             InputTextWidget(
-                               hintText: context.watchTr('confirm_your_password'),
+                            InputTextWidget(
+                              hintText: context.watchTr(
+                                'confirm_your_password',
+                              ),
                               obscureText: true,
                               onChanged: (_) {},
-                              leadingHeight: 18,
-                              leadingWidth: 14,
-                              textEditingController: _confirmController,
+                              leadingIconHeight: 18,
+                              leadingIconWidth: 14,
+                              controller: _confirmController,
                             ),
                             SizedBox(height: 20.h),
                             CustomButton(
-                               height: 60,
-                               title: context.watchTr('change_password_caps'),
+                              height: 60,
+                              title: context.watchTr('change_password_caps'),
                               fontWeight: FontWeight.w900,
                               onPress: auth.isLoading
                                   ? null
-                                  : ()async {
-                                      context.push(
-                                        AppRoutes.goToHome,
-                                      );
+                                  : () async {
+                                      context.push(AppRoutes.goToHome);
                                       // _onSave(auth)
                                     },
                               loading: auth.isLoading,

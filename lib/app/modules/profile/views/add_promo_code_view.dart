@@ -87,7 +87,7 @@ class AddPromoCodeView extends StatelessWidget {
                       InputTextWidget(
                         onChanged: (e) {},
                         hintText: 'Enter your promo code',
-                        textEditingController: profile.promoCodeCtrl,
+                        controller: profile.promoCodeCtrl,
                       ),
                       SizedBox(height: 30.h),
                       CustomButton(

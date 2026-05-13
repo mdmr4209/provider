@@ -1,108 +1,176 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-
-import '../res/assets/image_assets.dart';
 import '../res/colors/app_color.dart';
 
-/// Pure-Flutter replacement for InputTextWidget.
-/// The obscure-text toggle is managed with local StatefulWidget state
-/// instead of a GetX controller.
 class InputTextWidget extends StatefulWidget {
+  final TextEditingController? controller;
+  final String? hintText;
+  final String? labelText;
+  final String? title;
+  final bool obscureText;
+  final bool showObscureToggle;
+  final bool readOnly;
+  final bool enabled;
+  final bool autofocus;
+  final int? maxLines;
+  final int? minLines;
+  final int? maxLength;
+  final TextInputType keyboardType;
+  final TextInputAction textInputAction;
+  final TextAlign textAlign;
+  final TextCapitalization textCapitalization;
+  final List<TextInputFormatter>? inputFormatters;
+  final FocusNode? focusNode;
+  final ValueChanged<String>? onChanged;
+  final VoidCallback? onTap;
+  final String? Function(String?)? validator;
+
+  // Title Style
+  final bool showTitle;
+  final TextStyle? titleStyle;
+  final Color titleColor;
+  final double titleFontSize;
+  final FontWeight titleFontWeight;
+  final String titleFontFamily;
+  final double titlePaddingBottom;
+
+  // Container & Decoration
+  final double? height;
+  final double width;
+  final Color backgroundColor;
+  final Color borderColor;
+  final Color focusedBorderColor;
+  final Color errorBorderColor;
+  final double borderWidth;
+  final double borderRadius;
+  final EdgeInsetsGeometry contentPadding;
+  final bool shadow;
+  final Color? shadowColor;
+  final Gradient? gradient;
+
+  // Text Styles
+  final TextStyle? textStyle;
+  final Color textColor;
+  final double fontSize;
+  final FontWeight fontWeight;
+  final String fontFamily;
+
+  final TextStyle? hintStyle;
+  final Color hintColor;
+  final double hintFontSize;
+  final FontWeight hintFontWeight;
+  final String hintFontFamily;
+
+  // Leading (Prefix)
+  final String leadingIcon;
+  final Widget? leadingWidget;
+  final double leadingIconHeight;
+  final double leadingIconWidth;
+  final EdgeInsetsGeometry leadingPadding;
+  final bool useLeadingColor;
+  final Color? leadingColor;
+
+  // Trailing (Suffix)
+  final String trailingIcon;
+  final Widget? trailingWidget;
+  final double trailingIconHeight;
+  final double trailingIconWidth;
+  final EdgeInsetsGeometry trailingPadding;
+  final bool useTrailingColor;
+  final Color? trailingColor;
+
+  // Obscure Toggle Icons
+  final String? visibleIcon;
+  final String? hiddenIcon;
+  final double obscureIconSize;
+
   const InputTextWidget({
     super.key,
-    this.hintText = '',
-    this.backicontap2,
-    this.backicontap,
-    required this.onChanged,
+    this.controller,
+    this.hintText,
+    this.labelText,
+    this.title,
+    this.obscureText = false,
+    this.showObscureToggle = false,
+    this.readOnly = false,
+    this.enabled = true,
+    this.autofocus = false,
+    this.maxLines = 1,
+    this.minLines,
+    this.maxLength,
+    this.keyboardType = TextInputType.text,
+    this.textInputAction = TextInputAction.next,
+    this.textAlign = TextAlign.start,
+    this.textCapitalization = TextCapitalization.none,
+    this.inputFormatters,
+    this.focusNode,
+    this.onChanged,
     this.onTap,
     this.validator,
-    this.obscureText = false,
-    this.readOnly = false,
-    this.leading = false,
-    this.backIcon = false,
-    this.backIcon2 = false,
-    this.textAlign = false,
-    this.leadingIcon = ImageAssets.home,
-    this.imageIcon = '',
-    this.backimage = '',
-    this.keyboardType = TextInputType.text,
-    this.backimagetap,
-    this.backimageadd = false,
-    this.contentPadding = false,
-    this.clock = false,
-    this.shadow = false,
-    this.linearGradient = false,
-    this.passwordIcon = ImageAssets.obsecure,
-    this.borderRadius = 0.0,
-    this.borderColor = AppColor.whiteColor,
-    this.hintTextColor = AppColor.hintTextColor,
-    this.borderShadowColor = AppColor.whiteColor,
-    this.textColor = AppColor.textColor,
-    this.leadingHeight = 14.0,
-    this.leadingWidth = 17.0,
-    this.height = 60.0,
-    this.width = double.infinity,
-    this.hintfontFamily = 'Roboto',
-    this.hintfontSize = 14.0,
-    this.hintfontWeight = FontWeight.w300,
-    this.fontSize = 16.0,
-    this.fontWeight = FontWeight.w400,
-    this.fontFamily = 'Roboto',
-    this.vertical = 14.0,
-    this.horizontal = 15.0,
-    this.leadingright = 0.0,
-    this.leadingtop = 0.0,
-    this.leadingleft = 10.0,
-    this.backimagewidth = 24.0,
-    this.backimageheight = 24.0,
-    this.borderWidth = .5,
-    this.backgroundColor = AppColor.whiteColor,
-    this.leadingColor = AppColor.hintTextColor,
-    this.maxLines = 1,
-    this.textEditingController,
-    this.settingsIconWidget,
-  });
 
-  final String hintText, hintfontFamily, fontFamily;
-  final double borderRadius,
-      fontSize,
-      hintfontSize,
-      leadingHeight,
-      leadingWidth,
-      leadingright,
-      leadingtop,
-      leadingleft,
-      backimagewidth,
-      backimageheight;
-  final Color borderColor,
-      textColor,
-      hintTextColor,
-      backgroundColor,
-      leadingColor,
-      borderShadowColor;
-  final double height, width, horizontal, vertical, borderWidth;
-  final bool obscureText,
-      readOnly,
-      contentPadding,
-      leading,
-      clock,
-      backIcon,
-      backIcon2,
-      backimageadd,
-      linearGradient,
-      shadow,
-      textAlign;
-  final String passwordIcon, leadingIcon, imageIcon, backimage;
-  final ValueChanged<String> onChanged;
-  final VoidCallback? onTap, backicontap, backicontap2, backimagetap;
-  final String? Function(String?)? validator;
-  final FontWeight fontWeight, hintfontWeight;
-  final int maxLines;
-  final TextEditingController? textEditingController;
-  final Widget? settingsIconWidget;
-  final TextInputType keyboardType;
+    // Title
+    this.showTitle = false,
+    this.titleStyle,
+    this.titleColor = AppColor.textColor,
+    this.titleFontSize = 14,
+    this.titleFontWeight = FontWeight.w600,
+    this.titleFontFamily = 'Proxima Nova',
+    this.titlePaddingBottom = 6,
+
+    // Container
+    this.height,
+    this.width = double.infinity,
+    this.backgroundColor = AppColor.whiteColor,
+    this.borderColor = AppColor.borderColor,
+    this.focusedBorderColor = AppColor.primaryColor,
+    this.errorBorderColor = AppColor.redColor,
+    this.borderWidth = 1,
+    this.borderRadius = 12,
+    this.contentPadding = const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+    this.shadow = false,
+    this.shadowColor,
+    this.gradient,
+
+    // Text
+    this.textStyle,
+    this.textColor = AppColor.textColor,
+    this.fontSize = 14,
+    this.fontWeight = FontWeight.w400,
+    this.fontFamily = 'Proxima Nova',
+
+    // Hint
+    this.hintStyle,
+    this.hintColor = AppColor.hintTextColor,
+    this.hintFontSize = 14,
+    this.hintFontWeight = FontWeight.w400,
+    this.hintFontFamily = 'Proxima Nova',
+
+    // Leading
+    this.leadingIcon = '',
+    this.leadingWidget,
+    this.leadingIconHeight = 20,
+    this.leadingIconWidth = 20,
+    this.leadingPadding = const EdgeInsets.only(right: 12),
+    this.useLeadingColor = true,
+    this.leadingColor,
+
+    // Trailing
+    this.trailingIcon = '',
+    this.trailingWidget,
+    this.trailingIconHeight = 20,
+    this.trailingIconWidth = 20,
+    this.trailingPadding = const EdgeInsets.only(left: 12),
+    this.useTrailingColor = true,
+    this.trailingColor,
+
+    // Obscure
+    this.visibleIcon,
+    this.hiddenIcon,
+    this.obscureIconSize = 22,
+  });
 
   @override
   State<InputTextWidget> createState() => _InputTextWidgetState();
@@ -110,24 +178,30 @@ class InputTextWidget extends StatefulWidget {
 
 class _InputTextWidgetState extends State<InputTextWidget> {
   late bool _isObscured;
-  late TextEditingController _controller;
-  bool _ownsController = false;
+  late FocusNode _focusNode;
+  bool _isFocused = false;
 
   @override
   void initState() {
     super.initState();
     _isObscured = widget.obscureText;
-    if (widget.textEditingController != null) {
-      _controller = widget.textEditingController!;
-    } else {
-      _controller = TextEditingController();
-      _ownsController = true;
-    }
+    _focusNode = widget.focusNode ?? FocusNode();
+    _focusNode.addListener(_onFocusChange);
+  }
+
+  void _onFocusChange() {
+    setState(() {
+      _isFocused = _focusNode.hasFocus;
+    });
   }
 
   @override
   void dispose() {
-    if (_ownsController) _controller.dispose();
+    if (widget.focusNode == null) {
+      _focusNode.dispose();
+    } else {
+      _focusNode.removeListener(_onFocusChange);
+    }
     super.dispose();
   }
 
@@ -135,162 +209,201 @@ class _InputTextWidgetState extends State<InputTextWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final inputTheme = theme.inputDecorationTheme;
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (widget.showTitle && widget.title != null) _buildTitle(),
+        _buildInputField(),
+      ],
+    );
+  }
 
-    // Resolve effective colors
-    final effectiveBackgroundColor = widget.backgroundColor == AppColor.whiteColor
-        ? (inputTheme.fillColor ?? widget.backgroundColor)
-        : widget.backgroundColor;
-    final effectiveBorderColor = widget.borderColor == AppColor.whiteColor
-        ? (theme.colorScheme.outline)
-        : widget.borderColor;
-    final effectiveTextColor = widget.textColor == AppColor.textColor
-        ? (theme.textTheme.bodyLarge?.color ?? widget.textColor)
-        : widget.textColor;
-    final effectiveHintColor = widget.hintTextColor == AppColor.hintTextColor
-        ? (inputTheme.hintStyle?.color ?? widget.hintTextColor)
-        : widget.hintTextColor;
+  Widget _buildTitle() {
+    return Padding(
+      padding: EdgeInsets.only(bottom: widget.titlePaddingBottom.h),
+      child: Text(
+        widget.title!,
+        style: widget.titleStyle ??
+            TextStyle(
+              color: widget.titleColor,
+              fontSize: widget.titleFontSize.sp,
+              fontWeight: widget.titleFontWeight,
+              fontFamily: widget.titleFontFamily,
+            ),
+      ),
+    );
+  }
+
+  Widget _buildInputField() {
+    final Color effectiveBorderColor = _isFocused ? widget.focusedBorderColor : widget.borderColor;
 
     return Container(
-      height: widget.height.h,
-      width: widget.width == double.infinity ? double.infinity : widget.width.w,
-      decoration: widget.shadow
-          ? ShapeDecoration(
-              color: effectiveBackgroundColor,
-              shape: RoundedRectangleBorder(
-                side: BorderSide(
-                  width: widget.borderWidth.w,
-                  color: effectiveBorderColor,
-                ),
-                borderRadius: BorderRadius.circular(widget.borderRadius == 0 ? 12.r : widget.borderRadius.r),
-              ),
-              shadows: [
+      width: widget.width.w,
+      height: widget.height?.h,
+      decoration: BoxDecoration(
+        color: widget.backgroundColor,
+        gradient: widget.gradient,
+        borderRadius: BorderRadius.circular(widget.borderRadius.r),
+        border: Border.all(
+          color: effectiveBorderColor,
+          width: widget.borderWidth.w,
+        ),
+        boxShadow: widget.shadow
+            ? [
                 BoxShadow(
-                  color: widget.borderShadowColor == AppColor.whiteColor ? Colors.black12 : widget.borderShadowColor,
+                  color: widget.shadowColor ?? AppColor.boxShadowColor.withOpacity(0.1),
                   blurRadius: 4,
-                  spreadRadius: 0,
+                  offset: const Offset(0, 2),
                 ),
-              ],
-            )
-          : ShapeDecoration(
-              color: effectiveBackgroundColor,
-              shape: RoundedRectangleBorder(
-                side: BorderSide(
-                  width: widget.borderWidth.w,
-                  color: effectiveBorderColor,
-                ),
-                borderRadius: BorderRadius.circular(widget.borderRadius == 0 ? 12.r : widget.borderRadius.r),
-              ),
+              ]
+            : null,
+      ),
+      child: TextFormField(
+        controller: widget.controller,
+        focusNode: _focusNode,
+        obscureText: _isObscured,
+        readOnly: widget.readOnly,
+        enabled: widget.enabled,
+        autofocus: widget.autofocus,
+        maxLines: widget.maxLines,
+        minLines: widget.minLines,
+        maxLength: widget.maxLength,
+        keyboardType: widget.keyboardType,
+        textInputAction: widget.textInputAction,
+        textAlign: widget.textAlign,
+        textCapitalization: widget.textCapitalization,
+        inputFormatters: widget.inputFormatters,
+        onChanged: widget.onChanged,
+        onTap: widget.onTap,
+        validator: widget.validator,
+        style: widget.textStyle ??
+            TextStyle(
+              color: widget.textColor,
+              fontSize: widget.fontSize.sp,
+              fontWeight: widget.fontWeight,
+              fontFamily: widget.fontFamily,
             ),
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10.w),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // Leading icon
-            if (widget.leading)
-              Padding(
-                padding: EdgeInsets.only(
-                  right: widget.leadingright.w,
-                  top: widget.leadingtop.h,
-                  left: widget.leadingleft.w,
-                ),
-                child: SvgPicture.asset(
-                  widget.leadingIcon,
-                  width: widget.leadingWidth.w,
-                  height: widget.leadingHeight.h,
-                  colorFilter: ColorFilter.mode(
-                    widget.leadingColor == AppColor.hintTextColor ? theme.hintColor : widget.leadingColor,
-                    BlendMode.srcIn,
-                  ),
-                ),
+        decoration: InputDecoration(
+          hintText: widget.hintText,
+          labelText: widget.labelText,
+          hintStyle: widget.hintStyle ??
+              TextStyle(
+                color: widget.hintColor,
+                fontSize: widget.hintFontSize.sp,
+                fontWeight: widget.hintFontWeight,
+                fontFamily: widget.hintFontFamily,
               ),
-
-            // Text field
-            Expanded(
-              child: TextField(
-                controller: _controller,
-                onChanged: widget.onChanged,
-                onTap: widget.onTap,
-                readOnly: widget.readOnly,
-                maxLines: widget.maxLines,
-                textAlign: widget.textAlign ? TextAlign.right : TextAlign.left,
-                obscureText: _isObscured,
-                keyboardType: widget.keyboardType,
-                decoration: InputDecoration(
-                  isDense: true,
-                  hintText: widget.hintText,
-                  hintStyle: theme.textTheme.bodyMedium?.copyWith(
-                    color: effectiveHintColor,
-                    fontSize: widget.hintfontSize.sp,
-                    fontWeight: widget.hintfontWeight,
-                  ),
-                  border: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  contentPadding: widget.contentPadding || widget.maxLines > 1
-                      ? EdgeInsets.symmetric(
-                          horizontal: widget.horizontal.w,
-                          vertical: widget.vertical.h,
-                        )
-                      : EdgeInsets.symmetric(horizontal: widget.horizontal.w),
-                ),
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  fontSize: widget.fontSize.sp,
-                  fontWeight: widget.fontWeight,
-                  color: effectiveTextColor,
-                ),
-              ),
-            ),
-
-            // Obscure toggle
-            if (widget.obscureText)
-              Padding(
-                padding: EdgeInsets.only(right: 10.w),
-                child: GestureDetector(
-                  onTap: _toggleObscure,
-                  child: Icon(
-                    _isObscured
-                        ? Icons.visibility_off_outlined
-                        : Icons.visibility_outlined,
-                    size: 22.sp,
-                    color: effectiveHintColor,
-                  ),
-                ),
-              ),
-
-            // Back icons
-            if (widget.backIcon)
-              Padding(
-                padding: EdgeInsets.only(left: 10.w),
-                child: GestureDetector(
-                  onTap: widget.backicontap,
-                  child:
-                      widget.settingsIconWidget ??
-                      SvgPicture.asset(widget.imageIcon),
-                ),
-              ),
-            if (widget.backIcon2)
-              Padding(
-                padding: EdgeInsets.only(left: 10.w),
-                child: GestureDetector(
-                  onTap: widget.backicontap2,
-                  child: SvgPicture.asset(widget.imageIcon),
-                ),
-              ),
-            if (widget.backimageadd)
-              GestureDetector(
-                onTap: widget.backimagetap,
-                child: Image.asset(
-                  widget.backimage,
-                  height: widget.backimageheight.h,
-                  width: widget.backimagewidth.w,
-                ),
-              ),
-          ],
+          labelStyle: widget.hintStyle,
+          isDense: true,
+          contentPadding: widget.contentPadding,
+          border: InputBorder.none,
+          enabledBorder: InputBorder.none,
+          focusedBorder: InputBorder.none,
+          errorBorder: InputBorder.none,
+          disabledBorder: InputBorder.none,
+          prefixIcon: _buildLeading(),
+          suffixIcon: _buildTrailing(),
+          counterText: '',
         ),
       ),
+    );
+  }
+
+  Widget? _buildLeading() {
+    final widgetLeading = widget.leadingWidget ??
+        (widget.leadingIcon.isNotEmpty
+            ? Padding(
+                padding: widget.leadingPadding,
+                child: _buildAsset(
+                  widget.leadingIcon,
+                  widget.leadingIconWidth,
+                  widget.leadingIconHeight,
+                  widget.useLeadingColor,
+                  widget.leadingColor ?? widget.hintColor,
+                ),
+              )
+            : null);
+
+    if (widgetLeading == null) return null;
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [widgetLeading],
+    );
+  }
+
+  Widget? _buildTrailing() {
+    final List<Widget> children = [];
+
+    // Obscure toggle logic
+    if (widget.showObscureToggle || widget.obscureText) {
+      children.add(
+        GestureDetector(
+          onTap: _toggleObscure,
+          child: _buildObscureIcon(),
+        ),
+      );
+    }
+
+    // Trailing icon/widget
+    final trailing = widget.trailingWidget ??
+        (widget.trailingIcon.isNotEmpty
+            ? Padding(
+                padding: widget.trailingPadding,
+                child: _buildAsset(
+                  widget.trailingIcon,
+                  widget.trailingIconWidth,
+                  widget.trailingIconHeight,
+                  widget.useTrailingColor,
+                  widget.trailingColor ?? widget.hintColor,
+                ),
+              )
+            : null);
+
+    if (trailing != null) {
+      children.add(trailing);
+    }
+
+    if (children.isEmpty) return null;
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: children,
+    );
+  }
+
+  Widget _buildObscureIcon() {
+    if (_isObscured) {
+      if (widget.hiddenIcon != null) {
+        return _buildAsset(widget.hiddenIcon!, widget.obscureIconSize, widget.obscureIconSize, true, widget.hintColor);
+      }
+      return Icon(Icons.visibility_off_outlined, size: widget.obscureIconSize.sp, color: widget.hintColor);
+    } else {
+      if (widget.visibleIcon != null) {
+        return _buildAsset(widget.visibleIcon!, widget.obscureIconSize, widget.obscureIconSize, true, widget.hintColor);
+      }
+      return Icon(Icons.visibility_outlined, size: widget.obscureIconSize.sp, color: widget.hintColor);
+    }
+  }
+
+  Widget _buildAsset(String path, double width, double height, bool useColor, Color color) {
+    if (path.toLowerCase().endsWith('.svg')) {
+      return SvgPicture.asset(
+        path,
+        width: width.w,
+        height: height.h,
+        colorFilter: useColor ? ColorFilter.mode(color, BlendMode.srcIn) : null,
+      );
+    }
+    return Image.asset(
+      path,
+      width: width.w,
+      height: height.h,
+      color: useColor ? color : null,
+      fit: BoxFit.contain,
     );
   }
 }

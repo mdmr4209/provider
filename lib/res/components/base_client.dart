@@ -4,15 +4,15 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../../widgets/custom_snack_bar.dart';
+import '../../widgets/snack_bar_helper.dart';
 import '../app_url/app_url.dart';
 
-
-/// Static HTTP client built on Dio.
+/// Robust HTTP client built on Dio with automatic token refresh and centralized error handling.
+/// Supports GET, POST, PUT, PATCH, DELETE and Multipart for all methods.
 class BaseClient {
   static const _storage = FlutterSecureStorage();
 
-  /// Set in main.dart — called when 401 refresh fails (GoRouter redirect).
+  /// Set in main.dart — called when 401 refresh fails to redirect the user to login.
   static VoidCallback? onUnauthorized;
 
   // ── Dio singleton ──────────────────────────────────────────────────────────
@@ -24,7 +24,8 @@ class BaseClient {
         connectTimeout: const Duration(seconds: 30),
         receiveTimeout: const Duration(minutes: 10),
         sendTimeout: const Duration(seconds: 30),
-        validateStatus: (_) => true, // handle all status codes manually
+        // By default, Dio throws for status codes >= 400.
+        // We'll catch them in onError interceptor for global handling.
       ),
     );
 
@@ -33,12 +34,12 @@ class BaseClient {
         LogInterceptor(
           requestBody: true,
           responseBody: true,
-          logPrint: (o) => debugPrint(o.toString()),
+          requestHeader: true,
+          logPrint: (o) => debugPrint('🌐 [API]: ${o.toString()}'),
         ),
       );
     }
 
-    // Auth + token-refresh interceptor
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
@@ -50,23 +51,34 @@ class BaseClient {
           }
           handler.next(options);
         },
-        onError: (error, handler) async {
-          if (error.response?.statusCode == 401) {
+        onError: (DioException error, handler) async {
+          final statusCode = error.response?.statusCode;
+          final isAuthReq = error.requestOptions.extra['auth'] == true;
+
+          // 1. Automatic 401 handling: Attempt to refresh token if authorized request fails
+          if (statusCode == 401 && isAuthReq) {
             final refreshed = await _silentRefresh();
             if (refreshed) {
               final token = await getAccessToken();
-              final opts = error.requestOptions
-                ..headers['Authorization'] = 'Bearer $token';
+              final opts = error.requestOptions;
+              opts.headers['Authorization'] = 'Bearer $token';
+              
               try {
-                final retryRes = await _dio.fetch(opts);
+                // Retry the original request with a fresh Dio instance to avoid looping
+                final retryRes = await Dio(_dio.options).fetch(opts);
                 return handler.resolve(retryRes);
-              } catch (_) {}
+              } catch (e) {
+                return handler.next(error);
+              }
+            } else {
+              showErrorSnackBar(message: 'Session expired. Please log in again.');
+              onUnauthorized?.call();
+              return handler.next(error);
             }
-            showErrorSnackBar(
-              message: 'Your session has expired. Please log in again.',
-            );
-            onUnauthorized?.call();
           }
+
+          // 2. Centralized Error Handling for all other status codes
+          _handleDioError(error);
           handler.next(error);
         },
       ),
@@ -75,40 +87,10 @@ class BaseClient {
     return dio;
   }
 
-  // ── Token / Role storage ───────────────────────────────────────────────────
+  // ── Storage Helpers ────────────────────────────────────────────────────────
   static Future<bool> isLoggedIn() async {
     final token = await getAccessToken();
     return token != null && token.isNotEmpty;
-  }
-
-  static Future<void> storeRole({required String role}) async {
-    await _storage.write(key: 'user_role', value: role);
-  }
-
-  static Future<void> storeUserId({required String id}) async {
-    await _storage.write(key: 'user_id', value: id);
-  }
-
-  static Future<void> store({
-    required String key,
-    required String value,
-  }) async {
-    await _storage.write(key: key, value: value);
-  }
-
-  static Future<String?> getStored({required String key}) async {
-    final v = await _storage.read(key: key);
-    return v?.toString();
-  }
-
-  static Future<String?> getStoredRole() async {
-    final v = await _storage.read(key: 'user_role');
-    return v?.toString();
-  }
-
-  static Future<int?> getStoredId() async {
-    final v = await _storage.read(key: 'user_id');
-    return v == null ? null : int.tryParse(v);
   }
 
   static Future<void> storeTokens({
@@ -121,248 +103,239 @@ class BaseClient {
   }
 
   static Future<String?> getAccessToken() => _storage.read(key: 'access_token');
+  static Future<String?> getRefreshToken() => _storage.read(key: 'refresh_token');
 
-  static Future<String?> getRefreshToken() =>
-      _storage.read(key: 'refresh_token');
+  static Future<void> store({required String key, required String value}) async =>
+      await _storage.write(key: key, value: value);
+
+  static Future<String?> getStored({required String key}) => _storage.read(key: key);
+
+  static Future<void> storeRole({required String role}) async => await _storage.write(key: 'user_role', value: role);
+  static Future<String?> getStoredRole() => _storage.read(key: 'user_role');
+
+  static Future<void> storeUserId({required String id}) async => await _storage.write(key: 'user_id', value: id);
+  static Future<int?> getStoredId() async {
+    final v = await _storage.read(key: 'user_id');
+    return v == null ? null : int.tryParse(v);
+  }
 
   static Future<void> clearTokens() async {
-    await _storage.delete(key: 'access_token');
-    await _storage.delete(key: 'refresh_token');
-    await _storage.delete(key: 'user_role');
-    debugPrint('🗑️ Tokens cleared');
+    await _storage.deleteAll();
+    debugPrint('🗑️ All auth data cleared');
   }
 
-  // ── HTTP Methods ───────────────────────────────────────────────────────────
-  static Future<Response> getRequest({
+  // ── Unified Request Core ───────────────────────────────────────────────────
+  /// Main entry point for all network calls.
+  /// Handles GET, POST, PUT, PATCH, DELETE and Multipart automatically.
+  static Future<Response?> safeRequest({
+    required String api,
+    required String method,
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    bool authenticated = false,
+    bool isMultipart = false,
+  }) async {
+    try {
+      dynamic finalData = data;
+      
+      // Auto-convert to FormData if Multipart is specified and data is a Map
+      if (isMultipart && data is Map<String, dynamic>) {
+        finalData = await _convertToFormData(data);
+      }
+
+      return await _dio.request(
+        api,
+        data: finalData,
+        queryParameters: queryParameters,
+        options: Options(
+          method: method,
+          extra: {'auth': authenticated},
+          contentType: isMultipart ? 'multipart/form-data' : Headers.jsonContentType,
+        ),
+      );
+    } on DioException {
+      // Handled globally in Interceptor
+      return null;
+    } catch (e) {
+      debugPrint('❌ Unexpected Error: $e');
+      return null;
+    }
+  }
+
+  // ── API Methods ────────────────────────────────────────────────────────────
+  
+  static Future<Response?> get({
     required String api,
     Map<String, dynamic>? params,
-    bool authenticated = false,
-  }) async {
-    try {
-      return await _dio.get(
-        api,
-        queryParameters: params,
-        options: Options(extra: {'auth': authenticated}),
-      );
-    } on DioException catch (e) {
-      _handleDioError(e);
-      rethrow;
-    }
-  }
+    bool auth = false,
+  }) => safeRequest(api: api, method: 'GET', queryParameters: params, authenticated: auth);
 
-  static Future<Response> postRequest({
+  static Future<Response?> post({
     required String api,
-    dynamic body,
-    bool authenticated = false,
-  }) async {
-    try {
-      return await _dio.post(
-        api,
-        data: body,
-        options: Options(
-          extra: {'auth': authenticated},
-          contentType: Headers.jsonContentType,
-        ),
-      );
-    } on DioException catch (e) {
-      _handleDioError(e);
-      rethrow;
-    }
-  }
+    dynamic data,
+    bool auth = false,
+    bool multipart = false,
+  }) => safeRequest(api: api, method: 'POST', data: data, authenticated: auth, isMultipart: multipart);
 
-  static Future<Response> patchRequest({
+  static Future<Response?> put({
     required String api,
-    required dynamic body,
-    bool authenticated = false,
-  }) async {
-    try {
-      return await _dio.patch(
-        api,
-        data: body,
-        options: Options(
-          extra: {'auth': authenticated},
-          contentType: Headers.jsonContentType,
-        ),
-      );
-    } on DioException catch (e) {
-      _handleDioError(e);
-      rethrow;
-    }
-  }
+    dynamic data,
+    bool auth = false,
+    bool multipart = false,
+  }) => safeRequest(api: api, method: 'PUT', data: data, authenticated: auth, isMultipart: multipart);
 
-  static Future<Response> putRequest({
+  static Future<Response?> patch({
     required String api,
-    required dynamic body,
-    bool authenticated = false,
-  }) async {
-    try {
-      return await _dio.put(
-        api,
-        data: body,
-        options: Options(
-          extra: {'auth': authenticated},
-          contentType: Headers.jsonContentType,
-        ),
-      );
-    } on DioException catch (e) {
-      _handleDioError(e);
-      rethrow;
-    }
-  }
+    dynamic data,
+    bool auth = false,
+    bool multipart = false,
+  }) => safeRequest(api: api, method: 'PATCH', data: data, authenticated: auth, isMultipart: multipart);
 
-  static Future<Response> deleteRequest({
+  static Future<Response?> delete({
     required String api,
-    dynamic body,
-    bool authenticated = false,
-  }) async {
-    try {
-      return await _dio.delete(
-        api,
-        data: body,
-        options: Options(extra: {'auth': authenticated}),
-      );
-    } on DioException catch (e) {
-      _handleDioError(e);
-      rethrow;
-    }
-  }
+    dynamic data,
+    bool auth = false,
+  }) => safeRequest(api: api, method: 'DELETE', data: data, authenticated: auth);
 
-  static Future<Response> multipartPutRequest({
-    required String api,
-    required Map<String, String> fields,
-    required String fileKey,
-    File? image,
-    bool authenticated = false,
-  }) async {
-    try {
-      final formData = FormData.fromMap({
-        ...fields,
-        if (image != null) fileKey: await MultipartFile.fromFile(image.path),
-      });
-      return await _dio.put(
-        api,
-        data: formData,
-        options: Options(extra: {'auth': authenticated}),
-      );
-    } on DioException catch (e) {
-      _handleDioError(e);
-      rethrow;
-    }
-  }
-
-  static Future<Response> multipartPostRequest({
-    required String api,
-    required Map<String, String> fields,
-    List<File>? images,
-    bool authenticated = false,
-  }) async {
-    try {
-      final Map<String, dynamic> data = {...fields};
-      if (images != null) {
-        for (int i = 0; i < images.length; i++) {
-          data['images[$i]image'] = await MultipartFile.fromFile(
-            images[i].path,
-          );
-        }
-      }
-      return await _dio.post(
-        api,
-        data: FormData.fromMap(data),
-        options: Options(extra: {'auth': authenticated}),
-      );
-    } on DioException catch (e) {
-      _handleDioError(e);
-      rethrow;
-    }
-  }
-
-  // ── Response handler ───────────────────────────────────────────────────────
-  static dynamic handleResponse(Response response) {
-    final status = response.statusCode ?? 0;
-    if (status >= 200 && status <= 210) return response.data;
-    if (status == 401) {
-      showErrorSnackBar(
-        message: 'Your session has expired. Please log in again.',
-      );
-      onUnauthorized?.call();
-      return null;
-    }
-    if (status == 404) {
-      showErrorSnackBar(message: 'The requested resource was not found.');
-      throw 'Resource not found';
-    }
-    if (status == 400) {
-      showErrorSnackBar(
-        message: _extractErrorMessage(response.data, 'Invalid request data'),
-      );
-      return null;
-    }
-    if (status == 403) {
-      showErrorSnackBar(
-        message: 'You do not have permission to access this resource.',
-      );
-      throw 'Forbidden';
-    }
-    if (status == 500) {
-      showErrorSnackBar(
-        message: 'A server error occurred. Please try again later.',
-      );
-      throw 'Server Error';
-    }
-    final msg = _extractErrorMessage(response.data, 'Something went wrong');
-    showErrorSnackBar(message: msg);
-    throw msg;
-  }
-
-  // ── Private helpers ────────────────────────────────────────────────────────
+  // ── Error & Response Handling ──────────────────────────────────────────────
+  
   static void _handleDioError(DioException e) {
+    String message = 'Unexpected error occurred';
+    
     if (e.type == DioExceptionType.connectionTimeout ||
         e.type == DioExceptionType.receiveTimeout ||
         e.type == DioExceptionType.sendTimeout) {
-      showErrorSnackBar(
-        message: 'The request took too long. Please check your connection.',
-      );
+      message = 'Request timed out. Check your connection.';
     } else if (e.type == DioExceptionType.connectionError) {
-      showErrorSnackBar(message: 'No internet connection. Please try again.');
-    } else {
-      showErrorSnackBar(message: 'A network error occurred. Please try again.');
+      message = 'Internet connection lost.';
+    } else if (e.error is SocketException) {
+      message = 'Could not reach the server.';
+    } else if (e.response != null) {
+      final status = e.response!.statusCode;
+      final data = e.response!.data;
+
+      switch (status) {
+        case 400:
+          message = _extractErrorMessage(data, 'Bad Request (400)');
+          break;
+        case 401:
+          // 401 is handled for auth:true requests in interceptor.
+          // This case catches guest 401s or failed refreshes.
+          message = 'Unauthorized access (401).';
+          break;
+        case 402:
+          message = 'Payment Required (402).';
+          break;
+        case 403:
+          message = 'Forbidden: Access denied (403).';
+          break;
+        case 404:
+          message = 'Resource not found (404).';
+          break;
+        case 405:
+          message = 'Method not allowed (405).';
+          break;
+        case 408:
+          message = 'Request Timeout (408).';
+          break;
+        case 422:
+          message = _extractErrorMessage(data, 'Validation Error (422)');
+          break;
+        case 429:
+          message = 'Too many requests. Please slow down.';
+          break;
+        case 500:
+          message = 'Internal Server Error (500).';
+          break;
+        case 502:
+          message = 'Bad Gateway (502). Server might be down.';
+          break;
+        case 503:
+          message = 'Service Unavailable (503).';
+          break;
+        case 504:
+          message = 'Gateway Timeout (504).';
+          break;
+        default:
+          message = _extractErrorMessage(data, 'Error code: $status');
+      }
     }
+
+    showErrorSnackBar(message: message);
   }
 
   static String _extractErrorMessage(dynamic data, String defaultMsg) {
-    if (data == null) return defaultMsg;
     if (data is Map) {
-      return data['errors']?.toString() ??
-          data['detail']?.toString() ??
-          data['non_field_errors']?.toString() ??
-          data['message']?.toString() ??
+      return data['message']?.toString() ??
           data['error']?.toString() ??
+          data['errors']?.toString() ??
+          data['detail']?.toString() ??
+          data['details']?.toString() ??
+          data['msg']?.toString() ??
+          (data['errors'] is Map ? (data['errors'] as Map).values.first.toString() : null) ??
+          (data['errors'] is List ? (data['errors'] as List).first.toString() : null) ??
           defaultMsg;
     }
     return defaultMsg;
   }
 
+  // ── Silent Token Refresh ───────────────────────────────────────────────────
   static Future<bool> _silentRefresh() async {
     try {
       final refresh = await getRefreshToken();
       if (refresh == null) return false;
+
+      // Use a pure Dio instance to avoid infinite interceptor loops
       final response = await Dio().post(
-        Api.createToken,
-        data: {'refresh_token': refresh},
+        Api.refreshTokenUrl,
+        data: {'refresh': refresh},
         options: Options(contentType: Headers.jsonContentType),
       );
-      if ((response.statusCode ?? 0) >= 200 &&
-          (response.statusCode ?? 0) <= 210) {
-        final newAccess = response.data['access_token'] as String?;
+
+      if (response.statusCode == 200) {
+        final newAccess = response.data['access'] as String? ?? response.data['access_token'] as String?;
         if (newAccess != null) {
           await _storage.write(key: 'access_token', value: newAccess);
-          debugPrint('🔐 Token silently refreshed');
+          final newRefresh = response.data['refresh'] as String? ?? response.data['refresh_token'] as String?;
+          if (newRefresh != null) {
+            await _storage.write(key: 'refresh_token', value: newRefresh);
+          }
+          debugPrint('🔐 Access token successfully refreshed');
           return true;
         }
       }
       return false;
-    } catch (_) {
+    } catch (e) {
+      debugPrint('❌ Silent refresh failed: $e');
       return false;
     }
+  }
+
+  /// Extracts data if response is successful.
+  static dynamic handleResponse(Response? response) {
+    if (response == null) return null;
+    final status = response.statusCode ?? 0;
+    if (status >= 200 && status < 300) {
+      return response.data;
+    }
+    return null;
+  }
+
+  // ── Internal Multipart Utility ─────────────────────────────────────────────
+  static Future<FormData> _convertToFormData(Map<String, dynamic> data) async {
+    final Map<String, dynamic> formDataMap = {};
+    for (var entry in data.entries) {
+      final key = entry.key;
+      final value = entry.value;
+
+      if (value is File) {
+        formDataMap[key] = await MultipartFile.fromFile(value.path, filename: value.path.split('/').last);
+      } else if (value is List<File>) {
+        formDataMap[key] = await Future.wait(value.map((f) => MultipartFile.fromFile(f.path, filename: f.path.split('/').last)));
+      } else {
+        formDataMap[key] = value;
+      }
+    }
+    return FormData.fromMap(formDataMap);
   }
 }

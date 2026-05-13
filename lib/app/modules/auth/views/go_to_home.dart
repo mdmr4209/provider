@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../res/assets/image_assets.dart';
+// Removed: import '../../../../res/assets/image_assets.dart';
 import '../../../../res/colors/app_color.dart';
 import '../../../../widgets/custom_button.dart';
 import '../controllers/auth_controller.dart';
@@ -28,15 +28,29 @@ class GoToHome extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(height: 20.h),
-                SvgPicture.asset(ImageAssets.title),
+                // Removed: SvgPicture.asset(ImageAssets.title),
                 SizedBox(height: 15.h),
                 Stack(
                   alignment: Alignment.center,
                   children: [
-                    Image.asset(ImageAssets.bgIcon),
+                    // Removed: Image.asset(ImageAssets.bgIcon),
+                    Container( // Placeholder for bgIcon
+                      width: 200.w, // Adjust size as needed
+                      height: 200.h, // Adjust size as needed
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surfaceVariant, // Placeholder color
+                        shape: BoxShape.circle,
+                      ),
+                    ),
                     Positioned(
                         bottom: 0,
-                        child: SvgPicture.asset( origin == "Sign up"?ImageAssets.account:ImageAssets.password)),
+                        // Removed: child: SvgPicture.asset( origin == "Sign up"?ImageAssets.account:ImageAssets.password)),
+                        child: Icon(
+                          origin == "Sign up" ? Icons.person_add_alt_1 : Icons.lock_reset_rounded,
+                          size: 80.w,
+                          color: Theme.of(context).colorScheme.primary,
+                        ), // Placeholder icon
+                    ),
                   ],
                 ),
                 Consumer<AuthController>(

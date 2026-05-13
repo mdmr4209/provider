@@ -16,18 +16,17 @@ Widget appProviders({required Widget child}) {
       Provider<ApiService>(create: (_) => ApiService()),
 
       ChangeNotifierProvider(create: (_) => OnboardingController()),
-
-      ChangeNotifierProxyProvider<ApiService, AuthController>(
-        create: (ctx) => AuthController(apiService: ctx.read<ApiService>()),
-        update: (_, apiService, previous) =>
-            previous ?? AuthController(apiService: apiService),
-      ),
-
+      ChangeNotifierProvider(create: (_) => AuthController()),
       ChangeNotifierProvider(create: (_) => HomeController()),
       ChangeNotifierProvider(create: (_) => ProfileController()),
       ChangeNotifierProvider(create: (_) => CartController()),
       ChangeNotifierProvider(create: (_) => ThemeController()),
       ChangeNotifierProvider(create: (_) => LocalizationController()),
+      // ChangeNotifierProxyProvider<ApiService, AuthController>(
+      //   create: (ctx) => AuthController(apiService: ctx.read<ApiService>()),
+      //   update: (_, apiService, previous) =>
+      //   previous ?? AuthController(apiService: apiService),
+      // ),
     ],
     child: child,
   );

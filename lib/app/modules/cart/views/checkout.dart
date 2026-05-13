@@ -130,7 +130,7 @@ class CheckoutScreen extends StatelessWidget {
                           maxLines: 10,
                           borderColor: Theme.of(context).dividerColor,
                           borderRadius: 12,
-                          textEditingController: commentCtrl,
+                          controller: commentCtrl,
                           onChanged: cart.setComment,
                           borderWidth: 1,
                         ),

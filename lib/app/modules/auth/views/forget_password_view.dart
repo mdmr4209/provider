@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../res/assets/image_assets.dart';
+// Removed: import '../../../../res/assets/image_assets.dart';
 import '../../../../res/colors/app_color.dart';
 import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/input_text_widget.dart';
@@ -53,10 +53,11 @@ class ForgetPasswordView extends StatelessWidget {
                   height: 331.h,
                   clipBehavior: Clip.antiAlias,
                   decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(ImageAssets.background2),
-                      fit: BoxFit.cover,
-                    ),
+                    // Removed: image: DecorationImage(
+                    // Removed:   image: AssetImage(ImageAssets.background2),
+                    // Removed:   fit: BoxFit.cover,
+                    // Removed: ),
+                    color: Theme.of(context).colorScheme.surface, // Placeholder color
                   ),
                   child: Stack(
                     alignment: Alignment.center,
@@ -76,7 +77,7 @@ class ForgetPasswordView extends StatelessWidget {
                             SizedBox(height: 30.h),
                             InputTextWidget(
                                hintText: context.watchTr('enter_your_email'),
-                              textEditingController: auth.forgetEmailController,
+                              controller: auth.forgetEmailController,
                               onChanged: (v) =>
                                   auth.forgetEmailController.text = v,
                               keyboardType: TextInputType.emailAddress,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import '../colors/app_color.dart';
 
@@ -25,7 +24,7 @@ class _GeneralExceptionWidgetState extends State<GeneralExceptionWidget> {
             padding: const EdgeInsets.only(top: 30.0),
             child: Center(
               child: Text(
-                'general_exception'.tr,
+                'general_exception',
                 style: TextStyle(color: AppColor.deepred, fontSize: 20),
                 textAlign: TextAlign.center,
               ),

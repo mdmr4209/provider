@@ -7,7 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../res/assets/image_assets.dart';
+// Removed: import '../../../../res/assets/image_assets.dart';
 import '../../../../res/colors/app_color.dart';
 import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/snack_bar_helper.dart';
@@ -109,10 +109,11 @@ class _OtpVerifyViewState extends State<OtpVerifyView> {
                   height: 331.h,
                   clipBehavior: Clip.antiAlias,
                   decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(ImageAssets.background2),
-                      fit: BoxFit.cover,
-                    ),
+                    // Removed: image: DecorationImage(
+                    // Removed:   image: AssetImage(ImageAssets.background2),
+                    // Removed:   fit: BoxFit.cover,
+                    // Removed: ),
+                    color: Theme.of(context).colorScheme.surface, // Placeholder color
                   ),
                   child: Stack(
                     alignment: Alignment.center,

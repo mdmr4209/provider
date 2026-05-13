@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../res/colors/app_color.dart';
 
@@ -8,81 +9,94 @@ class CustomDropdown extends StatefulWidget {
   final ValueNotifier<dynamic> controller;
   final List<String> items;
   final String title;
+  final void Function(dynamic value)? onChanged;
+  final bool enabled;
 
   // Title Text
-  final double? titlePaddingBottom;
+  final bool showTitle;
+  final double titlePaddingBottom;
   final TextStyle? titleStyle;
-  final Color? titleColor;
-  final double? titleFontSize;
-  final FontWeight? titleFontWeight;
-  final String? titleFontFamily;
+  final Color titleColor;
+  final double titleFontSize;
+  final FontWeight titleFontWeight;
+  final String titleFontFamily;
   final double? titleLetterSpacing;
   final EdgeInsets? titlePadding;
 
   // Container
   final double? height;
-  final double? width;
-  final double? containerPaddingHorizontal;
-  final double? containerPaddingVertical;
-  final Color? backgroundColor;
-  final Color? borderColor;
-  final double? borderWidth;
+  final double width;
+  final double containerPaddingHorizontal;
+  final double containerPaddingVertical;
+  final Color backgroundColor;
+  final Color borderColor;
+  final double borderWidth;
   final double borderRadius;
   final bool shadow;
   final Color? shadowColor;
   final double shadowBlur;
   final Offset shadowOffset;
+  final Gradient? gradient;
+
+  // Leading & Trailing Assets (Support SVG/Image/Widget)
+  final String leadingIcon;
+  final Widget? leadingWidget;
+  final double leadingIconHeight;
+  final double leadingIconWidth;
+  final EdgeInsetsGeometry leadingPadding;
+  final bool useLeadingColor;
+  final Color? leadingColor;
+
+  final String trailingIcon;
+  final Widget? trailingWidget;
+  final double trailingIconHeight;
+  final double trailingIconWidth;
+  final EdgeInsetsGeometry trailingPadding;
+  final bool useTrailingColor;
+  final Color? trailingColor;
 
   // Hint
-  final String? hintText;
+  final String hintText;
   final TextStyle? hintStyle;
-  final Color? hintColor;
-  final double? hintFontSize;
-  final FontWeight? hintFontWeight;
-  final String? hintFontFamily;
-  final double? hintLetterSpacing;
+  final Color hintColor;
+  final double hintFontSize;
+  final FontWeight hintFontWeight;
+  final String hintFontFamily;
 
   // Selected text
   final TextStyle? selectedTextStyle;
-  final Color? selectedTextColor;
-  final double? selectedTextFontSize;
-  final FontWeight? selectedTextFontWeight;
-  final String? selectedTextFontFamily;
+  final Color selectedTextColor;
+  final double selectedTextFontSize;
+  final FontWeight selectedTextFontWeight;
+  final String selectedTextFontFamily;
 
-  // Dropdown icon
-  final IconData icon;
-  final Color? iconColor;
-  final double? iconSize;
-
-  // Menu popup
-  final Color? menuBackgroundColor;
-  final double? menuElevation;
+  // Menu popup (Single Select)
+  final Color menuBackgroundColor;
+  final double menuElevation;
+  final double? menuMaxHeight;
 
   // Menu item text
   final TextStyle? menuItemStyle;
-  final Color? menuItemColor;
-  final double? menuItemFontSize;
-  final FontWeight? menuItemFontWeight;
-  final String? menuItemFontFamily;
+  final Color menuItemColor;
+  final double menuItemFontSize;
+  final FontWeight menuItemFontWeight;
+  final String menuItemFontFamily;
 
-  // Multi-select
+  // Multi-select specific
   final bool multiSelect;
-  final bool useRawItems;
-
-  // Dialog style
   final Color? dialogBackgroundColor;
+  final String dialogTitle;
   final TextStyle? dialogTitleStyle;
-  final Color? dialogTitleColor;
-  final double? dialogTitleFontSize;
-  final FontWeight? dialogTitleFontWeight;
-  final String? dialogTitleFontFamily;
-  final double? dialogTitleLetterSpacing;
+  final Color dialogTitleColor;
+  final double dialogTitleFontSize;
+  final FontWeight dialogTitleFontWeight;
+  final String dialogTitleFontFamily;
   final TextStyle? dialogItemStyle;
-  final Color? dialogItemColor;
-  final double? dialogItemFontSize;
-  final FontWeight? dialogItemFontWeight;
-  final String? dialogItemFontFamily;
-  final Color? checkboxActiveColor;
+  final Color dialogItemColor;
+  final double dialogItemFontSize;
+  final FontWeight dialogItemFontWeight;
+  final String dialogItemFontFamily;
+  final Color checkboxActiveColor;
   final double dialogRadius;
 
   // Initial values
@@ -93,65 +107,97 @@ class CustomDropdown extends StatefulWidget {
     super.key,
     required this.controller,
     required this.items,
-    required this.title,
-    this.titlePaddingBottom = 0,
+    this.title = '',
+    this.onChanged,
+    this.enabled = true,
+
+    // Title
+    this.showTitle = true,
+    this.titlePaddingBottom = 6,
     this.titleStyle,
-    this.titleColor = AppColor.defaultColor,
-    this.titleFontSize = 12,
-    this.titleFontWeight = FontWeight.w500,
-    this.titleFontFamily = 'Inter',
+    this.titleColor = AppColor.textColor,
+    this.titleFontSize = 14,
+    this.titleFontWeight = FontWeight.w600,
+    this.titleFontFamily = 'Proxima Nova',
     this.titleLetterSpacing,
     this.titlePadding,
+
+    // Container
     this.height,
-    this.width,
-    this.containerPaddingHorizontal,
-    this.containerPaddingVertical,
-    this.backgroundColor,
-    this.borderColor,
-    this.borderWidth,
-    this.borderRadius = 10,
+    this.width = double.infinity,
+    this.containerPaddingHorizontal = 12,
+    this.containerPaddingVertical = 0,
+    this.backgroundColor = AppColor.whiteColor,
+    this.borderColor = AppColor.borderColor,
+    this.borderWidth = 1,
+    this.borderRadius = 12,
     this.shadow = false,
     this.shadowColor,
-    this.shadowBlur = 6,
-    this.shadowOffset = const Offset(0, 3),
-    this.hintText,
+    this.shadowBlur = 4,
+    this.shadowOffset = const Offset(0, 2),
+    this.gradient,
+
+    // Leading
+    this.leadingIcon = '',
+    this.leadingWidget,
+    this.leadingIconHeight = 20,
+    this.leadingIconWidth = 20,
+    this.leadingPadding = const EdgeInsets.only(right: 10),
+    this.useLeadingColor = true,
+    this.leadingColor,
+
+    // Trailing
+    this.trailingIcon = '',
+    this.trailingWidget,
+    this.trailingIconHeight = 20,
+    this.trailingIconWidth = 20,
+    this.trailingPadding = const EdgeInsets.only(left: 10),
+    this.useTrailingColor = true,
+    this.trailingColor,
+
+    // Hint
+    this.hintText = 'Select Option',
     this.hintStyle,
-    this.hintColor,
-    this.hintFontSize,
-    this.hintFontWeight,
-    this.hintFontFamily = 'Inter',
-    this.hintLetterSpacing,
+    this.hintColor = AppColor.hintTextColor,
+    this.hintFontSize = 14,
+    this.hintFontWeight = FontWeight.w400,
+    this.hintFontFamily = 'Proxima Nova',
+
+    // Selected
     this.selectedTextStyle,
-    this.selectedTextColor,
-    this.selectedTextFontSize,
-    this.selectedTextFontWeight,
-    this.selectedTextFontFamily = 'Inter',
-    this.icon = Icons.keyboard_arrow_down_rounded,
-    this.iconColor,
-    this.iconSize,
-    this.menuBackgroundColor,
-    this.menuElevation,
+    this.selectedTextColor = AppColor.textColor,
+    this.selectedTextFontSize = 14,
+    this.selectedTextFontWeight = FontWeight.w500,
+    this.selectedTextFontFamily = 'Proxima Nova',
+
+    // Menu
+    this.menuBackgroundColor = AppColor.whiteColor,
+    this.menuElevation = 8,
+    this.menuMaxHeight,
     this.menuItemStyle,
-    this.menuItemColor,
-    this.menuItemFontSize,
-    this.menuItemFontWeight,
-    this.menuItemFontFamily = 'Inter',
+    this.menuItemColor = AppColor.textColor,
+    this.menuItemFontSize = 14,
+    this.menuItemFontWeight = FontWeight.w400,
+    this.menuItemFontFamily = 'Proxima Nova',
+
+    // Multi
     this.multiSelect = false,
-    this.useRawItems = false,
+    this.dialogTitle = 'Select Items',
     this.dialogBackgroundColor,
     this.dialogTitleStyle,
-    this.dialogTitleColor,
-    this.dialogTitleFontSize,
-    this.dialogTitleFontWeight,
-    this.dialogTitleFontFamily = 'Inter',
-    this.dialogTitleLetterSpacing,
+    this.dialogTitleColor = AppColor.textColor,
+    this.dialogTitleFontSize = 18,
+    this.dialogTitleFontWeight = FontWeight.bold,
+    this.dialogTitleFontFamily = 'Proxima Nova',
     this.dialogItemStyle,
-    this.dialogItemColor,
-    this.dialogItemFontSize,
-    this.dialogItemFontWeight,
-    this.dialogItemFontFamily = 'Inter',
-    this.checkboxActiveColor,
-    this.dialogRadius = 12,
+    this.dialogItemColor = AppColor.textColor,
+    this.dialogItemFontSize = 15,
+    this.dialogItemFontWeight = FontWeight.w400,
+    this.dialogItemFontFamily = 'Proxima Nova',
+    this.checkboxActiveColor = AppColor.primaryColor,
+    this.dialogRadius = 16,
+
+    // Initial
     this.initialSingleValue,
     this.initialMultiValues,
   });
@@ -168,17 +214,13 @@ class _CustomDropdownState extends State<CustomDropdown> {
   }
 
   void _initValues() {
-    if (!widget.multiSelect &&
-        widget.initialSingleValue != null &&
-        widget.controller.value is String) {
-      if ((widget.controller.value as String).isEmpty) {
-        widget.controller.value = widget.initialSingleValue!;
+    if (!widget.multiSelect && widget.initialSingleValue != null) {
+      if (widget.controller.value == null || widget.controller.value.toString().isEmpty) {
+        widget.controller.value = widget.initialSingleValue;
       }
     }
-    if (widget.multiSelect &&
-        widget.initialMultiValues != null &&
-        widget.controller.value is List<String>) {
-      if ((widget.controller.value as List<String>).isEmpty) {
+    if (widget.multiSelect && widget.initialMultiValues != null) {
+      if (widget.controller.value == null || (widget.controller.value as List).isEmpty) {
         widget.controller.value = List<String>.from(widget.initialMultiValues!);
       }
     }
@@ -186,14 +228,19 @@ class _CustomDropdownState extends State<CustomDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: widget.controller,
-      builder: (_, __, ___) => Column(
+    return Opacity(
+      opacity: widget.enabled ? 1.0 : 0.6,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildTitle(),
-          SizedBox(height: 6.h),
-          _buildContainer(context),
+          if (widget.showTitle && widget.title.isNotEmpty) _buildTitle(),
+          ValueListenableBuilder(
+            valueListenable: widget.controller,
+            builder: (context, value, child) {
+              return _buildContainer(context, value);
+            },
+          ),
         ],
       ),
     );
@@ -201,15 +248,14 @@ class _CustomDropdownState extends State<CustomDropdown> {
 
   Widget _buildTitle() {
     return Padding(
-      padding: widget.titlePadding ??
-          EdgeInsets.only(bottom: (widget.titlePaddingBottom ?? 0).h),
+      padding: widget.titlePadding ?? EdgeInsets.only(bottom: widget.titlePaddingBottom.h),
       child: Text(
         widget.title,
         style: widget.titleStyle ??
             TextStyle(
-              color: widget.titleColor ?? Colors.black,
-              fontSize: (widget.titleFontSize ?? 14).sp,
-              fontWeight: widget.titleFontWeight ?? FontWeight.w500,
+              color: widget.titleColor,
+              fontSize: widget.titleFontSize.sp,
+              fontWeight: widget.titleFontWeight,
               fontFamily: widget.titleFontFamily,
               letterSpacing: widget.titleLetterSpacing,
             ),
@@ -217,210 +263,283 @@ class _CustomDropdownState extends State<CustomDropdown> {
     );
   }
 
-  Widget _buildContainer(BuildContext context) {
+  Widget _buildContainer(BuildContext context, dynamic currentValue) {
     return Container(
-      width: widget.width ?? double.infinity,
-      height: widget.height ?? 46.h,
+      width: widget.width.w,
+      height: widget.height?.h ?? 50.h,
       padding: EdgeInsets.symmetric(
-        horizontal: widget.containerPaddingHorizontal ?? 12.w,
-        vertical: widget.containerPaddingVertical ?? 0,
+        horizontal: widget.containerPaddingHorizontal.w,
+        vertical: widget.containerPaddingVertical.h,
       ),
       decoration: BoxDecoration(
-        color: widget.backgroundColor ?? Colors.white,
-        borderRadius: BorderRadius.circular(widget.borderRadius),
+        color: widget.backgroundColor,
+        gradient: widget.gradient,
+        borderRadius: BorderRadius.circular(widget.borderRadius.r),
         border: Border.all(
-          color: widget.borderColor ?? Colors.grey.shade300,
-          width: widget.borderWidth ?? 1,
+          color: widget.borderColor,
+          width: widget.borderWidth.w,
         ),
         boxShadow: widget.shadow
             ? [
                 BoxShadow(
-                  color: widget.shadowColor ?? Colors.black12,
+                  color: widget.shadowColor ?? AppColor.boxShadowColor.withOpacity(0.1),
                   blurRadius: widget.shadowBlur,
                   offset: widget.shadowOffset,
                 ),
               ]
-            : [
-                BoxShadow(
-                  color: (widget.shadowColor ?? AppColor.boxShadowColor)
-                      .withAlpha(27),
-                  blurRadius: 4,
-                ),
-              ],
+            : null,
       ),
       child: widget.multiSelect
-          ? _buildMultiSelect(context)
-          : _buildSingleSelect(),
+          ? _buildMultiSelectTrigger(context, currentValue)
+          : _buildSingleSelect(currentValue),
     );
   }
 
-  Widget _buildSingleSelect() {
-    final String current = widget.controller.value as String;
+  Widget _buildSingleSelect(dynamic currentValue) {
+    final effectiveLeading = _getLeading(widget.selectedTextColor);
+
     return DropdownButtonHideUnderline(
       child: DropdownButton<String>(
         isExpanded: true,
-        value: current.isEmpty ? null : current,
-        icon: Icon(widget.icon,
-            color: widget.iconColor ?? Colors.black,
-            size: widget.iconSize ?? 22.sp),
-        dropdownColor: widget.menuBackgroundColor ?? Colors.white,
-        elevation: widget.menuElevation?.toInt() ?? 4,
+        value: (currentValue == null || currentValue.toString().isEmpty) ? null : currentValue.toString(),
+        icon: _getTrailing(widget.selectedTextColor),
+        dropdownColor: widget.menuBackgroundColor,
+        elevation: widget.menuElevation.toInt(),
+        menuMaxHeight: widget.menuMaxHeight?.h,
+        borderRadius: BorderRadius.circular(widget.borderRadius.r),
         style: widget.selectedTextStyle ??
             TextStyle(
-              fontSize: (widget.selectedTextFontSize ?? 14).sp,
-              color: widget.selectedTextColor ?? Colors.black87,
-              fontWeight:
-                  widget.selectedTextFontWeight ?? FontWeight.w500,
+              fontSize: widget.selectedTextFontSize.sp,
+              color: widget.selectedTextColor,
+              fontWeight: widget.selectedTextFontWeight,
               fontFamily: widget.selectedTextFontFamily,
             ),
-        hint: Text(
-          widget.hintText ?? 'Select',
-          style: widget.hintStyle ??
-              TextStyle(
-                fontSize: (widget.hintFontSize ?? 14).sp,
-                color: widget.hintColor ?? Colors.grey.shade600,
-                fontWeight: widget.hintFontWeight ?? FontWeight.w400,
-                fontFamily: widget.hintFontFamily,
+        hint: Row(
+          children: [
+            if (effectiveLeading != null) Padding(padding: widget.leadingPadding, child: effectiveLeading),
+            Expanded(
+              child: Text(
+                widget.hintText,
+                style: widget.hintStyle ??
+                    TextStyle(
+                      fontSize: widget.hintFontSize.sp,
+                      color: widget.hintColor,
+                      fontWeight: widget.hintFontWeight,
+                      fontFamily: widget.hintFontFamily,
+                    ),
               ),
+            ),
+          ],
         ),
-        onChanged: (value) {
-          widget.controller.value = value ?? '';
-        },
-        items: widget.items
-            .map(
-              (item) => DropdownMenuItem(
-                value: item,
-                child: Text(
-                  item,
-                  style: widget.menuItemStyle ??
-                      TextStyle(
-                        fontSize: (widget.menuItemFontSize ?? 14).sp,
-                        color: widget.menuItemColor ?? Colors.black87,
-                        fontWeight:
-                            widget.menuItemFontWeight ?? FontWeight.w400,
-                        fontFamily: widget.menuItemFontFamily,
-                      ),
+        selectedItemBuilder: (context) {
+          return widget.items.map((String item) {
+            return Row(
+              children: [
+                if (effectiveLeading != null) Padding(padding: widget.leadingPadding, child: effectiveLeading),
+                Expanded(
+                  child: Text(
+                    item,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: widget.selectedTextStyle ??
+                        TextStyle(
+                          fontSize: widget.selectedTextFontSize.sp,
+                          color: widget.selectedTextColor,
+                          fontWeight: widget.selectedTextFontWeight,
+                          fontFamily: widget.selectedTextFontFamily,
+                        ),
+                  ),
                 ),
-              ),
-            )
-            .toList(),
+              ],
+            );
+          }).toList();
+        },
+        onChanged: widget.enabled
+            ? (value) {
+                widget.controller.value = value;
+                if (widget.onChanged != null) widget.onChanged!(value);
+              }
+            : null,
+        items: widget.items.map((item) {
+          return DropdownMenuItem<String>(
+            value: item,
+            child: Text(
+              item,
+              style: widget.menuItemStyle ??
+                  TextStyle(
+                    fontSize: widget.menuItemFontSize.sp,
+                    color: widget.menuItemColor,
+                    fontWeight: widget.menuItemFontWeight,
+                    fontFamily: widget.menuItemFontFamily,
+                  ),
+            ),
+          );
+        }).toList(),
       ),
     );
   }
 
-  Widget _buildMultiSelect(BuildContext context) {
-    final List<String> selected =
-        List<String>.from(widget.controller.value as List<String>);
+  Widget _buildMultiSelectTrigger(BuildContext context, dynamic currentValue) {
+    final List<String> selected = List<String>.from(currentValue ?? []);
+    final effectiveLeading = _getLeading(widget.selectedTextColor);
+
     return InkWell(
-      onTap: () => _showMultiSelectDialog(context),
+      onTap: widget.enabled ? () => _showMultiSelectDialog(context) : null,
       child: Row(
         children: [
+          if (effectiveLeading != null) Padding(padding: widget.leadingPadding, child: effectiveLeading),
           Expanded(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Text(
-                selected.isEmpty
-                    ? widget.hintText ?? 'Select option'
-                    : selected.join(', '),
-                style: selected.isEmpty
-                    ? (widget.hintStyle ??
-                        TextStyle(
-                          fontSize: (widget.hintFontSize ?? 14).sp,
-                          color: widget.hintColor ?? Colors.grey.shade600,
-                          fontWeight:
-                              widget.hintFontWeight ?? FontWeight.w400,
-                          fontFamily: widget.hintFontFamily,
-                        ))
-                    : (widget.selectedTextStyle ??
-                        TextStyle(
-                          fontSize: (widget.selectedTextFontSize ?? 14).sp,
-                          color:
-                              widget.selectedTextColor ?? Colors.black87,
-                          fontWeight: widget.selectedTextFontWeight ??
-                              FontWeight.w500,
-                          fontFamily: widget.selectedTextFontFamily,
-                        )),
-              ),
+            child: Text(
+              selected.isEmpty ? widget.hintText : selected.join(', '),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: selected.isEmpty
+                  ? (widget.hintStyle ??
+                      TextStyle(
+                        fontSize: widget.hintFontSize.sp,
+                        color: widget.hintColor,
+                        fontWeight: widget.hintFontWeight,
+                        fontFamily: widget.hintFontFamily,
+                      ))
+                  : (widget.selectedTextStyle ??
+                      TextStyle(
+                        fontSize: widget.selectedTextFontSize.sp,
+                        color: widget.selectedTextColor,
+                        fontWeight: widget.selectedTextFontWeight,
+                        fontFamily: widget.selectedTextFontFamily,
+                      )),
             ),
           ),
-          SizedBox(width: 8.w),
-          Icon(widget.icon,
-              color: widget.iconColor ?? Colors.black,
-              size: widget.iconSize ?? 22.sp),
+          Padding(
+            padding: widget.trailingPadding,
+            child: _getTrailing(selected.isEmpty ? widget.hintColor : widget.selectedTextColor),
+          ),
         ],
       ),
     );
   }
 
   Future<void> _showMultiSelectDialog(BuildContext context) async {
-    final List<String> current =
-        List<String>.from(widget.controller.value as List<String>);
+    final List<String> current = List<String>.from(widget.controller.value ?? []);
     final temp = ValueNotifier<List<String>>(List.from(current));
 
     await showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        backgroundColor: widget.dialogBackgroundColor ?? Colors.white,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(widget.dialogRadius.r)),
+        backgroundColor: widget.dialogBackgroundColor ?? widget.backgroundColor,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(widget.dialogRadius.r)),
         title: Text(
-          widget.title,
+          widget.dialogTitle,
           style: widget.dialogTitleStyle ??
               TextStyle(
-                color: widget.dialogTitleColor ?? Colors.black,
-                fontSize: (widget.dialogTitleFontSize ?? 16).sp,
-                fontWeight:
-                    widget.dialogTitleFontWeight ?? FontWeight.bold,
+                color: widget.dialogTitleColor,
+                fontSize: widget.dialogTitleFontSize.sp,
+                fontWeight: widget.dialogTitleFontWeight,
                 fontFamily: widget.dialogTitleFontFamily,
               ),
         ),
         content: ValueListenableBuilder<List<String>>(
           valueListenable: temp,
-          builder: (_, selected, __) => SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: widget.items.map((item) {
+          builder: (_, selected, __) => SizedBox(
+            width: double.maxFinite,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: widget.items.length,
+              itemBuilder: (context, index) {
+                final item = widget.items[index];
+                final isSelected = selected.contains(item);
                 return CheckboxListTile(
-                  value: selected.contains(item),
-                  activeColor: widget.checkboxActiveColor ?? Colors.blue,
+                  value: isSelected,
+                  activeColor: widget.checkboxActiveColor,
+                  checkColor: AppColor.whiteColor,
+                  controlAffinity: ListTileControlAffinity.leading,
                   title: Text(
                     item,
                     style: widget.dialogItemStyle ??
                         TextStyle(
-                          fontSize: (widget.dialogItemFontSize ?? 14).sp,
-                          color:
-                              widget.dialogItemColor ?? Colors.black87,
-                          fontWeight: widget.dialogItemFontWeight ??
-                              FontWeight.w400,
+                          fontSize: widget.dialogItemFontSize.sp,
+                          color: widget.dialogItemColor,
+                          fontWeight: widget.dialogItemFontWeight,
                           fontFamily: widget.dialogItemFontFamily,
                         ),
                   ),
                   onChanged: (checked) {
-                    final updated = List<String>.from(selected);
-                    checked == true
-                        ? updated.add(item)
-                        : updated.remove(item);
+                    final updated = List<String>.from(temp.value);
+                    if (checked == true) {
+                      updated.add(item);
+                    } else {
+                      updated.remove(item);
+                    }
                     temp.value = updated;
                   },
                 );
-              }).toList(),
+              },
             ),
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text('Cancel', style: TextStyle(color: AppColor.textColor3, fontSize: 14.sp)),
           ),
           ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: widget.checkboxActiveColor,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+            ),
             onPressed: () {
               widget.controller.value = List<String>.from(temp.value);
+              if (widget.onChanged != null) widget.onChanged!(widget.controller.value);
               Navigator.pop(context);
             },
-            child: const Text('OK'),
+            child: Text('OK', style: TextStyle(color: AppColor.whiteColor, fontSize: 14.sp)),
           ),
         ],
       ),
+    );
+  }
+
+  Widget? _getLeading(Color color) {
+    return widget.leadingWidget ??
+        (widget.leadingIcon.isNotEmpty
+            ? _buildAsset(
+                widget.leadingIcon,
+                widget.leadingIconWidth,
+                widget.leadingIconHeight,
+                widget.useLeadingColor,
+                widget.leadingColor ?? color,
+              )
+            : null);
+  }
+
+  Widget _getTrailing(Color color) {
+    return widget.trailingWidget ??
+        (widget.trailingIcon.isNotEmpty
+            ? _buildAsset(
+                widget.trailingIcon,
+                widget.trailingIconWidth,
+                widget.trailingIconHeight,
+                widget.useTrailingColor,
+                widget.trailingColor ?? color,
+              )
+            : Icon(Icons.keyboard_arrow_down_rounded, size: 24.sp, color: color));
+  }
+
+  Widget _buildAsset(String path, double width, double height, bool useColor, Color color) {
+    if (path.toLowerCase().endsWith('.svg')) {
+      return SvgPicture.asset(
+        path,
+        width: width.w,
+        height: height.h,
+        colorFilter: useColor ? ColorFilter.mode(color, BlendMode.srcIn) : null,
+      );
+    }
+    return Image.asset(
+      path,
+      width: width.w,
+      height: height.h,
+      color: useColor ? color : null,
+      fit: BoxFit.contain,
     );
   }
 }

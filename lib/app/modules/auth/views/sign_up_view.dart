@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../res/assets/image_assets.dart';
+// Removed: import '../../../../res/assets/image_assets.dart';
 import '../../../../res/colors/app_color.dart';
 import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/input_text_widget.dart';
@@ -55,10 +55,11 @@ class SignUpView extends StatelessWidget {
                     height: 677.h,
                     clipBehavior: Clip.antiAlias,
                     decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(ImageAssets.background),
-                        fit: BoxFit.cover,
-                      ),
+                      // Removed: image: DecorationImage(
+                      // Removed:   image: AssetImage(ImageAssets.background),
+                      // Removed:   fit: BoxFit.cover,
+                      // Removed: ),
+                      color: Theme.of(context).colorScheme.surface, // Placeholder color
                     ),
                     child: Stack(
                       alignment: Alignment.center,
@@ -92,14 +93,14 @@ class SignUpView extends StatelessWidget {
                                 SizedBox(height: 110.h),
                                 InputTextWidget(
                                   hintText: context.watchTr('enter_your_name'),
-                                  textEditingController: auth.nameController,
+                                  controller: auth.nameController,
                                   onChanged: (_) {},
                                   keyboardType: TextInputType.name,
                                 ),
                                 SizedBox(height: 10.h),
                                 InputTextWidget(
                                   hintText: context.watchTr('enter_your_email'),
-                                  textEditingController: auth.emailController,
+                                  controller: auth.emailController,
                                   onChanged: (_) {},
                                   keyboardType: TextInputType.emailAddress,
                                 ),
@@ -107,21 +108,21 @@ class SignUpView extends StatelessWidget {
                                 InputTextWidget(
                                   hintText: context.watchTr('enter_your_password'),
                                   obscureText: true,
-                                  textEditingController:
+                                  controller:
                                       auth.passwordController,
                                   onChanged: (_) {},
-                                  leadingHeight: 18,
-                                  leadingWidth: 14,
+                                  leadingIconHeight: 18,
+                                  leadingIconWidth: 14,
                                 ),
                                 SizedBox(height: 10.h),
                                 InputTextWidget(
                                   hintText: context.watchTr('confirm_your_password'),
                                   obscureText: true,
-                                  textEditingController:
+                                  controller:
                                       auth.setPasswordController,
                                   onChanged: (_) {},
-                                  leadingHeight: 18,
-                                  leadingWidth: 14,
+                                  leadingIconHeight: 18,
+                                  leadingIconWidth: 14,
                                 ),
                                 SizedBox(height: 20.h),
                                 CustomButton(

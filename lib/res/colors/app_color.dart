@@ -7,7 +7,7 @@ class AppColor {
   static const Color defaultLightColor = Color(0xFFFFD7E3);
   static const Color ratingColor = Color(0xFFCFC819);
   static const Color ratingColor2 = Color(0xFFFFBE00);
-  static const Color primaryColor = Color(0xFFDD8560);
+  static const Color primaryColor = Color(0xFFD05278);
 
   static const Color textColor = Color(0xFF222222);
   static const Color textColor2 = Color(0xFF666666);
