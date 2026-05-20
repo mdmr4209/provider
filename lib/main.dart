@@ -5,21 +5,18 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import 'app/modules/auth/controllers/auth_controller.dart';
-import 'app/modules/onboarding/controllers/onboarding_controller.dart';
-import 'app/routes/app_router.dart';
-import 'firebase_options.dart';
-import 'res/colors/app_color.dart';
-import 'res/components/base_client.dart';
-import 'res/components/dependency_injection.dart';
-import 'res/components/api_service.dart';
-import 'res/components/notification_service.dart';
-import 'widgets/snack_bar_helper.dart';
-import 'app/modules/theme/controllers/theme_controller.dart';
-import 'app/modules/localization/controllers/localization_controller.dart';
-import 'app/modules/localization/localization_extension.dart';
-import 'res/theme/app_theme.dart';
-
+import 'bindings/provider_binding.dart';
+import 'core/theme/app_theme.dart';
+import 'features/auth/controllers/auth_controller.dart';
+import 'features/localization/controllers/localization_controller.dart';
+import 'features/onboarding/controllers/onboarding_controller.dart';
+import 'features/theme/controllers/theme_controller.dart';
+import 'core/services/notifications/firebase_options.dart';
+import 'core/constants/app_colors.dart';
+import 'core/services/api_service.dart';
+import 'core/services/notifications/notification_service.dart';
+import 'routes/app_router.dart';
+import 'core/utils/helpers/snack_bar_helper.dart';
 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -44,14 +41,13 @@ Future<void> main() async {
     );
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
     final initMsg = await FirebaseMessaging.instance.getInitialMessage();
-    if (initMsg != null) NotificationService.initialMessage = initMsg;
-    final apiService = ApiService();
-    await NotificationService.instance.initialize(apiService: apiService);
+    // if (initMsg != null) NotificationService.initialMessage = initMsg;
+    // final apiService = ApiService();
+    // await NotificationService.instance.initialize(apiService: apiService);
     debugPrint('✅ Firebase initialized successfully');
   } catch (e) {
     debugPrint('❌ Firebase init error: $e');
   }
-
 
   runApp(appProviders(child: MyApp(navigatorKey: navigatorKey)));
 }
@@ -80,9 +76,12 @@ class _MyAppState extends State<MyApp> {
     // Remove this line - don't overwrite:
     // SnackBarHelper.navigatorKey = _routerKey;
 
-    AuthController.routerKey = widget.navigatorKey;  // Use the passed navigatorKey
-    BaseClient.onUnauthorized = () {
-      widget.navigatorKey.currentContext?.go(AppRoutes.login);  // Use the passed navigatorKey
+    AuthController.routerKey =
+        widget.navigatorKey; // Use the passed navigatorKey
+    ApiService.onUnauthorized = () {
+      widget.navigatorKey.currentContext?.go(
+        AppRoutes.login,
+      ); // Use the passed navigatorKey
     };
 
     // Pass navigatorKey to AppRouter
@@ -96,8 +95,9 @@ class _MyAppState extends State<MyApp> {
       return MaterialApp(
         navigatorKey: SnackBarHelper.navigatorKey,
         home: const Scaffold(
-            backgroundColor: AppColor.backgroundColor,
-            body: SizedBox.shrink()),
+          backgroundColor: AppColors.backgroundColor,
+          body: SizedBox.shrink(),
+        ),
       );
     }
 
