@@ -30,22 +30,27 @@ class GoToHome extends StatelessWidget {
                   alignment: Alignment.center,
                   children: [
                     // Removed: Image.asset(ImageAssets.bgIcon),
-                    Container( // Placeholder for bgIcon
+                    Container(
+                      // Placeholder for bgIcon
                       width: 200.w, // Adjust size as needed
                       height: 200.h, // Adjust size as needed
                       decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surfaceVariant, // Placeholder color
+                        color: Theme.of(context)
+                            .colorScheme
+                            .surfaceContainerHighest, // Placeholder color
                         shape: BoxShape.circle,
                       ),
                     ),
                     Positioned(
-                        bottom: 0,
-                        // Removed: child: SvgPicture.asset( origin == "Sign up"?ImageAssets.account:ImageAssets.password)),
-                        child: Icon(
-                          origin == "Sign up" ? Icons.person_add_alt_1 : Icons.lock_reset_rounded,
-                          size: 80.w,
-                          color: Theme.of(context).colorScheme.primary,
-                        ), // Placeholder icon
+                      bottom: 0,
+                      // Removed: child: SvgPicture.asset( origin == "Sign up"?ImageAssets.account:ImageAssets.password)),
+                      child: Icon(
+                        origin == "Sign up"
+                            ? Icons.person_add_alt_1
+                            : Icons.lock_reset_rounded,
+                        size: 80.w,
+                        color: Theme.of(context).colorScheme.primary,
+                      ), // Placeholder icon
                     ),
                   ],
                 ),
@@ -72,7 +77,9 @@ class GoToHome extends StatelessWidget {
                         SizedBox(height: 30.h),
                         CustomButton(
                           height: 60,
-                          title: origin == "Sign up" ? context.watchTr('shop_now') : context.watchTr('done'),
+                          title: origin == "Sign up"
+                              ? context.watchTr('shop_now')
+                              : context.watchTr('done'),
                           onPress: auth.isHomeLoading
                               ? null
                               : () async {

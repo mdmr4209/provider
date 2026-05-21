@@ -14,15 +14,13 @@ class Helpers {
     return DateFormat('dd MMM yyyy').format(date);
   }
 
-  static void showSnackBar(
-      BuildContext context,
-      String message,
-      ) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+  static void showSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 }
+
 // Helpers.hideKeyboard(context);
 // Text(Helpers.formatPrice(99.5)) Output:$99.50
 // Helpers.showSnackBar(

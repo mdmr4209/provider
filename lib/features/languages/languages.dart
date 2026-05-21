@@ -21,7 +21,7 @@ class Languages {
       'search_hint': 'Search products...',
       'get_your': 'Get Your',
       'discount_percent': ' 50% ',
-      'off': 'Off!',
+      'off_banner': 'Off!',
 
       // Auth
       'login': 'Login',
@@ -67,7 +67,8 @@ class Languages {
       'register_now': 'Register now',
       'already_have_account': 'Already have an account?',
       'forgot_password': 'Forgot password',
-      'forget_pass_msg': 'Please enter your email address. You will receive a link to create a new password via email.',
+      'forget_pass_msg':
+          'Please enter your email address. You will receive a link to create a new password via email.',
       'continue_button': 'Continue',
       'reset_pass_msg': 'Enter new password and confirm.',
       'change_password_caps': 'CHANGE PASSWORD',
@@ -82,12 +83,14 @@ class Languages {
       'enter_valid_otp': 'Please enter a valid 5-digit OTP',
       'account_created_msg': 'Your account had beed created\nsuccessfully.',
       'password_reset_success': 'Your password has\nbeen reset!',
-      'password_reset_msg': 'Qui ex aute ipsum duis. Incididunt\nadipisicing voluptate laborum',
+      'password_reset_msg':
+          'Qui ex aute ipsum duis. Incididunt\nadipisicing voluptate laborum',
       'order_failed': 'Sorry! Your Order Has Failed!',
       'congrats_points': 'Congratulations! You get ',
       'points': 'Points',
       'thank_you': 'Thank you!',
-      'something_went_wrong': 'Something went wrong. Please try again\nto continue your order.',
+      'something_went_wrong':
+          'Something went wrong. Please try again\nto continue your order.',
       'view_orders': 'VIEW ORDERS',
       'continue_shopping': 'CONTINUE SHOPPING',
       'try_again': 'TRY AGAIN',
@@ -103,11 +106,14 @@ class Languages {
       'leave_review': 'Leave a review',
       'cart_empty_msg': 'Looks like you haven\'t made\nyour order yet.',
       'onboarding_title_1': 'Welcome to\nElixir-369 !',
-      'onboarding_desc_1': 'Labore sunt culpa excepteur culpa ipsum. Labore occaecat ex nisi mollit.',
+      'onboarding_desc_1':
+          'Labore sunt culpa excepteur culpa ipsum. Labore occaecat ex nisi mollit.',
       'onboarding_title_2': 'Easy Track\nOrder!',
-      'onboarding_desc_2': 'Labore sunt culpa excepteur culpa ipsum. Labore occaecat ex nisi mollit.',
+      'onboarding_desc_2':
+          'Labore sunt culpa excepteur culpa ipsum. Labore occaecat ex nisi mollit.',
       'onboarding_title_3': 'Door to Door\nDelivery!',
-      'onboarding_desc_3': 'Labore sunt culpa excepteur culpa ipsum. Labore occaecat ex nisi mollit.',
+      'onboarding_desc_3':
+          'Labore sunt culpa excepteur culpa ipsum. Labore occaecat ex nisi mollit.',
       'next': 'NEXT',
       'skip': 'Skip',
       'view_all': 'View all',
@@ -161,6 +167,9 @@ class Languages {
       'trending_products': 'المنتجات الرائجة',
       'new_arrivals': 'وصل حديثاً',
       'search_hint': 'البحث عن المنتجات...',
+      'get_your': 'احصل على',
+      'discount_percent': ' خصم 50% ',
+      'off_banner': 'من السعر!',
 
       // Auth
       'login': 'تسجيل الدخول',
@@ -206,7 +215,8 @@ class Languages {
       'register_now': 'سجل الآن',
       'already_have_account': 'لديك حساب بالفعل؟',
       'forgot_password': 'نسيت كلمة المرور',
-      'forget_pass_msg': 'يرجى إدخال عنوان بريدك الإلكتروني. ستتلقى رابطاً لإنشاء كلمة مرور جديدة عبر البريد الإلكتروني.',
+      'forget_pass_msg':
+          'يرجى إدخال عنوان بريدك الإلكتروني. ستتلقى رابطاً لإنشاء كلمة مرور جديدة عبر البريد الإلكتروني.',
       'continue_button': 'استمرار',
       'reset_pass_msg': 'أدخل كلمة المرور الجديدة وقم بتأكيدها.',
       'change_password_caps': 'تغيير كلمة المرور',
@@ -221,12 +231,14 @@ class Languages {
       'enter_valid_otp': 'يرجى إدخال رمز OTP صحيح مكون من 5 أرقام',
       'account_created_msg': 'تم إنشاء حسابك بنجاح.',
       'password_reset_success': 'تم إعادة تعيين كلمة المرور الخاصة بك بنجاح!',
-      'password_reset_msg': 'تمت العملية بنجاح. يمكنك الآن تسجيل الدخول بكلمة المرور الجديدة.',
+      'password_reset_msg':
+          'تمت العملية بنجاح. يمكنك الآن تسجيل الدخول بكلمة المرور الجديدة.',
       'order_failed': 'عذراً! لقد فشل طلبك!',
       'congrats_points': 'تهانينا! لقد حصلت على ',
       'points': 'نقاط',
       'thank_you': 'شكراً لك!',
-      'something_went_wrong': 'حدث خطأ ما. يرجى المحاولة مرة أخرى لمواصلة طلبك.',
+      'something_went_wrong':
+          'حدث خطأ ما. يرجى المحاولة مرة أخرى لمواصلة طلبك.',
       'view_orders': 'عرض الطلبات',
       'continue_shopping': 'مواصلة التسوق',
       'try_again': 'المحاولة مرة أخرى',
@@ -242,11 +254,14 @@ class Languages {
       'leave_review': 'ترك تقييم',
       'cart_empty_msg': 'يبدو أنك لم تقم بإجراء طلبك بعد.',
       'onboarding_title_1': 'مرحباً بكم في\nElixir-369 !',
-      'onboarding_desc_1': 'هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة.',
+      'onboarding_desc_1':
+          'هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة.',
       'onboarding_title_2': 'تتبع سهل\nللطلبات!',
-      'onboarding_desc_2': 'هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة.',
+      'onboarding_desc_2':
+          'هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة.',
       'onboarding_title_3': 'توصيل من الباب\nإلى الباب!',
-      'onboarding_desc_3': 'هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة.',
+      'onboarding_desc_3':
+          'هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة.',
       'next': 'التالي',
       'skip': 'تخطي',
       'view_all': 'عرض الكل',

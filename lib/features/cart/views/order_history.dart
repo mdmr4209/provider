@@ -116,7 +116,9 @@ class OrderHistory extends StatelessWidget {
         padding: EdgeInsets.all(20.r),
         decoration: BoxDecoration(
           // Background turns surface color only when expanded
-          color: isExpanded ? Theme.of(context).colorScheme.surface : Theme.of(context).cardTheme.color,
+          color: isExpanded
+              ? Theme.of(context).colorScheme.surface
+              : Theme.of(context).cardTheme.color,
           border: Border.all(color: Theme.of(context).dividerColor),
           borderRadius: BorderRadius.circular(12.r),
         ),
@@ -126,10 +128,7 @@ class OrderHistory extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  orderId,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
+                Text(orderId, style: Theme.of(context).textTheme.bodyLarge),
                 Row(
                   children: [
                     Text(
@@ -157,15 +156,12 @@ class OrderHistory extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  date,
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
+                Text(date, style: Theme.of(context).textTheme.bodySmall),
                 Text(
                   price,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -174,8 +170,16 @@ class OrderHistory extends StatelessWidget {
             if (isExpanded) ...[
               Divider(height: 30.h, color: Theme.of(context).dividerColor),
               _productLine(context, 'Foundation Beshop', '1 x \$401.90'),
-              _productLine(context, 'Hair mask with oat extract', '1 x \$125.95'),
-              _productLine(context, 'Spray balm with oat extract', '1 x \$60.95'),
+              _productLine(
+                context,
+                'Hair mask with oat extract',
+                '1 x \$125.95',
+              ),
+              _productLine(
+                context,
+                'Spray balm with oat extract',
+                '1 x \$60.95',
+              ),
               SizedBox(height: 20.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -184,7 +188,8 @@ class OrderHistory extends StatelessWidget {
                     context,
                     Icons.refresh,
                     context.watchTr('repeat_order'),
-                    Theme.of(context).textTheme.bodyLarge?.color ?? Colors.black,
+                    Theme.of(context).textTheme.bodyLarge?.color ??
+                        Colors.black,
                   ),
                   _actionButton(
                     context,
@@ -208,21 +213,20 @@ class OrderHistory extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
-            child: Text(
-              name,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
+            child: Text(name, style: Theme.of(context).textTheme.bodySmall),
           ),
-          Text(
-            qtyPrice,
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
+          Text(qtyPrice, style: Theme.of(context).textTheme.bodySmall),
         ],
       ),
     );
   }
 
-  Widget _actionButton(BuildContext context, IconData icon, String label, Color color) {
+  Widget _actionButton(
+    BuildContext context,
+    IconData icon,
+    String label,
+    Color color,
+  ) {
     return Row(
       children: [
         Icon(icon, size: 16.r, color: color),

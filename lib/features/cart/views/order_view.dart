@@ -185,7 +185,10 @@ class _OrderScreenState extends State<OrderScreen> {
         asset,
         width: 24.w,
         height: 24.h,
-        colorFilter: ColorFilter.mode(Theme.of(context).iconTheme.color ?? Colors.black, BlendMode.srcIn),
+        colorFilter: ColorFilter.mode(
+          Theme.of(context).iconTheme.color ?? Colors.black,
+          BlendMode.srcIn,
+        ),
       ),
     );
   }
@@ -282,18 +285,24 @@ class _CartItemCard extends StatelessWidget {
                         if (item.originalPrice != null) ...[
                           Text(
                             '\$${item.originalPrice!.toStringAsFixed(2)}',
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              decoration: TextDecoration.lineThrough,
-                            ),
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(
+                                  decoration: TextDecoration.lineThrough,
+                                ),
                           ),
                           SizedBox(width: 6.w),
                         ],
                         Text(
                           '\$${item.price.toStringAsFixed(2)}',
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: item.isOnSale ? Theme.of(context).colorScheme.primary : Theme.of(context).textTheme.bodyLarge?.color,
-                            fontWeight: FontWeight.w700,
-                          ),
+                          style: Theme.of(context).textTheme.bodyLarge
+                              ?.copyWith(
+                                color: item.isOnSale
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Theme.of(
+                                        context,
+                                      ).textTheme.bodyLarge?.color,
+                                fontWeight: FontWeight.w700,
+                              ),
                         ),
                       ],
                     ),
@@ -327,7 +336,10 @@ class _CartItemCard extends StatelessWidget {
           children: [
             Text(
               'Remove "${item.name}"?',
-              style: GoogleFonts.tenorSans(fontSize: 16.sp, color: Theme.of(context).textTheme.bodyLarge?.color),
+              style: GoogleFonts.tenorSans(
+                fontSize: 16.sp,
+                color: Theme.of(context).textTheme.bodyLarge?.color,
+              ),
             ),
             SizedBox(height: 20.h),
             Row(
@@ -395,14 +407,19 @@ class _CartItemCard extends StatelessWidget {
             ),
             content: Text(
               'Remove "${item.name}" from cart?',
-              style: GoogleFonts.lato(fontSize: 13.sp, color: Theme.of(context).disabledColor),
+              style: GoogleFonts.lato(
+                fontSize: 13.sp,
+                color: Theme.of(context).disabledColor,
+              ),
             ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context, false),
                 child: Text(
                   'Cancel',
-                  style: GoogleFonts.lato(color: Theme.of(context).disabledColor),
+                  style: GoogleFonts.lato(
+                    color: Theme.of(context).disabledColor,
+                  ),
                 ),
               ),
               TextButton(
@@ -505,7 +522,9 @@ class _PromoInputRow extends StatelessWidget {
                   height: 52.h,
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: hasError ? Colors.redAccent : Theme.of(context).dividerColor,
+                      color: hasError
+                          ? Colors.redAccent
+                          : Theme.of(context).dividerColor,
                     ),
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(4.r),
@@ -515,7 +534,10 @@ class _PromoInputRow extends StatelessWidget {
                   child: TextField(
                     controller: controller,
                     textCapitalization: TextCapitalization.characters,
-                    style: GoogleFonts.lato(fontSize: 14.sp, color: Theme.of(context).textTheme.bodyLarge?.color),
+                    style: GoogleFonts.lato(
+                      fontSize: 14.sp,
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
+                    ),
                     decoration: InputDecoration(
                       hintText: 'Enter promocode',
                       hintStyle: GoogleFonts.lato(
@@ -561,9 +583,9 @@ class _PromoInputRow extends StatelessWidget {
               padding: EdgeInsets.only(top: 6.h, left: 4.w),
               child: Text(
                 'Invalid promocode. Try DISCOUNT23',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Colors.redAccent,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: Colors.redAccent),
               ),
             ),
         ],
@@ -592,7 +614,11 @@ class _PromoAppliedBadge extends StatelessWidget {
           const Spacer(),
           GestureDetector(
             onTap: onRemove,
-            child: Icon(Icons.close, color: Theme.of(context).disabledColor, size: 18.r),
+            child: Icon(
+              Icons.close,
+              color: Theme.of(context).disabledColor,
+              size: 18.r,
+            ),
           ),
         ],
       ),
@@ -630,10 +656,18 @@ class _SummaryCard extends StatelessWidget {
               ),
             ],
             SizedBox(height: 10.h),
-            _SummaryRow(label: 'Delivery', value: 'Free', valueColor: Colors.green),
+            _SummaryRow(
+              label: 'Delivery',
+              value: 'Free',
+              valueColor: Colors.green,
+            ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 12.h),
-              child: Divider(color: Theme.of(context).dividerColor, height: 1, thickness: 1),
+              child: Divider(
+                color: Theme.of(context).dividerColor,
+                height: 1,
+                thickness: 1,
+              ),
             ),
             _SummaryRow(
               label: 'Total',
@@ -668,7 +702,9 @@ class _SummaryRow extends StatelessWidget {
         Text(
           label,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: isBold ? Theme.of(context).textTheme.bodyLarge?.color : Theme.of(context).textTheme.bodySmall?.color,
+            color: isBold
+                ? Theme.of(context).textTheme.bodyLarge?.color
+                : Theme.of(context).textTheme.bodySmall?.color,
             fontWeight: isBold ? FontWeight.w700 : FontWeight.w400,
           ),
         ),

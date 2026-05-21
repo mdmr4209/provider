@@ -197,7 +197,9 @@ class _ProductViewState extends State<ProductView> {
                                   width: 280.w,
                                   child: Text(
                                     'Body Hair Depilatory Cream',
-                                    style: Theme.of(context).textTheme.titleLarge,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.titleLarge,
                                   ),
                                 ),
                                 Container(
@@ -223,9 +225,7 @@ class _ProductViewState extends State<ProductView> {
                                     height: 20.r,
                                     clipBehavior: Clip.antiAlias,
                                     decoration: BoxDecoration(),
-                                    child: SvgPicture.asset(
-                                      AppAssets.wishlist,
-                                    ),
+                                    child: SvgPicture.asset(AppAssets.wishlist),
                                   ),
                                 ),
                               ],
@@ -236,9 +236,12 @@ class _ProductViewState extends State<ProductView> {
                               children: [
                                 Text(
                                   context.watchTr('in_stock'),
-                                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                                    color: Theme.of(context).colorScheme.secondary,
-                                  ),
+                                  style: Theme.of(context).textTheme.labelLarge
+                                      ?.copyWith(
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.secondary,
+                                      ),
                                 ),
                                 Row(
                                   spacing: 4.w,
@@ -250,7 +253,9 @@ class _ProductViewState extends State<ProductView> {
                                     ),
                                     Text(
                                       '5.0',
-                                      style: Theme.of(context).textTheme.bodySmall,
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.bodySmall,
                                     ),
                                   ],
                                 ),
@@ -269,7 +274,9 @@ class _ProductViewState extends State<ProductView> {
                                   height: 40.h,
                                   clipBehavior: Clip.antiAlias,
                                   decoration: ShapeDecoration(
-                                    color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.surfaceContainerHighest,
                                     shape: RoundedRectangleBorder(
                                       side: BorderSide(
                                         width: 1.w,
@@ -289,7 +296,9 @@ class _ProductViewState extends State<ProductView> {
                                         width: 26.w,
                                         child: Text(
                                           '1',
-                                          style: Theme.of(context).textTheme.bodyMedium,
+                                          style: Theme.of(
+                                            context,
+                                          ).textTheme.bodyMedium,
                                         ),
                                       ),
                                       IconButton(
@@ -345,7 +354,10 @@ class _ProductViewState extends State<ProductView> {
           // ── Apply Filters Button ───────────────────────────────────
           Padding(
             padding: EdgeInsets.all(16.w),
-            child: CustomButton(onPress: () async {}, title: context.watchTr('add_to_cart')),
+            child: CustomButton(
+              onPress: () async {},
+              title: context.watchTr('add_to_cart'),
+            ),
           ),
         ],
       ),
@@ -413,10 +425,7 @@ class _ProductViewState extends State<ProductView> {
                     color: AppColors.primaryColor, // Theme primary color
                   ),
                   SizedBox(width: 4.w),
-                  Text(
-                    '5.0',
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
+                  Text('5.0', style: Theme.of(context).textTheme.bodySmall),
                 ],
               ),
             ],
@@ -451,10 +460,7 @@ class _ProductViewState extends State<ProductView> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              title,
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
+            Text(title, style: Theme.of(context).textTheme.titleLarge),
             InkWell(
               onTap: () {
                 context.push(AppRoutes.review);
@@ -514,7 +520,10 @@ class _ProductViewState extends State<ProductView> {
         asset,
         width: 24.w,
         height: 24.h,
-        colorFilter: ColorFilter.mode(Theme.of(context).iconTheme.color!, BlendMode.srcIn),
+        colorFilter: ColorFilter.mode(
+          Theme.of(context).iconTheme.color!,
+          BlendMode.srcIn,
+        ),
       ),
     );
   }

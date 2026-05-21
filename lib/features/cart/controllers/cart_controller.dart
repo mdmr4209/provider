@@ -6,9 +6,6 @@ import '../models/shipping_address.dart';
 
 // ─── Models ──────────────────────────────────────────────────────────
 
-
-
-
 // ─── Provider ────────────────────────────────────────────────────────
 class CartController extends ChangeNotifier {
   /// Set this from main.dart: HomeProvider.routerKey = _routerKey;
@@ -22,11 +19,7 @@ class CartController extends ChangeNotifier {
       originalPrice: 265.95,
       isOnSale: true,
     ),
-    CartItem(
-      id: '2',
-      name: 'Hair mask with oat extract',
-      price: 125.95,
-    ),
+    CartItem(id: '2', name: 'Hair mask with oat extract', price: 125.95),
   ];
 
   List<CartItem> get items => List.unmodifiable(_items);
@@ -39,18 +32,12 @@ class CartController extends ChangeNotifier {
   String get promoInput => _promoInput;
   bool get promoApplied => _promoApplied;
 
-  static const List<String> _validCodes = [
-    'DISCOUNT23',
-    'SAVE10',
-    'PROMO10'
-  ];
+  static const List<String> _validCodes = ['DISCOUNT23', 'SAVE10', 'PROMO10'];
 
   // Totals
-  double get subtotal =>
-      _items.fold(0, (sum, item) => sum + item.totalPrice);
+  double get subtotal => _items.fold(0, (sum, item) => sum + item.totalPrice);
 
-  double get discountAmount =>
-      _promoApplied ? subtotal * _discountPercent : 0;
+  double get discountAmount => _promoApplied ? subtotal * _discountPercent : 0;
 
   double get total => subtotal - discountAmount;
 
@@ -60,13 +47,18 @@ class CartController extends ChangeNotifier {
   // Shipping addresses
   final List<ShippingAddress> addresses = const [
     ShippingAddress(
-        label: 'Home', address: '8000 S Kirkland Ave, Chicago, IL 6065...'),
+      label: 'Home',
+      address: '8000 S Kirkland Ave, Chicago, IL 6065...',
+    ),
     ShippingAddress(
-        label: 'Work', address: '8000 S Kirkland Ave, Chicago, IL 6065...'),
+      label: 'Work',
+      address: '8000 S Kirkland Ave, Chicago, IL 6065...',
+    ),
     ShippingAddress(
-        label: 'Other', address: '8000 S Kirkland Ave, Chicago, IL 6065...'),
-    ShippingAddress(
-        label: '', address: '3646 S 58th Ave, Cicero, IL 608...'),
+      label: 'Other',
+      address: '8000 S Kirkland Ave, Chicago, IL 6065...',
+    ),
+    ShippingAddress(label: '', address: '3646 S 58th Ave, Cicero, IL 608...'),
   ];
 
   int _selectedAddressIndex = 3;

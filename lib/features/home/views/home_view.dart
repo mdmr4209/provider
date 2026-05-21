@@ -42,9 +42,15 @@ class HomeView extends StatelessWidget {
                             style: TextStyle(fontSize: 10.sp),
                           ),
                           isLabelVisible: count > 0,
-                          backgroundColor: Theme.of(context).colorScheme.primary,
+                          backgroundColor: Theme.of(
+                            context,
+                          ).colorScheme.primary,
                           offset: Offset(-5.w, -10.h),
-                          child: _headerIcon(context, AppAssets.cart, onTap: () {}),
+                          child: _headerIcon(
+                            context,
+                            AppAssets.cart,
+                            onTap: () {},
+                          ),
                         ),
                       ],
                     ),
@@ -61,19 +67,21 @@ class HomeView extends StatelessWidget {
                         width: 234.w,
                         child: Text(
                           context.watchTr('beauty_and_care'),
-                          style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                            height: 1.20,
-                          ),
+                          style: Theme.of(
+                            context,
+                          ).textTheme.displayLarge?.copyWith(height: 1.20),
                         ),
                       ),
                       SizedBox(height: 4.h),
                       SizedBox(
                         width: 213.w,
                         child: Text(
-                          context.watchTr('onboarding_desc_1'), // Reusing a similar message
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            height: 1.70,
-                          ),
+                          context.watchTr(
+                            'onboarding_desc_1',
+                          ), // Reusing a similar message
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodyMedium?.copyWith(height: 1.70),
                         ),
                       ),
                       CustomButton(
@@ -116,7 +124,9 @@ class HomeView extends StatelessWidget {
                   Container(
                     width: double.infinity,
                     height: 238.h,
-                    color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.surfaceContainerHighest,
                     padding: EdgeInsets.all(20.w),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -127,22 +137,25 @@ class HomeView extends StatelessWidget {
                             children: [
                               TextSpan(
                                 text: context.watchTr('get_your'),
-                                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                  height: 1.20,
-                                ),
+                                style: Theme.of(
+                                  context,
+                                ).textTheme.titleLarge?.copyWith(height: 1.20),
                               ),
                               TextSpan(
                                 text: context.watchTr('discount_percent'),
-                                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                  color: Theme.of(context).colorScheme.secondary,
-                                  height: 1.20,
-                                ),
+                                style: Theme.of(context).textTheme.titleLarge
+                                    ?.copyWith(
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.secondary,
+                                      height: 1.20,
+                                    ),
                               ),
                               TextSpan(
-                                text: context.watchTr('off'),
-                                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                  height: 1.20,
-                                ),
+                                text: context.watchTr('off_banner'),
+                                style: Theme.of(
+                                  context,
+                                ).textTheme.titleLarge?.copyWith(height: 1.20),
                               ),
                             ],
                           ),
@@ -152,9 +165,9 @@ class HomeView extends StatelessWidget {
                           width: 213.w,
                           child: Text(
                             context.watchTr('onboarding_desc_1'),
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              height: 1.70,
-                            ),
+                            style: Theme.of(
+                              context,
+                            ).textTheme.bodyMedium?.copyWith(height: 1.70),
                           ),
                         ),
                         SizedBox(height: 20.h),
@@ -247,14 +260,22 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _headerIcon(BuildContext context, String asset, {required VoidCallback onTap}) {
+  Widget _headerIcon(
+    BuildContext context,
+    String asset, {
+    required VoidCallback onTap,
+  }) {
     return InkWell(
       onTap: onTap,
       child: SvgPicture.asset(
         asset,
         width: 24.w,
         height: 24.h,
-        colorFilter: ColorFilter.mode(Theme.of(context).iconTheme.color ?? Theme.of(context).colorScheme.onSurface, BlendMode.srcIn),
+        colorFilter: ColorFilter.mode(
+          Theme.of(context).iconTheme.color ??
+              Theme.of(context).colorScheme.onSurface,
+          BlendMode.srcIn,
+        ),
       ),
     );
   }
@@ -269,9 +290,9 @@ class HomeView extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  height: 1.20,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(height: 1.20),
               ),
               Text(
                 context.watchTr('view_all'),
@@ -283,7 +304,11 @@ class HomeView extends StatelessWidget {
               ),
             ],
           ),
-          Divider(thickness: 2.h, color: Theme.of(context).dividerColor, height: 10.h),
+          Divider(
+            thickness: 2.h,
+            color: Theme.of(context).dividerColor,
+            height: 10.h,
+          ),
         ],
       ),
     );
@@ -342,9 +367,9 @@ class HomeView extends StatelessWidget {
                       Text(
                         '5.0',
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                           color: Colors.white,
-                           fontWeight: FontWeight.w900,
-                         ),
+                          color: Colors.white,
+                          fontWeight: FontWeight.w900,
+                        ),
                       ),
                     ],
                   ),
@@ -436,18 +461,18 @@ class HomeView extends StatelessWidget {
                       Text(
                         product.updatePrice,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                           color: Theme.of(context).disabledColor,
-                           decoration: TextDecoration.lineThrough,
-                         ),
+                          color: Theme.of(context).disabledColor,
+                          decoration: TextDecoration.lineThrough,
+                        ),
                       ),
 
                     Text(
                       product.price,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                         color: product.updatePrice != '0'
-                             ? Theme.of(context).colorScheme.primary
-                             : Theme.of(context).textTheme.titleMedium?.color,
-                       ),
+                        color: product.updatePrice != '0'
+                            ? Theme.of(context).colorScheme.primary
+                            : Theme.of(context).textTheme.titleMedium?.color,
+                      ),
                     ),
                   ],
                 ),

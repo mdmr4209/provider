@@ -32,7 +32,10 @@ class ForgetPasswordView extends StatelessWidget {
                       onTap: () {
                         Navigator.pop(context);
                       },
-                      child: Icon(Icons.arrow_back_ios_new, color: Theme.of(context).iconTheme.color),
+                      child: Icon(
+                        Icons.arrow_back_ios_new,
+                        color: Theme.of(context).iconTheme.color,
+                      ),
                     ),
                     Spacer(),
                     Text(
@@ -54,7 +57,9 @@ class ForgetPasswordView extends StatelessWidget {
                     // Removed:   image: AssetImage(ImageAssets.background2),
                     // Removed:   fit: BoxFit.cover,
                     // Removed: ),
-                    color: Theme.of(context).colorScheme.surface, // Placeholder color
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.surface, // Placeholder color
                   ),
                   child: Stack(
                     alignment: Alignment.center,
@@ -66,14 +71,14 @@ class ForgetPasswordView extends StatelessWidget {
                             SizedBox(height: 30.h),
                             SizedBox(
                               width: 295.w,
-                                child: Text(
-                                  context.watchTr('forget_pass_msg'),
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                ),
+                              child: Text(
+                                context.watchTr('forget_pass_msg'),
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
                             ),
                             SizedBox(height: 30.h),
                             InputTextWidget(
-                               hintText: context.watchTr('enter_your_email'),
+                              hintText: context.watchTr('enter_your_email'),
                               controller: auth.forgetEmailController,
                               onChanged: (v) =>
                                   auth.forgetEmailController.text = v,
@@ -99,7 +104,7 @@ class ForgetPasswordView extends StatelessWidget {
                                       }
                                     },
                               loading: auth.isLoading,
-                               title: context.watchTr('continue_button'),
+                              title: context.watchTr('continue_button'),
                               fontWeight: FontWeight.w700,
                             ),
                           ],

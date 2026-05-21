@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../Languages/languages.dart';
+import '../../languages/languages.dart';
 
 class LocalizationController with ChangeNotifier {
   static const String _localeKey = "app_locale";
@@ -38,22 +38,22 @@ class LocalizationController with ChangeNotifier {
 
   String translate(String key) {
     final String localeKey = _locale.toString(); // e.g. 'en_US'
-    
+
     // Try exact match (e.g. 'en_US')
-    if (Languages.keys.containsKey(localeKey) && 
+    if (Languages.keys.containsKey(localeKey) &&
         Languages.keys[localeKey]!.containsKey(key)) {
       return Languages.keys[localeKey]![key]!;
     }
-    
+
     // Try language code only (e.g. 'en')
     final String langCode = _locale.languageCode;
-    if (Languages.keys.containsKey(langCode) && 
+    if (Languages.keys.containsKey(langCode) &&
         Languages.keys[langCode]!.containsKey(key)) {
       return Languages.keys[langCode]![key]!;
     }
 
     // Default to 'en_US' if not found
-    if (Languages.keys.containsKey('en_US') && 
+    if (Languages.keys.containsKey('en_US') &&
         Languages.keys['en_US']!.containsKey(key)) {
       return Languages.keys['en_US']![key]!;
     }

@@ -19,7 +19,9 @@ class SearchView extends StatelessWidget {
         children: [
           Container(
             width: double.infinity,
-            decoration: BoxDecoration(color: Theme.of(context).colorScheme.surfaceContainerHighest),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surfaceContainerHighest,
+            ),
             child: SafeArea(
               child: SizedBox(
                 height: 47.h,
@@ -57,10 +59,14 @@ class SearchView extends StatelessWidget {
                           InputTextWidget(
                             width: 260.w,
                             height: 20.h,
-                            contentPadding: EdgeInsets.symmetric(horizontal: 0.w),
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 0.w,
+                            ),
                             onChanged: (onChanged) {},
                             hintText: context.watchTr('search'),
-                            backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+                            backgroundColor: Theme.of(
+                              context,
+                            ).colorScheme.surfaceContainerHighest,
                           ),
                         ],
                       ),

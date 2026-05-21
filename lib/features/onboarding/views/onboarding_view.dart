@@ -107,7 +107,9 @@ class _OnboardingViewState extends State<OnboardingView> {
                   bottom: 0,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(onboardingData(context).length, (index) {
+                    children: List.generate(onboardingData(context).length, (
+                      index,
+                    ) {
                       return Padding(
                         padding: EdgeInsets.symmetric(horizontal: 4.w),
                         child: Container(
@@ -116,8 +118,17 @@ class _OnboardingViewState extends State<OnboardingView> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5.r),
                             color: index == _currentPage.toInt()
-                                ? Theme.of(context).bottomNavigationBarTheme.selectedIconTheme?.color ?? Theme.of(context).colorScheme.primary
-                                : (Theme.of(context).bottomNavigationBarTheme.unselectedIconTheme?.color ?? Colors.grey).withAlpha(100),
+                                ? Theme.of(context)
+                                          .bottomNavigationBarTheme
+                                          .selectedIconTheme
+                                          ?.color ??
+                                      Theme.of(context).colorScheme.primary
+                                : (Theme.of(context)
+                                              .bottomNavigationBarTheme
+                                              .unselectedIconTheme
+                                              ?.color ??
+                                          Colors.grey)
+                                      .withAlpha(100),
                           ),
                         ),
                       );

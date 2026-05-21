@@ -6,12 +6,13 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-// Removed: import '../../../../res/components/api_service.dart';
+// ...existing imports...
+import '../../../core/exceptions/app_exceptions.dart';
+import '../../../core/exceptions/exception_handler.dart';
 import '../../../core/services/api_service.dart';
 import '../../../core/utils/helpers/snack_bar_helper.dart';
 import '../../../core/constants/api_constants.dart';
 import '../../../routes/app_router.dart';
-
 
 class AuthController extends ChangeNotifier {
   // Removed final ApiService apiService;
@@ -21,7 +22,6 @@ class AuthController extends ChangeNotifier {
   AuthController() {
     checkLoginStatus();
   }
-
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -44,6 +44,9 @@ class AuthController extends ChangeNotifier {
   int _secondsRemaining = 60;
   String _formattedTime = '01:00';
   Timer? _timer;
+
+  // Exception handling
+  AppException? _error;
 
   // ── Text controllers ───────────────────────────────────────────────────────
   final TextEditingController nameController = TextEditingController();
@@ -71,6 +74,9 @@ class AuthController extends ChangeNotifier {
   int get secondsRemaining => _secondsRemaining;
   String get formattedTime => _formattedTime;
 
+  // Exception handling getter
+  AppException? get error => _error;
+
   // ── Toggle helpers ─────────────────────────────────────────────────────────
   void toggleRemembered() {
     _isRemembered = !_isRemembered;
@@ -79,6 +85,11 @@ class AuthController extends ChangeNotifier {
 
   void togglePasswordVisibility() {
     _isPasswordVisible = !_isPasswordVisible;
+    notifyListeners();
+  }
+
+  void clearError() {
+    _error = null;
     notifyListeners();
   }
 
@@ -159,8 +170,10 @@ class AuthController extends ChangeNotifier {
 
       if (response != null && response.statusCode == 200) {
         final data = response.data;
-        _accessToken = data['access'] as String? ?? data['access_token'] as String;
-        _refreshToken = data['refresh'] as String? ?? data['refresh_token'] as String;
+        _accessToken =
+            data['access'] as String? ?? data['access_token'] as String;
+        _refreshToken =
+            data['refresh'] as String? ?? data['refresh_token'] as String;
         await ApiService.storeTokens(
           accessToken: _accessToken,
           refreshToken: _refreshToken,
@@ -223,6 +236,9 @@ class AuthController extends ChangeNotifier {
 
     try {
       _setLoading(true);
+      _error = null;
+      notifyListeners();
+
       final response = await ApiService.post(
         api: ApiConstants.loginUrl,
         data: {'email': email, 'password': password},
@@ -237,7 +253,9 @@ class AuthController extends ChangeNotifier {
         final message = data['message'] ?? 'Login successful';
 
         await ApiService.storeTokens(
-            accessToken: _accessToken, refreshToken: _refreshToken);
+          accessToken: _accessToken,
+          refreshToken: _refreshToken,
+        );
         await ApiService.store(key: 'verify', value: verify);
         await ApiService.store(key: 'user_id', value: _id);
 
@@ -245,20 +263,22 @@ class AuthController extends ChangeNotifier {
 
         if (verify == 'yes') {
           _isLoggedIn = true;
-          _isSignedIn = true; // Also set isSignedIn on successful login
-          notifyListeners(); // GoRouter redirect → /home
+          _isSignedIn = true;
+          notifyListeners();
         } else {
-          // If not verified, maybe redirect to OTP or a verification screen
-          _go(AppRoutes.otpVerify, extra: 'Login'); // Assuming OTP verification is next
+          _go(AppRoutes.otpVerify, extra: 'Login');
         }
       } else {
-        // Error message already shown by ApiService's interceptor
-        _errorMessage = response?.data?['error']?.toString() ?? response?.data?['message']?.toString() ?? 'Invalid credentials';
+        _errorMessage =
+            response?.data?['error']?.toString() ??
+            response?.data?['message']?.toString() ??
+            'Invalid credentials';
         notifyListeners();
       }
     } catch (e) {
       debugPrint('login error: $e');
-      // SnackBar already shown by ApiService's _handleDioError or _processResponse
+      _error = ExceptionHandler.handleException(e);
+      notifyListeners();
     } finally {
       _setLoading(false);
     }
@@ -269,6 +289,9 @@ class AuthController extends ChangeNotifier {
     debugPrint('signup: $email');
     try {
       _setLoading(true);
+      _error = null;
+      notifyListeners();
+
       final response = await ApiService.post(
         api: ApiConstants.signup,
         data: {'email': email},
@@ -282,11 +305,16 @@ class AuthController extends ChangeNotifier {
         );
         _go(AppRoutes.otpVerify, extra: 'Signup');
       } else {
-        _errorMessage = response?.data?['error']?.toString() ?? response?.data?['message']?.toString() ?? 'Signup failed';
+        _errorMessage =
+            response?.data?['error']?.toString() ??
+            response?.data?['message']?.toString() ??
+            'Signup failed';
         notifyListeners();
       }
     } catch (e) {
       debugPrint('signup error: $e');
+      _error = ExceptionHandler.handleException(e);
+      notifyListeners();
     } finally {
       _setLoading(false);
     }
@@ -297,6 +325,9 @@ class AuthController extends ChangeNotifier {
     debugPrint('forget: $email');
     try {
       _setLoading(true);
+      _error = null;
+      notifyListeners();
+
       final response = await ApiService.post(
         api: ApiConstants.forget,
         data: {'email': email},
@@ -305,18 +336,23 @@ class AuthController extends ChangeNotifier {
       if (response != null && response.statusCode == 201) {
         _signupEmail = email;
         notifyListeners();
-        showSuccessSnackBar(message: response.data?['message'] ?? 'OTP sent to your email');
+        showSuccessSnackBar(
+          message: response.data?['message'] ?? 'OTP sent to your email',
+        );
         _go(AppRoutes.otpVerify, extra: 'Forget');
       } else {
-        _errorMessage = response?.data?['error']?.toString() ?? response?.data?['message']?.toString() ?? 'Request failed';
+        _errorMessage =
+            response?.data?['error']?.toString() ??
+            response?.data?['message']?.toString() ??
+            'Request failed';
         notifyListeners();
-        // Even on failure, if the server indicates OTP sent (or a client side error preventing it), still navigate.
-        // This is a design choice; if strict failure means no navigation, remove this line.
         _go(AppRoutes.otpVerify, extra: 'Forget');
       }
     } catch (e) {
       debugPrint('forget error: $e');
-      _go(AppRoutes.otpVerify, extra: 'Forget'); // Still navigate to OTP view to give user a chance to input OTP
+      _error = ExceptionHandler.handleException(e);
+      notifyListeners();
+      _go(AppRoutes.otpVerify, extra: 'Forget');
     } finally {
       _setLoading(false);
     }
@@ -328,6 +364,9 @@ class AuthController extends ChangeNotifier {
     debugPrint('verifyOtp email=$email otp=$otp');
     try {
       _setLoading(true);
+      _error = null;
+      notifyListeners();
+
       final response = await ApiService.post(
         api: ApiConstants.verifyOtp,
         data: {'email': email, 'otp': otp},
@@ -335,15 +374,20 @@ class AuthController extends ChangeNotifier {
 
       if (response != null && response.statusCode == 200) {
         showSuccessSnackBar(message: 'OTP Verified. Now set your password.');
-        _isOtpVerified = true; // Mark OTP as verified
+        _isOtpVerified = true;
         notifyListeners();
         _go(AppRoutes.changePass, extra: origin ?? 'Signup');
       } else {
-        _errorMessage = response?.data?['error']?.toString() ?? response?.data?['message']?.toString() ?? 'Invalid OTP';
+        _errorMessage =
+            response?.data?['error']?.toString() ??
+            response?.data?['message']?.toString() ??
+            'Invalid OTP';
         notifyListeners();
       }
     } catch (e) {
       debugPrint('verifyOtp error: $e');
+      _error = ExceptionHandler.handleException(e);
+      notifyListeners();
     } finally {
       _setLoading(false);
     }
@@ -358,20 +402,30 @@ class AuthController extends ChangeNotifier {
     debugPrint('resendOtp email=$email');
     try {
       _setLoading(true);
+      _error = null;
+      notifyListeners();
+
       final response = await ApiService.post(
         api: ApiConstants.resendOtp,
         data: {'email': email},
       );
 
       if (response != null && response.statusCode == 200) {
-        showSuccessSnackBar(message: response.data?['message'] ?? 'OTP resent successfully.');
-        startTimer(); // Restart the timer
+        showSuccessSnackBar(
+          message: response.data?['message'] ?? 'OTP resent successfully.',
+        );
+        startTimer();
       } else {
-        _errorMessage = response?.data?['error']?.toString() ?? response?.data?['message']?.toString() ?? 'Failed to resend OTP.';
+        _errorMessage =
+            response?.data?['error']?.toString() ??
+            response?.data?['message']?.toString() ??
+            'Failed to resend OTP.';
         notifyListeners();
       }
     } catch (e) {
       debugPrint('resendOtp error: $e');
+      _error = ExceptionHandler.handleException(e);
+      notifyListeners();
     } finally {
       _setLoading(false);
     }
@@ -383,6 +437,9 @@ class AuthController extends ChangeNotifier {
     debugPrint('setPassword email=$email');
     try {
       _setLoading(true);
+      _error = null;
+      notifyListeners();
+
       final response = await ApiService.post(
         api: ApiConstants.setPassword,
         data: {'email': email, 'password': password},
@@ -407,27 +464,31 @@ class AuthController extends ChangeNotifier {
         _accessToken = access;
         _refreshToken = refresh ?? '';
         _isSignedIn = true;
-        _isLoggedIn = verify == 'yes'; // Update isLoggedIn based on verification
+        _isLoggedIn = verify == 'yes';
         notifyListeners();
         showSuccessSnackBar(message: message);
-        await registerFcmToken(); // Register FCM after setting password and logging in
+        await registerFcmToken();
 
         if (origin == 'Signup') {
-          _go(AppRoutes.home); // Assuming home is the next step after signup & set password
+          _go(AppRoutes.home);
         } else if (origin == 'Forget') {
-          _isLoggedIn = true; // If forget and set password, they are logged in
+          _isLoggedIn = true;
           notifyListeners();
           _go(AppRoutes.home);
         } else {
-          // Default navigation if origin is not specified
           _go(AppRoutes.home);
         }
       } else {
-        _errorMessage = response?.data?['error']?.toString() ?? response?.data?['message']?.toString() ?? 'Failed to set password';
+        _errorMessage =
+            response?.data?['error']?.toString() ??
+            response?.data?['message']?.toString() ??
+            'Failed to set password';
         notifyListeners();
       }
     } catch (e) {
       debugPrint('setPassword error: $e');
+      _error = ExceptionHandler.handleException(e);
+      notifyListeners();
     } finally {
       _setLoading(false);
     }
@@ -467,19 +528,19 @@ class AuthController extends ChangeNotifier {
       final fcm = await ApiService.getStored(key: 'fcm_token');
       final access = await ApiService.getAccessToken();
       if (fcm == null || access == null) return;
-      
+
       final response = await ApiService.post(
         api: ApiConstants.registerFcmTokenUrl,
-        data: {
-          'fcm_token': fcm,
-        },
+        data: {'fcm_token': fcm},
         auth: true, // This endpoint requires authentication
       );
 
       if (response != null && response.statusCode == 200) {
-         debugPrint('FCM register successful: ${response.statusCode}');
+        debugPrint('FCM register successful: ${response.statusCode}');
       } else {
-         debugPrint('FCM register failed: ${response?.statusCode} - ${response?.data}');
+        debugPrint(
+          'FCM register failed: ${response?.statusCode} - ${response?.data}',
+        );
       }
     } catch (e) {
       debugPrint('registerFcmToken error: $e');

@@ -7,7 +7,7 @@ extension LocalizationExtension on BuildContext {
     return read<LocalizationController>().translate(key);
   }
 
-  // If we want it to react to changes, we can use watch, but usually 
+  // If we want it to react to changes, we can use watch, but usually
   // we use a Consumer or Provider.of(context) in the build method.
   // For convenience in some places, we might want a 'watch' version.
   String watchTr(String key) {

@@ -5,7 +5,6 @@ import 'package:flutter_svg/svg.dart';
 
 import '../constants/app_colors.dart';
 
-
 class InputTextWidget extends StatefulWidget {
   final TextEditingController? controller;
   final String? hintText;
@@ -130,7 +129,10 @@ class InputTextWidget extends StatefulWidget {
     this.errorBorderColor = AppColors.redColor,
     this.borderWidth = 1,
     this.borderRadius = 12,
-    this.contentPadding = const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+    this.contentPadding = const EdgeInsets.symmetric(
+      horizontal: 16,
+      vertical: 12,
+    ),
     this.shadow = false,
     this.shadowColor,
     this.gradient,
@@ -225,7 +227,8 @@ class _InputTextWidgetState extends State<InputTextWidget> {
       padding: EdgeInsets.only(bottom: widget.titlePaddingBottom.h),
       child: Text(
         widget.title!,
-        style: widget.titleStyle ??
+        style:
+            widget.titleStyle ??
             TextStyle(
               color: widget.titleColor,
               fontSize: widget.titleFontSize.sp,
@@ -237,7 +240,9 @@ class _InputTextWidgetState extends State<InputTextWidget> {
   }
 
   Widget _buildInputField() {
-    final Color effectiveBorderColor = _isFocused ? widget.focusedBorderColor : widget.borderColor;
+    final Color effectiveBorderColor = _isFocused
+        ? widget.focusedBorderColor
+        : widget.borderColor;
 
     return Container(
       width: widget.width.w,
@@ -253,7 +258,9 @@ class _InputTextWidgetState extends State<InputTextWidget> {
         boxShadow: widget.shadow
             ? [
                 BoxShadow(
-                  color: widget.shadowColor ?? AppColors.boxShadowColor.withOpacity(0.1),
+                  color:
+                      widget.shadowColor ??
+                      AppColors.boxShadowColor.withValues(alpha: 0.1),
                   blurRadius: 4,
                   offset: const Offset(0, 2),
                 ),
@@ -278,7 +285,8 @@ class _InputTextWidgetState extends State<InputTextWidget> {
         onChanged: widget.onChanged,
         onTap: widget.onTap,
         validator: widget.validator,
-        style: widget.textStyle ??
+        style:
+            widget.textStyle ??
             TextStyle(
               color: widget.textColor,
               fontSize: widget.fontSize.sp,
@@ -288,7 +296,8 @@ class _InputTextWidgetState extends State<InputTextWidget> {
         decoration: InputDecoration(
           hintText: widget.hintText,
           labelText: widget.labelText,
-          hintStyle: widget.hintStyle ??
+          hintStyle:
+              widget.hintStyle ??
               TextStyle(
                 color: widget.hintColor,
                 fontSize: widget.hintFontSize.sp,
@@ -312,7 +321,8 @@ class _InputTextWidgetState extends State<InputTextWidget> {
   }
 
   Widget? _buildLeading() {
-    final widgetLeading = widget.leadingWidget ??
+    final widgetLeading =
+        widget.leadingWidget ??
         (widget.leadingIcon.isNotEmpty
             ? Padding(
                 padding: widget.leadingPadding,
@@ -341,15 +351,13 @@ class _InputTextWidgetState extends State<InputTextWidget> {
     // Obscure toggle logic
     if (widget.showObscureToggle || widget.obscureText) {
       children.add(
-        GestureDetector(
-          onTap: _toggleObscure,
-          child: _buildObscureIcon(),
-        ),
+        GestureDetector(onTap: _toggleObscure, child: _buildObscureIcon()),
       );
     }
 
     // Trailing icon/widget
-    final trailing = widget.trailingWidget ??
+    final trailing =
+        widget.trailingWidget ??
         (widget.trailingIcon.isNotEmpty
             ? Padding(
                 padding: widget.trailingPadding,
@@ -379,18 +387,44 @@ class _InputTextWidgetState extends State<InputTextWidget> {
   Widget _buildObscureIcon() {
     if (_isObscured) {
       if (widget.hiddenIcon != null) {
-        return _buildAsset(widget.hiddenIcon!, widget.obscureIconSize, widget.obscureIconSize, true, widget.hintColor);
+        return _buildAsset(
+          widget.hiddenIcon!,
+          widget.obscureIconSize,
+          widget.obscureIconSize,
+          true,
+          widget.hintColor,
+        );
       }
-      return Icon(Icons.visibility_off_outlined, size: widget.obscureIconSize.sp, color: widget.hintColor);
+      return Icon(
+        Icons.visibility_off_outlined,
+        size: widget.obscureIconSize.sp,
+        color: widget.hintColor,
+      );
     } else {
       if (widget.visibleIcon != null) {
-        return _buildAsset(widget.visibleIcon!, widget.obscureIconSize, widget.obscureIconSize, true, widget.hintColor);
+        return _buildAsset(
+          widget.visibleIcon!,
+          widget.obscureIconSize,
+          widget.obscureIconSize,
+          true,
+          widget.hintColor,
+        );
       }
-      return Icon(Icons.visibility_outlined, size: widget.obscureIconSize.sp, color: widget.hintColor);
+      return Icon(
+        Icons.visibility_outlined,
+        size: widget.obscureIconSize.sp,
+        color: widget.hintColor,
+      );
     }
   }
 
-  Widget _buildAsset(String path, double width, double height, bool useColor, Color color) {
+  Widget _buildAsset(
+    String path,
+    double width,
+    double height,
+    bool useColor,
+    Color color,
+  ) {
     if (path.toLowerCase().endsWith('.svg')) {
       return SvgPicture.asset(
         path,

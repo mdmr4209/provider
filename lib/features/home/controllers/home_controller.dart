@@ -77,8 +77,6 @@ class HomeController extends ChangeNotifier {
     notifyListeners();
   }
 
-
-
   final PageController bannerController = PageController();
   int _currentBannerIndex = 0;
   int get currentBannerIndex => _currentBannerIndex;
@@ -101,6 +99,7 @@ class HomeController extends ChangeNotifier {
       curve: Curves.easeInOut,
     );
   }
+
   void resetFilters() {
     _sortOption = 'From expensive to cheap';
     _selectedColors = {'#D4A5A0'};
@@ -208,44 +207,36 @@ class HomeController extends ChangeNotifier {
     }
 
     // ✅ Filter by Price Range
-    filtered = filtered
-        .where((p) {
+    filtered = filtered.where((p) {
       // Parse price - use updatePrice if available and not '0', else use price
       String priceStr = p.updatePrice != '0' && p.updatePrice.isNotEmpty
           ? p.updatePrice
           : p.price;
       final price = double.tryParse(priceStr.replaceAll('\$', '')) ?? 0;
       return price >= _priceRange.start && price <= _priceRange.end;
-    })
-        .toList();
+    }).toList();
 
     // ✅ Filter by Sale Status
     if (_selectedConditions.isNotEmpty) {
-      filtered = filtered
-          .where((p) {
+      filtered = filtered.where((p) {
         if (_selectedConditions.contains('sale') && p.sale) return true;
         return false;
-      })
-          .toList();
+      }).toList();
     }
 
     // ✅ Apply Sorting
     switch (_sortOption) {
       case 'From expensive to cheap':
         filtered.sort((a, b) {
-          final priceA =
-              double.tryParse(a.price.replaceAll('\$', '')) ?? 0;
-          final priceB =
-              double.tryParse(b.price.replaceAll('\$', '')) ?? 0;
+          final priceA = double.tryParse(a.price.replaceAll('\$', '')) ?? 0;
+          final priceB = double.tryParse(b.price.replaceAll('\$', '')) ?? 0;
           return priceB.compareTo(priceA);
         });
         break;
       case 'From cheap to expensive':
         filtered.sort((a, b) {
-          final priceA =
-              double.tryParse(a.price.replaceAll('\$', '')) ?? 0;
-          final priceB =
-              double.tryParse(b.price.replaceAll('\$', '')) ?? 0;
+          final priceA = double.tryParse(a.price.replaceAll('\$', '')) ?? 0;
+          final priceB = double.tryParse(b.price.replaceAll('\$', '')) ?? 0;
           return priceA.compareTo(priceB);
         });
         break;
@@ -253,7 +244,7 @@ class HomeController extends ChangeNotifier {
         filtered.sort((a, b) => b.rating.compareTo(a.rating));
         break;
       case 'Newest':
-      // Implement based on date if available
+        // Implement based on date if available
         break;
     }
 

@@ -36,9 +36,7 @@ class ConfirmOrderView extends StatelessWidget {
                     Positioned(
                       bottom: 0,
                       child: SvgPicture.asset(
-                        origin == true
-                            ? AppAssets.bgThank
-                            : AppAssets.bgSorry,
+                        origin == true ? AppAssets.bgThank : AppAssets.bgSorry,
                       ),
                     ),
                   ],
@@ -63,18 +61,28 @@ class ConfirmOrderView extends StatelessWidget {
                                   TextSpan(
                                     children: [
                                       TextSpan(
-                                        text: context.watchTr('congrats_points'),
-                                        style: Theme.of(context).textTheme.bodyMedium,
+                                        text: context.watchTr(
+                                          'congrats_points',
+                                        ),
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.bodyMedium,
                                       ),
                                       TextSpan(
-                                        text: ' 5 ${context.watchTr('points')}\n',
-                                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                          fontWeight: FontWeight.w700,
-                                        ),
+                                        text:
+                                            ' 5 ${context.watchTr('points')}\n',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.w700,
+                                            ),
                                       ),
                                       TextSpan(
                                         text: context.watchTr('thank_you'),
-                                        style: Theme.of(context).textTheme.bodyMedium,
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.bodyMedium,
                                       ),
                                     ],
                                   ),

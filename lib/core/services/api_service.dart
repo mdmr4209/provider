@@ -62,7 +62,7 @@ class ApiService {
               final token = await getAccessToken();
               final opts = error.requestOptions;
               opts.headers['Authorization'] = 'Bearer $token';
-              
+
               try {
                 // Retry the original request with a fresh Dio instance to avoid looping
                 final retryRes = await Dio(_dio.options).fetch(opts);
@@ -71,7 +71,9 @@ class ApiService {
                 return handler.next(error);
               }
             } else {
-              showErrorSnackBar(message: 'Session expired. Please log in again.');
+              showErrorSnackBar(
+                message: 'Session expired. Please log in again.',
+              );
               onUnauthorized?.call();
               return handler.next(error);
             }
@@ -103,17 +105,23 @@ class ApiService {
   }
 
   static Future<String?> getAccessToken() => _storage.read(key: 'access_token');
-  static Future<String?> getRefreshToken() => _storage.read(key: 'refresh_token');
+  static Future<String?> getRefreshToken() =>
+      _storage.read(key: 'refresh_token');
 
-  static Future<void> store({required String key, required String value}) async =>
-      await _storage.write(key: key, value: value);
+  static Future<void> store({
+    required String key,
+    required String value,
+  }) async => await _storage.write(key: key, value: value);
 
-  static Future<String?> getStored({required String key}) => _storage.read(key: key);
+  static Future<String?> getStored({required String key}) =>
+      _storage.read(key: key);
 
-  static Future<void> storeRole({required String role}) async => await _storage.write(key: 'user_role', value: role);
+  static Future<void> storeRole({required String role}) async =>
+      await _storage.write(key: 'user_role', value: role);
   static Future<String?> getStoredRole() => _storage.read(key: 'user_role');
 
-  static Future<void> storeUserId({required String id}) async => await _storage.write(key: 'user_id', value: id);
+  static Future<void> storeUserId({required String id}) async =>
+      await _storage.write(key: 'user_id', value: id);
   static Future<int?> getStoredId() async {
     final v = await _storage.read(key: 'user_id');
     return v == null ? null : int.tryParse(v);
@@ -137,7 +145,7 @@ class ApiService {
   }) async {
     try {
       dynamic finalData = data;
-      
+
       // Auto-convert to FormData if Multipart is specified and data is a Map
       if (isMultipart && data is Map<String, dynamic>) {
         finalData = await _convertToFormData(data);
@@ -150,7 +158,9 @@ class ApiService {
         options: Options(
           method: method,
           extra: {'auth': authenticated},
-          contentType: isMultipart ? 'multipart/form-data' : Headers.jsonContentType,
+          contentType: isMultipart
+              ? 'multipart/form-data'
+              : Headers.jsonContentType,
         ),
       );
     } on DioException {
@@ -163,45 +173,69 @@ class ApiService {
   }
 
   // ── API Methods ────────────────────────────────────────────────────────────
-  
+
   static Future<Response?> get({
     required String api,
     Map<String, dynamic>? params,
     bool auth = false,
-  }) => safeRequest(api: api, method: 'GET', queryParameters: params, authenticated: auth);
+  }) => safeRequest(
+    api: api,
+    method: 'GET',
+    queryParameters: params,
+    authenticated: auth,
+  );
 
   static Future<Response?> post({
     required String api,
     dynamic data,
     bool auth = false,
     bool multipart = false,
-  }) => safeRequest(api: api, method: 'POST', data: data, authenticated: auth, isMultipart: multipart);
+  }) => safeRequest(
+    api: api,
+    method: 'POST',
+    data: data,
+    authenticated: auth,
+    isMultipart: multipart,
+  );
 
   static Future<Response?> put({
     required String api,
     dynamic data,
     bool auth = false,
     bool multipart = false,
-  }) => safeRequest(api: api, method: 'PUT', data: data, authenticated: auth, isMultipart: multipart);
+  }) => safeRequest(
+    api: api,
+    method: 'PUT',
+    data: data,
+    authenticated: auth,
+    isMultipart: multipart,
+  );
 
   static Future<Response?> patch({
     required String api,
     dynamic data,
     bool auth = false,
     bool multipart = false,
-  }) => safeRequest(api: api, method: 'PATCH', data: data, authenticated: auth, isMultipart: multipart);
+  }) => safeRequest(
+    api: api,
+    method: 'PATCH',
+    data: data,
+    authenticated: auth,
+    isMultipart: multipart,
+  );
 
   static Future<Response?> delete({
     required String api,
     dynamic data,
     bool auth = false,
-  }) => safeRequest(api: api, method: 'DELETE', data: data, authenticated: auth);
+  }) =>
+      safeRequest(api: api, method: 'DELETE', data: data, authenticated: auth);
 
   // ── Error & Response Handling ──────────────────────────────────────────────
-  
+
   static void _handleDioError(DioException e) {
     String message = 'Unexpected error occurred';
-    
+
     if (e.type == DioExceptionType.connectionTimeout ||
         e.type == DioExceptionType.receiveTimeout ||
         e.type == DioExceptionType.sendTimeout) {
@@ -272,8 +306,12 @@ class ApiService {
           data['detail']?.toString() ??
           data['details']?.toString() ??
           data['msg']?.toString() ??
-          (data['errors'] is Map ? (data['errors'] as Map).values.first.toString() : null) ??
-          (data['errors'] is List ? (data['errors'] as List).first.toString() : null) ??
+          (data['errors'] is Map
+              ? (data['errors'] as Map).values.first.toString()
+              : null) ??
+          (data['errors'] is List
+              ? (data['errors'] as List).first.toString()
+              : null) ??
           defaultMsg;
     }
     return defaultMsg;
@@ -293,10 +331,14 @@ class ApiService {
       );
 
       if (response.statusCode == 200) {
-        final newAccess = response.data['access'] as String? ?? response.data['access_token'] as String?;
+        final newAccess =
+            response.data['access'] as String? ??
+            response.data['access_token'] as String?;
         if (newAccess != null) {
           await _storage.write(key: 'access_token', value: newAccess);
-          final newRefresh = response.data['refresh'] as String? ?? response.data['refresh_token'] as String?;
+          final newRefresh =
+              response.data['refresh'] as String? ??
+              response.data['refresh_token'] as String?;
           if (newRefresh != null) {
             await _storage.write(key: 'refresh_token', value: newRefresh);
           }
@@ -329,9 +371,19 @@ class ApiService {
       final value = entry.value;
 
       if (value is File) {
-        formDataMap[key] = await MultipartFile.fromFile(value.path, filename: value.path.split('/').last);
+        formDataMap[key] = await MultipartFile.fromFile(
+          value.path,
+          filename: value.path.split('/').last,
+        );
       } else if (value is List<File>) {
-        formDataMap[key] = await Future.wait(value.map((f) => MultipartFile.fromFile(f.path, filename: f.path.split('/').last)));
+        formDataMap[key] = await Future.wait(
+          value.map(
+            (f) => MultipartFile.fromFile(
+              f.path,
+              filename: f.path.split('/').last,
+            ),
+          ),
+        );
       } else {
         formDataMap[key] = value;
       }

@@ -26,7 +26,11 @@ class CheckoutScreen extends StatelessWidget {
             centerTitle: true,
             leading: IconButton(
               onPressed: () => Navigator.pop(context),
-              icon: Icon(Icons.arrow_back_ios_new, size: 18.r, color: Theme.of(context).iconTheme.color),
+              icon: Icon(
+                Icons.arrow_back_ios_new,
+                size: 18.r,
+                color: Theme.of(context).iconTheme.color,
+              ),
             ),
             title: Text(
               context.watchTr('checkout'),
@@ -48,10 +52,10 @@ class CheckoutScreen extends StatelessWidget {
                         _CheckoutCard(
                           child: Column(
                             children: [
-                                _CheckoutCardHeader(
-                                  label: context.watchTr('my_order'),
-                                  value: '\$${cart.total.toStringAsFixed(2)}',
-                                ),
+                              _CheckoutCardHeader(
+                                label: context.watchTr('my_order'),
+                                value: '\$${cart.total.toStringAsFixed(2)}',
+                              ),
                               SizedBox(height: 12.h),
                               ...cart.items.map(
                                 (item) => _CheckoutItemRow(
@@ -66,11 +70,11 @@ class CheckoutScreen extends StatelessWidget {
                                   value:
                                       '-\$${cart.discountAmount.toStringAsFixed(2)}',
                                 ),
-                                _CheckoutDetailRow(
-                                  label: context.watchTr('delivery'),
-                                  value: context.watchTr('free'),
-                                  valueColor: Colors.green,
-                                ),
+                              _CheckoutDetailRow(
+                                label: context.watchTr('delivery'),
+                                value: context.watchTr('free'),
+                                valueColor: Colors.green,
+                              ),
                             ],
                           ),
                         ),
@@ -83,16 +87,16 @@ class CheckoutScreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                                _CheckoutCardHeader(
-                                  label: context.watchTr('shipping_details'),
-                                  hasArrow: true,
-                                  onTap: () => context.push(AppRoutes.shipping),
-                                ),
+                              _CheckoutCardHeader(
+                                label: context.watchTr('shipping_details'),
+                                hasArrow: true,
+                                onTap: () => context.push(AppRoutes.shipping),
+                              ),
                               SizedBox(height: 10.h),
-                                Text(
-                                  cart.selectedAddress.address,
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                ),
+                              Text(
+                                cart.selectedAddress.address,
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
                             ],
                           ),
                         ),
@@ -105,16 +109,16 @@ class CheckoutScreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                                _CheckoutCardHeader(
-                                  label: context.watchTr('payment_method'),
-                                  hasArrow: true,
-                                  onTap: () => context.push(AppRoutes.payment),
-                                ),
+                              _CheckoutCardHeader(
+                                label: context.watchTr('payment_method'),
+                                hasArrow: true,
+                                onTap: () => context.push(AppRoutes.payment),
+                              ),
                               SizedBox(height: 10.h),
-                                Text(
-                                  cart.selectedCard.masked,
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                ),
+                              Text(
+                                cart.selectedCard.masked,
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
                             ],
                           ),
                         ),
@@ -205,10 +209,7 @@ class _CheckoutCardHeader extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              label,
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
+            Text(label, style: Theme.of(context).textTheme.bodyLarge),
             Row(
               children: [
                 if (value != null)
@@ -219,7 +220,11 @@ class _CheckoutCardHeader extends StatelessWidget {
                     ),
                   ),
                 SizedBox(width: 4.w),
-                Icon(Icons.chevron_right, size: 20.r, color: Theme.of(context).iconTheme.color),
+                Icon(
+                  Icons.chevron_right,
+                  size: 20.r,
+                  color: Theme.of(context).iconTheme.color,
+                ),
               ],
             ),
           ],
@@ -249,10 +254,7 @@ class _CheckoutItemRow extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
-            child: Text(
-              name,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
+            child: Text(name, style: Theme.of(context).textTheme.bodySmall),
           ),
           Text(
             '$qty x \$${price.toStringAsFixed(2)}',
@@ -281,10 +283,7 @@ class _CheckoutDetailRow extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            label,
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
+          Text(label, style: Theme.of(context).textTheme.bodySmall),
           Text(
             value,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(

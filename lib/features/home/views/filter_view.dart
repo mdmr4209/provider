@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../localization/localization_extension.dart';
 
-import '../../../core/constants/app_colors.dart';
 import '../controllers/home_controller.dart';
 
 class FilterView extends StatefulWidget {
@@ -25,7 +23,9 @@ class _FilterViewState extends State<FilterView> {
 
   // ── Sort Options ───────────────────────────────────────────────────────
   List<String> sortOptions(BuildContext context) => [
-    context.watchTr('luxury_fashion'), // Replace with actual sort keys if available
+    context.watchTr(
+      'luxury_fashion',
+    ), // Replace with actual sort keys if available
     'From expensive to cheap',
     'From cheap to expensive',
     'Newest',
@@ -217,7 +217,10 @@ class _FilterViewState extends State<FilterView> {
                   color: Color(int.parse(color.replaceFirst('#', '0xFF'))),
                   borderRadius: BorderRadius.circular(4.r),
                   border: isSelected
-                      ? Border.all(color: Theme.of(context).colorScheme.primary, width: 2.5.w)
+                      ? Border.all(
+                          color: Theme.of(context).colorScheme.primary,
+                          width: 2.5.w,
+                        )
                       : Border.all(color: Colors.transparent, width: 2.5.w),
                 ),
               ),
@@ -321,7 +324,9 @@ class _FilterViewState extends State<FilterView> {
                     ),
                     child: Text(
                       condition['label'],
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(color: Colors.white),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.labelSmall?.copyWith(color: Colors.white),
                     ),
                   ),
                 ],
@@ -387,7 +392,9 @@ class _FilterViewState extends State<FilterView> {
                     ),
                     child: Text(
                       gender['label'],
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(color: Colors.white),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.labelSmall?.copyWith(color: Colors.white),
                     ),
                   ),
                 ],
@@ -427,8 +434,14 @@ class _FilterViewState extends State<FilterView> {
                 padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
                 decoration: BoxDecoration(
                   border: isSelected
-                      ? Border.all(color: Theme.of(context).colorScheme.primary, width: 2.w)
-                      : Border.all(color: Theme.of(context).dividerColor, width: 1.w),
+                      ? Border.all(
+                          color: Theme.of(context).colorScheme.primary,
+                          width: 2.w,
+                        )
+                      : Border.all(
+                          color: Theme.of(context).dividerColor,
+                          width: 1.w,
+                        ),
                   borderRadius: BorderRadius.circular(8.r),
                   color: isSelected
                       ? Theme.of(context).colorScheme.primary.withAlpha(20)
@@ -482,14 +495,19 @@ class _FilterViewState extends State<FilterView> {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Theme.of(context).colorScheme.primary, Theme.of(context).colorScheme.primary.withAlpha(200)],
+            colors: [
+              Theme.of(context).colorScheme.primary,
+              Theme.of(context).colorScheme.primary.withAlpha(200),
+            ],
           ),
           borderRadius: BorderRadius.circular(8.r),
         ),
         child: Center(
           child: Text(
             context.watchTr('apply_filters'),
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.white),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(color: Colors.white),
           ),
         ),
       ),

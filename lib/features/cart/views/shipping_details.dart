@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../models/shipping_address.dart';
 import '../controllers/cart_controller.dart';
-import 'order_view.dart';
 import '../../localization/localization_extension.dart';
 
 class ShippingDetailsScreen extends StatelessWidget {
@@ -23,7 +21,11 @@ class ShippingDetailsScreen extends StatelessWidget {
             centerTitle: true,
             leading: IconButton(
               onPressed: () => Navigator.pop(context),
-              icon: Icon(Icons.arrow_back_ios_new, size: 18.r, color: Theme.of(context).iconTheme.color),
+              icon: Icon(
+                Icons.arrow_back_ios_new,
+                size: 18.r,
+                color: Theme.of(context).iconTheme.color,
+              ),
             ),
             title: Text(
               context.watchTr('shipping_details'),
@@ -46,7 +48,11 @@ class ShippingDetailsScreen extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.location_on, color: Colors.green, size: 36.r),
+                          Icon(
+                            Icons.location_on,
+                            color: Colors.green,
+                            size: 36.r,
+                          ),
                         ],
                       ),
                     ),
@@ -89,10 +95,12 @@ class ShippingDetailsScreen extends StatelessWidget {
                             Icon(
                               Icons.check,
                               size: 16.r,
-                              color: Theme.of(context).disabledColor.withAlpha(127),
+                              color: Theme.of(
+                                context,
+                              ).disabledColor.withAlpha(127),
                             ),
                             SizedBox(width: 8.w),
-                             Text(
+                            Text(
                               context.watchTr('use_current_location'),
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
@@ -134,7 +142,9 @@ class _AddressOption extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).cardTheme.color,
           border: Border.all(
-            color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).dividerColor,
+            color: isSelected
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).dividerColor,
             width: 1,
           ),
           borderRadius: BorderRadius.circular(12.r),
@@ -163,7 +173,9 @@ class _AddressOption extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: isSelected ? Theme.of(context).colorScheme.primary : Colors.grey.shade400,
+                  color: isSelected
+                      ? Theme.of(context).colorScheme.primary
+                      : Colors.grey.shade400,
                   width: 1.5,
                 ),
               ),

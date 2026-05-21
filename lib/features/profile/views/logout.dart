@@ -15,7 +15,9 @@ class Logout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.r)),
-      backgroundColor: Theme.of(context).colorScheme.surface, // Your light red/pink color
+      backgroundColor: Theme.of(
+        context,
+      ).colorScheme.surface, // Your light red/pink color
       child: Padding(
         padding: EdgeInsets.all(20.r),
         child: Column(

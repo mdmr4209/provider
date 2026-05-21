@@ -13,7 +13,6 @@ Widget appProviders({required Widget child}) {
   return MultiProvider(
     providers: [
       // Provider<ApiService>(create: (_) => ApiService()),
-
       ChangeNotifierProvider(create: (_) => OnboardingController()),
       ChangeNotifierProvider(create: (_) => AuthController()),
       ChangeNotifierProvider(create: (_) => HomeController()),

@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../../core/constants/app_assets.dart';
-import '../../../core/constants/app_colors.dart';
 import '../../localization/localization_extension.dart';
 
 class Navbar extends StatelessWidget {
@@ -36,8 +34,18 @@ class Navbar extends StatelessWidget {
               _navItem(context, 0, context.watchTr('home'), AppAssets.home),
               _navItem(context, 1, context.watchTr('search'), AppAssets.search),
               _navItem(context, 2, context.watchTr('cart'), AppAssets.cart),
-              _navItem(context, 3, context.watchTr('wishlist'), AppAssets.wishlist),
-              _navItem(context, 4, context.watchTr('profile'), AppAssets.profile),
+              _navItem(
+                context,
+                3,
+                context.watchTr('wishlist'),
+                AppAssets.wishlist,
+              ),
+              _navItem(
+                context,
+                4,
+                context.watchTr('profile'),
+                AppAssets.profile,
+              ),
             ],
           ),
         ),
@@ -67,9 +75,17 @@ class Navbar extends StatelessWidget {
                 SvgPicture.asset(
                   icon,
                   colorFilter: ColorFilter.mode(
-                    isSelected 
-                        ? (Theme.of(context).bottomNavigationBarTheme.selectedIconTheme?.color ?? Theme.of(context).colorScheme.primary)
-                        : (Theme.of(context).bottomNavigationBarTheme.unselectedIconTheme?.color ?? Colors.grey),
+                    isSelected
+                        ? (Theme.of(context)
+                                  .bottomNavigationBarTheme
+                                  .selectedIconTheme
+                                  ?.color ??
+                              Theme.of(context).colorScheme.primary)
+                        : (Theme.of(context)
+                                  .bottomNavigationBarTheme
+                                  .unselectedIconTheme
+                                  ?.color ??
+                              Colors.grey),
                     BlendMode.srcIn,
                   ),
                   width: 24.r,
@@ -88,14 +104,23 @@ class Navbar extends StatelessWidget {
             SizedBox(height: 4.h),
             Text(
               label,
-              style: (isSelected
-                      ? Theme.of(context).bottomNavigationBarTheme.selectedLabelStyle
-                      : Theme.of(context).bottomNavigationBarTheme.unselectedLabelStyle)
-                  ?.copyWith(
-                color: isSelected
-                    ? Theme.of(context).bottomNavigationBarTheme.selectedItemColor
-                    : Theme.of(context).bottomNavigationBarTheme.unselectedItemColor,
-              ),
+              style:
+                  (isSelected
+                          ? Theme.of(
+                              context,
+                            ).bottomNavigationBarTheme.selectedLabelStyle
+                          : Theme.of(
+                              context,
+                            ).bottomNavigationBarTheme.unselectedLabelStyle)
+                      ?.copyWith(
+                        color: isSelected
+                            ? Theme.of(
+                                context,
+                              ).bottomNavigationBarTheme.selectedItemColor
+                            : Theme.of(
+                                context,
+                              ).bottomNavigationBarTheme.unselectedItemColor,
+                      ),
             ),
           ],
         ),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/constants/app_assets.dart';
@@ -83,7 +82,7 @@ class ProfileView extends StatelessWidget {
                         bottom: 15.h,
                         right: 0,
                         child: InkWell(
-                          onTap: ()=>context.push(AppRoutes.editProfile),
+                          onTap: () => context.push(AppRoutes.editProfile),
                           child: Container(
                             width: 40.w,
                             height: 40.h,
@@ -217,7 +216,10 @@ class ProfileView extends StatelessWidget {
               decoration: ShapeDecoration(
                 color: Theme.of(context).colorScheme.surface,
                 shape: RoundedRectangleBorder(
-                  side: BorderSide(width: 1.w, color: Theme.of(context).dividerColor),
+                  side: BorderSide(
+                    width: 1.w,
+                    color: Theme.of(context).dividerColor,
+                  ),
                   borderRadius: BorderRadius.circular(10.r),
                 ),
               ),
@@ -232,7 +234,10 @@ class ProfileView extends StatelessWidget {
                           Colors.redAccent,
                           BlendMode.srcIn,
                         )
-                      : ColorFilter.mode(Theme.of(context).iconTheme.color!, BlendMode.srcIn),
+                      : ColorFilter.mode(
+                          Theme.of(context).iconTheme.color!,
+                          BlendMode.srcIn,
+                        ),
                 ),
               ),
             ),
@@ -242,7 +247,9 @@ class ProfileView extends StatelessWidget {
               child: Text(
                 title,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: isLogout ? Colors.redAccent : Theme.of(context).textTheme.bodyLarge?.color,
+                  color: isLogout
+                      ? Colors.redAccent
+                      : Theme.of(context).textTheme.bodyLarge?.color,
                 ),
               ),
             ),

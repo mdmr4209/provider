@@ -21,7 +21,10 @@ class SettingsView extends StatelessWidget {
           style: Theme.of(context).textTheme.titleLarge,
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new, color: Theme.of(context).iconTheme.color),
+          icon: Icon(
+            Icons.arrow_back_ios_new,
+            color: Theme.of(context).iconTheme.color,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -34,11 +37,13 @@ class SettingsView extends StatelessWidget {
               builder: (context, themeCtrl, _) => _settingsTile(
                 context,
                 title: context.watchTr('dark_mode'),
-                subtitle: themeCtrl.isDarkMode ? context.watchTr('on') : context.watchTr('off'),
+                subtitle: themeCtrl.isDarkMode
+                    ? context.watchTr('on')
+                    : context.watchTr('off'),
                 trailing: Switch.adaptive(
                   value: themeCtrl.isDarkMode,
                   onChanged: (value) => themeCtrl.toggleTheme(),
-                  activeColor: Theme.of(context).colorScheme.primary,
+                  activeThumbColor: Theme.of(context).colorScheme.primary,
                 ),
                 onTap: () => themeCtrl.toggleTheme(),
               ),
@@ -113,26 +118,29 @@ class SettingsView extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(bottom: 10.h),
       decoration: BoxDecoration(
-        color: isSelected 
-            ? Theme.of(context).colorScheme.primary.withAlpha(20) 
+        color: isSelected
+            ? Theme.of(context).colorScheme.primary.withAlpha(20)
             : Theme.of(context).cardTheme.color,
         borderRadius: BorderRadius.circular(12.r),
         border: Border.all(
-          color: isSelected 
-              ? Theme.of(context).colorScheme.primary 
+          color: isSelected
+              ? Theme.of(context).colorScheme.primary
               : Theme.of(context).dividerColor,
         ),
       ),
       child: ListTile(
         onTap: onTap,
         title: Text(
-          title, 
+          title,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-          )
+          ),
         ),
-        trailing: isSelected 
-            ? Icon(Icons.check_circle, color: Theme.of(context).colorScheme.primary) 
+        trailing: isSelected
+            ? Icon(
+                Icons.check_circle,
+                color: Theme.of(context).colorScheme.primary,
+              )
             : null,
       ),
     );

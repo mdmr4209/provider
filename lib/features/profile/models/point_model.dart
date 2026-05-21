@@ -5,4 +5,3 @@ class PointModel {
 
   PointModel({required this.title, required this.points, required this.date});
 }
-

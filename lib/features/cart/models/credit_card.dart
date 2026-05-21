@@ -1,4 +1,3 @@
-
 class CreditCard {
   final String id;
   final String masked;

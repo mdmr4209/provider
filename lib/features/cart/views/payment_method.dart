@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../models/credit_card.dart';
 import '../controllers/cart_controller.dart';
-import 'order_view.dart';
 import '../../localization/localization_extension.dart';
 
 class PaymentMethodScreen extends StatelessWidget {
@@ -23,7 +21,11 @@ class PaymentMethodScreen extends StatelessWidget {
             centerTitle: true,
             leading: IconButton(
               onPressed: () => Navigator.pop(context),
-              icon: Icon(Icons.arrow_back_ios_new, size: 18.r, color: Theme.of(context).iconTheme.color),
+              icon: Icon(
+                Icons.arrow_back_ios_new,
+                size: 18.r,
+                color: Theme.of(context).iconTheme.color,
+              ),
             ),
             title: Text(
               context.watchTr('payment_method'),
@@ -37,7 +39,10 @@ class PaymentMethodScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Theme.of(context).cardTheme.color,
                 borderRadius: BorderRadius.circular(12.r),
-                border: Border.all(color: Theme.of(context).dividerColor, width: 0.5),
+                border: Border.all(
+                  color: Theme.of(context).dividerColor,
+                  width: 0.5,
+                ),
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -48,7 +53,11 @@ class PaymentMethodScreen extends StatelessWidget {
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   SizedBox(height: 6.h),
-                  Divider(color: Theme.of(context).dividerColor, height: 1, thickness: 1),
+                  Divider(
+                    color: Theme.of(context).dividerColor,
+                    height: 1,
+                    thickness: 1,
+                  ),
                   SizedBox(height: 4.h),
                   ...cart.creditCards.asMap().entries.map(
                     (e) => _CardOption(
@@ -90,17 +99,16 @@ class _CardOption extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              card.masked,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
+            Text(card.masked, style: Theme.of(context).textTheme.bodyMedium),
             Container(
               width: 22.w,
               height: 22.w,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: isSelected ? Theme.of(context).colorScheme.primary : Colors.grey.shade400,
+                  color: isSelected
+                      ? Theme.of(context).colorScheme.primary
+                      : Colors.grey.shade400,
                   width: 1.5,
                 ),
               ),

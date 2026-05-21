@@ -1,4 +1,3 @@
-
 class ShippingAddress {
   final String label;
   final String address;

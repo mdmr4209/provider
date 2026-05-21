@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import '../../features/localization/localization_extension.dart';
 import '../constants/app_colors.dart';
 
-
-
 class InternetExceptionsWidget extends StatefulWidget {
   final VoidCallback onPress;
   const InternetExceptionsWidget({super.key, required this.onPress});
@@ -29,7 +27,10 @@ class _InternetExceptionsWidgetState extends State<InternetExceptionsWidget> {
             child: Center(
               child: Text(
                 context.watchTr('internet_exception'),
-                style: TextStyle(color: const Color.fromARGB(255, 12, 0, 2), fontSize: 20),
+                style: TextStyle(
+                  color: const Color.fromARGB(255, 12, 0, 2),
+                  fontSize: 20,
+                ),
                 textAlign: TextAlign.center,
               ),
             ),

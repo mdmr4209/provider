@@ -4,8 +4,7 @@ class Validators {
       return "Email is required";
     }
 
-    final emailRegex =
-    RegExp(r'^[^@]+@[^@]+\.[^@]+');
+    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
 
     if (!emailRegex.hasMatch(value)) {
       return "Invalid email";
@@ -34,6 +33,7 @@ class Validators {
     return null;
   }
 }
+
 // TextFormField(
 // validator: Validators.validateEmail,
 // )

@@ -104,8 +104,8 @@ void showAppSnackBar({
   required String title,
   required String message,
   SnackBarType type = SnackBarType.success,
- Color? backgroundColor,
-Color? accentColor,
+  Color? backgroundColor,
+  Color? accentColor,
   Color? textColor,
   Duration? duration,
 }) {
@@ -141,17 +141,49 @@ Color? accentColor,
 }
 
 // ── Convenience helpers ───────────────────────────────────────────────────────
-void showSuccessSnackBar({String? title, required String message, Duration? duration}) =>
-    showAppSnackBar(title: title ?? 'Success', message: message, type: SnackBarType.success, duration: duration);
+void showSuccessSnackBar({
+  String? title,
+  required String message,
+  Duration? duration,
+}) => showAppSnackBar(
+  title: title ?? 'Success',
+  message: message,
+  type: SnackBarType.success,
+  duration: duration,
+);
 
-void showErrorSnackBar({String? title, required String message, Duration? duration}) =>
-    showAppSnackBar(title: title ?? 'Error', message: message, type: SnackBarType.error, duration: duration);
+void showErrorSnackBar({
+  String? title,
+  required String message,
+  Duration? duration,
+}) => showAppSnackBar(
+  title: title ?? 'Error',
+  message: message,
+  type: SnackBarType.error,
+  duration: duration,
+);
 
-void showWarningSnackBar({String? title, required String message, Duration? duration}) =>
-    showAppSnackBar(title: title ?? 'Warning', message: message, type: SnackBarType.warning, duration: duration);
+void showWarningSnackBar({
+  String? title,
+  required String message,
+  Duration? duration,
+}) => showAppSnackBar(
+  title: title ?? 'Warning',
+  message: message,
+  type: SnackBarType.warning,
+  duration: duration,
+);
 
-void showInfoSnackBar({required String title, required String message, Duration? duration}) =>
-    showAppSnackBar(title: title, message: message, type: SnackBarType.info, duration: duration);
+void showInfoSnackBar({
+  required String title,
+  required String message,
+  Duration? duration,
+}) => showAppSnackBar(
+  title: title,
+  message: message,
+  type: SnackBarType.info,
+  duration: duration,
+);
 
 // ── Overlay widget ────────────────────────────────────────────────────────────
 class _SnackBarOverlay extends StatefulWidget {
@@ -183,7 +215,7 @@ class _SnackBarOverlayState extends State<_SnackBarOverlay>
   @override
   void initState() {
     super.initState();
-    
+
     // Entrance/Exit Animation (Right to Left)
     _slideCtrl = AnimationController(
       vsync: this,
@@ -207,9 +239,10 @@ class _SnackBarOverlayState extends State<_SnackBarOverlay>
       duration: const Duration(milliseconds: 800),
     )..repeat(reverse: true);
 
-    _iconScaleAnim = Tween<double>(begin: 1.0, end: 1.25).animate(
-      CurvedAnimation(parent: _iconPulseCtrl, curve: Curves.easeInOut),
-    );
+    _iconScaleAnim = Tween<double>(
+      begin: 1.0,
+      end: 1.25,
+    ).animate(CurvedAnimation(parent: _iconPulseCtrl, curve: Curves.easeInOut));
 
     _slideCtrl.forward().then((_) {
       if (mounted) {
@@ -250,12 +283,18 @@ class _SnackBarOverlayState extends State<_SnackBarOverlay>
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [widget.config.backgroundColor, widget.config.accentColor],
+                  colors: [
+                    widget.config.backgroundColor,
+                    widget.config.accentColor,
+                  ],
                 ),
                 borderRadius: BorderRadius.circular(16.r),
                 boxShadow: [
                   BoxShadow(
-                    color: [widget.config.backgroundColor, widget.config.accentColor].first.withValues(alpha: 0.3),
+                    color: [
+                      widget.config.backgroundColor,
+                      widget.config.accentColor,
+                    ].first.withValues(alpha: 0.3),
                     blurRadius: 15,
                     offset: const Offset(0, 8),
                   ),
@@ -313,7 +352,9 @@ class _SnackBarOverlayState extends State<_SnackBarOverlay>
                                 Text(
                                   widget.message,
                                   style: TextStyle(
-                                    color: widget.config.textColor.withValues(alpha: 0.9),
+                                    color: widget.config.textColor.withValues(
+                                      alpha: 0.9,
+                                    ),
                                     fontSize: 12.sp,
                                   ),
                                   maxLines: 2,
@@ -324,9 +365,13 @@ class _SnackBarOverlayState extends State<_SnackBarOverlay>
                           ),
                           IconButton(
                             onPressed: _handleExit,
-                            icon: Icon(Icons.close_rounded,
-                                color: widget.config.textColor.withValues(alpha: 0.8),
-                                size: 22.w),
+                            icon: Icon(
+                              Icons.close_rounded,
+                              color: widget.config.textColor.withValues(
+                                alpha: 0.8,
+                              ),
+                              size: 22.w,
+                            ),
                             padding: EdgeInsets.zero,
                             constraints: const BoxConstraints(),
                           ),
@@ -338,7 +383,9 @@ class _SnackBarOverlayState extends State<_SnackBarOverlay>
                       animation: _progressCtrl,
                       builder: (context, child) {
                         return LinearProgressIndicator(
-                          value: 1.0 - _progressCtrl.value, // Shrinks as time passes
+                          value:
+                              1.0 -
+                              _progressCtrl.value, // Shrinks as time passes
                           minHeight: 5.h,
                           backgroundColor: Colors.black.withValues(alpha: 0.1),
                           valueColor: AlwaysStoppedAnimation<Color>(

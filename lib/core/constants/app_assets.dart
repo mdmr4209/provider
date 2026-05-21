@@ -13,7 +13,8 @@ class AppAssets {
   static const String selected = 'assets/image/selected.svg';
   static const String homeBg = 'assets/image/homeBg.png';
   static const String filter = 'assets/image/filter.svg';
-  static const String settings = 'assets/image/promoCode.svg'; // Fallback to promoCode since settings.svg is missing
+  static const String settings =
+      'assets/image/promoCode.svg'; // Fallback to promoCode since settings.svg is missing
   static const String banner = 'assets/image/img_2.png';
   static const String addReview = 'assets/image/addReview.png';
   static const String love = 'assets/image/love.svg';

@@ -310,7 +310,10 @@ class _TierInfoRow extends StatelessWidget {
         children: [
           Text(
             label,
-            style: GoogleFonts.lato(fontSize: 13.sp, color: AppColors.textColor),
+            style: GoogleFonts.lato(
+              fontSize: 13.sp,
+              color: AppColors.textColor,
+            ),
           ),
           Text(
             value,

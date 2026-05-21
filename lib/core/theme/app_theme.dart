@@ -23,13 +23,33 @@ class AppTheme {
       elevation: 0,
       centerTitle: true,
       iconTheme: IconThemeData(color: AppColors.blackColor),
-      titleTextStyle: TextStyle(color: AppColors.blackColor, fontSize: 18, fontWeight: FontWeight.bold),
+      titleTextStyle: TextStyle(
+        color: AppColors.blackColor,
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+      ),
     ),
     textTheme: const TextTheme(
-      displayLarge: TextStyle(color: AppColors.textColor, fontSize: 32, fontWeight: FontWeight.bold),
-      displayMedium: TextStyle(color: AppColors.textColor, fontSize: 28, fontWeight: FontWeight.bold),
-      headlineLarge: TextStyle(color: AppColors.textColor, fontSize: 24, fontWeight: FontWeight.w600),
-      titleLarge: TextStyle(color: AppColors.textColor, fontSize: 20, fontWeight: FontWeight.w500),
+      displayLarge: TextStyle(
+        color: AppColors.textColor,
+        fontSize: 32,
+        fontWeight: FontWeight.bold,
+      ),
+      displayMedium: TextStyle(
+        color: AppColors.textColor,
+        fontSize: 28,
+        fontWeight: FontWeight.bold,
+      ),
+      headlineLarge: TextStyle(
+        color: AppColors.textColor,
+        fontSize: 24,
+        fontWeight: FontWeight.w600,
+      ),
+      titleLarge: TextStyle(
+        color: AppColors.textColor,
+        fontSize: 20,
+        fontWeight: FontWeight.w500,
+      ),
       bodyLarge: TextStyle(color: AppColors.textColor, fontSize: 16),
       bodyMedium: TextStyle(color: AppColors.textColor2, fontSize: 14),
       bodySmall: TextStyle(color: AppColors.textColor3, fontSize: 12),
@@ -71,7 +91,9 @@ class AppTheme {
       textStyle: const TextStyle(color: AppColors.textColor),
       menuStyle: MenuStyle(
         backgroundColor: WidgetStateProperty.all(AppColors.whiteColor),
-        shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
+        shape: WidgetStateProperty.all(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        ),
       ),
     ),
     snackBarTheme: SnackBarThemeData(
@@ -103,13 +125,33 @@ class AppTheme {
       elevation: 0,
       centerTitle: true,
       iconTheme: IconThemeData(color: Colors.white),
-      titleTextStyle: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+      titleTextStyle: TextStyle(
+        color: Colors.white,
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+      ),
     ),
     textTheme: const TextTheme(
-      displayLarge: TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold),
-      displayMedium: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold),
-      headlineLarge: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w600),
-      titleLarge: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
+      displayLarge: TextStyle(
+        color: Colors.white,
+        fontSize: 32,
+        fontWeight: FontWeight.bold,
+      ),
+      displayMedium: TextStyle(
+        color: Colors.white,
+        fontSize: 28,
+        fontWeight: FontWeight.bold,
+      ),
+      headlineLarge: TextStyle(
+        color: Colors.white,
+        fontSize: 24,
+        fontWeight: FontWeight.w600,
+      ),
+      titleLarge: TextStyle(
+        color: Colors.white,
+        fontSize: 20,
+        fontWeight: FontWeight.w500,
+      ),
       bodyLarge: TextStyle(color: Colors.white, fontSize: 16),
       bodyMedium: TextStyle(color: Colors.white70, fontSize: 14),
       bodySmall: TextStyle(color: Colors.white54, fontSize: 12),
@@ -151,7 +193,9 @@ class AppTheme {
       textStyle: const TextStyle(color: Colors.white),
       menuStyle: MenuStyle(
         backgroundColor: WidgetStateProperty.all(const Color(0xFF2C2C2C)),
-        shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
+        shape: WidgetStateProperty.all(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        ),
       ),
     ),
     snackBarTheme: SnackBarThemeData(

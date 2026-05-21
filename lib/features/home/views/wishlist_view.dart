@@ -94,14 +94,22 @@ class WishlistView extends StatelessWidget {
     );
   }
 
-  Widget _headerIcon(BuildContext context, String asset, {required VoidCallback onTap}) {
+  Widget _headerIcon(
+    BuildContext context,
+    String asset, {
+    required VoidCallback onTap,
+  }) {
     return InkWell(
       onTap: onTap,
       child: SvgPicture.asset(
         asset,
         width: 24.w,
         height: 24.h,
-        colorFilter: ColorFilter.mode(Theme.of(context).iconTheme.color ?? Theme.of(context).colorScheme.onSurface, BlendMode.srcIn),
+        colorFilter: ColorFilter.mode(
+          Theme.of(context).iconTheme.color ??
+              Theme.of(context).colorScheme.onSurface,
+          BlendMode.srcIn,
+        ),
       ),
     );
   }
@@ -147,7 +155,9 @@ class WishlistView extends StatelessWidget {
                       decoration: BoxDecoration(color: const Color(0xFFA3D2A2)),
                       child: Text(
                         context.watchTr('sale'),
-                        style: Theme.of(context).textTheme.labelSmall?.copyWith(color: Colors.white),
+                        style: Theme.of(
+                          context,
+                        ).textTheme.labelSmall?.copyWith(color: Colors.white),
                       ),
                     ),
                   ),
@@ -173,18 +183,22 @@ class WishlistView extends StatelessWidget {
                       if (product.updatePrice != '0')
                         Text(
                           product.updatePrice,
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            decoration: TextDecoration.lineThrough,
-                            color: Theme.of(context).disabledColor,
-                          ),
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
+                                decoration: TextDecoration.lineThrough,
+                                color: Theme.of(context).disabledColor,
+                              ),
                         ),
                       Text(
                         product.price,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: product.updatePrice != '0'
-                              ? Theme.of(context).colorScheme.primary
-                              : Theme.of(context).textTheme.titleMedium?.color,
-                        ),
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(
+                              color: product.updatePrice != '0'
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(
+                                      context,
+                                    ).textTheme.titleMedium?.color,
+                            ),
                       ),
                     ],
                   ),
@@ -196,10 +210,7 @@ class WishlistView extends StatelessWidget {
                     spacing: 4.w,
                     children: [
                       Icon(Icons.star, color: AppColors.ratingColor),
-                      Text(
-                        '5.0',
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
+                      Text('5.0', style: Theme.of(context).textTheme.bodySmall),
                     ],
                   ),
                 ],

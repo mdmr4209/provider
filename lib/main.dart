@@ -14,7 +14,6 @@ import 'features/theme/controllers/theme_controller.dart';
 import 'core/services/notifications/firebase_options.dart';
 import 'core/constants/app_colors.dart';
 import 'core/services/api_service.dart';
-import 'core/services/notifications/notification_service.dart';
 import 'routes/app_router.dart';
 import 'core/utils/helpers/snack_bar_helper.dart';
 
@@ -40,7 +39,7 @@ Future<void> main() async {
       options: DefaultFirebaseOptions.currentPlatform,
     );
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-    final initMsg = await FirebaseMessaging.instance.getInitialMessage();
+    // final initMsg = await FirebaseMessaging.instance.getInitialMessage();
     // if (initMsg != null) NotificationService.initialMessage = initMsg;
     // final apiService = ApiService();
     // await NotificationService.instance.initialize(apiService: apiService);

@@ -3,7 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/exceptions/app_exceptions.dart';
 import '../../../core/widgets/custom_button.dart';
+import '../../../core/widgets/custom_loader.dart';
+import '../../../core/widgets/error_widget.dart';
 import '../../../core/widgets/input_text_widget.dart';
 import '../../../routes/app_router.dart';
 import '../../localization/localization_extension.dart';
@@ -23,197 +26,245 @@ class AuthView extends StatelessWidget {
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Row(
+            child: Consumer<AuthController>(
+              builder: (context, auth, _) {
+                // Show full-screen loader while loading
+                if (auth.isLoading && auth.errorMessage.isEmpty) {
+                  return const FullScreenLoader();
+                }
+
+                // Show error widget if there's an error
+                if (auth.error != null) {
+                  return ErrorDisplayWidget(
+                    exception: auth.error!,
+                    isFullScreen: true,
+                    onRetry: () {
+                      auth.clearError();
+                    },
+                  );
+                }
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Spacer(),
-                    Text(
-                      context.watchTr('sign_in'),
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    Spacer(),
-                  ],
-                ),
-                SizedBox(height: 10.h),
-                Expanded(
-                  child: Container(
-                    width: 335.w,
-                    height: 677.h,
-                    clipBehavior: Clip.antiAlias,
-                    decoration: BoxDecoration(
-                      // Removed: image: DecorationImage(
-                      // Removed:   image: AssetImage(ImageAssets.background),
-                      // Removed:   fit: BoxFit.cover,
-                      // Removed: ),
-                      color: Theme.of(context).colorScheme.surface, // Placeholder color
-                    ),
-                    child: Stack(
-                      alignment: Alignment.center,
+                    Row(
                       children: [
-                        AnimatedPositioned(
-                          duration: Duration(milliseconds: 200),
-                          curve: Curves.easeIn,
-                          top: isKeyboardOpen ? -150.h : 50.h,
-                          left: 0,
-                          right: 0,
-                          bottom: 0,
-                          child: Consumer<AuthController>(
-                            builder: (context, auth, _) => ListView(
-                              padding: EdgeInsets.symmetric(horizontal: 20.w),
-                              children: [
-                                // Removed: SvgPicture.asset(ImageAssets.title),
-                                SizedBox(height: 20.h),
-                                Text(
-                                  context.watchTr('welcome_back'),
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(
-                                    context,
-                                  ).textTheme.displaySmall,
-                                ),
-                                SizedBox(height: 20.h),
-                                SizedBox(
-                                  width: 266.w,
-                                  child: Text(
-                                    context.watchTr('auth_subtitle'),
+                        Spacer(),
+                        Text(
+                          context.watchTr('sign_in'),
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        Spacer(),
+                      ],
+                    ),
+                    SizedBox(height: 10.h),
+                    Expanded(
+                      child: Container(
+                        width: 335.w,
+                        height: 677.h,
+                        clipBehavior: Clip.antiAlias,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.surface,
+                        ),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            AnimatedPositioned(
+                              duration: Duration(milliseconds: 200),
+                              curve: Curves.easeIn,
+                              top: isKeyboardOpen ? -150.h : 50.h,
+                              left: 0,
+                              right: 0,
+                              bottom: 0,
+                              child: ListView(
+                                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                                children: [
+                                  SizedBox(height: 20.h),
+                                  Text(
+                                    context.watchTr('welcome_back'),
                                     textAlign: TextAlign.center,
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.bodyMedium,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .displaySmall,
                                   ),
-                                ),
-                                SizedBox(height: 110.h),
-                                InputTextWidget(
-                                  hintText: context.watchTr('enter_your_email'),
-                                  controller: auth.emailController,
-                                  onChanged: (_) {},
-                                  keyboardType: TextInputType.emailAddress,
-                                ),
-                                SizedBox(height: 17.h),
-                                InputTextWidget(
-                                  hintText: context.watchTr(
-                                    'enter_your_password',
+                                  SizedBox(height: 20.h),
+                                  SizedBox(
+                                    width: 266.w,
+                                    child: Text(
+                                      context.watchTr('auth_subtitle'),
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium,
+                                    ),
                                   ),
-                                  obscureText: true,
-                                  controller: auth.passwordController,
-                                  onChanged: (_) {},
-                                  leadingIconHeight: 18,
-                                  leadingIconWidth: 14,
-                                ),
-                                SizedBox(height: 16.h),
-                                Row(
-                                  children: [
-                                    GestureDetector(
-                                      onTap: auth.toggleRemembered,
+                                  SizedBox(height: 110.h),
+                                  // Inline error display
+                                  if (auth.errorMessage.isNotEmpty) ...[
+                                    Container(
+                                      padding: EdgeInsets.all(12.w),
+                                      decoration: BoxDecoration(
+                                        color: Colors.red.withValues(alpha: 0.1),
+                                        border: Border.all(
+                                          color: Colors.red,
+                                          width: 1.5,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(8.r),
+                                      ),
                                       child: Row(
                                         children: [
-                                          Container(
-                                            width: 18.r,
-                                            height: 18.r,
-                                            decoration: BoxDecoration(
-                                              color: auth.isRemembered
-                                                  ? Theme.of(
-                                                      context,
-                                                    ).colorScheme.primary
-                                                  : Colors.transparent,
-                                              border: Border.all(
-                                                color: Theme.of(
-                                                  context,
-                                                ).dividerColor,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(4.r),
-                                            ),
-                                            child: Center(
-                                              child: Icon(
-                                                Icons.check,
-                                                color: auth.isRemembered
-                                                    ? Colors.white
-                                                    : Colors.transparent,
-                                                size: 14.r,
-                                              ),
-                                            ),
+                                          Icon(
+                                            Icons.error_outline,
+                                            color: Colors.red,
+                                            size: 20.w,
                                           ),
                                           SizedBox(width: 10.w),
-                                          Text(
-                                            context.watchTr('remember_me'),
-                                            textAlign: TextAlign.right,
-                                            style: Theme.of(
-                                              context,
-                                            ).textTheme.bodyMedium,
+                                          Expanded(
+                                            child: Text(
+                                              auth.errorMessage,
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 12.sp,
+                                              ),
+                                            ),
                                           ),
                                         ],
                                       ),
                                     ),
-                                    Spacer(),
-                                    InkWell(
-                                      onTap: () {
-                                        // Add this to debug
-                                        context.push(AppRoutes.forgetPass);
-                                      },
-                                      child: Text(
-                                        context.watchTr('lost_your_password'),
-                                        textAlign: TextAlign.right,
+                                    SizedBox(height: 16.h),
+                                  ],
+                                  InputTextWidget(
+                                    hintText:
+                                        context.watchTr('enter_your_email'),
+                                    controller: auth.emailController,
+                                    onChanged: (_) {},
+                                    keyboardType: TextInputType.emailAddress,
+                                  ),
+                                  SizedBox(height: 17.h),
+                                  InputTextWidget(
+                                    hintText: context.watchTr(
+                                      'enter_your_password',
+                                    ),
+                                    obscureText: true,
+                                    controller: auth.passwordController,
+                                    onChanged: (_) {},
+                                    leadingIconHeight: 18,
+                                    leadingIconWidth: 14,
+                                  ),
+                                  SizedBox(height: 16.h),
+                                  Row(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: auth.toggleRemembered,
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              width: 18.r,
+                                              height: 18.r,
+                                              decoration: BoxDecoration(
+                                                color: auth.isRemembered
+                                                    ? Theme.of(context)
+                                                        .colorScheme
+                                                        .primary
+                                                    : Colors.transparent,
+                                                border: Border.all(
+                                                  color: Theme.of(context)
+                                                      .dividerColor,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(4.r),
+                                              ),
+                                              child: Center(
+                                                child: Icon(
+                                                  Icons.check,
+                                                  color: auth.isRemembered
+                                                      ? Colors.white
+                                                      : Colors.transparent,
+                                                  size: 14.r,
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(width: 10.w),
+                                            Text(
+                                              context.watchTr('remember_me'),
+                                              textAlign: TextAlign.right,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      InkWell(
+                                        onTap: () {
+                                          context.push(AppRoutes.forgetPass);
+                                        },
+                                        child: Text(
+                                          context
+                                              .watchTr('lost_your_password'),
+                                          textAlign: TextAlign.right,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.copyWith(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                              ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 50.h),
+                                  CustomButton(
+                                    height: 60,
+                                    title: context.watchTr('sign_in_caps'),
+                                    onPress: auth.isLoading ? null : auth.login,
+                                    loading: auth.isLoading,
+                                  ),
+                                  SizedBox(height: 20.h),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "${context.watchTr('no_account')} ",
                                         style: Theme.of(context)
                                             .textTheme
-                                            .bodyMedium
-                                            ?.copyWith(
-                                              color: Theme.of(
-                                                context,
-                                              ).colorScheme.primary,
-                                            ),
+                                            .bodyMedium,
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 50.h),
-                                CustomButton(
-                                  height: 60,
-                                  title: context.watchTr('sign_in_caps'),
-                                  onPress: auth.isLoading ? null : auth.login,
-                                  loading: auth.isLoading,
-                                ),
-                                SizedBox(height: 20.h),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "${context.watchTr('no_account')} ",
-                                      style: Theme.of(
-                                        context,
-                                      ).textTheme.bodyMedium,
-                                    ),
-                                    GestureDetector(
-                                      onTap: () =>
-                                          context.push(AppRoutes.signup),
-                                      child: Text(
-                                        context.watchTr('register_now'),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium
-                                            ?.copyWith(
-                                              color: Theme.of(
-                                                context,
-                                              ).colorScheme.primary,
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                      GestureDetector(
+                                        onTap: () =>
+                                            context.push(AppRoutes.signup),
+                                        child: Text(
+                                          context.watchTr('register_now'),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.copyWith(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 20.h),
-                              ],
+                                    ],
+                                  ),
+                                  SizedBox(height: 20.h),
+                                ],
+                              ),
                             ),
-                          ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-              ],
+                  ],
+                );
+              },
             ),
           ),
         ),

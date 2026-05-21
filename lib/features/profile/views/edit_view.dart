@@ -92,7 +92,8 @@ class _EditViewState extends State<EditView> {
                                   shape: RoundedRectangleBorder(
                                     side: BorderSide(
                                       width: 1.5.w,
-                                      strokeAlign: BorderSide.strokeAlignOutside,
+                                      strokeAlign:
+                                          BorderSide.strokeAlignOutside,
                                       color: AppColors.defaultColor,
                                     ),
                                     borderRadius: BorderRadius.circular(70.r),
@@ -113,7 +114,9 @@ class _EditViewState extends State<EditView> {
                                     decoration: ShapeDecoration(
                                       color: Colors.white,
                                       shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(50.r),
+                                        borderRadius: BorderRadius.circular(
+                                          50.r,
+                                        ),
                                       ),
                                       shadows: const [
                                         BoxShadow(
@@ -142,7 +145,10 @@ class _EditViewState extends State<EditView> {
                           SizedBox(height: 10.h),
                           _inputCard('Email', profileController.emailCtrl),
                           SizedBox(height: 10.h),
-                          _inputCard('Phone Number', profileController.phoneCtrl),
+                          _inputCard(
+                            'Phone Number',
+                            profileController.phoneCtrl,
+                          ),
                           SizedBox(height: 10.h),
                           _inputCard('Address', profileController.addressCtrl),
                           SizedBox(height: 40.h),
@@ -153,7 +159,9 @@ class _EditViewState extends State<EditView> {
                                 Navigator.pop(context);
                               }
                             },
-                            title: profileController.isLoading ? 'SAVING...' : 'SAVE CHANGE',
+                            title: profileController.isLoading
+                                ? 'SAVING...'
+                                : 'SAVE CHANGE',
                           ),
                           SizedBox(height: 20.h),
                         ],

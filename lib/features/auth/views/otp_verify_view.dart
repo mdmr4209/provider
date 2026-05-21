@@ -89,7 +89,10 @@ class _OtpVerifyViewState extends State<OtpVerifyView> {
                       onTap: () {
                         Navigator.pop(context);
                       },
-                      child: Icon(Icons.arrow_back_ios_new, color: Theme.of(context).iconTheme.color),
+                      child: Icon(
+                        Icons.arrow_back_ios_new,
+                        color: Theme.of(context).iconTheme.color,
+                      ),
                     ),
                     Spacer(),
                     Text(
@@ -111,7 +114,9 @@ class _OtpVerifyViewState extends State<OtpVerifyView> {
                     // Removed:   image: AssetImage(ImageAssets.background2),
                     // Removed:   fit: BoxFit.cover,
                     // Removed: ),
-                    color: Theme.of(context).colorScheme.surface, // Placeholder color
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.surface, // Placeholder color
                   ),
                   child: Stack(
                     alignment: Alignment.center,
@@ -144,17 +149,27 @@ class _OtpVerifyViewState extends State<OtpVerifyView> {
                                 length: 5,
                                 textStyle: TextStyle(fontSize: 18.sp),
                                 animationType: AnimationType.fade,
-                                cursorColor: Theme.of(context).colorScheme.primary,
+                                cursorColor: Theme.of(
+                                  context,
+                                ).colorScheme.primary,
                                 pinTheme: PinTheme(
                                   shape: PinCodeFieldShape.box,
                                   fieldHeight: 50.h,
                                   fieldWidth: 50.w,
                                   activeColor: Theme.of(context).dividerColor,
-                                  activeFillColor: Theme.of(context).cardTheme.color,
-                                  selectedColor: Theme.of(context).colorScheme.primary,
-                                  selectedFillColor: Theme.of(context).cardTheme.color,
+                                  activeFillColor: Theme.of(
+                                    context,
+                                  ).cardTheme.color,
+                                  selectedColor: Theme.of(
+                                    context,
+                                  ).colorScheme.primary,
+                                  selectedFillColor: Theme.of(
+                                    context,
+                                  ).cardTheme.color,
                                   inactiveColor: Theme.of(context).dividerColor,
-                                  inactiveFillColor: Theme.of(context).cardTheme.color,
+                                  inactiveFillColor: Theme.of(
+                                    context,
+                                  ).cardTheme.color,
                                   borderRadius: BorderRadius.circular(8.r),
                                 ),
                                 animationDuration: const Duration(
@@ -181,7 +196,9 @@ class _OtpVerifyViewState extends State<OtpVerifyView> {
                                     children: [
                                       Text(
                                         context.watchTr('did_not_receive_code'),
-                                        style: Theme.of(context).textTheme.bodySmall,
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.bodySmall,
                                       ),
                                       InkWell(
                                         onTap: _secondsRemaining == 0
@@ -189,14 +206,23 @@ class _OtpVerifyViewState extends State<OtpVerifyView> {
                                             : null,
                                         child: Text(
                                           context.watchTr('resend'),
-                                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                            color: _secondsRemaining == 0
-                                                ? Theme.of(context).colorScheme.primary
-                                                : Theme.of(context).textTheme.bodySmall?.color,
-                                            fontWeight: _secondsRemaining == 0
-                                                ? FontWeight.bold
-                                                : FontWeight.w600,
-                                          ),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall
+                                              ?.copyWith(
+                                                color: _secondsRemaining == 0
+                                                    ? Theme.of(
+                                                        context,
+                                                      ).colorScheme.primary
+                                                    : Theme.of(context)
+                                                          .textTheme
+                                                          .bodySmall
+                                                          ?.color,
+                                                fontWeight:
+                                                    _secondsRemaining == 0
+                                                    ? FontWeight.bold
+                                                    : FontWeight.w600,
+                                              ),
                                         ),
                                       ),
                                     ],
@@ -204,9 +230,12 @@ class _OtpVerifyViewState extends State<OtpVerifyView> {
                                   SizedBox(height: 5.h),
                                   Text(
                                     '${context.watchTr('resend_available_in')} $_formattedTime',
-                                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: Theme.of(context).colorScheme.primary,
-                                    ),
+                                    style: Theme.of(context).textTheme.bodySmall
+                                        ?.copyWith(
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.primary,
+                                        ),
                                     textAlign: TextAlign.center,
                                   ),
                                   SizedBox(height: 20.h),
@@ -232,8 +261,9 @@ class _OtpVerifyViewState extends State<OtpVerifyView> {
                                         );
                                       } else {
                                         showWarningSnackBar(
-                                          message:
-                                              context.watchTr('enter_valid_otp'),
+                                          message: context.watchTr(
+                                            'enter_valid_otp',
+                                          ),
                                         );
                                       }
                                     },

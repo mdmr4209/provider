@@ -121,7 +121,7 @@ class MyAddress extends StatelessWidget {
             height: 50.r,
             clipBehavior: Clip.antiAlias,
             decoration: ShapeDecoration(
-              color:AppColors.containerColor,
+              color: AppColors.containerColor,
               shape: RoundedRectangleBorder(
                 side: BorderSide(width: 1.w, color: AppColors.whiteTextColor),
               ),
@@ -163,5 +163,4 @@ class MyAddress extends StatelessWidget {
       ),
     );
   }
-
 }
