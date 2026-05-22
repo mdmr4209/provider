@@ -1,17 +1,33 @@
-/// Base exception class
+/// Base exception class for the application
 abstract class AppException implements Exception {
   final String message;
+  final String title;
   final String? code;
+  final bool isCritical;
   final dynamic originalException;
 
   AppException({
     required this.message,
+    required this.title,
+    this.isCritical = false,
     this.code,
     this.originalException,
   });
 
   @override
-  String toString() => message;
+  String toString() => '$title: $message';
+
+  /// Helper to check if the error is network related
+  bool get isNetworkError => 
+    this is InternetException || 
+    this is TimeoutException || 
+    this is NetworkException;
+
+  /// Helper to check if the error is auth related
+  bool get isAuthError => 
+    this is UnauthorizedException || 
+    this is ForbiddenException || 
+    this is AuthException;
 }
 
 // ── Network Exceptions ─────────────────────────────────────────────────
@@ -23,10 +39,12 @@ class InternetException extends AppException {
     String? code,
     dynamic originalException,
   }) : super(
-    message: message,
-    code: code,
-    originalException: originalException,
-  );
+          message: message,
+          title: 'Connectivity Issue',
+          isCritical: true,
+          code: code,
+          originalException: originalException,
+        );
 }
 
 /// Request timeout exception
@@ -36,10 +54,12 @@ class TimeoutException extends AppException {
     String? code,
     dynamic originalException,
   }) : super(
-    message: message,
-    code: code,
-    originalException: originalException,
-  );
+          message: message,
+          title: 'Timeout',
+          isCritical: true,
+          code: code,
+          originalException: originalException,
+        );
 }
 
 /// Bad request exception (400)
@@ -49,10 +69,12 @@ class BadRequestException extends AppException {
     String? code,
     dynamic originalException,
   }) : super(
-    message: message,
-    code: code ?? '400',
-    originalException: originalException,
-  );
+          message: message,
+          title: 'Invalid Request',
+          isCritical: false,
+          code: code ?? '400',
+          originalException: originalException,
+        );
 }
 
 /// Unauthorized exception (401)
@@ -62,10 +84,12 @@ class UnauthorizedException extends AppException {
     String? code,
     dynamic originalException,
   }) : super(
-    message: message,
-    code: code ?? '401',
-    originalException: originalException,
-  );
+          message: message,
+          title: 'Unauthorized',
+          isCritical: false,
+          code: code ?? '401',
+          originalException: originalException,
+        );
 }
 
 /// Forbidden exception (403)
@@ -75,10 +99,12 @@ class ForbiddenException extends AppException {
     String? code,
     dynamic originalException,
   }) : super(
-    message: message,
-    code: code ?? '403',
-    originalException: originalException,
-  );
+          message: message,
+          title: 'Forbidden',
+          isCritical: false,
+          code: code ?? '403',
+          originalException: originalException,
+        );
 }
 
 /// Not found exception (404)
@@ -88,10 +114,12 @@ class NotFoundException extends AppException {
     String? code,
     dynamic originalException,
   }) : super(
-    message: message,
-    code: code ?? '404',
-    originalException: originalException,
-  );
+          message: message,
+          title: 'Not Found',
+          isCritical: false,
+          code: code ?? '404',
+          originalException: originalException,
+        );
 }
 
 /// Server exception (500, 502, 503, 504)
@@ -101,10 +129,12 @@ class ServerException extends AppException {
     String? code,
     dynamic originalException,
   }) : super(
-    message: message,
-    code: code ?? '500',
-    originalException: originalException,
-  );
+          message: message,
+          title: 'Server Error',
+          isCritical: true,
+          code: code ?? '500',
+          originalException: originalException,
+        );
 }
 
 /// Validation exception (422)
@@ -117,10 +147,12 @@ class ValidationException extends AppException {
     dynamic originalException,
     this.errors,
   }) : super(
-    message: message,
-    code: code ?? '422',
-    originalException: originalException,
-  );
+          message: message,
+          title: 'Validation Failed',
+          isCritical: false,
+          code: code ?? '422',
+          originalException: originalException,
+        );
 }
 
 /// Generic network exception
@@ -130,10 +162,12 @@ class NetworkException extends AppException {
     String? code,
     dynamic originalException,
   }) : super(
-    message: message,
-    code: code,
-    originalException: originalException,
-  );
+          message: message,
+          title: 'Network Error',
+          isCritical: false,
+          code: code,
+          originalException: originalException,
+        );
 }
 
 // ── App-Level Exceptions ───────────────────────────────────────────────
@@ -145,10 +179,12 @@ class GenericException extends AppException {
     String? code,
     dynamic originalException,
   }) : super(
-    message: message,
-    code: code,
-    originalException: originalException,
-  );
+          message: message,
+          title: 'Error',
+          isCritical: false,
+          code: code,
+          originalException: originalException,
+        );
 }
 
 /// Authentication exception
@@ -158,10 +194,12 @@ class AuthException extends AppException {
     String? code,
     dynamic originalException,
   }) : super(
-    message: message,
-    code: code,
-    originalException: originalException,
-  );
+          message: message,
+          title: 'Authentication Error',
+          isCritical: false,
+          code: code,
+          originalException: originalException,
+        );
 }
 
 /// Data parsing exception
@@ -171,10 +209,12 @@ class DataParsingException extends AppException {
     String? code,
     dynamic originalException,
   }) : super(
-    message: message,
-    code: code,
-    originalException: originalException,
-  );
+          message: message,
+          title: 'Parsing Error',
+          isCritical: true,
+          code: code,
+          originalException: originalException,
+        );
 }
 
 /// Cache exception
@@ -184,9 +224,10 @@ class CacheException extends AppException {
     String? code,
     dynamic originalException,
   }) : super(
-    message: message,
-    code: code,
-    originalException: originalException,
-  );
+          message: message,
+          title: 'Cache Error',
+          isCritical: false,
+          code: code,
+          originalException: originalException,
+        );
 }
-

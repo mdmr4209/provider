@@ -14,6 +14,9 @@ class GoToHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Standardizing the origin check based on AuthController refactor
+    final isSignup = origin?.toLowerCase() == "signup" || origin == "Sign up";
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
@@ -22,77 +25,62 @@ class GoToHome extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 20.h),
-                // Removed: SvgPicture.asset(ImageAssets.title),
-                SizedBox(height: 15.h),
+                const Spacer(),
                 Stack(
                   alignment: Alignment.center,
                   children: [
-                    // Removed: Image.asset(ImageAssets.bgIcon),
                     Container(
-                      // Placeholder for bgIcon
-                      width: 200.w, // Adjust size as needed
-                      height: 200.h, // Adjust size as needed
+                      width: 160.r,
+                      height: 160.r,
                       decoration: BoxDecoration(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .surfaceContainerHighest, // Placeholder color
+                        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
                         shape: BoxShape.circle,
                       ),
                     ),
-                    Positioned(
-                      bottom: 0,
-                      // Removed: child: SvgPicture.asset( origin == "Sign up"?ImageAssets.account:ImageAssets.password)),
-                      child: Icon(
-                        origin == "Sign up"
-                            ? Icons.person_add_alt_1
-                            : Icons.lock_reset_rounded,
-                        size: 80.w,
-                        color: Theme.of(context).colorScheme.primary,
-                      ), // Placeholder icon
+                    Icon(
+                      isSignup ? Icons.person_add_alt_1_rounded : Icons.lock_reset_rounded,
+                      size: 80.r,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ],
                 ),
-                Consumer<AuthController>(
-                  builder: (context, auth, _) => Expanded(
-                    child: ListView(
-                      children: [
-                        SizedBox(height: 30.h),
-                        Text(
-                          origin == "Sign up"
-                              ? context.watchTr('account_created')
-                              : context.watchTr('password_reset_success'),
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.headlineMedium,
-                        ),
-                        SizedBox(height: 10.h),
-                        Text(
-                          origin == "Sign up"
-                              ? context.watchTr('account_created_msg')
-                              : context.watchTr('password_reset_msg'),
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                        SizedBox(height: 30.h),
-                        CustomButton(
-                          height: 60,
-                          title: origin == "Sign up"
-                              ? context.watchTr('shop_now')
-                              : context.watchTr('done'),
-                          onPress: auth.isHomeLoading
-                              ? null
-                              : () async {
-                                  auth.clear();
-                                  context.push(AppRoutes.home);
-                                },
-                          loading: auth.isHomeLoading,
-                        ),
-                        SizedBox(height: 20.h),
-                      ],
-                    ),
+                SizedBox(height: 40.h),
+                Text(
+                  isSignup
+                      ? context.watchTr('account_created')
+                      : context.watchTr('password_reset_success'),
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
+                SizedBox(height: 16.h),
+                Text(
+                  isSignup
+                      ? context.watchTr('account_created_msg')
+                      : context.watchTr('password_reset_msg'),
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                const Spacer(),
+                Consumer<AuthController>(
+                  builder: (context, auth, _) => CustomButton(
+                    height: 56,
+                    title: isSignup ? context.watchTr('shop_now') : context.watchTr('done'),
+                    onPress: auth.isLoading
+                        ? null
+                        : () async {
+                            // Reset input controllers but don't log out (don't call auth.clear())
+                            auth.clearInputFields();
+                            // Navigate to home and clear navigation stack
+                            context.go(AppRoutes.home);
+                          },
+                    loading: auth.isLoading,
+                  ),
+                ),
+                SizedBox(height: 40.h),
               ],
             ),
           ),

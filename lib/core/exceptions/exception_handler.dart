@@ -26,6 +26,15 @@ class ExceptionHandler {
     );
   }
 
+  /// Handles manual response checks when Dio validateStatus allows error codes
+  static AppException handleResponse(Response response) {
+    return _handleStatusCode(
+      response.statusCode ?? 0,
+      response.data,
+      null,
+    );
+  }
+
   static AppException _handleDioException(DioException error) {
     switch (error.type) {
       case DioExceptionType.connectionTimeout:
@@ -53,7 +62,11 @@ class ExceptionHandler {
         );
 
       case DioExceptionType.badResponse:
-        return _handleStatusCode(error);
+        return _handleStatusCode(
+          error.response?.statusCode ?? 0,
+          error.response?.data,
+          error,
+        );
 
       case DioExceptionType.cancel:
         return NetworkException(
@@ -69,36 +82,34 @@ class ExceptionHandler {
     }
   }
 
-  static AppException _handleStatusCode(DioException error) {
-    final statusCode = error.response?.statusCode ?? 0;
-    final data = error.response?.data;
+  static AppException _handleStatusCode(int statusCode, dynamic data, dynamic original) {
     final message = _extractErrorMessage(data);
 
     switch (statusCode) {
       case 400:
         return BadRequestException(
           message: message,
-          originalException: error,
+          originalException: original,
         );
       case 401:
         return UnauthorizedException(
           message: message,
-          originalException: error,
+          originalException: original,
         );
       case 403:
         return ForbiddenException(
           message: message,
-          originalException: error,
+          originalException: original,
         );
       case 404:
         return NotFoundException(
           message: message,
-          originalException: error,
+          originalException: original,
         );
       case 422:
         return ValidationException(
           message: message,
-          originalException: error,
+          originalException: original,
           errors: data is Map ? data['errors'] : null,
         );
       case 500:
@@ -108,13 +119,13 @@ class ExceptionHandler {
         return ServerException(
           message: message,
           code: '$statusCode',
-          originalException: error,
+          originalException: original,
         );
       default:
         return NetworkException(
           message: message,
           code: '$statusCode',
-          originalException: error,
+          originalException: original,
         );
     }
   }
@@ -124,9 +135,10 @@ class ExceptionHandler {
       return data['message']?.toString() ??
           data['error']?.toString() ??
           data['detail']?.toString() ??
+          data['msg']?.toString() ??
+          (data['errors'] is Map ? (data['errors'] as Map).values.first.toString() : null) ??
           'An error occurred';
     }
     return 'An error occurred';
   }
 }
-

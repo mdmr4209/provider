@@ -28,20 +28,19 @@ class AuthView extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
             child: Consumer<AuthController>(
               builder: (context, auth, _) {
-                // Show full-screen loader while loading
-                if (auth.isLoading && auth.errorMessage.isEmpty) {
-                  return const FullScreenLoader();
-                }
-
-                // Show error widget if there's an error
-                if (auth.error != null) {
+                // 1. Critical Error Handling (Full Screen)
+                // Used for issues like No Internet or Server Down.
+                if (auth.error != null && auth.error!.isCritical) {
                   return ErrorDisplayWidget(
                     exception: auth.error!,
                     isFullScreen: true,
-                    onRetry: () {
-                      auth.clearError();
-                    },
+                    onRetry: () => auth.login(),
                   );
+                }
+
+                // 2. Loading State
+                if (auth.isLoading && auth.error == null) {
+                  return const FullScreenLoader();
                 }
 
                 return Column(
@@ -50,13 +49,13 @@ class AuthView extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Spacer(),
+                        const Spacer(),
                         Text(
                           context.watchTr('sign_in'),
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
-                        Spacer(),
+                        const Spacer(),
                       ],
                     ),
                     SizedBox(height: 10.h),
@@ -72,7 +71,7 @@ class AuthView extends StatelessWidget {
                           alignment: Alignment.center,
                           children: [
                             AnimatedPositioned(
-                              duration: Duration(milliseconds: 200),
+                              duration: const Duration(milliseconds: 200),
                               curve: Curves.easeIn,
                               top: isKeyboardOpen ? -150.h : 50.h,
                               left: 0,
@@ -85,9 +84,7 @@ class AuthView extends StatelessWidget {
                                   Text(
                                     context.watchTr('welcome_back'),
                                     textAlign: TextAlign.center,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .displaySmall,
+                                    style: Theme.of(context).textTheme.displaySmall,
                                   ),
                                   SizedBox(height: 20.h),
                                   SizedBox(
@@ -95,64 +92,40 @@ class AuthView extends StatelessWidget {
                                     child: Text(
                                       context.watchTr('auth_subtitle'),
                                       textAlign: TextAlign.center,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium,
+                                      style: Theme.of(context).textTheme.bodyMedium,
                                     ),
                                   ),
                                   SizedBox(height: 110.h),
-                                  // Inline error display
-                                  if (auth.errorMessage.isNotEmpty) ...[
-                                    Container(
-                                      padding: EdgeInsets.all(12.w),
-                                      decoration: BoxDecoration(
-                                        color: Colors.red.withValues(alpha: 0.1),
-                                        border: Border.all(
-                                          color: Colors.red,
-                                          width: 1.5,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(8.r),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            Icons.error_outline,
-                                            color: Colors.red,
-                                            size: 20.w,
-                                          ),
-                                          SizedBox(width: 10.w),
-                                          Expanded(
-                                            child: Text(
-                                              auth.errorMessage,
-                                              style: TextStyle(
-                                                color: Colors.red,
-                                                fontSize: 12.sp,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+
+                                  // 3. Non-Critical Error Display (Inline)
+                                  if (auth.error != null) ...[
+                                    ErrorDisplayWidget(
+                                      exception: auth.error!,
+                                      onRetry: () => auth.clearError(),
+                                    ),
+                                    SizedBox(height: 16.h),
+                                  ] else if (auth.errorMessage.isNotEmpty) ...[
+                                    // Fallback for string-based errors
+                                    ErrorDisplayWidget(
+                                      exception: GenericException(message: auth.errorMessage),
+                                      onRetry: () => auth.clear(),
                                     ),
                                     SizedBox(height: 16.h),
                                   ],
+
                                   InputTextWidget(
-                                    hintText:
-                                        context.watchTr('enter_your_email'),
+                                    hintText: context.watchTr('enter_your_email'),
                                     controller: auth.emailController,
-                                    onChanged: (_) {},
+                                    onChanged: (_) => auth.clearError(), // Auto-clear error when user types
                                     keyboardType: TextInputType.emailAddress,
                                   ),
                                   SizedBox(height: 17.h),
                                   InputTextWidget(
-                                    hintText: context.watchTr(
-                                      'enter_your_password',
-                                    ),
+                                    hintText: context.watchTr('enter_your_password'),
                                     obscureText: true,
                                     controller: auth.passwordController,
-                                    onChanged: (_) {},
-                                    leadingIconHeight: 18,
-                                    leadingIconWidth: 14,
+                                    onChanged: (_) => auth.clearError(), // Auto-clear error when user types
+                                    showObscureToggle: true,
                                   ),
                                   SizedBox(height: 16.h),
                                   Row(
@@ -166,16 +139,12 @@ class AuthView extends StatelessWidget {
                                               height: 18.r,
                                               decoration: BoxDecoration(
                                                 color: auth.isRemembered
-                                                    ? Theme.of(context)
-                                                        .colorScheme
-                                                        .primary
+                                                    ? Theme.of(context).colorScheme.primary
                                                     : Colors.transparent,
                                                 border: Border.all(
-                                                  color: Theme.of(context)
-                                                      .dividerColor,
+                                                  color: Theme.of(context).dividerColor,
                                                 ),
-                                                borderRadius:
-                                                    BorderRadius.circular(4.r),
+                                                borderRadius: BorderRadius.circular(4.r),
                                               ),
                                               child: Center(
                                                 child: Icon(
@@ -191,29 +160,21 @@ class AuthView extends StatelessWidget {
                                             Text(
                                               context.watchTr('remember_me'),
                                               textAlign: TextAlign.right,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium,
+                                              style: Theme.of(context).textTheme.bodyMedium,
                                             ),
                                           ],
                                         ),
                                       ),
-                                      Spacer(),
+                                      const Spacer(),
                                       InkWell(
                                         onTap: () {
                                           context.push(AppRoutes.forgetPass);
                                         },
                                         child: Text(
-                                          context
-                                              .watchTr('lost_your_password'),
+                                          context.watchTr('lost_your_password'),
                                           textAlign: TextAlign.right,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium
-                                              ?.copyWith(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary,
+                                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                                color: Theme.of(context).colorScheme.primary,
                                               ),
                                         ),
                                       ),
@@ -232,22 +193,14 @@ class AuthView extends StatelessWidget {
                                     children: [
                                       Text(
                                         "${context.watchTr('no_account')} ",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium,
+                                        style: Theme.of(context).textTheme.bodyMedium,
                                       ),
                                       GestureDetector(
-                                        onTap: () =>
-                                            context.push(AppRoutes.signup),
+                                        onTap: () => context.push(AppRoutes.signup),
                                         child: Text(
                                           context.watchTr('register_now'),
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium
-                                              ?.copyWith(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary,
+                                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                                color: Theme.of(context).colorScheme.primary,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                         ),
