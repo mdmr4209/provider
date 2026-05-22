@@ -21,12 +21,10 @@ class SignUpView extends StatefulWidget {
 }
 
 class _SignUpViewState extends State<SignUpView> {
-  late TextEditingController _nameController;
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
   late TextEditingController _confirmPasswordController;
 
-  String? _nameError;
   String? _emailError;
   String? _passwordError;
   String? _confirmPasswordError;
@@ -35,7 +33,6 @@ class _SignUpViewState extends State<SignUpView> {
   void initState() {
     super.initState();
     final auth = context.read<AuthController>();
-    _nameController = auth.nameController;
     _emailController = auth.emailController;
     _passwordController = auth.passwordController;
     _confirmPasswordController = auth.setPasswordController;
@@ -43,7 +40,6 @@ class _SignUpViewState extends State<SignUpView> {
 
   void _validateFields() {
     setState(() {
-      _nameError = InputValidators.validateName(_nameController.text);
       _emailError = InputValidators.validateEmail(_emailController.text);
       _passwordError =
           InputValidators.validatePassword(_passwordController.text);
@@ -55,11 +51,9 @@ class _SignUpViewState extends State<SignUpView> {
   }
 
   bool get _isFormValid =>
-      _nameError == null &&
       _emailError == null &&
       _passwordError == null &&
       _confirmPasswordError == null &&
-      _nameController.text.isNotEmpty &&
       _emailController.text.isNotEmpty &&
       _passwordController.text.isNotEmpty &&
       _confirmPasswordController.text.isNotEmpty;
@@ -77,19 +71,15 @@ class _SignUpViewState extends State<SignUpView> {
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
             child: Consumer<AuthController>(
               builder: (context, auth, _) {
-                // Show full-screen loader while loading
-                if (auth.isLoading && auth.errorMessage.isEmpty) {
+                if (auth.isLoading && auth.error == null) {
                   return const FullScreenLoader();
                 }
 
-                // Show error widget if there's an error
-                if (auth.error != null) {
+                if (auth.error != null && auth.error!.isCritical) {
                   return ErrorDisplayWidget(
                     exception: auth.error!,
                     isFullScreen: true,
-                    onRetry: () {
-                      auth.clearError();
-                    },
+                    onRetry: () => auth.signup(),
                   );
                 }
 
@@ -108,13 +98,13 @@ class _SignUpViewState extends State<SignUpView> {
                             color: Theme.of(context).iconTheme.color,
                           ),
                         ),
-                        Spacer(),
+                        const Spacer(),
                         Text(
                           context.watchTr('sign_up'),
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
-                        Spacer(),
+                        const Spacer(),
                         SizedBox(width: 20.w),
                       ],
                     ),
@@ -131,7 +121,7 @@ class _SignUpViewState extends State<SignUpView> {
                           alignment: Alignment.center,
                           children: [
                             AnimatedPositioned(
-                              duration: Duration(milliseconds: 200),
+                              duration: const Duration(milliseconds: 200),
                               curve: Curves.easeIn,
                               top: isKeyboardOpen ? -150.h : 50.h,
                               left: 0,
@@ -160,74 +150,16 @@ class _SignUpViewState extends State<SignUpView> {
                                           .bodyMedium,
                                     ),
                                   ),
-                                  SizedBox(height: 110.h),
-                                  // Inline error display
-                                  if (auth.errorMessage.isNotEmpty) ...[
-                                    Container(
-                                      padding: EdgeInsets.all(12.w),
-                                      decoration: BoxDecoration(
-                                        color: Colors.red.withValues(alpha: 0.1),
-                                        border: Border.all(
-                                          color: Colors.red,
-                                          width: 1.5,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(8.r),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            Icons.error_outline,
-                                            color: Colors.red,
-                                            size: 20.w,
-                                          ),
-                                          SizedBox(width: 10.w),
-                                          Expanded(
-                                            child: Text(
-                                              auth.errorMessage,
-                                              style: TextStyle(
-                                                color: Colors.red,
-                                                fontSize: 12.sp,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                  SizedBox(height: 50.h),
+                                  
+                                  if (auth.error != null) ...[
+                                    ErrorDisplayWidget(
+                                      exception: auth.error!,
+                                      onRetry: () => auth.clearError(),
                                     ),
                                     SizedBox(height: 16.h),
                                   ],
-                                  // Name field
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      InputTextWidget(
-                                        hintText:
-                                            context.watchTr('enter_your_name'),
-                                        controller: _nameController,
-                                        onChanged: (_) {
-                                          setState(() {
-                                            _nameError = InputValidators
-                                                .validateName(
-                                              _nameController.text,
-                                            );
-                                          });
-                                        },
-                                        keyboardType: TextInputType.name,
-                                      ),
-                                      if (_nameError != null) ...[
-                                        SizedBox(height: 4.h),
-                                        Text(
-                                          _nameError!,
-                                          style: TextStyle(
-                                            color: Colors.red,
-                                            fontSize: 11.sp,
-                                          ),
-                                        ),
-                                      ],
-                                    ],
-                                  ),
-                                  SizedBox(height: 10.h),
+
                                   // Email field
                                   Column(
                                     crossAxisAlignment:
@@ -238,6 +170,7 @@ class _SignUpViewState extends State<SignUpView> {
                                             .watchTr('enter_your_email'),
                                         controller: _emailController,
                                         onChanged: (_) {
+                                          auth.clearError();
                                           setState(() {
                                             _emailError = InputValidators
                                                 .validateEmail(
@@ -253,7 +186,7 @@ class _SignUpViewState extends State<SignUpView> {
                                         Text(
                                           _emailError!,
                                           style: TextStyle(
-                                            color: Colors.red,
+                                            color: Theme.of(context).colorScheme.error,
                                             fontSize: 11.sp,
                                           ),
                                         ),
@@ -271,8 +204,10 @@ class _SignUpViewState extends State<SignUpView> {
                                           'enter_your_password',
                                         ),
                                         obscureText: true,
+                                        showObscureToggle: true,
                                         controller: _passwordController,
                                         onChanged: (_) {
+                                          auth.clearError();
                                           setState(() {
                                             _passwordError = InputValidators
                                                 .validatePassword(
@@ -280,15 +215,13 @@ class _SignUpViewState extends State<SignUpView> {
                                             );
                                           });
                                         },
-                                        leadingIconHeight: 18,
-                                        leadingIconWidth: 14,
                                       ),
                                       if (_passwordError != null) ...[
                                         SizedBox(height: 4.h),
                                         Text(
                                           _passwordError!,
                                           style: TextStyle(
-                                            color: Colors.red,
+                                            color: Theme.of(context).colorScheme.error,
                                             fontSize: 11.sp,
                                           ),
                                         ),
@@ -306,8 +239,10 @@ class _SignUpViewState extends State<SignUpView> {
                                           'confirm_your_password',
                                         ),
                                         obscureText: true,
+                                        showObscureToggle: true,
                                         controller: _confirmPasswordController,
                                         onChanged: (_) {
+                                          auth.clearError();
                                           setState(() {
                                             _confirmPasswordError =
                                                 InputValidators
@@ -317,22 +252,20 @@ class _SignUpViewState extends State<SignUpView> {
                                             );
                                           });
                                         },
-                                        leadingIconHeight: 18,
-                                        leadingIconWidth: 14,
                                       ),
                                       if (_confirmPasswordError != null) ...[
                                         SizedBox(height: 4.h),
                                         Text(
                                           _confirmPasswordError!,
                                           style: TextStyle(
-                                            color: Colors.red,
+                                            color: Theme.of(context).colorScheme.error,
                                             fontSize: 11.sp,
                                           ),
                                         ),
                                       ],
                                     ],
                                   ),
-                                  SizedBox(height: 20.h),
+                                  SizedBox(height: 30.h),
                                   CustomButton(
                                     height: 60,
                                     title: context.watchTr('sign_up_button'),

@@ -3,11 +3,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeController with ChangeNotifier {
   static const String _themeKey = "theme_mode";
-  ThemeMode _themeMode = ThemeMode.light;
+  
+  // Default to system theme to respect device settings
+  ThemeMode _themeMode = ThemeMode.system;
 
   ThemeMode get themeMode => _themeMode;
 
-  bool get isDarkMode => _themeMode == ThemeMode.dark;
+  /// Check if dark mode is active. 
+  /// If themeMode is system, it depends on the device's brightness.
+  bool isDarkMode(BuildContext context) {
+    if (_themeMode == ThemeMode.system) {
+      return MediaQuery.platformBrightnessOf(context) == Brightness.dark;
+    }
+    return _themeMode == ThemeMode.dark;
+  }
 
   ThemeController() {
     _loadTheme();
@@ -30,11 +39,14 @@ class ThemeController with ChangeNotifier {
     await prefs.setInt(_themeKey, mode.index);
   }
 
-  Future<void> toggleTheme() async {
-    if (_themeMode == ThemeMode.light) {
-      await setThemeMode(ThemeMode.dark);
-    } else {
+  /// Toggles between light and dark mode. 
+  /// If currently system, it toggles based on the current effective brightness.
+  Future<void> toggleTheme(BuildContext context) async {
+    final currentlyDark = isDarkMode(context);
+    if (currentlyDark) {
       await setThemeMode(ThemeMode.light);
+    } else {
+      await setThemeMode(ThemeMode.dark);
     }
   }
 }

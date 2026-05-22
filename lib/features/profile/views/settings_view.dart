@@ -34,19 +34,57 @@ class SettingsView extends StatelessWidget {
           children: [
             _sectionHeader(context, context.watchTr('appearance')),
             Consumer<ThemeController>(
-              builder: (context, themeCtrl, _) => _settingsTile(
-                context,
-                title: context.watchTr('dark_mode'),
-                subtitle: themeCtrl.isDarkMode
-                    ? context.watchTr('on')
-                    : context.watchTr('off'),
-                trailing: Switch.adaptive(
-                  value: themeCtrl.isDarkMode,
-                  onChanged: (value) => themeCtrl.toggleTheme(),
-                  activeThumbColor: Theme.of(context).colorScheme.primary,
-                ),
-                onTap: () => themeCtrl.toggleTheme(),
-              ),
+              builder: (context, themeCtrl, _) {
+                final isDark = themeCtrl.isDarkMode(context);
+                final isSystem = themeCtrl.themeMode == ThemeMode.system;
+
+                return Column(
+                  children: [
+                    _settingsTile(
+                      context,
+                      title: context.watchTr('dark_mode'),
+                      subtitle: isDark
+                          ? context.watchTr('on')
+                          : context.watchTr('off'),
+                      trailing: Switch.adaptive(
+                        value: isDark,
+                        onChanged: isSystem 
+                          ? null // Disable manual toggle if following system
+                          : (value) => themeCtrl.toggleTheme(context),
+                        activeThumbColor: Theme.of(context).colorScheme.primary,
+                      ),
+                      onTap: isSystem 
+                        ? null 
+                        : () => themeCtrl.toggleTheme(context),
+                    ),
+                    SizedBox(height: 12.h),
+                    _settingsTile(
+                      context,
+                      title: 'Use Device Theme',
+                      subtitle: 'Automatically switch based on device settings',
+                      trailing: Checkbox(
+                        value: isSystem,
+                        onChanged: (value) {
+                          if (value == true) {
+                            themeCtrl.setThemeMode(ThemeMode.system);
+                          } else {
+                            // If turning off system, set to current effective brightness
+                            themeCtrl.setThemeMode(isDark ? ThemeMode.dark : ThemeMode.light);
+                          }
+                        },
+                        activeColor: Theme.of(context).colorScheme.primary,
+                      ),
+                      onTap: () {
+                        if (isSystem) {
+                          themeCtrl.setThemeMode(isDark ? ThemeMode.dark : ThemeMode.light);
+                        } else {
+                          themeCtrl.setThemeMode(ThemeMode.system);
+                        }
+                      },
+                    ),
+                  ],
+                );
+              },
             ),
             SizedBox(height: 20.h),
             _sectionHeader(context, context.watchTr('language')),
@@ -92,7 +130,7 @@ class SettingsView extends StatelessWidget {
     required String title,
     required String subtitle,
     required Widget trailing,
-    required VoidCallback onTap,
+    required VoidCallback? onTap,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -103,7 +141,12 @@ class SettingsView extends StatelessWidget {
       child: ListTile(
         onTap: onTap,
         title: Text(title, style: Theme.of(context).textTheme.bodyLarge),
-        subtitle: Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
+        subtitle: Text(
+          subtitle, 
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.6),
+          ),
+        ),
         trailing: trailing,
       ),
     );
@@ -119,7 +162,7 @@ class SettingsView extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 10.h),
       decoration: BoxDecoration(
         color: isSelected
-            ? Theme.of(context).colorScheme.primary.withAlpha(20)
+            ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
             : Theme.of(context).cardTheme.color,
         borderRadius: BorderRadius.circular(12.r),
         border: Border.all(

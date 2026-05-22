@@ -414,7 +414,11 @@ class AuthController extends ChangeNotifier {
         showSuccessSnackBar(message: message);
         await registerFcmToken();
 
-        _go(AppRoutes.goToHome, extra: origin);
+        if (origin == 'Signup') {
+           _go(AppRoutes.roleSelection);
+        } else {
+           _go(AppRoutes.goToHome, extra: origin);
+        }
       } else if (response != null) {
         _error = ExceptionHandler.handleResponse(response);
         notifyListeners();

@@ -8,6 +8,8 @@ import '../features/auth/views/forget_password_view.dart';
 import '../features/auth/views/go_to_home.dart';
 import '../features/auth/views/otp_verify_view.dart';
 import '../features/auth/views/sign_up_view.dart';
+import '../features/auth/views/role_selection_view.dart';
+import '../features/auth/views/name_input_view.dart';
 import '../features/cart/views/checkout.dart';
 import '../features/cart/views/confirm_order_view.dart';
 import '../features/cart/views/order_history.dart';
@@ -41,6 +43,8 @@ import '../features/profile/views/track_order.dart';
 abstract class AppRoutes {
   static const login = '/login';
   static const signup = '/signup';
+  static const roleSelection = '/role-selection';
+  static const nameInput = '/name-input';
   static const forgetPass = '/forget-password';
   static const otpVerify = '/otp-verify';
   static const changePass = '/change-password';
@@ -71,22 +75,18 @@ abstract class AppRoutes {
   static const checkout = '/checkout';
   static const addPromoCodeView = '/addPromoCodeView';
   static const settings = '/settings';
-  // static const  = '/';
 }
 
 // ── Router factory ──────────────────────────────────────────────────────────
 class AppRouter {
-  /// Pass the [AuthProvider] so the router can listen to auth state changes
-  /// and auto-redirect without any manual navigation calls inside the provider.
   static GoRouter create(
     AuthController auth,
     OnboardingController onboard,
     GlobalKey<NavigatorState> navigatorKey,
   ) {
     return GoRouter(
-      navigatorKey: navigatorKey, // Add this line
-      initialLocation: AppRoutes.home,
-      // Listen to both for changes
+      navigatorKey: navigatorKey,
+      initialLocation: AppRoutes.onboarding,
       refreshListenable: Listenable.merge([auth, onboard]),
 
       redirect: (context, state) {
@@ -96,20 +96,19 @@ class AppRouter {
         final bool isLoggedIn = auth.isLoggedIn;
         final String loc = state.matchedLocation;
 
-        // 1. Force Onboarding if not done
         if (!hasOnboarded && loc != AppRoutes.onboarding) {
           return AppRoutes.onboarding;
         }
 
-        // 2. If finished onboarding but on onboarding page, go to login/home
         if (hasOnboarded && loc == AppRoutes.onboarding) {
           return isLoggedIn ? AppRoutes.home : AppRoutes.login;
         }
 
-        // 3. Standard Auth Guard
         final onAuthScreen =
             loc == AppRoutes.login ||
             loc == AppRoutes.signup ||
+            loc == AppRoutes.roleSelection ||
+            loc == AppRoutes.nameInput ||
             loc == AppRoutes.forgetPass ||
             loc == AppRoutes.otpVerify ||
             loc == AppRoutes.changePass ||
@@ -138,7 +137,8 @@ class AppRouter {
             loc == AppRoutes.checkout ||
             loc == AppRoutes.order ||
             loc == AppRoutes.settings ||
-            loc == AppRoutes.goToHome; // etc
+            loc == AppRoutes.goToHome;
+            
         if (isLoggedIn && onAuthScreen) return AppRoutes.home;
         if (!isLoggedIn && !onAuthScreen && hasOnboarded) {
           return AppRoutes.login;
@@ -149,7 +149,6 @@ class AppRouter {
       routes: [
         StatefulShellRoute.indexedStack(
           builder: (context, state, navigationShell) {
-            // navigationShell contains the currentIndex and the sub-page
             return Navbar(navigationShell: navigationShell);
           },
           branches: [
@@ -188,7 +187,7 @@ class AppRouter {
             StatefulShellBranch(
               routes: [
                 GoRoute(
-                  path: AppRoutes.profile, // Define a simple profile path
+                  path: AppRoutes.profile,
                   builder: (context, state) => const ProfileView(),
                 ),
               ],
@@ -213,6 +212,18 @@ class AppRouter {
           pageBuilder: (_, __) => const MaterialPage(child: SignUpView()),
         ),
         GoRoute(
+          path: AppRoutes.roleSelection,
+          name: 'roleSelection',
+          pageBuilder: (_, __) => const MaterialPage(child: RoleSelectionView()),
+        ),
+        GoRoute(
+          path: AppRoutes.nameInput,
+          name: 'nameInput',
+          pageBuilder: (_, state) => MaterialPage(
+            child: NameInputView(role: state.extra as String? ?? 'User'),
+          ),
+        ),
+        GoRoute(
           path: AppRoutes.forgetPass,
           name: 'forgetPassword',
           pageBuilder: (_, __) =>
@@ -221,7 +232,6 @@ class AppRouter {
         GoRoute(
           path: AppRoutes.otpVerify,
           name: 'otpVerify',
-          // Usage: context.go(AppRoutes.otpVerify, extra: 'Signup')
           pageBuilder: (_, state) => MaterialPage(
             child: OtpVerifyView(origin: state.extra as String?),
           ),
@@ -229,31 +239,20 @@ class AppRouter {
         GoRoute(
           path: AppRoutes.changePass,
           name: 'changePassword',
-          // Usage: context.go(AppRoutes.changePass, extra: 'Forget')
           pageBuilder: (_, state) => MaterialPage(child: ChangePasswordView()),
         ),
         GoRoute(
           path: AppRoutes.goToHome,
           name: 'goToHome',
-          // Usage: context.go(AppRoutes.changePass, extra: 'Forget')
           pageBuilder: (_, state) =>
               MaterialPage(child: GoToHome(origin: state.extra as String?)),
         ),
 
         // ── Protected ─────────────────────────────────────────────────────────
-        // GoRoute(
-        //   path: AppRoutes.home,
-        //   name: 'home',
-        //   pageBuilder: (_, __) => const MaterialPage(
-        //     // child: NavBar(),  // swap in your home widget
-        //     child: Navbar(),
-        //   ),
-        // ),
         GoRoute(
           path: AppRoutes.wishlist,
           name: 'wishlist',
           pageBuilder: (_, __) => const MaterialPage(
-            // child: NavBar(),  // swap in your home widget
             child: WishlistView(),
           ),
         ),
@@ -261,7 +260,6 @@ class AppRouter {
           path: AppRoutes.search,
           name: 'search',
           pageBuilder: (_, __) => const MaterialPage(
-            // child: NavBar(),  // swap in your home widget
             child: SearchView(),
           ),
         ),
@@ -269,7 +267,6 @@ class AppRouter {
           path: AppRoutes.review,
           name: 'review',
           pageBuilder: (_, __) => const MaterialPage(
-            // child: NavBar(),  // swap in your home widget
             child: ReviewView(),
           ),
         ),
@@ -277,7 +274,6 @@ class AppRouter {
           path: AppRoutes.product,
           name: 'product',
           pageBuilder: (_, __) => MaterialPage(
-            // child: NavBar(),  // swap in your home widget
             child: ProductView(),
           ),
         ),
@@ -285,7 +281,6 @@ class AppRouter {
           path: AppRoutes.filter,
           name: 'filter',
           pageBuilder: (_, __) => const MaterialPage(
-            // child: NavBar(),  // swap in your home widget
             child: FilterView(),
           ),
         ),
@@ -293,7 +288,6 @@ class AppRouter {
           path: AppRoutes.commentReview,
           name: 'commentReview',
           pageBuilder: (_, __) => const MaterialPage(
-            // child: NavBar(),  // swap in your home widget
             child: CommentReviewView(),
           ),
         ),
@@ -301,7 +295,6 @@ class AppRouter {
           path: AppRoutes.logout,
           name: 'logout',
           pageBuilder: (_, __) => const MaterialPage(
-            // child: NavBar(),  // swap in your home widget
             child: Logout(),
           ),
         ),
@@ -309,7 +302,6 @@ class AppRouter {
           path: AppRoutes.orderHistory,
           name: 'orderHistory',
           pageBuilder: (_, __) => const MaterialPage(
-            // child: NavBar(),  // swap in your home widget
             child: OrderHistory(),
           ),
         ),
@@ -317,7 +309,6 @@ class AppRouter {
           path: AppRoutes.paymentMethod,
           name: 'paymentMethod',
           pageBuilder: (_, __) => const MaterialPage(
-            // child: NavBar(),  // swap in your home widget
             child: PaymentView(),
           ),
         ),
@@ -325,7 +316,6 @@ class AppRouter {
           path: AppRoutes.address,
           name: 'address',
           pageBuilder: (_, __) => const MaterialPage(
-            // child: NavBar(),  // swap in your home widget
             child: MyAddress(),
           ),
         ),
@@ -333,7 +323,6 @@ class AppRouter {
           path: AppRoutes.promoCode,
           name: 'promoCode',
           pageBuilder: (_, __) => const MaterialPage(
-            // child: NavBar(),  // swap in your home widget
             child: PromoCodeView(),
           ),
         ),
@@ -341,7 +330,6 @@ class AppRouter {
           path: AppRoutes.trackOrder,
           name: 'trackOrder',
           pageBuilder: (_, __) => const MaterialPage(
-            // child: NavBar(),  // swap in your home widget
             child: TrackOrder(),
           ),
         ),
@@ -349,7 +337,6 @@ class AppRouter {
           path: AppRoutes.editProfile,
           name: 'editProfile',
           pageBuilder: (_, __) => const MaterialPage(
-            // child: NavBar(),  // swap in your home widget
             child: EditView(),
           ),
         ),
@@ -357,7 +344,6 @@ class AppRouter {
           path: AppRoutes.addCard,
           name: 'addCard',
           pageBuilder: (_, __) => const MaterialPage(
-            // child: NavBar(),  // swap in your home widget
             child: AddNewCardView(),
           ),
         ),
@@ -365,7 +351,6 @@ class AppRouter {
           path: AppRoutes.addAddress,
           name: 'addAddress',
           pageBuilder: (_, __) => const MaterialPage(
-            // child: NavBar(),  // swap in your home widget
             child: AddNewAddress(),
           ),
         ),
@@ -373,7 +358,6 @@ class AppRouter {
           path: AppRoutes.points,
           name: 'points',
           pageBuilder: (_, __) => const MaterialPage(
-            // child: NavBar(),  // swap in your home widget
             child: PointView(),
           ),
         ),
@@ -381,7 +365,6 @@ class AppRouter {
           path: AppRoutes.order,
           name: 'order',
           pageBuilder: (_, __) => const MaterialPage(
-            // child: NavBar(),  // swap in your home widget
             child: OrderScreen(),
           ),
         ),
@@ -389,7 +372,6 @@ class AppRouter {
           path: AppRoutes.payment,
           name: 'payment',
           pageBuilder: (_, __) => const MaterialPage(
-            // child: NavBar(),  // swap in your home widget
             child: PaymentMethodScreen(),
           ),
         ),
@@ -397,7 +379,6 @@ class AppRouter {
           path: AppRoutes.shipping,
           name: 'shipping',
           pageBuilder: (_, __) => const MaterialPage(
-            // child: NavBar(),  // swap in your home widget
             child: ShippingDetailsScreen(),
           ),
         ),
@@ -405,7 +386,6 @@ class AppRouter {
           path: AppRoutes.checkout,
           name: 'checkout',
           pageBuilder: (_, __) => const MaterialPage(
-            // child: NavBar(),  // swap in your home widget
             child: CheckoutScreen(),
           ),
         ),
@@ -413,7 +393,6 @@ class AppRouter {
           path: AppRoutes.addPromoCodeView,
           name: 'addPromoCodeView',
           pageBuilder: (_, __) => const MaterialPage(
-            // child: NavBar(),  // swap in your home widget
             child: AddPromoCodeView(),
           ),
         ),
@@ -426,17 +405,11 @@ class AppRouter {
           path: AppRoutes.confirm,
           name: 'confirm',
           pageBuilder: (_, state) => MaterialPage(
-            // child: NavBar(),  // swap in your home widget
             child: ConfirmOrderView(origin: state.extra as bool?),
           ),
         ),
-        // '/order': (_) => const OrderScreen(),
-        //     '/checkout': (_) => const CheckoutScreen(),
-        //     '/shipping': (_) => const ShippingDetailsScreen(),
-        //     '/payment': (_) => const PaymentMethodScreen(),
       ],
 
-      // ── 404 ───────────────────────────────────────────────────────────────
       errorPageBuilder: (_, state) => MaterialPage(
         child: Scaffold(
           body: Center(child: Text('Page not found: ${state.error}')),
