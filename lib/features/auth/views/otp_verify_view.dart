@@ -2,14 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/utils/helpers/snack_bar_helper.dart';
 import '../../../core/widgets/custom_button.dart';
-import '../../../routes/app_router.dart';
+import '../../../core/widgets/background_widget.dart';
 import '../../localization/localization_extension.dart';
 import '../controllers/auth_controller.dart';
 
@@ -72,213 +71,168 @@ class _OtpVerifyViewState extends State<OtpVerifyView> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        body: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Icon(
-                        Icons.arrow_back_ios_new,
-                        color: Theme.of(context).iconTheme.color,
-                      ),
-                    ),
-                    Spacer(),
-                    Text(
-                      context.watchTr('otp_verification'),
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    Spacer(),
-                    SizedBox(width: 20.w),
-                  ],
-                ),
-                SizedBox(height: 10.h),
-                Container(
-                  width: 335.w,
-                  height: 331.h,
-                  clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(
-                    // Removed: image: DecorationImage(
-                    // Removed:   image: AssetImage(ImageAssets.background2),
-                    // Removed:   fit: BoxFit.cover,
-                    // Removed: ),
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.surface, // Placeholder color
-                  ),
-                  child: Stack(
-                    alignment: Alignment.center,
+    final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom != 0;
+
+    return BackgroundWidget(
+      imagePath: 'assets/images/bg.png',
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+          body: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Row(
                     children: [
-                      Consumer<AuthController>(
-                        builder: (context, auth, _) => ListView(
-                          padding: EdgeInsets.symmetric(horizontal: 20.w),
-                          children: [
-                            SizedBox(height: 30.h),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  context.watchTr('enter_otp_msg'),
-                                  style: Theme.of(context).textTheme.bodyLarge,
-                                ),
-                                SizedBox(height: 16.h),
-                                Text(
-                                  '${context.watchTr('sms_sent_msg')} ${widget.origin == 'forget' ? auth.forgetEmailController.text : auth.signupEmail} ${context.watchTr('containing_code_msg')}',
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                ),
-                                SizedBox(height: 15.h),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 53.h,
-                              width: double.infinity,
-                              child: PinCodeTextField(
-                                appContext: context,
-                                length: 5,
-                                textStyle: TextStyle(fontSize: 18.sp),
-                                animationType: AnimationType.fade,
-                                cursorColor: Theme.of(
-                                  context,
-                                ).colorScheme.primary,
-                                pinTheme: PinTheme(
-                                  shape: PinCodeFieldShape.box,
-                                  fieldHeight: 50.h,
-                                  fieldWidth: 50.w,
-                                  activeColor: Theme.of(context).dividerColor,
-                                  activeFillColor: Theme.of(
-                                    context,
-                                  ).cardTheme.color,
-                                  selectedColor: Theme.of(
-                                    context,
-                                  ).colorScheme.primary,
-                                  selectedFillColor: Theme.of(
-                                    context,
-                                  ).cardTheme.color,
-                                  inactiveColor: Theme.of(context).dividerColor,
-                                  inactiveFillColor: Theme.of(
-                                    context,
-                                  ).cardTheme.color,
-                                  borderRadius: BorderRadius.circular(8.r),
-                                ),
-                                animationDuration: const Duration(
-                                  milliseconds: 300,
-                                ),
-                                enableActiveFill: true,
-                                keyboardType: TextInputType.number,
-                                controller: _otpController,
-                                focusNode: _pinFocusNode,
-                                onChanged: (v) {
-                                  auth.otpController.text = v;
-                                  auth.updateOtp(v);
-                                },
-                                onCompleted: auth.updateOtp,
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 30.w),
-                              child: Column(
-                                children: [
-                                  SizedBox(height: 15.h),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        context.watchTr('did_not_receive_code'),
-                                        style: Theme.of(
-                                          context,
-                                        ).textTheme.bodySmall,
-                                      ),
-                                      InkWell(
-                                        onTap: _secondsRemaining == 0
-                                            ? _startTimer
-                                            : null,
-                                        child: Text(
-                                          context.watchTr('resend'),
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall
-                                              ?.copyWith(
-                                                color: _secondsRemaining == 0
-                                                    ? Theme.of(
-                                                        context,
-                                                      ).colorScheme.primary
-                                                    : Theme.of(context)
-                                                          .textTheme
-                                                          .bodySmall
-                                                          ?.color,
-                                                fontWeight:
-                                                    _secondsRemaining == 0
-                                                    ? FontWeight.bold
-                                                    : FontWeight.w600,
-                                              ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 5.h),
-                                  Text(
-                                    '${context.watchTr('resend_available_in')} $_formattedTime',
-                                    style: Theme.of(context).textTheme.bodySmall
-                                        ?.copyWith(
-                                          color: Theme.of(
-                                            context,
-                                          ).colorScheme.primary,
-                                        ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  SizedBox(height: 20.h),
-                                  CustomButton(
-                                    title: context.watchTr('verify_caps'),
-                                    buttonColor: auth.isOtpVerified
-                                        ? AppColors.buttonColor
-                                        : AppColors.subTitleColor,
-                                    borderColor: auth.isOtpVerified
-                                        ? AppColors.buttonColor
-                                        : AppColors.subTitleColor,
-                                    textColor: AppColors.whiteColor,
-                                    onPress: () async {
-                                      if (auth.isOtpVerified) {
-                                        auth.otpController.text =
-                                            _otpController.text;
-                                        // await auth.verifyOtp(
-                                        //   origin: widget.origin,
-                                        // );
-                                        context.push(
-                                          AppRoutes.changePass,
-                                          extra: widget.origin,
-                                        );
-                                      } else {
-                                        showWarningSnackBar(
-                                          message: context.watchTr(
-                                            'enter_valid_otp',
-                                          ),
-                                        );
-                                      }
-                                    },
-                                  ),
-                                  SizedBox(height: 10.h),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      const Spacer(),
+                      const Spacer(),
                     ],
                   ),
-                ),
-              ],
+                  SizedBox(height: 10.h),
+                  Expanded(
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        AnimatedPositioned(
+                          duration: const Duration(milliseconds: 200),
+                          curve: Curves.easeIn,
+                          top: isKeyboardOpen ? -50.h : 170.h,
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          child: Consumer<AuthController>(
+                            builder: (context, auth, _) => ListView(
+                              padding: EdgeInsets.symmetric(horizontal: 20.w),
+                              children: [
+                                SizedBox(height: 20.h),
+                                Text(
+                                  context.watchTr('otp_verification'),
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .displayLarge
+                                      ?.copyWith(fontFamily: 'LobsterTwo'),
+                                ),
+                                SizedBox(height: 8.h),
+                                SizedBox(
+                                  width: 291.w,
+                                  child: Text(
+                                    '${context.watchTr('sms_sent_msg')} ${widget.origin == 'forget' ? auth.forgetEmailController.text : auth.signupEmail} ${context.watchTr('containing_code_msg')}',
+                                    textAlign: TextAlign.center,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall
+                                        ?.copyWith(
+                                          fontFamily: 'Segoe UI',
+                                          color: AppColors.textColor2,
+                                        ),
+                                  ),
+                                ),
+                                SizedBox(height: 30.h),
+                                PinCodeTextField(
+                                  appContext: context,
+                                  length: 4, // Set to 4 digits
+                                  textStyle: TextStyle(
+                                    fontSize: 18.sp,
+                                    color: AppColors.whiteColor,
+                                  ),
+                                  animationType: AnimationType.fade,
+                                  cursorColor: Theme.of(context).colorScheme.primary,
+                                  pinTheme: PinTheme(
+                                    shape: PinCodeFieldShape.box,
+                                    fieldHeight: 60.h,
+                                    fieldWidth: 60.w,
+                                    activeColor: AppColors.primaryColor,
+                                    activeFillColor: AppColors.defaultColorAlpha,
+                                    selectedColor: AppColors.primaryColor,
+                                    selectedFillColor: AppColors.defaultColorAlpha,
+                                    inactiveColor: AppColors.inputBorderColor,
+                                    inactiveFillColor: AppColors.defaultColorAlpha,
+                                    borderRadius: BorderRadius.circular(8.r),
+                                  ),
+                                  animationDuration: const Duration(milliseconds: 300),
+                                  enableActiveFill: true,
+                                  keyboardType: TextInputType.number,
+                                  controller: _otpController,
+                                  focusNode: _pinFocusNode,
+                                  onChanged: (v) {
+                                    auth.otpController.text = v;
+                                    auth.updateOtp(v);
+                                  },
+                                  onCompleted: auth.updateOtp,
+                                ),
+                                SizedBox(height: 20.h),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      context.watchTr('did_not_receive_code'),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(fontFamily: 'Segoe UI'),
+                                    ),
+                                    SizedBox(width: 5.w),
+                                    InkWell(
+                                      onTap: _secondsRemaining == 0 ? _startTimer : null,
+                                      child: Text(
+                                        context.watchTr('resend'),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(
+                                              color: _secondsRemaining == 0
+                                                  ? AppColors.primaryColor
+                                                  : AppColors.textColor2,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'Segoe UI',
+                                            ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 5.h),
+                                Text(
+                                  '${context.watchTr('resend_available_in')} $_formattedTime',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.copyWith(
+                                        color: AppColors.primaryColor,
+                                        fontFamily: 'Segoe UI',
+                                      ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                SizedBox(height: 40.h),
+                                CustomButton(
+                                  linearGradient: true,
+                                  height: 48,
+                                  title: context.watchTr('verify_caps'),
+                                  loading: auth.isLoading,
+                                  onPress: () async {
+                                    if (auth.isOtpVerified) {
+                                      auth.otpController.text = _otpController.text;
+                                      await auth.verifyOtp(origin: widget.origin);
+                                    } else {
+                                      showWarningSnackBar(
+                                        message: context.watchTr('enter_valid_otp'),
+                                      );
+                                    }
+                                  },
+                                ),
+                                SizedBox(height: 20.h),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

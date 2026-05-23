@@ -2,25 +2,33 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const Color defaultColor = Color(0xFFD05278);
+  static const Color defaultColor = Color(0xFF22331F);
+  static const Color defaultColorLight = Color(0xFF4A6741);
   static const Color backgroundColor = Color(0xFFFCEDEA);
   static const Color defaultLightColor = Color(0xFFFFD7E3);
   static const Color ratingColor = Color(0xFFCFC819);
   static const Color ratingColor2 = Color(0xFFFFBE00);
-  static const Color primaryColor = Color(0xFFD05278);
+  static const Color primaryColor = Color(0xFFAC823A);
+  static const Color iconColor = Color(0xFFC9A84C);
+  static const Color popupBackgroundColor = Color(0xFF20341F);
 
-  static const Color textColor = Color(0xFF222222);
-  static const Color textColor2 = Color(0xFF666666);
-  static const Color textColor3 = Color(0xFF999999);
+  static const Color textColor = Color(0xFFDAE0DA);
+  static const Color textColor2 = Color(0xFF8CA08B);
+  static const Color textColor3 = Color(0xFFFFBE3D);
   static const Color whiteTextColor = Color(0xFFEEEEEE);
   static const Color indicatorColor = Color(0xFFF4CED3);
-  static const Color hintTextColor = Color(0xFF6A6A6A);
-  static const Color buttonColor = Color(0xFFAF48FF);
+  static const Color hintTextColor = Color(0xFFA9A8A8);
+  static const Color buttonColor = Color(0xFFAC823A);
+  static const Color buttonColor3 = Color(0xFF434928);
+  static const Color buttonColor4 = Color(0xBA384737);
+  static const Color buttonShadowColor4 = Color(0x2B000000);
+  static const Color buttonBorderColor4 = Color(0x66EBEBEB);
   static const Color containerColor = Color(0xFFFAF9FF);
   static const Color containerColor2 = Color(0xFFF5F5F5);
   static const Color cardBorderColor = Color(0xFFE8E8E8);
 
   static const Color whiteColor = Color(0xFFFFFFFF);
+  static const Color defaultColorAlpha = Color(0xFF334931);
   static const Color blackColor = Color(0xFF000000);
   static const Color redColor = Color(0xFFFF0000);
   static const Color greenColor = Color(0xFF00824B);
@@ -44,9 +52,10 @@ class AppColors {
   static const Color linearColor = Color(0xFF000F5B);
   static const Color linearLightColor = Color(0xFF6294FF);
   static const Color linearShadowColor = Color(0x3F000000);
-  static const Color buttonColor1 = Color(0xFF021681);
-  static const Color borderColor = Color(0xFFDAD9D9);
-  static const Color boxShadowColor = Color(0x3F000000);
+  static const Color buttonColor1 = Color(0xFFD0B47D);
+  static const Color borderColor = Color(0xFFF3D194);
+  static const Color inputBorderColor = Color(0x66EBEBEB);
+  static const Color boxShadowColor = Color(0x1E000000);
   static const Color boxShadowColor2 = Color(0x26000000);
   static const Color containerColor3 = Color(0xFFE0E4F2);
   static const Color containerBorderColor = Color(0xFFB5B5B5);

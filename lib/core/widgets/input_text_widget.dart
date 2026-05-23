@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../constants/app_colors.dart';
+
 class InputTextWidget extends StatefulWidget {
   final TextEditingController? controller;
   final String? hintText;
@@ -47,8 +49,8 @@ class InputTextWidget extends StatefulWidget {
   final Color? focusedBorderColor;
   final Color? errorBorderColor;
   final Color? disabledBorderColor;
-  final double borderWidth;
-  final double borderRadius;
+  final double? borderWidth;
+  final double? borderRadius;
   final EdgeInsetsGeometry? contentPadding;
   final bool shadow;
   final Color? shadowColor;
@@ -135,8 +137,8 @@ class InputTextWidget extends StatefulWidget {
     this.focusedBorderColor,
     this.errorBorderColor,
     this.disabledBorderColor,
-    this.borderWidth = 1,
-    this.borderRadius = 12,
+    this.borderWidth,
+    this.borderRadius,
     this.contentPadding,
     this.shadow = false,
     this.shadowColor,
@@ -274,17 +276,41 @@ class _InputTextWidgetState extends State<InputTextWidget> {
     final inputTheme = theme.inputDecorationTheme;
     final colorScheme = theme.colorScheme;
 
+    // Helper to get properties from theme's InputBorder
+    Color getBorderColor(InputBorder? border, Color fallback) {
+      if (border is OutlineInputBorder) return border.borderSide.color;
+      return fallback;
+    }
+
+    double getBorderWidth(InputBorder? border, double fallback) {
+      if (border is OutlineInputBorder) return border.borderSide.width;
+      return fallback;
+    }
+
+    BorderRadius getBorderRadius(InputBorder? border) {
+      if (border is OutlineInputBorder) return border.borderRadius;
+      return BorderRadius.circular(12.r);
+    }
+
     final bg = widget.backgroundColor ?? 
                (isEnabled ? (inputTheme.fillColor ?? theme.cardColor) 
-                          : (theme.disabledColor.withValues(alpha: 0.1)));
+                          : (theme.disabledColor.withAlpha(25)));
     
     final borderCol = hasError 
-        ? (widget.errorBorderColor ?? colorScheme.error)
+        ? (widget.errorBorderColor ?? getBorderColor(inputTheme.errorBorder, colorScheme.error))
         : (!isEnabled 
-            ? (widget.disabledBorderColor ?? theme.disabledColor.withValues(alpha: 0.3))
+            ? (widget.disabledBorderColor ?? getBorderColor(inputTheme.disabledBorder, theme.disabledColor.withAlpha(75)))
             : (_isFocused 
-                ? (widget.focusedBorderColor ?? colorScheme.primary) 
-                : (widget.borderColor ?? theme.dividerColor)));
+                ? (widget.focusedBorderColor ?? getBorderColor(inputTheme.focusedBorder, colorScheme.primary)) 
+                : (widget.borderColor ?? getBorderColor(inputTheme.enabledBorder, AppColors.inputBorderColor))));
+
+    final effectiveWidth = hasError || _isFocused 
+        ? getBorderWidth(hasError ? inputTheme.errorBorder : inputTheme.focusedBorder, 1.5) 
+        : getBorderWidth(inputTheme.enabledBorder, 1.0);
+
+    final effectiveRadius = widget.borderRadius != null 
+        ? BorderRadius.circular(widget.borderRadius!.r) 
+        : getBorderRadius(inputTheme.enabledBorder);
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
@@ -293,15 +319,15 @@ class _InputTextWidgetState extends State<InputTextWidget> {
       decoration: BoxDecoration(
         color: bg,
         gradient: widget.gradient,
-        borderRadius: BorderRadius.circular(widget.borderRadius.r),
+        borderRadius: effectiveRadius,
         border: Border.all(
           color: borderCol,
-          width: (hasError || _isFocused) ? (widget.borderWidth + 0.5).w : widget.borderWidth.w,
+          width: (widget.borderWidth ?? effectiveWidth).w,
         ),
         boxShadow: widget.shadow
             ? [
                 BoxShadow(
-                  color: widget.shadowColor ?? theme.shadowColor.withValues(alpha: 0.08),
+                  color: widget.shadowColor ?? theme.shadowColor.withAlpha(20),
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
@@ -328,19 +354,15 @@ class _InputTextWidgetState extends State<InputTextWidget> {
         onEditingComplete: widget.onEditingComplete,
         autovalidateMode: widget.autovalidateMode,
         onChanged: (val) {
-          if (hasError) {
-            setState(() => _errorText = null);
-          }
+          if (hasError) setState(() => _errorText = null);
           widget.onChanged?.call(val);
         },
         onTap: widget.onTap,
         validator: (val) {
           if (widget.validator != null) {
             final result = widget.validator!(val);
-            if (mounted) {
-              setState(() => _errorText = result);
-            }
-            return null; // Suppress standard error UI to use custom inline error
+            if (mounted) setState(() => _errorText = result);
+            return null; // Use custom error UI
           }
           return null;
         },
@@ -356,17 +378,10 @@ class _InputTextWidgetState extends State<InputTextWidget> {
         decoration: InputDecoration(
           hintText: widget.hintText,
           labelText: widget.labelText,
-          hintStyle: widget.hintStyle ??
-              inputTheme.hintStyle ??
-              theme.textTheme.bodyMedium?.copyWith(
-                color: widget.hintColor ?? theme.hintColor.withValues(alpha: 0.6),
-                fontSize: (widget.hintFontSize ?? 14).sp,
-                fontWeight: widget.hintFontWeight ?? FontWeight.w400,
-                fontFamily: widget.hintFontFamily,
-              ),
+          hintStyle: widget.hintStyle ?? inputTheme.hintStyle,
           labelStyle: widget.hintStyle ?? inputTheme.labelStyle,
           isDense: true,
-          contentPadding: widget.contentPadding ?? EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+          contentPadding: widget.contentPadding ?? inputTheme.contentPadding ?? EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
           border: InputBorder.none,
           enabledBorder: InputBorder.none,
           focusedBorder: InputBorder.none,
@@ -382,96 +397,48 @@ class _InputTextWidgetState extends State<InputTextWidget> {
 
   Widget? _buildLeading(ThemeData theme, bool hasError) {
     if (widget.leadingWidget == null && widget.leadingIcon.isEmpty) return null;
-
     final color = hasError ? theme.colorScheme.error : (widget.leadingColor ?? theme.hintColor);
-    
     final leading = widget.leadingWidget ??
         Padding(
           padding: widget.leadingPadding,
-          child: _buildAsset(
-            widget.leadingIcon,
-            widget.leadingIconWidth,
-            widget.leadingIconHeight,
-            widget.useLeadingColor,
-            color,
-          ),
+          child: _buildAsset(widget.leadingIcon, widget.leadingIconWidth, widget.leadingIconHeight, widget.useLeadingColor, color),
         );
-
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [leading],
-    );
+    return Row(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.center, children: [leading]);
   }
 
   Widget? _buildTrailing(ThemeData theme, bool hasError) {
     final List<Widget> children = [];
     final color = hasError ? theme.colorScheme.error : (widget.trailingColor ?? theme.hintColor);
-
     if (widget.showObscureToggle || widget.obscureText) {
-      children.add(
-        GestureDetector(
-          onTap: _toggleObscure, 
-          child: _buildObscureIcon(theme, hasError)
-        ),
-      );
+      children.add(GestureDetector(onTap: _toggleObscure, child: _buildObscureIcon(theme, hasError)));
     }
-
     if (widget.trailingWidget != null || widget.trailingIcon.isNotEmpty) {
       final trailing = widget.trailingWidget ??
           Padding(
             padding: widget.trailingPadding,
-            child: _buildAsset(
-              widget.trailingIcon,
-              widget.trailingIconWidth,
-              widget.trailingIconHeight,
-              widget.useTrailingColor,
-              color,
-            ),
+            child: _buildAsset(widget.trailingIcon, widget.trailingIconWidth, widget.trailingIconHeight, widget.useTrailingColor, color),
           );
       children.add(trailing);
     }
-
     if (children.isEmpty) return null;
-
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: children,
-    );
+    return Row(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.center, children: children);
   }
 
   Widget _buildObscureIcon(ThemeData theme, bool hasError) {
-    final color = hasError ? theme.colorScheme.error : theme.hintColor;
-    
+    final color = hasError ? theme.colorScheme.error : (widget.trailingColor ?? theme.hintColor);
     if (_isObscured) {
-      if (widget.hiddenIcon != null) {
-        return _buildAsset(widget.hiddenIcon!, widget.obscureIconSize, widget.obscureIconSize, true, color);
-      }
+      if (widget.hiddenIcon != null) return _buildAsset(widget.hiddenIcon!, widget.obscureIconSize, widget.obscureIconSize, true, color);
       return Icon(Icons.visibility_off_outlined, size: widget.obscureIconSize.sp, color: color);
     } else {
-      if (widget.visibleIcon != null) {
-        return _buildAsset(widget.visibleIcon!, widget.obscureIconSize, widget.obscureIconSize, true, color);
-      }
+      if (widget.visibleIcon != null) return _buildAsset(widget.visibleIcon!, widget.obscureIconSize, widget.obscureIconSize, true, color);
       return Icon(Icons.visibility_outlined, size: widget.obscureIconSize.sp, color: color);
     }
   }
 
   Widget _buildAsset(String path, double width, double height, bool useColor, Color color) {
     if (path.toLowerCase().endsWith('.svg')) {
-      return SvgPicture.asset(
-        path,
-        width: width.w,
-        height: height.h,
-        colorFilter: useColor ? ColorFilter.mode(color, BlendMode.srcIn) : null,
-      );
+      return SvgPicture.asset(path, width: width.w, height: height.h, colorFilter: useColor ? ColorFilter.mode(color, BlendMode.srcIn) : null);
     }
-    return Image.asset(
-      path,
-      width: width.w,
-      height: height.h,
-      color: useColor ? color : null,
-      fit: BoxFit.contain,
-    );
+    return Image.asset(path, width: width.w, height: height.h, color: useColor ? color : null, fit: BoxFit.contain);
   }
 }

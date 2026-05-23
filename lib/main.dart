@@ -16,13 +16,16 @@ import 'core/constants/app_colors.dart';
 import 'core/services/api_service.dart';
 import 'routes/app_router.dart';
 import 'core/utils/helpers/snack_bar_helper.dart';
+import 'core/widgets/background_widget.dart';
 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   try {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+    if (Firebase.apps.isEmpty) {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+    }
     debugPrint('📩 Background message: ${message.data}');
   } catch (e) {
     debugPrint('❌ Background handler error: $e');
@@ -39,10 +42,6 @@ Future<void> main() async {
       options: DefaultFirebaseOptions.currentPlatform,
     );
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-    // final initMsg = await FirebaseMessaging.instance.getInitialMessage();
-    // if (initMsg != null) NotificationService.initialMessage = initMsg;
-    // final apiService = ApiService();
-    // await NotificationService.instance.initialize(apiService: apiService);
     debugPrint('✅ Firebase initialized successfully');
   } catch (e) {
     debugPrint('❌ Firebase init error: $e');
@@ -72,18 +71,11 @@ class _MyAppState extends State<MyApp> {
     final auth = context.read<AuthController>();
     final onboard = context.read<OnboardingController>();
 
-    // Remove this line - don't overwrite:
-    // SnackBarHelper.navigatorKey = _routerKey;
-
-    AuthController.routerKey =
-        widget.navigatorKey; // Use the passed navigatorKey
+    AuthController.routerKey = widget.navigatorKey;
     ApiService.onUnauthorized = () {
-      widget.navigatorKey.currentContext?.go(
-        AppRoutes.login,
-      ); // Use the passed navigatorKey
+      widget.navigatorKey.currentContext?.go(AppRoutes.login);
     };
 
-    // Pass navigatorKey to AppRouter
     _router = AppRouter.create(auth, onboard, widget.navigatorKey);
     setState(() {});
   }
@@ -115,6 +107,10 @@ class _MyAppState extends State<MyApp> {
         themeMode: themeController.themeMode,
         locale: localizationController.locale,
         routerConfig: _router!,
+        // Wrap every route with BackgroundWidget
+        builder: (context, child) {
+          return BackgroundWidget(child: child!);
+        },
       ),
     );
   }

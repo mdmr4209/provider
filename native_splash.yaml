@@ -1,6 +1,6 @@
 flutter_native_splash:
-  color: "#FCEDEA"
-  image: "assets/image/logo2.png"
+  color: "#1F291E"
+  image: "assets/images/splash.png"
 
   # This allows the splash to use the full screen area
   fullscreen: true
@@ -11,8 +11,8 @@ flutter_native_splash:
   ios_content_mode: scaleAspectFill
 
   android_12:
-    color: "#FCEDEA"
-    image: "assets/image/logo.png"
-    icon_background_color: "#FCEDEA"
+    color: "#1F291E"
+    image: "assets/images/splash.png"
+    icon_background_color: "#1F291E"
 
   web: true

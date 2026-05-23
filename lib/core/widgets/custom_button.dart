@@ -14,8 +14,8 @@ class CustomButton extends StatelessWidget {
     this.buttonColor1 = AppColors.buttonColor1,
     this.textColor = AppColors.textWhiteColor,
     this.subtextColor = AppColors.textWhiteColor,
-    this.borderColor = Colors.transparent,
-    this.borderShadowColor = Colors.transparent,
+    this.borderColor = AppColors.borderColor,
+    this.borderShadowColor = AppColors.boxShadowColor,
     this.height = 50,
     this.width = double.infinity,
     this.radius = 12,
@@ -104,9 +104,9 @@ class CustomButton extends StatelessWidget {
             color: linearGradient ? null : effectiveButtonColor,
             gradient: linearGradient
                 ? LinearGradient(
-                    begin: const Alignment(1.00, -1.22),
-                    end: const Alignment(-0.20, 2.10),
-                    colors: [buttonColor, buttonColor1],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: [buttonColor, buttonColor1, buttonColor],
                   )
                 : null,
             shape: RoundedRectangleBorder(
@@ -117,8 +117,9 @@ class CustomButton extends StatelessWidget {
               if (borderShadowColor != Colors.transparent)
                 BoxShadow(
                   color: borderShadowColor,
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
+                  blurRadius: 12,
+                  offset: Offset(0, 12),
+                  spreadRadius: 0,
                 ),
             ],
           ),
@@ -183,11 +184,18 @@ class CustomButton extends StatelessWidget {
         Text(
           title,
           textAlign: center ? TextAlign.center : TextAlign.start,
-          style: theme.textTheme.labelLarge?.copyWith(
+          style: theme.textTheme.titleSmall?.copyWith(
             color: textColor,
             fontSize: fontSize.sp,
             fontWeight: fontWeight,
             fontFamily: fontFamily,
+            shadows: [
+              Shadow(
+                offset: Offset(0, 0),
+                blurRadius: 5,
+                color: Color(0xFF000000).withOpacity(0.91),
+              ),
+            ],
           ),
         ),
         if (subtitle.isNotEmpty)

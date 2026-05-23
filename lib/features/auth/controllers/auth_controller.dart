@@ -90,7 +90,7 @@ class AuthController extends ChangeNotifier {
   }
 
   void updateOtp(String value) {
-    _isOtpVerified = (value.length == 5);
+    _isOtpVerified = (value.length == 4);
     notifyListeners();
   }
 
@@ -231,25 +231,36 @@ class AuthController extends ChangeNotifier {
 
       if (response != null && response.statusCode == 200) {
         final data = response.data;
-        _accessToken = data['access_token'] as String;
-        _refreshToken = data['refresh_token'] as String? ?? '';
-        _id = data['user_id']?.toString() ?? '';
-        final verify = data['verify']?.toString() ?? 'no';
-        final message = data['message'] ?? 'Login successful';
-
-        await ApiService.storeTokens(accessToken: _accessToken, refreshToken: _refreshToken);
-        await ApiService.store(key: 'verify', value: verify);
-        await ApiService.store(key: 'user_id', value: _id);
-
-        showSuccessSnackBar(message: message);
-
-        if (verify == 'yes') {
+        
+        // Handle DummyJSON vs Real API response keys
+        if (ApiConstants.useDummyJson) {
+          _accessToken = data['token'] as String? ?? '';
+          _refreshToken = data['refreshToken'] as String? ?? '';
+          _id = data['id']?.toString() ?? '';
+          const verify = 'yes'; // Dummy is always verified
+          await ApiService.storeTokens(accessToken: _accessToken, refreshToken: _refreshToken);
+          await ApiService.store(key: 'verify', value: verify);
+          await ApiService.store(key: 'user_id', value: _id);
           _isLoggedIn = true;
           _isSignedIn = true;
-          notifyListeners();
         } else {
-          _go(AppRoutes.otpVerify, extra: 'Login');
+          _accessToken = data['access_token'] as String;
+          _refreshToken = data['refresh_token'] as String? ?? '';
+          _id = data['user_id']?.toString() ?? '';
+          final verify = data['verify']?.toString() ?? 'no';
+          await ApiService.storeTokens(accessToken: _accessToken, refreshToken: _refreshToken);
+          await ApiService.store(key: 'verify', value: verify);
+          await ApiService.store(key: 'user_id', value: _id);
+          if (verify == 'yes') {
+            _isLoggedIn = true;
+            _isSignedIn = true;
+          } else {
+            _go(AppRoutes.otpVerify, extra: 'Login');
+          }
         }
+        
+        showSuccessSnackBar(message: data['message'] ?? 'Login successful');
+        notifyListeners();
       } else if (response != null) {
         _error = ExceptionHandler.handleResponse(response);
         notifyListeners();
@@ -274,10 +285,14 @@ class AuthController extends ChangeNotifier {
         data: {'email': email},
       );
 
-      if (response != null && response.statusCode == 201) {
+      // DummyJSON returns 200 for user creation, Real API returns 201
+      final isSuccess = response != null && 
+          (response.statusCode == 201 || (ApiConstants.useDummyJson && response.statusCode == 200));
+
+      if (isSuccess) {
         _signupEmail = email;
         notifyListeners();
-        showSuccessSnackBar(message: response.data?['message'] ?? 'OTP sent to your email');
+        showSuccessSnackBar(message: response?.data?['message'] ?? 'OTP sent to your email');
         _go(AppRoutes.otpVerify, extra: 'Signup');
       } else if (response != null) {
         _error = ExceptionHandler.handleResponse(response);
@@ -297,6 +312,15 @@ class AuthController extends ChangeNotifier {
       _setLoading(true);
       _error = null;
       notifyListeners();
+
+      if (ApiConstants.useDummyJson) {
+        await Future.delayed(const Duration(seconds: 1));
+        _signupEmail = email;
+        notifyListeners();
+        showSuccessSnackBar(message: 'Dummy: OTP sent to your email (use 1234)');
+        _go(AppRoutes.otpVerify, extra: 'Forget');
+        return;
+      }
 
       final response = await ApiService.post(
         api: ApiConstants.forget,
@@ -328,16 +352,40 @@ class AuthController extends ChangeNotifier {
       _error = null;
       notifyListeners();
 
+      if (ApiConstants.useDummyJson) {
+        await Future.delayed(const Duration(seconds: 1));
+        // Mock success for any 4 digit OTP in dummy mode
+        if (otp.length == 4) {
+          showSuccessSnackBar(message: 'Dummy: OTP Verified.');
+          _isOtpVerified = true;
+          notifyListeners();
+          if (origin == 'Signup') {
+             await setPassword(origin: origin);
+          } else {
+             _go(AppRoutes.changePass, extra: origin ?? 'Forget');
+          }
+        } else {
+          _error = BadRequestException(message: 'Invalid OTP (use any 4 digits)');
+          notifyListeners();
+        }
+        return;
+      }
+
       final response = await ApiService.post(
         api: ApiConstants.verifyOtp,
         data: {'email': email, 'otp': otp},
       );
 
       if (response != null && response.statusCode == 200) {
-        showSuccessSnackBar(message: 'OTP Verified. Now set your password.');
+        showSuccessSnackBar(message: 'OTP Verified.');
         _isOtpVerified = true;
         notifyListeners();
-        _go(AppRoutes.changePass, extra: origin ?? 'Signup');
+        
+        if (origin == 'Signup') {
+           await setPassword(origin: origin);
+        } else {
+           _go(AppRoutes.changePass, extra: origin ?? 'Forget');
+        }
       } else if (response != null) {
         _error = ExceptionHandler.handleResponse(response);
         notifyListeners();
@@ -361,6 +409,13 @@ class AuthController extends ChangeNotifier {
       _setLoading(true);
       _error = null;
       notifyListeners();
+
+      if (ApiConstants.useDummyJson) {
+        await Future.delayed(const Duration(milliseconds: 500));
+        showSuccessSnackBar(message: 'Dummy: OTP resent successfully.');
+        startTimer();
+        return;
+      }
 
       final response = await ApiService.post(
         api: ApiConstants.resendOtp,
@@ -389,6 +444,24 @@ class AuthController extends ChangeNotifier {
       _setLoading(true);
       _error = null;
       notifyListeners();
+
+      if (ApiConstants.useDummyJson) {
+        await Future.delayed(const Duration(seconds: 1));
+        await ApiService.storeTokens(accessToken: 'dummy_access', refreshToken: 'dummy_refresh');
+        await ApiService.store(key: 'verify', value: 'yes');
+        _accessToken = 'dummy_access';
+        _refreshToken = 'dummy_refresh';
+        _isSignedIn = true;
+        _isLoggedIn = true;
+        notifyListeners();
+        showSuccessSnackBar(message: 'Dummy: Password set successfully');
+        if (origin == 'Signup') {
+           _go(AppRoutes.roleSelection);
+        } else {
+           _go(AppRoutes.goToHome, extra: origin);
+        }
+        return;
+      }
 
       final response = await ApiService.post(
         api: ApiConstants.setPassword,

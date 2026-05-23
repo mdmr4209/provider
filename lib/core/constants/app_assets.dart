@@ -1,5 +1,15 @@
 class AppAssets {
   //Icons
+  static const String email = 'assets/icons/email.svg';
+  static const String google = 'assets/icons/ggl.svg';
+  static const String pass = 'assets/icons/pass.svg';
+  static const String logo = 'assets/images/logo2.png';
+
+
+
+
+
+
   static const String title = 'assets/image/title.svg';
   static const String background = 'assets/image/bg.png';
   static const String background2 = 'assets/image/bg2.png';
@@ -50,7 +60,6 @@ class AppAssets {
 
   //AUTH
   static const String line = 'assets/icons/auth/Line.svg';
-  static const String google = 'assets/icons/auth/google.svg';
   static const String apple = 'assets/icons/auth/apple.svg';
   static const String like = 'assets/icons/auth/like.svg';
   static const String language = 'assets/icons/auth/language.svg';
@@ -149,7 +158,6 @@ class AppAssets {
 
   // Splash & Onboarding Screen
   static const String splash = 'assets/images/splash/splash.png';
-  static const String logo = 'assets/images/splash/logo.png';
 
   // Auth
   static const String user = 'assets/images/auth/user.png';

@@ -10,6 +10,7 @@ import '../features/auth/views/otp_verify_view.dart';
 import '../features/auth/views/sign_up_view.dart';
 import '../features/auth/views/role_selection_view.dart';
 import '../features/auth/views/name_input_view.dart';
+import '../features/auth/views/setup/setup_views.dart';
 import '../features/cart/views/checkout.dart';
 import '../features/cart/views/confirm_order_view.dart';
 import '../features/cart/views/order_history.dart';
@@ -75,6 +76,22 @@ abstract class AppRoutes {
   static const checkout = '/checkout';
   static const addPromoCodeView = '/addPromoCodeView';
   static const settings = '/settings';
+
+  // Setup Routes
+  static const setup1 = '/setup1';
+  static const setup2 = '/setup2';
+  static const setup3 = '/setup3';
+  static const setup4 = '/setup4';
+  static const setup5 = '/setup5';
+  static const setup6 = '/setup6';
+  static const setup7 = '/setup7';
+  static const setup8 = '/setup8';
+  static const setup9 = '/setup9';
+  static const setup10 = '/setup10';
+  static const setup11 = '/setup11';
+  static const setup12 = '/setup12';
+  static const setup13 = '/setup13';
+  static const setupComplete = '/setup-complete';
 }
 
 // ── Router factory ──────────────────────────────────────────────────────────
@@ -88,6 +105,7 @@ class AppRouter {
       navigatorKey: navigatorKey,
       initialLocation: AppRoutes.onboarding,
       refreshListenable: Listenable.merge([auth, onboard]),
+      debugLogDiagnostics: true,
 
       redirect: (context, state) {
         if (onboard.isLoading || auth.isCheckingToken) return null;
@@ -104,43 +122,28 @@ class AppRouter {
           return isLoggedIn ? AppRoutes.home : AppRoutes.login;
         }
 
-        final onAuthScreen =
+        final bool isPublicOnlyScreen = 
             loc == AppRoutes.login ||
             loc == AppRoutes.signup ||
+            loc == AppRoutes.forgetPass;
+            
+        if (isLoggedIn && isPublicOnlyScreen) {
+          return AppRoutes.home;
+        }
+
+        final bool isAuthScreen =
+            loc == AppRoutes.home ||
             loc == AppRoutes.roleSelection ||
             loc == AppRoutes.nameInput ||
-            loc == AppRoutes.forgetPass ||
-            loc == AppRoutes.otpVerify ||
-            loc == AppRoutes.changePass ||
-            loc == AppRoutes.home ||
+            loc == AppRoutes.profile ||
             loc == AppRoutes.wishlist ||
             loc == AppRoutes.search ||
-            loc == AppRoutes.addPromoCodeView ||
-            loc == AppRoutes.review ||
-            loc == AppRoutes.product ||
-            loc == AppRoutes.filter ||
-            loc == AppRoutes.profile ||
-            loc == AppRoutes.commentReview ||
-            loc == AppRoutes.editProfile ||
-            loc == AppRoutes.logout ||
-            loc == AppRoutes.points ||
-            loc == AppRoutes.trackOrder ||
-            loc == AppRoutes.promoCode ||
-            loc == AppRoutes.address ||
-            loc == AppRoutes.confirm ||
-            loc == AppRoutes.orderHistory ||
-            loc == AppRoutes.paymentMethod ||
-            loc == AppRoutes.addAddress ||
-            loc == AppRoutes.addCard ||
-            loc == AppRoutes.payment ||
-            loc == AppRoutes.shipping ||
-            loc == AppRoutes.checkout ||
             loc == AppRoutes.order ||
-            loc == AppRoutes.settings ||
-            loc == AppRoutes.goToHome;
-            
-        if (isLoggedIn && onAuthScreen) return AppRoutes.home;
-        if (!isLoggedIn && !onAuthScreen && hasOnboarded) {
+            loc == AppRoutes.checkout ||
+            loc == AppRoutes.setupComplete ||
+            loc.startsWith('/setup');
+
+        if (!isLoggedIn && isAuthScreen) {
           return AppRoutes.login;
         }
 
@@ -223,6 +226,23 @@ class AppRouter {
             child: NameInputView(role: state.extra as String? ?? 'User'),
           ),
         ),
+        
+        // Setup Routes
+        GoRoute(path: AppRoutes.setup1, builder: (context, state) => const Setup1View()),
+        GoRoute(path: AppRoutes.setup2, builder: (context, state) => const Setup2View()),
+        GoRoute(path: AppRoutes.setup3, builder: (context, state) => const Setup3View()),
+        GoRoute(path: AppRoutes.setup4, builder: (context, state) => const Setup4View()),
+        GoRoute(path: AppRoutes.setup5, builder: (context, state) => const Setup5View()),
+        GoRoute(path: AppRoutes.setup6, builder: (context, state) => const Setup6View()),
+        GoRoute(path: AppRoutes.setup7, builder: (context, state) => const Setup7View()),
+        GoRoute(path: AppRoutes.setup8, builder: (context, state) => const Setup8View()),
+        GoRoute(path: AppRoutes.setup9, builder: (context, state) => const Setup9View()),
+        GoRoute(path: AppRoutes.setup10, builder: (context, state) => const Setup10View()),
+        GoRoute(path: AppRoutes.setup11, builder: (context, state) => const Setup11View()),
+        GoRoute(path: AppRoutes.setup12, builder: (context, state) => const Setup12View()),
+        GoRoute(path: AppRoutes.setup13, builder: (context, state) => const Setup13View()),
+        GoRoute(path: AppRoutes.setupComplete, builder: (context, state) => const SetupCompleteView()),
+
         GoRoute(
           path: AppRoutes.forgetPass,
           name: 'forgetPassword',
@@ -249,20 +269,6 @@ class AppRouter {
         ),
 
         // ── Protected ─────────────────────────────────────────────────────────
-        GoRoute(
-          path: AppRoutes.wishlist,
-          name: 'wishlist',
-          pageBuilder: (_, __) => const MaterialPage(
-            child: WishlistView(),
-          ),
-        ),
-        GoRoute(
-          path: AppRoutes.search,
-          name: 'search',
-          pageBuilder: (_, __) => const MaterialPage(
-            child: SearchView(),
-          ),
-        ),
         GoRoute(
           path: AppRoutes.review,
           name: 'review',
@@ -359,13 +365,6 @@ class AppRouter {
           name: 'points',
           pageBuilder: (_, __) => const MaterialPage(
             child: PointView(),
-          ),
-        ),
-        GoRoute(
-          path: AppRoutes.order,
-          name: 'order',
-          pageBuilder: (_, __) => const MaterialPage(
-            child: OrderScreen(),
           ),
         ),
         GoRoute(
