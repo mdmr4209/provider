@@ -10,6 +10,7 @@ import '../features/auth/views/otp_verify_view.dart';
 import '../features/auth/views/sign_up_view.dart';
 import '../features/auth/views/role_selection_view.dart';
 import '../features/auth/views/name_input_view.dart';
+import '../features/auth/views/splash_screen.dart';
 import '../features/auth/views/setup/setup_views.dart';
 import '../features/cart/views/checkout.dart';
 import '../features/cart/views/confirm_order_view.dart';
@@ -42,6 +43,7 @@ import '../features/profile/views/track_order.dart';
 
 // ── Route name constants ────────────────────────────────────────────────────
 abstract class AppRoutes {
+  static const splash = '/splash';
   static const login = '/login';
   static const signup = '/signup';
   static const roleSelection = '/role-selection';
@@ -103,7 +105,7 @@ class AppRouter {
   ) {
     return GoRouter(
       navigatorKey: navigatorKey,
-      initialLocation: AppRoutes.onboarding,
+      initialLocation: AppRoutes.splash,
       refreshListenable: Listenable.merge([auth, onboard]),
       debugLogDiagnostics: true,
 
@@ -114,6 +116,11 @@ class AppRouter {
         final bool isLoggedIn = auth.isLoggedIn;
         final String loc = state.matchedLocation;
 
+        // Always allow splash screen
+        if (loc == AppRoutes.splash) {
+          return null;
+        }
+
         if (!hasOnboarded && loc != AppRoutes.onboarding) {
           return AppRoutes.onboarding;
         }
@@ -122,11 +129,11 @@ class AppRouter {
           return isLoggedIn ? AppRoutes.home : AppRoutes.login;
         }
 
-        final bool isPublicOnlyScreen = 
+        final bool isPublicOnlyScreen =
             loc == AppRoutes.login ||
             loc == AppRoutes.signup ||
             loc == AppRoutes.forgetPass;
-            
+
         if (isLoggedIn && isPublicOnlyScreen) {
           return AppRoutes.home;
         }
@@ -150,6 +157,12 @@ class AppRouter {
         return null;
       },
       routes: [
+        // ── Splash Screen ──────────────────────────────────────────────────
+        GoRoute(
+          path: AppRoutes.splash,
+          builder: (context, state) => const SplashScreen(),
+        ),
+
         StatefulShellRoute.indexedStack(
           builder: (context, state, navigationShell) {
             return Navbar(navigationShell: navigationShell);
@@ -217,7 +230,8 @@ class AppRouter {
         GoRoute(
           path: AppRoutes.roleSelection,
           name: 'roleSelection',
-          pageBuilder: (_, __) => const MaterialPage(child: RoleSelectionView()),
+          pageBuilder: (_, __) =>
+              const MaterialPage(child: RoleSelectionView()),
         ),
         GoRoute(
           path: AppRoutes.nameInput,
@@ -226,22 +240,64 @@ class AppRouter {
             child: NameInputView(role: state.extra as String? ?? 'User'),
           ),
         ),
-        
+
         // Setup Routes
-        GoRoute(path: AppRoutes.setup1, builder: (context, state) => const Setup1View()),
-        GoRoute(path: AppRoutes.setup2, builder: (context, state) => const Setup2View()),
-        GoRoute(path: AppRoutes.setup3, builder: (context, state) => const Setup3View()),
-        GoRoute(path: AppRoutes.setup4, builder: (context, state) => const Setup4View()),
-        GoRoute(path: AppRoutes.setup5, builder: (context, state) => const Setup5View()),
-        GoRoute(path: AppRoutes.setup6, builder: (context, state) => const Setup6View()),
-        GoRoute(path: AppRoutes.setup7, builder: (context, state) => const Setup7View()),
-        GoRoute(path: AppRoutes.setup8, builder: (context, state) => const Setup8View()),
-        GoRoute(path: AppRoutes.setup9, builder: (context, state) => const Setup9View()),
-        GoRoute(path: AppRoutes.setup10, builder: (context, state) => const Setup10View()),
-        GoRoute(path: AppRoutes.setup11, builder: (context, state) => const Setup11View()),
-        GoRoute(path: AppRoutes.setup12, builder: (context, state) => const Setup12View()),
-        GoRoute(path: AppRoutes.setup13, builder: (context, state) => const Setup13View()),
-        GoRoute(path: AppRoutes.setupComplete, builder: (context, state) => const SetupCompleteView()),
+        GoRoute(
+          path: AppRoutes.setup1,
+          builder: (context, state) => const Setup1View(),
+        ),
+        GoRoute(
+          path: AppRoutes.setup2,
+          builder: (context, state) => const Setup2View(),
+        ),
+        GoRoute(
+          path: AppRoutes.setup3,
+          builder: (context, state) => const Setup3View(),
+        ),
+        GoRoute(
+          path: AppRoutes.setup4,
+          builder: (context, state) => const Setup4View(),
+        ),
+        GoRoute(
+          path: AppRoutes.setup5,
+          builder: (context, state) => const Setup5View(),
+        ),
+        GoRoute(
+          path: AppRoutes.setup6,
+          builder: (context, state) => const Setup6View(),
+        ),
+        GoRoute(
+          path: AppRoutes.setup7,
+          builder: (context, state) => const Setup7View(),
+        ),
+        GoRoute(
+          path: AppRoutes.setup8,
+          builder: (context, state) => const Setup8View(),
+        ),
+        GoRoute(
+          path: AppRoutes.setup9,
+          builder: (context, state) => const Setup9View(),
+        ),
+        GoRoute(
+          path: AppRoutes.setup10,
+          builder: (context, state) => const Setup10View(),
+        ),
+        GoRoute(
+          path: AppRoutes.setup11,
+          builder: (context, state) => const Setup11View(),
+        ),
+        GoRoute(
+          path: AppRoutes.setup12,
+          builder: (context, state) => const Setup12View(),
+        ),
+        GoRoute(
+          path: AppRoutes.setup13,
+          builder: (context, state) => const Setup13View(),
+        ),
+        GoRoute(
+          path: AppRoutes.setupComplete,
+          builder: (context, state) => const SetupCompleteView(),
+        ),
 
         GoRoute(
           path: AppRoutes.forgetPass,
@@ -272,128 +328,95 @@ class AppRouter {
         GoRoute(
           path: AppRoutes.review,
           name: 'review',
-          pageBuilder: (_, __) => const MaterialPage(
-            child: ReviewView(),
-          ),
+          pageBuilder: (_, __) => const MaterialPage(child: ReviewView()),
         ),
         GoRoute(
           path: AppRoutes.product,
           name: 'product',
-          pageBuilder: (_, __) => MaterialPage(
-            child: ProductView(),
-          ),
+          pageBuilder: (_, __) => MaterialPage(child: ProductView()),
         ),
         GoRoute(
           path: AppRoutes.filter,
           name: 'filter',
-          pageBuilder: (_, __) => const MaterialPage(
-            child: FilterView(),
-          ),
+          pageBuilder: (_, __) => const MaterialPage(child: FilterView()),
         ),
         GoRoute(
           path: AppRoutes.commentReview,
           name: 'commentReview',
-          pageBuilder: (_, __) => const MaterialPage(
-            child: CommentReviewView(),
-          ),
+          pageBuilder: (_, __) =>
+              const MaterialPage(child: CommentReviewView()),
         ),
         GoRoute(
           path: AppRoutes.logout,
           name: 'logout',
-          pageBuilder: (_, __) => const MaterialPage(
-            child: Logout(),
-          ),
+          pageBuilder: (_, __) => const MaterialPage(child: Logout()),
         ),
         GoRoute(
           path: AppRoutes.orderHistory,
           name: 'orderHistory',
-          pageBuilder: (_, __) => const MaterialPage(
-            child: OrderHistory(),
-          ),
+          pageBuilder: (_, __) => const MaterialPage(child: OrderHistory()),
         ),
         GoRoute(
           path: AppRoutes.paymentMethod,
           name: 'paymentMethod',
-          pageBuilder: (_, __) => const MaterialPage(
-            child: PaymentView(),
-          ),
+          pageBuilder: (_, __) => const MaterialPage(child: PaymentView()),
         ),
         GoRoute(
           path: AppRoutes.address,
           name: 'address',
-          pageBuilder: (_, __) => const MaterialPage(
-            child: MyAddress(),
-          ),
+          pageBuilder: (_, __) => const MaterialPage(child: MyAddress()),
         ),
         GoRoute(
           path: AppRoutes.promoCode,
           name: 'promoCode',
-          pageBuilder: (_, __) => const MaterialPage(
-            child: PromoCodeView(),
-          ),
+          pageBuilder: (_, __) => const MaterialPage(child: PromoCodeView()),
         ),
         GoRoute(
           path: AppRoutes.trackOrder,
           name: 'trackOrder',
-          pageBuilder: (_, __) => const MaterialPage(
-            child: TrackOrder(),
-          ),
+          pageBuilder: (_, __) => const MaterialPage(child: TrackOrder()),
         ),
         GoRoute(
           path: AppRoutes.editProfile,
           name: 'editProfile',
-          pageBuilder: (_, __) => const MaterialPage(
-            child: EditView(),
-          ),
+          pageBuilder: (_, __) => const MaterialPage(child: EditView()),
         ),
         GoRoute(
           path: AppRoutes.addCard,
           name: 'addCard',
-          pageBuilder: (_, __) => const MaterialPage(
-            child: AddNewCardView(),
-          ),
+          pageBuilder: (_, __) => const MaterialPage(child: AddNewCardView()),
         ),
         GoRoute(
           path: AppRoutes.addAddress,
           name: 'addAddress',
-          pageBuilder: (_, __) => const MaterialPage(
-            child: AddNewAddress(),
-          ),
+          pageBuilder: (_, __) => const MaterialPage(child: AddNewAddress()),
         ),
         GoRoute(
           path: AppRoutes.points,
           name: 'points',
-          pageBuilder: (_, __) => const MaterialPage(
-            child: PointView(),
-          ),
+          pageBuilder: (_, __) => const MaterialPage(child: PointView()),
         ),
         GoRoute(
           path: AppRoutes.payment,
           name: 'payment',
-          pageBuilder: (_, __) => const MaterialPage(
-            child: PaymentMethodScreen(),
-          ),
+          pageBuilder: (_, __) =>
+              const MaterialPage(child: PaymentMethodScreen()),
         ),
         GoRoute(
           path: AppRoutes.shipping,
           name: 'shipping',
-          pageBuilder: (_, __) => const MaterialPage(
-            child: ShippingDetailsScreen(),
-          ),
+          pageBuilder: (_, __) =>
+              const MaterialPage(child: ShippingDetailsScreen()),
         ),
         GoRoute(
           path: AppRoutes.checkout,
           name: 'checkout',
-          pageBuilder: (_, __) => const MaterialPage(
-            child: CheckoutScreen(),
-          ),
+          pageBuilder: (_, __) => const MaterialPage(child: CheckoutScreen()),
         ),
         GoRoute(
           path: AppRoutes.addPromoCodeView,
           name: 'addPromoCodeView',
-          pageBuilder: (_, __) => const MaterialPage(
-            child: AddPromoCodeView(),
-          ),
+          pageBuilder: (_, __) => const MaterialPage(child: AddPromoCodeView()),
         ),
         GoRoute(
           path: AppRoutes.settings,

@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../../core/widgets/custom_button.dart';
 import '../../../core/widgets/background_widget.dart';
 import '../../../routes/app_router.dart';
+import '../../../core/services/api_service.dart';
 import '../../localization/localization_extension.dart';
 import '../controllers/auth_controller.dart';
 
@@ -37,12 +38,16 @@ class GoToHome extends StatelessWidget {
                         width: 160.r,
                         height: 160.r,
                         decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.primary.withValues(alpha: 0.1),
                           shape: BoxShape.circle,
                         ),
                       ),
                       Icon(
-                        isSignup ? Icons.person_add_alt_1_rounded : Icons.lock_reset_rounded,
+                        isSignup
+                            ? Icons.person_add_alt_1_rounded
+                            : Icons.lock_reset_rounded,
                         size: 80.r,
                         color: Theme.of(context).colorScheme.primary,
                       ),
@@ -70,12 +75,21 @@ class GoToHome extends StatelessWidget {
                   Consumer<AuthController>(
                     builder: (context, auth, _) => CustomButton(
                       height: 56,
-                      title: isSignup ? context.watchTr('shop_now') : context.watchTr('done'),
+                      title: isSignup
+                          ? context.watchTr('shop_now')
+                          : context.watchTr('done'),
                       onPress: auth.isLoading
                           ? null
                           : () async {
                               // Reset input controllers but don't log out (don't call auth.clear())
                               auth.clearInputFields();
+                              // If coming from signup, show nav guide once
+                              if (isSignup) {
+                                await ApiService.store(
+                                  key: 'show_nav_guide',
+                                  value: 'true',
+                                );
+                              }
                               // Navigate to home and clear navigation stack
                               context.go(AppRoutes.home);
                             },
