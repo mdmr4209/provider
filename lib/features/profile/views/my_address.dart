@@ -62,33 +62,33 @@ class MyAddress extends StatelessWidget {
                 ),
                 Column(
                   children: [
-                    InkWell(
-                      onTap: () => context.push(AppRoutes.addAddress),
-                      child: Container(
-                        width: 50.r,
-                        height: 50.r,
-                        padding: EdgeInsets.all(5.r),
-                        decoration: ShapeDecoration(
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50.r),
-                          ),
-                          shadows: [
-                            BoxShadow(
-                              color: Color(0x26222222),
-                              blurRadius: 10,
-                              offset: Offset(0, 4),
-                              spreadRadius: 0,
-                            ),
-                          ],
-                        ),
-                        child: SvgPicture.asset(
-                          AppAssets.add,
-                          width: 22.w,
-                          height: 22.h,
-                        ),
-                      ),
-                    ),
+                    // InkWell(
+                    //   onTap: () => context.push(AppRoutes.addAddress),
+                    //   child: Container(
+                    //     width: 50.r,
+                    //     height: 50.r,
+                    //     padding: EdgeInsets.all(5.r),
+                    //     decoration: ShapeDecoration(
+                    //       color: Colors.white,
+                    //       shape: RoundedRectangleBorder(
+                    //         borderRadius: BorderRadius.circular(50.r),
+                    //       ),
+                    //       shadows: [
+                    //         BoxShadow(
+                    //           color: Color(0x26222222),
+                    //           blurRadius: 10,
+                    //           offset: Offset(0, 4),
+                    //           spreadRadius: 0,
+                    //         ),
+                    //       ],
+                    //     ),
+                    //     child: SvgPicture.asset(
+                    //       AppAssets.add,
+                    //       width: 22.w,
+                    //       height: 22.h,
+                    //     ),
+                    //   ),
+                    // ),
                     SizedBox(height: 10.h),
                     Text(
                       'Add a new address',
@@ -158,7 +158,7 @@ class MyAddress extends StatelessWidget {
               ],
             ),
           ),
-          SvgPicture.asset(AppAssets.edit, width: 16.w, height: 16.h),
+          // SvgPicture.asset(AppAssets.edit, width: 16.w, height: 16.h),
         ],
       ),
     );

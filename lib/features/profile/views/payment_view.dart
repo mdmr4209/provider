@@ -53,19 +53,19 @@ class PaymentView extends StatelessWidget {
                     SizedBox(height: 10.h),
 
                     // HORIZONTAL CARD SLIDER
-                    SizedBox(
-                      height: 200
-                          .h, // Explicit height is REQUIRED for horizontal lists
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        clipBehavior:
-                            Clip.none, // Allows shadows to show outside bounds
-                        children: [
-                          _cardItem(AppAssets.card1),
-                          _cardItem(AppAssets.card2),
-                        ],
-                      ),
-                    ),
+                    // SizedBox(
+                    //   height: 200
+                    //       .h, // Explicit height is REQUIRED for horizontal lists
+                    //   child: ListView(
+                    //     scrollDirection: Axis.horizontal,
+                    //     clipBehavior:
+                    //         Clip.none, // Allows shadows to show outside bounds
+                    //     children: [
+                    //       // _cardItem(AppAssets.card1),
+                    //       // _cardItem(AppAssets.card2),
+                    //     ],
+                    //   ),
+                    // ),
 
                     SizedBox(height: 30.h),
                     methodeItem(true),
@@ -80,33 +80,33 @@ class PaymentView extends StatelessWidget {
               ),
               Column(
                 children: [
-                  InkWell(
-                    onTap: () => context.push(AppRoutes.addCard),
-                    child: Container(
-                      width: 50.r,
-                      height: 50.r,
-                      padding: EdgeInsets.all(5.r),
-                      decoration: ShapeDecoration(
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50.r),
-                        ),
-                        shadows: [
-                          BoxShadow(
-                            color: Color(0x26222222),
-                            blurRadius: 10,
-                            offset: Offset(0, 4),
-                            spreadRadius: 0,
-                          ),
-                        ],
-                      ),
-                      child: SvgPicture.asset(
-                        AppAssets.add,
-                        width: 22.w,
-                        height: 22.h,
-                      ),
-                    ),
-                  ),
+                  // InkWell(
+                  //   onTap: () => context.push(AppRoutes.addCard),
+                  //   child: Container(
+                  //     width: 50.r,
+                  //     height: 50.r,
+                  //     padding: EdgeInsets.all(5.r),
+                  //     decoration: ShapeDecoration(
+                  //       color: Colors.white,
+                  //       shape: RoundedRectangleBorder(
+                  //         borderRadius: BorderRadius.circular(50.r),
+                  //       ),
+                  //       shadows: [
+                  //         BoxShadow(
+                  //           color: Color(0x26222222),
+                  //           blurRadius: 10,
+                  //           offset: Offset(0, 4),
+                  //           spreadRadius: 0,
+                  //         ),
+                  //       ],
+                  //     ),
+                  //     child: SvgPicture.asset(
+                  //       AppAssets.add,
+                  //       width: 22.w,
+                  //       height: 22.h,
+                  //     ),
+                  //   ),
+                  // ),
                   SizedBox(height: 10.h),
                   Text(
                     'Add a new card',
@@ -163,12 +163,12 @@ class PaymentView extends StatelessWidget {
             ],
           ),
           Spacer(),
-          IconButton(
-            onPressed: () {},
-            icon: asset == true
-                ? SvgPicture.asset(AppAssets.edit, width: 16.w, height: 16.h)
-                : SvgPicture.asset(AppAssets.add, width: 22.w, height: 22.h),
-          ),
+          // IconButton(
+          //   onPressed: () {},
+          //   icon: asset == true
+          //       ? SvgPicture.asset(AppAssets.edit, width: 16.w, height: 16.h)
+          //       : SvgPicture.asset(AppAssets.add, width: 22.w, height: 22.h),
+          // ),
         ],
       ),
     );

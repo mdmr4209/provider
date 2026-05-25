@@ -345,7 +345,7 @@ class _MemberIdButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset(AppAssets.memberId, width: 20.r, height: 20.r),
+            // SvgPicture.asset(AppAssets.memberId, width: 20.r, height: 20.r),
             SizedBox(width: 8.w),
             Text(
               'MEMBER ID',
@@ -702,7 +702,7 @@ class _TableDataRow extends StatelessWidget {
                       )
                     : (v == true
                           ? SvgPicture.asset(
-                              AppAssets.love,
+                              AppAssets.feather,
                               height: 16.r,
                               width: 16.w,
                             )

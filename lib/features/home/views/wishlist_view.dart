@@ -53,38 +53,38 @@ class WishlistView extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: Column(
               children: [
-                Expanded(
-                  child: ListView.builder(
-                    padding: EdgeInsets.symmetric(vertical: 15.h),
-
-                    itemCount: home.dummyProducts.length,
-                    itemBuilder: (context, index) {
-                      final product = home.dummyProducts[index];
-                      return Column(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              context.push(AppRoutes.product);
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.only(bottom: 10.h),
-                              child: _productCard(context, product),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              context.push(AppRoutes.product);
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.only(bottom: 10.h),
-                              child: _productCard(context, product),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                ),
+                // Expanded(
+                //   child: ListView.builder(
+                //     padding: EdgeInsets.symmetric(vertical: 15.h),
+                //
+                //     itemCount: home.dummyProducts.length,
+                //     itemBuilder: (context, index) {
+                //       final product = home.dummyProducts[index];
+                //       return Column(
+                //         children: [
+                //           InkWell(
+                //             onTap: () {
+                //               context.push(AppRoutes.product);
+                //             },
+                //             child: Padding(
+                //               padding: EdgeInsets.only(bottom: 10.h),
+                //               child: _productCard(context, product),
+                //             ),
+                //           ),
+                //           InkWell(
+                //             onTap: () {
+                //               context.push(AppRoutes.product);
+                //             },
+                //             child: Padding(
+                //               padding: EdgeInsets.only(bottom: 10.h),
+                //               child: _productCard(context, product),
+                //             ),
+                //           ),
+                //         ],
+                //       );
+                //     },
+                //   ),
+                // ),
                 SizedBox(height: 10.h),
               ],
             ),
@@ -220,13 +220,13 @@ class WishlistView extends StatelessWidget {
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                width: 17.w,
-                height: 16.h,
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(),
-                child: SvgPicture.asset(AppAssets.love),
-              ),
+              // Container(
+              //   width: 17.w,
+              //   height: 16.h,
+              //   clipBehavior: Clip.antiAlias,
+              //   decoration: BoxDecoration(),
+              //   child: SvgPicture.asset(AppAssets.love),
+              // ),
               Container(
                 width: 40.w,
                 height: 40.h,

@@ -115,7 +115,7 @@ class _SignUpViewState extends State<SignUpView> {
                             AnimatedPositioned(
                               duration: const Duration(milliseconds: 200),
                               curve: Curves.easeIn,
-                              top: isKeyboardOpen ? -150.h : 170.h,
+                              top: isKeyboardOpen ? -80.h : 170.h,
                               left: 0,
                               right: 0,
                               bottom: 0,

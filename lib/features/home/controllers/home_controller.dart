@@ -1,291 +1,129 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 
-import '../../../core/constants/app_assets.dart';
-import '../models/product_model.dart';
+import '../../../core/widgets/showBreathingDialog.dart';
 
-/// Pure ChangeNotifier — zero BuildContext, zero Navigator.
-/// Navigation is done via GoRouter using the routerKey set in main.dart.
+/// Controller for the Home Dashboard and Guides.
+/// Follows the pattern of using dummy data as specified in JSON.md.
 class HomeController extends ChangeNotifier {
-  /// Set this from main.dart: HomeController.routerKey = _routerKey;
-  static GlobalKey<NavigatorState>? routerKey;
+  // ── State ──────────────────────────────────────────────────────────────────
 
-  int _currentIndex = 0;
+  Map<String, dynamic> _dashboardData = {};
+  List<Map<String, dynamic>> _guideData = [];
+  bool _isLoading = false;
 
-  int get currentIndex => _currentIndex;
+  Map<String, dynamic> get dashboardData => _dashboardData;
+  List<Map<String, dynamic>> get guideData => _guideData;
+  bool get isLoading => _isLoading;
 
-  void setIndex(int index) {
-    _currentIndex = index;
+  HomeController() {
+    fetchDashboardData();
+    fetchGuideData();
+  }
+
+  /// Mimics fetching Dashboard data from an API (JSON.md #4.1)
+  Future<void> fetchDashboardData() async {
+    _isLoading = true;
+    notifyListeners();
+
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    _dashboardData = {
+      "status": "success",
+      "data": {
+        "user": {"name": "Jonathan", "status": "YOU ARE\nSTRONG ✨"},
+        "timer": {
+          "days": 32,
+          "hours": 0,
+          "mins": 11,
+          "startDate": "2024-04-22T08:30:00Z",
+        },
+        "dailyWisdom": {
+          "quote":
+              "Progress isn't a straight line. Every small step back is just preparation for a giant leap forward.",
+          "author": "Coach Pearl 🍃",
+        },
+        "journal": {
+          "prompt": "Tap to write about your day...",
+          "actionText": "Write →",
+        },
+        "notifications": {"unreadCount": 2},
+      },
+    };
+
+    _isLoading = false;
     notifyListeners();
   }
 
-  // ── Category Management ──────────────────────────────────────────────
-  final List<String> categories = ['All', 'Apparel', 'Dress', 'Tshirt', 'Bag'];
+  /// Mimics fetching Navigation Guide data from an API (JSON.md #5)
+  Future<void> fetchGuideData() async {
+    await Future.delayed(const Duration(milliseconds: 300));
 
-  String _selectedCategory = 'All';
-
-  String get selectedCategory => _selectedCategory;
-
-  void selectCategory(String category) {
-    _selectedCategory = category;
+    _guideData = [
+      {
+        "index": 0,
+        "title": "Home",
+        "message":
+            "Lorem ipsum dolor Mauris sit amet consectetur. Vel ligula nunc sed amet erat cursus. Mauris.",
+      },
+      {
+        "index": 1,
+        "title": "The Circle",
+        "message":
+            "Connect with others in our community forum and share your progress.",
+      },
+      {
+        "index": 2,
+        "title": "Find Coaches",
+        "message":
+            "Need expert help? Browse and book specialized coaches for one-on-one support.",
+      },
+      {
+        "index": 3,
+        "title": "Inbox",
+        "message":
+            "Stay updated with your latest messages and community notifications.",
+      },
+      {
+        "index": 4,
+        "title": "Profile",
+        "message":
+            "Customize your experience and track your personal growth metrics here.",
+      },
+    ];
     notifyListeners();
   }
 
-  // ── Filter States ────────────────────────────────────────────────────
-  String _sortOption = 'From expensive to cheap';
-  Set<String> _selectedColors = {'#D4A5A0'};
-  RangeValues _priceRange = const RangeValues(30, 130);
-  Set<String> _selectedConditions = {'sale'};
-  Set<String> _selectedGenders = {};
-  Set<String> _selectedTags = {'skin'};
+  // ── Actions ────────────────────────────────────────────────────────────────
 
-  // Getters
-  String get sortOption => _sortOption;
-  Set<String> get selectedColors => _selectedColors;
-  RangeValues get priceRange => _priceRange;
-  Set<String> get selectedConditions => _selectedConditions;
-  Set<String> get selectedGenders => _selectedGenders;
-  Set<String> get selectedTags => _selectedTags;
-
-  // Setters with notifyListeners
-  void setSortOption(String value) {
-    _sortOption = value;
-    notifyListeners();
-  }
-
-  void setColors(Set<String> colors) {
-    _selectedColors = colors;
-    notifyListeners();
-  }
-
-  void setPriceRange(RangeValues range) {
-    _priceRange = range;
-    notifyListeners();
-  }
-
-  void setConditions(Set<String> conditions) {
-    _selectedConditions = conditions;
-    notifyListeners();
-  }
-
-  void setGenders(Set<String> genders) {
-    _selectedGenders = genders;
-    notifyListeners();
-  }
-
-  void setTags(Set<String> tags) {
-    _selectedTags = tags;
-    notifyListeners();
-  }
-
-  final PageController bannerController = PageController();
-  int _currentBannerIndex = 0;
-  int get currentBannerIndex => _currentBannerIndex;
-
-  // List of banner images
-  final List<String> bannerImages = [
-    AppAssets.homeBg, // Your first image
-    AppAssets.background3, // Example second image
-    AppAssets.homeBg, // Example third image
-  ];
-
-  void updateBannerIndex(int index) {
-    _currentBannerIndex = index;
-    notifyListeners();
-  }
-
-  void nextBanner() {
-    bannerController.nextPage(
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeInOut,
-    );
-  }
-
-  void resetFilters() {
-    _sortOption = 'From expensive to cheap';
-    _selectedColors = {'#D4A5A0'};
-    _priceRange = const RangeValues(30, 130);
-    _selectedConditions = {'sale'};
-    _selectedGenders = {};
-    _selectedTags = {'skin'};
-    _selectedCategory = 'All';
-    notifyListeners();
-  }
-
-  // ── All Products (Sample Data) ───────────────────────────────────────
-  final List<ProductModel> _allProducts = [
-    ProductModel(
-      id: '1',
-      title: '21WN reversible angora card',
-      image: 'assets/images/product1.png',
-      price: '\$120',
-      updatePrice: '\$80',
-      rating: 4.5,
-      sale: true,
-      category: 'Apparel',
-    ),
-    ProductModel(
-      id: '2',
-      title: 'Classic Cotton Dress',
-      image: 'assets/images/product2.png',
-      price: '\$95',
-      updatePrice: '0',
-      rating: 4.8,
-      sale: false,
-      category: 'Dress',
-    ),
-    ProductModel(
-      id: '3',
-      title: 'Summer Casual T-Shirt',
-      image: 'assets/images/product3.png',
-      price: '\$45',
-      updatePrice: '\$30',
-      rating: 4.2,
-      sale: true,
-      category: 'Tshirt',
-    ),
-    ProductModel(
-      id: '4',
-      title: 'Elegant Leather Bag',
-      image: 'assets/images/product4.png',
-      price: '\$150',
-      updatePrice: '0',
-      rating: 4.6,
-      sale: false,
-      category: 'Bag',
-    ),
-    ProductModel(
-      id: '5',
-      title: 'Designer Apparel Set',
-      image: 'assets/images/product5.png',
-      price: '\$200',
-      updatePrice: '\$140',
-      rating: 4.9,
-      sale: true,
-      category: 'Apparel',
-    ),
-    ProductModel(
-      id: '6',
-      title: 'Premium Shirt',
-      image: 'assets/images/product6.png',
-      price: '\$75',
-      updatePrice: '\$60',
-      rating: 4.7,
-      sale: true,
-      category: 'Tshirt',
-    ),
-    ProductModel(
-      id: '7',
-      title: 'Evening Dress',
-      image: 'assets/images/product7.png',
-      price: '\$180',
-      updatePrice: '0',
-      rating: 4.9,
-      sale: false,
-      category: 'Dress',
-    ),
-    ProductModel(
-      id: '8',
-      title: 'Canvas Backpack',
-      image: 'assets/images/product8.png',
-      price: '\$65',
-      updatePrice: '\$50',
-      rating: 4.4,
-      sale: true,
-      category: 'Bag',
-    ),
-  ];
-
-  // ── Filtered Products (with sorting and filtering logic) ──────────────
-  List<ProductModel> get filteredProducts {
-    List<ProductModel> filtered = _allProducts;
-
-    // ✅ Filter by Category
-    if (_selectedCategory != 'All') {
-      filtered = filtered
-          .where((p) => p.category == _selectedCategory)
-          .toList();
+  void resetTimer() {
+    if (_dashboardData.containsKey('data')) {
+      _dashboardData['data']['timer']['days'] = 0;
+      _dashboardData['data']['timer']['hours'] = 0;
+      _dashboardData['data']['timer']['mins'] = 0;
+      notifyListeners();
     }
-
-    // ✅ Filter by Price Range
-    filtered = filtered.where((p) {
-      // Parse price - use updatePrice if available and not '0', else use price
-      String priceStr = p.updatePrice != '0' && p.updatePrice.isNotEmpty
-          ? p.updatePrice
-          : p.price;
-      final price = double.tryParse(priceStr.replaceAll('\$', '')) ?? 0;
-      return price >= _priceRange.start && price <= _priceRange.end;
-    }).toList();
-
-    // ✅ Filter by Sale Status
-    if (_selectedConditions.isNotEmpty) {
-      filtered = filtered.where((p) {
-        if (_selectedConditions.contains('sale') && p.sale) return true;
-        return false;
-      }).toList();
-    }
-
-    // ✅ Apply Sorting
-    switch (_sortOption) {
-      case 'From expensive to cheap':
-        filtered.sort((a, b) {
-          final priceA = double.tryParse(a.price.replaceAll('\$', '')) ?? 0;
-          final priceB = double.tryParse(b.price.replaceAll('\$', '')) ?? 0;
-          return priceB.compareTo(priceA);
-        });
-        break;
-      case 'From cheap to expensive':
-        filtered.sort((a, b) {
-          final priceA = double.tryParse(a.price.replaceAll('\$', '')) ?? 0;
-          final priceB = double.tryParse(b.price.replaceAll('\$', '')) ?? 0;
-          return priceA.compareTo(priceB);
-        });
-        break;
-      case 'Most Popular':
-        filtered.sort((a, b) => b.rating.compareTo(a.rating));
-        break;
-      case 'Newest':
-        // Implement based on date if available
-        break;
-    }
-
-    return filtered;
   }
 
-  // ── All Products (without filters - for reference) ────────────────────
-  List<ProductModel> get allProducts => _allProducts;
-
-  // Dummy List for home (not filtered)
-  final List<ProductModel> dummyProducts = [
-    ProductModel(
-      id: '1',
-      title: 'Modern Chair',
-      price: '\$120',
-      image: 'assets/image/img_1.png',
-      rating: 4.5,
-      sale: false,
-    ),
-    ProductModel(
-      id: '2',
-      title: 'Wood Table',
-      price: '\$250',
-      image: 'assets/image/img_1.png',
-      rating: 4.8,
-      sale: true,
-      updatePrice: '\$38.00',
-    ),
-    ProductModel(
-      id: '3',
-      title: 'Lounge Sofa',
-      price: '\$500',
-      image: 'assets/image/img_1.png',
-      rating: 4.2,
-    ),
-    ProductModel(
-      id: '4',
-      title: 'Fancy Chair',
-      price: '\$550',
-      image: 'assets/image/img_1.png',
-      rating: 4.2,
-    ),
-  ];
+  void handleBreakNoContact(BuildContext context) => showBreathingDialog(
+    context,
+    title: "Take A Breath, [Name]",
+    description:
+        "\"Stop. Don't press send. Before you do anything, let's take a quick 30 seconds and breathe. Do it with me 4 seconds breath in, 4 seconds hold, 4 seconds breathe out.\"",
+    primaryButtonText: "\"Start Breathing\"",
+    onPrimaryTap: () {
+      /// CLOSE FIRST DIALOG
+      Navigator.pop(context);
+    },
+  );
+  void handleRelapsePrevention(BuildContext context) => showBreathingDialog(
+    context,
+    title: "How do you feel now [Name]?",
+    description:
+        "\"Take a breath, [Name]. This happens. Breaking No Contact doesn't mean you've failed; it just means you're human.\"",
+    primaryButtonText: "\"Yes, I need to speak to someone.\" 📞",
+    onPrimaryTap: () {
+      Navigator.pop(context);
+    },
+  );
 }

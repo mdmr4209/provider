@@ -1,11 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import '../../../core/services/api_service.dart';
-import '../../auth/controllers/auth_controller.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/app_assets.dart';
+import '../../../core/constants/app_colors.dart';
+import '../controllers/home_controller.dart';
 import '../../localization/localization_extension.dart';
 
 class Navbar extends StatefulWidget {
@@ -20,261 +24,283 @@ class Navbar extends StatefulWidget {
 class _NavbarState extends State<Navbar> {
   bool _showGuide = false;
   int _guideIndex = 0;
-  final List<String> _guideMessages = [];
+  Timer? _autoVanishTimer;
+  double _overlayOpacity = 0.0;
 
   @override
   void initState() {
     super.initState();
-    _prepareGuides();
     _checkAndShowGuide();
   }
 
-  void _prepareGuides() {
-    _guideMessages.addAll([
-      'Home: Browse products and collections',
-      'The Circle: Community and social features',
-      'Find Coaches: Search and book experts',
-      'Inbox: View messages and notifications',
-      'Profile: Manage your account and settings',
-    ]);
+  @override
+  void dispose() {
+    _autoVanishTimer?.cancel();
+    super.dispose();
   }
 
   Future<void> _checkAndShowGuide() async {
     final v = await ApiService.getStored(key: 'show_nav_guide');
     if (v == 'true') {
-      setState(() => _showGuide = true);
-      // show dialog after first frame
-      WidgetsBinding.instance.addPostFrameCallback((_) => _showGuideDialog());
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          setState(() {
+            _showGuide = true;
+            _guideIndex = 0;
+            _overlayOpacity = 1.0;
+          });
+          _startAutoVanishTimer();
+        }
+      });
     }
   }
 
-  Future<void> _hideGuidePermanently() async {
-    await ApiService.store(key: 'show_nav_guide', value: 'false');
+  void _startAutoVanishTimer() {
+    _autoVanishTimer?.cancel();
+    _autoVanishTimer = Timer(const Duration(seconds: 5), () {
+      if (mounted && _showGuide) {
+        final home = context.read<HomeController>();
+        if (_guideIndex < home.guideData.length - 1) {
+          setState(() => _guideIndex++);
+          _startAutoVanishTimer();
+        } else {
+          _closeGuideWithAnimation();
+        }
+      }
+    });
   }
 
-  void _showGuideDialog() {
-    if (!_showGuide) return;
+  Future<void> _closeGuideWithAnimation() async {
+    setState(() => _overlayOpacity = 0.0);
+    await Future.delayed(const Duration(milliseconds: 400));
+    _hideGuidePermanently();
+  }
 
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (ctx) {
-        return StatefulBuilder(
-          builder: (context, setStateDialog) {
-            final message = _guideMessages[_guideIndex];
-            final isLastStep = _guideIndex == _guideMessages.length - 1;
+  Future<void> _hideGuidePermanently() async {
+    _autoVanishTimer?.cancel();
+    await ApiService.store(key: 'show_nav_guide', value: 'false');
+    if (mounted) {
+      setState(() {
+        _showGuide = false;
+      });
+    }
+  }
 
-            return Dialog(
-              backgroundColor: Colors.transparent,
-              insetPadding: EdgeInsets.zero,
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    bottom: 100.h,
-                    left: 16.w,
-                    right: 16.w,
+  @override
+  Widget build(BuildContext context) {
+    final home = context.watch<HomeController>();
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double marginW = 20.w;
+    final double bubbleWidth = screenWidth - (marginW * 2);
+
+    // Precise center calculation for 5 items: centers are at 10%, 30%, 50%, 70%, 90%
+    final double itemWidth = screenWidth / 5;
+    final double itemCenter = (_guideIndex + 0.5) * itemWidth;
+    final double pointerX = (itemCenter - marginW) / bubbleWidth;
+
+    final isLastStep =
+        home.guideData.isNotEmpty && _guideIndex == home.guideData.length - 1;
+
+    return Stack(
+      children: [
+        Scaffold(
+          body: widget.navigationShell,
+          bottomNavigationBar: Container(
+            height: 88.h,
+            decoration: BoxDecoration(
+              color: const Color(0xFF1F3A2F),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 10,
+                  offset: const Offset(0, -4),
+                ),
+              ],
+            ),
+            child: SafeArea(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _navItem(0, context.watchTr('home'), AppAssets.home),
+                  _navItem(1, context.watchTr('the_circle'), AppAssets.circle),
+                  _navItem(2, context.watchTr('find_coaches'), AppAssets.coach),
+                  _navItem(
+                    3,
+                    context.watchTr('inbox'),
+                    AppAssets.inbox,
+                    badge: "2",
                   ),
-                  child: Material(
-                    borderRadius: BorderRadius.circular(16),
-                    color: const Color(0xFF1F3A2F),
-                    child: Padding(
-                      padding: EdgeInsets.all(20.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          // Step indicator
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: List.generate(
-                              _guideMessages.length,
-                              (i) => Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 4.w),
-                                child: Container(
-                                  width: 8.r,
-                                  height: 8.r,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: i == _guideIndex
-                                        ? const Color(0xFFD4AF37)
-                                        : Colors.white30,
+                  _navItem(4, context.watchTr('profile'), AppAssets.profile),
+                ],
+              ),
+            ),
+          ),
+        ),
+
+        // ── Guide Overlay ───────────────────────────────────────────────────
+        if (_showGuide && home.guideData.isNotEmpty)
+          AnimatedOpacity(
+            opacity: _overlayOpacity,
+            duration: const Duration(milliseconds: 400),
+            child: Material(
+              color: Colors.transparent,
+              child: Container(
+                color: Colors.black.withOpacity(0.6),
+                child: Stack(
+                  children: [
+                    // Dismiss by tapping background
+                    GestureDetector(
+                      onTap: _closeGuideWithAnimation,
+                      child: Container(color: Colors.transparent),
+                    ),
+
+                    // Pointer Bubble
+                    Positioned(
+                      bottom: 105.h,
+                      left: marginW,
+                      right: marginW,
+                      child: CustomPaint(
+                        painter: BubblePainter(pointerX: pointerX),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
+                          padding: EdgeInsets.fromLTRB(20.w, 24.h, 20.w, 32.h),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              AnimatedSwitcher(
+                                duration: const Duration(milliseconds: 300),
+                                child: Text(
+                                  home.guideData[_guideIndex]['message'] ?? "",
+                                  key: ValueKey(_guideIndex),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14.sp,
+                                    height: 1.5,
+                                    fontFamily: 'Segoe UI',
+                                    decoration: TextDecoration.none,
                                   ),
+                                  textAlign: TextAlign.start,
                                 ),
                               ),
-                            ),
-                          ),
-                          SizedBox(height: 20.h),
-
-                          // Guide message
-                          Text(
-                            message,
-                            style: Theme.of(context).textTheme.bodyMedium
-                                ?.copyWith(
-                                  color: Colors.white,
-                                  height: 1.6,
-                                  fontSize: 14.sp,
-                                ),
-                            textAlign: TextAlign.center,
-                          ),
-                          SizedBox(height: 24.h),
-
-                          // Buttons
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              if (_guideIndex > 0)
-                                Expanded(
-                                  child: Container(
-                                    height: 48.h,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: Colors.white30,
-                                        width: 1.5,
-                                      ),
-                                      borderRadius: BorderRadius.circular(24),
-                                    ),
-                                    child: Material(
-                                      color: Colors.transparent,
-                                      child: InkWell(
-                                        onTap: () {
-                                          setStateDialog(() => _guideIndex--);
-                                        },
-                                        borderRadius: BorderRadius.circular(24),
-                                        child: Center(
-                                          child: Text(
-                                            'Previous',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 14.sp,
-                                              fontWeight: FontWeight.w600,
+                              SizedBox(height: 28.h),
+                              Row(
+                                children: [
+                                  // Previous Button - Outlined
+                                  Expanded(
+                                    child: Opacity(
+                                      opacity: _guideIndex > 0 ? 1.0 : 0.0,
+                                      child: GestureDetector(
+                                        onTap: _guideIndex > 0
+                                            ? () {
+                                                setState(() => _guideIndex--);
+                                                _startAutoVanishTimer();
+                                              }
+                                            : null,
+                                        child: Container(
+                                          height: 48.h,
+                                          margin: EdgeInsets.only(right: 12.w),
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: Colors.white38,
+                                              width: 1.5,
+                                            ),
+                                            borderRadius: BorderRadius.circular(
+                                              24.r,
+                                            ),
+                                          ),
+                                          child: const Center(
+                                            child: Text(
+                                              "Previous",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w600,
+                                                decoration: TextDecoration.none,
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                )
-                              else
-                                Expanded(child: SizedBox.shrink()),
-                              SizedBox(width: 12.w),
-                              Expanded(
-                                child: Container(
-                                  height: 48.h,
-                                  decoration: BoxDecoration(
-                                    gradient: const LinearGradient(
-                                      colors: [
-                                        Color(0xFFD4AF37),
-                                        Color(0xFFC99C21),
-                                      ],
-                                    ),
-                                    borderRadius: BorderRadius.circular(24),
-                                  ),
-                                  child: Material(
-                                    color: Colors.transparent,
-                                    child: InkWell(
+
+                                  // Next / Done Button - Gold Gradient
+                                  Expanded(
+                                    child: GestureDetector(
                                       onTap: () async {
                                         if (!isLastStep) {
-                                          setStateDialog(() => _guideIndex++);
+                                          setState(() => _guideIndex++);
+                                          _startAutoVanishTimer();
                                         } else {
-                                          // finish
-                                          await _hideGuidePermanently();
-                                          setState(() => _showGuide = false);
-                                          Navigator.of(context).pop();
+                                          _closeGuideWithAnimation();
                                         }
                                       },
-                                      borderRadius: BorderRadius.circular(24),
-                                      child: Center(
-                                        child: Text(
-                                          isLastStep ? 'Done' : 'Next',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14.sp,
-                                            fontWeight: FontWeight.w600,
+                                      child: Container(
+                                        height: 48.h,
+                                        decoration: BoxDecoration(
+                                          gradient: const LinearGradient(
+                                            colors: [
+                                              Color(0xFFAC823A),
+                                              Color(0xFFF3D194),
+                                            ],
+                                            begin: Alignment.centerLeft,
+                                            end: Alignment.centerRight,
+                                          ),
+                                          borderRadius: BorderRadius.circular(
+                                            24.r,
+                                          ),
+                                          boxShadow: const [
+                                            BoxShadow(
+                                              color: Colors.black26,
+                                              blurRadius: 4,
+                                              offset: Offset(0, 2),
+                                            ),
+                                          ],
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            isLastStep ? "Done" : "Next",
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              decoration: TextDecoration.none,
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
+                                ],
                               ),
                             ],
                           ),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
               ),
-            );
-          },
-        );
-      },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: widget.navigationShell,
-      bottomNavigationBar: Container(
-        height: 88.h,
-        decoration: BoxDecoration(
-          color: const Color(0xFF1F3A2F),
-          borderRadius: BorderRadius.vertical(top: Radius.circular(18.r)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.25),
-              blurRadius: 12,
-              offset: const Offset(0, -6),
             ),
-          ],
-        ),
-        child: SafeArea(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _navItem(
-                context,
-                0,
-                context.watchTr('home'),
-                'assets/icons/home.svg',
-              ),
-              _navItem(
-                context,
-                1,
-                context.watchTr('the_circle'),
-                'assets/image/home2.svg',
-              ),
-              _navItem(
-                context,
-                2,
-                context.watchTr('find_coaches'),
-                'assets/image/search.svg',
-              ),
-              _navItem(
-                context,
-                3,
-                context.watchTr('inbox'),
-                'assets/image/wishlist.svg',
-              ),
-              _navItem(
-                context,
-                4,
-                context.watchTr('profile'),
-                'assets/icons/logo.svg',
-              ),
-            ],
           ),
-        ),
-      ),
+      ],
     );
   }
 
-  Widget _navItem(BuildContext context, int index, String label, String icon) {
-    final isSelected = widget.navigationShell.currentIndex == index;
+  Widget _navItem(int index, String label, String icon, {String? badge}) {
+    // Highlight items based on guide index if visible
+    final bool isActive = _showGuide
+        ? (_guideIndex == index)
+        : (widget.navigationShell.currentIndex == index);
+
+    final Color activeColor = const Color(0xFFD4AF37);
+    final Color inactiveColor = Colors.white70;
 
     return GestureDetector(
       onTap: () {
+        if (_showGuide) return;
         widget.navigationShell.goBranch(
           index,
           initialLocation: index == widget.navigationShell.currentIndex,
@@ -282,48 +308,133 @@ class _NavbarState extends State<Navbar> {
       },
       behavior: HitTestBehavior.opaque,
       child: SizedBox(
-        width: 68.w,
+        width: 70.w,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 8.h),
-              child: Column(
-                children: [
-                  SvgPicture.asset(
-                    icon,
-                    colorFilter: ColorFilter.mode(
-                      isSelected ? const Color(0xFFD4AF37) : Colors.white70,
-                      BlendMode.srcIn,
-                    ),
-                    width: 26.r,
-                    height: 26.r,
-                  ),
-                  SizedBox(height: 6.h),
-                  if (isSelected)
-                    Container(
-                      width: 28.w,
-                      height: 4.h,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFD4AF37),
-                        borderRadius: BorderRadius.circular(8),
+            SizedBox(height: 10.h),
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                SvgPicture.asset(
+                  icon,
+                  colorFilter: isActive
+                      ? null
+                      : ColorFilter.mode(inactiveColor, BlendMode.srcIn),
+                  width: 24.r,
+                  height: 24.r,
+                ),
+                if (badge != null)
+                  Positioned(
+                    top: -4.r,
+                    right: -4.r,
+                    child: Container(
+                      padding: EdgeInsets.all(2.r),
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFD44637),
+                        shape: BoxShape.circle,
                       ),
-                    )
-                  else
-                    SizedBox(height: 4.h),
-                ],
-              ),
+                      constraints: BoxConstraints(
+                        minWidth: 14.r,
+                        minHeight: 14.r,
+                      ),
+                      child: Text(
+                        badge,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 8.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+              ],
             ),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 12.sp,
-                color: isSelected ? const Color(0xFFD4AF37) : Colors.white70,
-              ),
-            ),
+            SizedBox(height: 4.h),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 10.sp,
+                    color: isActive ? activeColor : inactiveColor,
+                    fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+                    decoration: TextDecoration.none,
+                  ),
+                ),
+
+                SizedBox(height: 4.h),
+
+                if (isActive)
+                  Container(
+                    width: 62.w,
+                    height: 2.h,
+                    decoration: ShapeDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.topRight,
+                        colors: [
+                          Color(0xFFB18406),
+                          Color(0xFFFFD258),
+                          Color(0xFFB28406),
+                        ],
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  )
+                else
+                  SizedBox(
+                    width: 14.w,
+                    height: 2.h,
+                  ),
+              ],
+            )
           ],
         ),
       ),
     );
   }
+}
+
+// ── Bubble Painter ───────────────────────────────────────────────────────────
+
+class BubblePainter extends CustomPainter {
+  final double pointerX;
+
+  BubblePainter({required this.pointerX});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color =
+          const Color(0xFF20341F) // Exact color from image
+      ..style = PaintingStyle.fill;
+
+    final double radius = 16.r;
+    final double tipHeight = 15.h;
+    final double tipWidth = 12.w;
+    final double tipX = size.width * pointerX;
+
+    final path = Path()
+      ..addRRect(
+        RRect.fromLTRBR(0, 0, size.width, size.height, Radius.circular(radius)),
+      )
+      ..moveTo(tipX - tipWidth, size.height)
+      ..lineTo(tipX, size.height + tipHeight)
+      ..lineTo(tipX + tipWidth, size.height)
+      ..close();
+
+    // Shadow as requested
+    canvas.drawShadow(path, const Color(0x0A1E1E01), 10, false);
+
+    // Draw the bubble and pointer
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }

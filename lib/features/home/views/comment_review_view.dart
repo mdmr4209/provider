@@ -43,10 +43,10 @@ class CommentReviewView extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SizedBox(
-                        height: 220.h,
-                        child: Image.asset(AppAssets.addReview),
-                      ),
+                      // SizedBox(
+                      //   height: 220.h,
+                      //   child: Image.asset(AppAssets.addReview),
+                      // ),
                       SizedBox(height: 10.h),
                       SizedBox(
                         width: 303.w,

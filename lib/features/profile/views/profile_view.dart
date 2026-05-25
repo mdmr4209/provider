@@ -78,40 +78,40 @@ class ProfileView extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Positioned(
-                        bottom: 15.h,
-                        right: 0,
-                        child: InkWell(
-                          onTap: () => context.push(AppRoutes.editProfile),
-                          child: Container(
-                            width: 40.w,
-                            height: 40.h,
-                            padding: EdgeInsets.all(5.w),
-                            decoration: ShapeDecoration(
-                              color: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50.r),
-                              ),
-                              shadows: [
-                                BoxShadow(
-                                  color: Color(0x26222222),
-                                  blurRadius: 10,
-                                  offset: Offset(0, 4),
-                                  spreadRadius: 0,
-                                ),
-                              ],
-                            ),
-                            child: SvgPicture.asset(
-                              AppAssets.edit,
-                              colorFilter: ColorFilter.mode(
-                                AppColors.defaultColor,
-                                BlendMode.srcIn,
-                              ),
-                              width: 20.w,
-                            ),
-                          ),
-                        ),
-                      ),
+                      // Positioned(
+                      //   bottom: 15.h,
+                      //   right: 0,
+                      //   child: InkWell(
+                      //     onTap: () => context.push(AppRoutes.editProfile),
+                      //     child: Container(
+                      //       width: 40.w,
+                      //       height: 40.h,
+                      //       padding: EdgeInsets.all(5.w),
+                      //       decoration: ShapeDecoration(
+                      //         color: Colors.white,
+                      //         shape: RoundedRectangleBorder(
+                      //           borderRadius: BorderRadius.circular(50.r),
+                      //         ),
+                      //         shadows: [
+                      //           BoxShadow(
+                      //             color: Color(0x26222222),
+                      //             blurRadius: 10,
+                      //             offset: Offset(0, 4),
+                      //             spreadRadius: 0,
+                      //           ),
+                      //         ],
+                      //       ),
+                      //       child: SvgPicture.asset(
+                      //         AppAssets.edit,
+                      //         colorFilter: ColorFilter.mode(
+                      //           AppColors.defaultColor,
+                      //           BlendMode.srcIn,
+                      //         ),
+                      //         width: 20.w,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                   SizedBox(height: 10.h),

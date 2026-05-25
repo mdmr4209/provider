@@ -43,19 +43,19 @@ class TrackOrder extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    height: 220.h,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Image.asset(AppAssets.bgIcon),
-                        Positioned(
-                          bottom: 0,
-                          child: SvgPicture.asset(AppAssets.bgOrder),
-                        ),
-                      ],
-                    ),
-                  ),
+                  // SizedBox(
+                  //   height: 220.h,
+                  //   child: Stack(
+                  //     alignment: Alignment.center,
+                  //     children: [
+                  //       // Image.asset(AppAssets.bgIcon),
+                  //       // Positioned(
+                  //       //   bottom: 0,
+                  //       //   child: SvgPicture.asset(AppAssets.bgOrder),
+                  //       // ),
+                  //     ],
+                  //   ),
+                  // ),
                   SizedBox(height: 10.h),
                   Text(
                     'Your order:',

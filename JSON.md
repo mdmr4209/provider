@@ -1,24 +1,17 @@
-# 📄 API Schemas & JSON Responses - Complete Guide
-
-## Table of Contents
-
-1. [Authentication APIs](#1-authentication-apis)
-2. [User Profile APIs](#2-user-profile-apis)
-3. [Setup APIs](#3-setup-apis)
-4. [Error Responses](#4-error-responses)
-5. [Dummy Data Collections](#5-dummy-data-collections)
-6. [Response Codes](#6-response-codes)
-7. [API Endpoint Summary](#7-api-endpoint-summary)
-
+📄 API Schemas & JSON Responses - Complete Guide
+Table of Contents
+Authentication APIs
+User Profile APIs
+Setup APIs
+Error Responses
+Dummy Data Collections
+Response Codes
+API Endpoint Summary
 ---
-
-## 1. Authentication APIs
-
-### 1.1 Login API
-
-**Endpoint**: `POST /api/auth/login`
-
-**Request**:
+1. Authentication APIs
+   1.1 Login API
+   Endpoint: `POST /api/auth/login`
+   Request:
 ```json
 {
   "email": "user@example.com",
@@ -26,8 +19,7 @@
   "rememberMe": true
 }
 ```
-
-**Success Response** (200 OK):
+Success Response (200 OK):
 ```json
 {
   "status": "success",
@@ -63,8 +55,7 @@
   }
 }
 ```
-
-**Error Response** (401 Unauthorized):
+Error Response (401 Unauthorized):
 ```json
 {
   "status": "error",
@@ -74,14 +65,10 @@
   "timestamp": "2026-05-24T10:30:00Z"
 }
 ```
-
 ---
-
-### 1.2 Sign Up API
-
-**Endpoint**: `POST /api/auth/signup`
-
-**Request**:
+1.2 Sign Up API
+Endpoint: `POST /api/auth/signup`
+Request:
 ```json
 {
   "name": "Jane Smith",
@@ -91,8 +78,7 @@
   "acceptTerms": true
 }
 ```
-
-**Success Response** (201 Created):
+Success Response (201 Created):
 ```json
 {
   "status": "success",
@@ -126,8 +112,7 @@
   }
 }
 ```
-
-**Error Response** (400 Bad Request):
+Error Response (400 Bad Request):
 ```json
 {
   "status": "error",
@@ -143,14 +128,10 @@
   "timestamp": "2026-05-24T10:35:00Z"
 }
 ```
-
 ---
-
-### 1.3 OTP Verification API
-
-**Endpoint**: `POST /api/auth/verify-otp`
-
-**Request**:
+1.3 OTP Verification API
+Endpoint: `POST /api/auth/verify-otp`
+Request:
 ```json
 {
   "email": "jane@example.com",
@@ -158,8 +139,7 @@
   "type": "email"
 }
 ```
-
-**Success Response** (200 OK):
+Success Response (200 OK):
 ```json
 {
   "status": "success",
@@ -174,8 +154,7 @@
   }
 }
 ```
-
-**Error Response** (400 Bad Request):
+Error Response (400 Bad Request):
 ```json
 {
   "status": "error",
@@ -187,22 +166,17 @@
   }
 }
 ```
-
 ---
-
-### 1.4 Resend OTP API
-
-**Endpoint**: `POST /api/auth/resend-otp`
-
-**Request**:
+1.4 Resend OTP API
+Endpoint: `POST /api/auth/resend-otp`
+Request:
 ```json
 {
   "email": "jane@example.com",
   "type": "email"
 }
 ```
-
-**Success Response** (200 OK):
+Success Response (200 OK):
 ```json
 {
   "status": "success",
@@ -216,21 +190,16 @@
   }
 }
 ```
-
 ---
-
-### 1.5 Forgot Password API
-
-**Endpoint**: `POST /api/auth/forgot-password`
-
-**Request**:
+1.5 Forgot Password API
+Endpoint: `POST /api/auth/forgot-password`
+Request:
 ```json
 {
   "email": "user@example.com"
 }
 ```
-
-**Success Response** (200 OK):
+Success Response (200 OK):
 ```json
 {
   "status": "success",
@@ -244,14 +213,10 @@
   }
 }
 ```
-
 ---
-
-### 1.6 Reset Password API
-
-**Endpoint**: `POST /api/auth/reset-password`
-
-**Request**:
+1.6 Reset Password API
+Endpoint: `POST /api/auth/reset-password`
+Request:
 ```json
 {
   "token": "reset_token_xyz",
@@ -259,8 +224,7 @@
   "confirmPassword": "NewSecurePass456!"
 }
 ```
-
-**Success Response** (200 OK):
+Success Response (200 OK):
 ```json
 {
   "status": "success",
@@ -273,16 +237,11 @@
   }
 }
 ```
-
 ---
-
-### 1.7 Change Password API
-
-**Endpoint**: `POST /api/auth/change-password`
-
-**Headers**: `Authorization: Bearer {accessToken}`
-
-**Request**:
+1.7 Change Password API
+Endpoint: `POST /api/auth/change-password`
+Headers: `Authorization: Bearer {accessToken}`
+Request:
 ```json
 {
   "currentPassword": "password123",
@@ -290,8 +249,7 @@
   "confirmPassword": "NewSecurePass456!"
 }
 ```
-
-**Success Response** (200 OK):
+Success Response (200 OK):
 ```json
 {
   "status": "success",
@@ -303,14 +261,10 @@
   }
 }
 ```
-
 ---
-
-### 1.8 Social Login API
-
-**Endpoint**: `POST /api/auth/social-login`
-
-**Request**:
+1.8 Social Login API
+Endpoint: `POST /api/auth/social-login`
+Request:
 ```json
 {
   "provider": "google",
@@ -318,8 +272,7 @@
   "accessToken": "google_access_token_xyz"
 }
 ```
-
-**Success Response** (200 OK):
+Success Response (200 OK):
 ```json
 {
   "status": "success",
@@ -344,24 +297,18 @@
   }
 }
 ```
-
 ---
-
-### 1.9 Logout API
-
-**Endpoint**: `POST /api/auth/logout`
-
-**Headers**: `Authorization: Bearer {accessToken}`
-
-**Request**:
+1.9 Logout API
+Endpoint: `POST /api/auth/logout`
+Headers: `Authorization: Bearer {accessToken}`
+Request:
 ```json
 {
   "deviceId": "device_789",
   "sessionId": "session_456"
 }
 ```
-
-**Success Response** (200 OK):
+Success Response (200 OK):
 ```json
 {
   "status": "success",
@@ -374,21 +321,16 @@
   }
 }
 ```
-
 ---
-
-### 1.10 Refresh Token API
-
-**Endpoint**: `POST /api/auth/refresh-token`
-
-**Request**:
+1.10 Refresh Token API
+Endpoint: `POST /api/auth/refresh-token`
+Request:
 ```json
 {
   "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
 ```
-
-**Success Response** (200 OK):
+Success Response (200 OK):
 ```json
 {
   "status": "success",
@@ -402,18 +344,12 @@
   }
 }
 ```
-
 ---
-
-## 2. User Profile APIs
-
-### 2.1 Get User Profile
-
-**Endpoint**: `GET /api/user/profile`
-
-**Headers**: `Authorization: Bearer {accessToken}`
-
-**Success Response** (200 OK):
+2. User Profile APIs
+   2.1 Get User Profile
+   Endpoint: `GET /api/user/profile`
+   Headers: `Authorization: Bearer {accessToken}`
+   Success Response (200 OK):
 ```json
 {
   "status": "success",
@@ -446,16 +382,11 @@
   }
 }
 ```
-
 ---
-
-### 2.2 Update User Profile
-
-**Endpoint**: `PUT /api/user/profile`
-
-**Headers**: `Authorization: Bearer {accessToken}`
-
-**Request**:
+2.2 Update User Profile
+Endpoint: `PUT /api/user/profile`
+Headers: `Authorization: Bearer {accessToken}`
+Request:
 ```json
 {
   "name": "John Doe Updated",
@@ -465,8 +396,7 @@
   "gender": "male"
 }
 ```
-
-**Success Response** (200 OK):
+Success Response (200 OK):
 ```json
 {
   "status": "success",
@@ -482,23 +412,17 @@
   }
 }
 ```
-
 ---
-
-### 2.3 Update Profile Picture
-
-**Endpoint**: `POST /api/user/profile-picture`
-
-**Headers**: `Authorization: Bearer {accessToken}`, `Content-Type: multipart/form-data`
-
-**Request**:
+2.3 Update Profile Picture
+Endpoint: `POST /api/user/profile-picture`
+Headers: `Authorization: Bearer {accessToken}`, `Content-Type: multipart/form-data`
+Request:
 ```
 FormData:
   - file: <binary_image_data>
   - mimeType: "image/jpeg"
 ```
-
-**Success Response** (200 OK):
+Success Response (200 OK):
 ```json
 {
   "status": "success",
@@ -512,18 +436,12 @@ FormData:
   }
 }
 ```
-
 ---
-
-## 3. Setup APIs
-
-### 3.1 Get Setup Status
-
-**Endpoint**: `GET /api/user/setup-status`
-
-**Headers**: `Authorization: Bearer {accessToken}`
-
-**Success Response** (200 OK):
+3. Setup APIs
+   3.1 Get Setup Status
+   Endpoint: `GET /api/user/setup-status`
+   Headers: `Authorization: Bearer {accessToken}`
+   Success Response (200 OK):
 ```json
 {
   "status": "success",
@@ -557,16 +475,11 @@ FormData:
   }
 }
 ```
-
 ---
-
-### 3.2 Setup Step 1 - Profile Information
-
-**Endpoint**: `POST /api/user/setup/step1`
-
-**Headers**: `Authorization: Bearer {accessToken}`
-
-**Request**:
+3.2 Setup Step 1 - Profile Information
+Endpoint: `POST /api/user/setup/step1`
+Headers: `Authorization: Bearer {accessToken}`
+Request:
 ```json
 {
   "bio": "I am a software engineer",
@@ -574,8 +487,7 @@ FormData:
   "profilePhotoUrl": "https://api.example.com/images/user_456.jpg"
 }
 ```
-
-**Success Response** (200 OK):
+Success Response (200 OK):
 ```json
 {
   "status": "success",
@@ -596,16 +508,11 @@ FormData:
   }
 }
 ```
-
 ---
-
-### 3.3 Setup Step 2 - User Preferences
-
-**Endpoint**: `POST /api/user/setup/step2`
-
-**Headers**: `Authorization: Bearer {accessToken}`
-
-**Request**:
+3.3 Setup Step 2 - User Preferences
+Endpoint: `POST /api/user/setup/step2`
+Headers: `Authorization: Bearer {accessToken}`
+Request:
 ```json
 {
   "notificationsEnabled": true,
@@ -616,8 +523,7 @@ FormData:
   "marketingEmails": false
 }
 ```
-
-**Success Response** (200 OK):
+Success Response (200 OK):
 ```json
 {
   "status": "success",
@@ -641,24 +547,18 @@ FormData:
   }
 }
 ```
-
 ---
-
-### 3.4 Setup Step 3 - Summary & Complete
-
-**Endpoint**: `POST /api/user/setup/complete`
-
-**Headers**: `Authorization: Bearer {accessToken}`
-
-**Request**:
+3.4 Setup Step 3 - Summary & Complete
+Endpoint: `POST /api/user/setup/complete`
+Headers: `Authorization: Bearer {accessToken}`
+Request:
 ```json
 {
   "confirmAll": true,
   "acceptedTerms": true
 }
 ```
-
-**Success Response** (200 OK):
+Success Response (200 OK):
 ```json
 {
   "status": "success",
@@ -686,14 +586,49 @@ FormData:
   }
 }
 ```
-
 ---
-
-## 4. Error Responses
-
-### 4.1 Authentication Errors
-
-**401 Unauthorized - Invalid Token**:
+## Home Screen APIs
+###  Get Home Dashboard Data
+**Endpoint**: `GET /api/home/dashboard`
+**Headers**: `Authorization: Bearer {accessToken}`
+**Success Response** (200 OK):
+```json
+{
+  "status": "success",
+  "message": "Dashboard data retrieved",
+  "data": {
+    "user": {
+      "name": "Jhonathan",
+      "status": "YOU ARE\nSTRONG ✨"
+    },
+    "timer": {
+      "days": 32,
+      "hours": 0,
+      "mins": 11,
+      "progress": 0.8,
+      "startDate": "2024-04-22T08:30:00Z"
+    },
+    "dailyWisdom": {
+      "id": "quote_789",
+      "quote": "Progress isn't a straight line. Every small step back is just preparation for a giant leap forward.",
+      "author": "Coach Pearl 🍃",
+      "category": "Motivation"
+    },
+    "journal": {
+      "hasEntryToday": false,
+      "prompt": "Tap to write about your day...",
+      "actionText": "Write →"
+    },
+    "notifications": {
+      "unreadCount": 2
+    }
+  }
+}
+```
+---
+4. Error Responses
+   4.1 Authentication Errors
+   401 Unauthorized - Invalid Token:
 ```json
 {
   "status": "error",
@@ -702,8 +637,7 @@ FormData:
   "timestamp": "2026-05-24T11:15:00Z"
 }
 ```
-
-**401 Unauthorized - Token Missing**:
+401 Unauthorized - Token Missing:
 ```json
 {
   "status": "error",
@@ -712,12 +646,9 @@ FormData:
   "timestamp": "2026-05-24T11:15:00Z"
 }
 ```
-
 ---
-
-### 4.2 Validation Errors
-
-**400 Bad Request - Validation Failed**:
+4.2 Validation Errors
+400 Bad Request - Validation Failed:
 ```json
 {
   "status": "error",
@@ -738,12 +669,9 @@ FormData:
   "timestamp": "2026-05-24T11:15:00Z"
 }
 ```
-
 ---
-
-### 4.3 Server Errors
-
-**500 Internal Server Error**:
+4.3 Server Errors
+500 Internal Server Error:
 ```json
 {
   "status": "error",
@@ -756,12 +684,9 @@ FormData:
   }
 }
 ```
-
 ---
-
-### 4.4 Resource Not Found
-
-**404 Not Found**:
+4.4 Resource Not Found
+404 Not Found:
 ```json
 {
   "status": "error",
@@ -769,14 +694,11 @@ FormData:
   "code": "USER_404",
   "timestamp": "2026-05-24T11:15:00Z"
 }
+
 ```
-
 ---
-
-## 5. Dummy Data Collections
-
-### 5.1 Users Collection
-
+5. Dummy Data Collections
+   5.1 Users Collection
 ```json
 {
   "users": [
@@ -829,11 +751,8 @@ FormData:
   ]
 }
 ```
-
 ---
-
-### 5.2 User Preferences Collection
-
+5.2 User Preferences Collection
 ```json
 {
   "preferences": [
@@ -855,11 +774,8 @@ FormData:
   ]
 }
 ```
-
 ---
-
-### 5.3 Setup Sessions Collection
-
+5.3 Setup Sessions Collection
 ```json
 {
   "setupSessions": [
@@ -896,11 +812,8 @@ FormData:
   ]
 }
 ```
-
 ---
-
-### 5.4 Login Sessions Collection
-
+5.4 Login Sessions Collection
 ```json
 {
   "sessions": [
@@ -920,57 +833,44 @@ FormData:
   ]
 }
 ```
-
 ---
-
-## 6. Response Codes
-
-### 6.1 Success Codes
-
-| Code | Meaning | HTTP Status |
-|------|---------|-------------|
-| AUTH_001 | Login successful | 200 |
-| AUTH_201 | Signup successful | 201 |
-| AUTH_202 | OTP verified | 200 |
-| AUTH_203 | OTP sent | 200 |
-| AUTH_204 | Reset link sent | 200 |
-| AUTH_205 | Password reset success | 200 |
-| AUTH_206 | Password changed | 200 |
-| AUTH_207 | Social login success | 200 |
-| AUTH_208 | Logout success | 200 |
-| AUTH_209 | Token refreshed | 200 |
-| USER_301 | Profile retrieved | 200 |
-| USER_302 | Profile updated | 200 |
-| USER_303 | Picture uploaded | 200 |
-| SETUP_401 | Status retrieved | 200 |
-| SETUP_402 | Step 1 complete | 200 |
-| SETUP_403 | Step 2 complete | 200 |
-| SETUP_404 | Setup complete | 200 |
-
+6. Response Codes
+   6.1 Success Codes
+   Code	Meaning	HTTP Status
+   AUTH_001	Login successful	200
+   AUTH_201	Signup successful	201
+   AUTH_202	OTP verified	200
+   AUTH_203	OTP sent	200
+   AUTH_204	Reset link sent	200
+   AUTH_205	Password reset success	200
+   AUTH_206	Password changed	200
+   AUTH_207	Social login success	200
+   AUTH_208	Logout success	200
+   AUTH_209	Token refreshed	200
+   USER_301	Profile retrieved	200
+   USER_302	Profile updated	200
+   USER_303	Picture uploaded	200
+   SETUP_401	Status retrieved	200
+   SETUP_402	Step 1 complete	200
+   SETUP_403	Step 2 complete	200
+   SETUP_404	Setup complete	200
 ---
-
-### 6.2 Error Codes
-
-| Code | Message | HTTP Status |
-|------|---------|-------------|
-| AUTH_101 | Invalid credentials | 401 |
-| AUTH_102 | Email already exists | 400 |
-| AUTH_103 | Invalid OTP | 400 |
-| AUTH_104 | Email not verified | 403 |
-| AUTH_105 | Account locked | 403 |
-| AUTH_401 | Invalid token | 401 |
-| AUTH_402 | Missing auth header | 401 |
-| AUTH_403 | Insufficient permissions | 403 |
-| VALIDATION_001 | Validation failed | 400 |
-| USER_404 | User not found | 404 |
-| SERVER_500 | Internal error | 500 |
-
+6.2 Error Codes
+Code	Message	HTTP Status
+AUTH_101	Invalid credentials	401
+AUTH_102	Email already exists	400
+AUTH_103	Invalid OTP	400
+AUTH_104	Email not verified	403
+AUTH_105	Account locked	403
+AUTH_401	Invalid token	401
+AUTH_402	Missing auth header	401
+AUTH_403	Insufficient permissions	403
+VALIDATION_001	Validation failed	400
+USER_404	User not found	404
+SERVER_500	Internal error	500
 ---
-
-## 7. API Endpoint Summary
-
-### Authentication Endpoints
-
+7. API Endpoint Summary
+   Authentication Endpoints
 ```
 POST   /api/auth/login              Login with email/password
 POST   /api/auth/signup             Create new account
@@ -983,28 +883,21 @@ POST   /api/auth/social-login       Social provider login
 POST   /api/auth/logout             User logout
 POST   /api/auth/refresh-token      Refresh access token
 ```
-
-### User Endpoints
-
+User Endpoints
 ```
 GET    /api/user/profile            Get user profile
 PUT    /api/user/profile            Update user profile
 POST   /api/user/profile-picture    Upload profile picture
 ```
-
-### Setup Endpoints
-
+Setup Endpoints
 ```
 GET    /api/user/setup-status       Get current setup status
 POST   /api/user/setup/step1        Complete profile step
 POST   /api/user/setup/step2        Complete preferences step
 POST   /api/user/setup/complete     Complete entire setup
 ```
-
 ---
-
-## Request/Response Timeline Example
-
+Request/Response Timeline Example
 ```
 User Action                Time    API Endpoint                   Status
 ────────────────────────────────────────────────────────────────────────
@@ -1022,29 +915,25 @@ User Action                Time    API Endpoint                   Status
 Total Response Time        500ms
 
 ```
-
 ---
-
-## Testing Checklist
-
-- [ ] Test login with valid credentials
-- [ ] Test login with invalid email
-- [ ] Test login with wrong password
-- [ ] Test signup with new email
-- [ ] Test signup with existing email
-- [ ] Test OTP verification
-- [ ] Test OTP resend
-- [ ] Test password reset flow
-- [ ] Test password change
-- [ ] Test profile update
-- [ ] Test profile picture upload
-- [ ] Test setup flow (all 3 steps)
-- [ ] Test logout
-- [ ] Test token refresh
-- [ ] Test social login (Google, Facebook)
-
+Testing Checklist
+[ ] Test login with valid credentials
+[ ] Test login with invalid email
+[ ] Test login with wrong password
+[ ] Test signup with new email
+[ ] Test signup with existing email
+[ ] Test OTP verification
+[ ] Test OTP resend
+[ ] Test password reset flow
+[ ] Test password change
+[ ] Test profile update
+[ ] Test profile picture upload
+[ ] Test setup flow (all 3 steps)
+[ ] Test logout
+[ ] Test token refresh
+[ ] Test social login (Google, Facebook)
 ---
+Last Updated: May 24, 2026
+API Version: 1.0
+Status: ✅ Complete
 
-**Last Updated**: May 24, 2026
-**API Version**: 1.0
-**Status**: ✅ Complete

@@ -58,16 +58,16 @@ class _OrderScreenState extends State<OrderScreen> {
         child: ListView(
           children: [
             SizedBox(height: 20.h),
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                Image.asset(AppAssets.bgIcon),
-                Positioned(
-                  bottom: 0,
-                  child: SvgPicture.asset(AppAssets.bgCart),
-                ),
-              ],
-            ),
+            // Stack(
+            //   alignment: Alignment.center,
+            //   children: [
+            //     Image.asset(AppAssets.bgIcon),
+            //     Positioned(
+            //       bottom: 0,
+            //       child: SvgPicture.asset(AppAssets.bgCart),
+            //     ),
+            //   ],
+            // ),
             SizedBox(height: 24.h),
             Text(
               context.watchTr('your_cart_is_empty'),

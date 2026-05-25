@@ -55,22 +55,22 @@ class _ProductViewState extends State<ProductView> {
                     builder: (context, home, _) => Stack(
                       children: [
                         // 1. FULL SCREEN IMAGE SLIDER
-                        SizedBox(
-                          height:
-                              375.h, // Adjusted to match your uploaded design
-                          child: PageView.builder(
-                            controller: home.bannerController,
-                            onPageChanged: home.updateBannerIndex,
-                            itemCount: home.bannerImages.length,
-                            itemBuilder: (context, index) {
-                              return Image.asset(
-                                home.bannerImages[index],
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                              );
-                            },
-                          ),
-                        ),
+                        // SizedBox(
+                        //   height:
+                        //       375.h, // Adjusted to match your uploaded design
+                        //   child: PageView.builder(
+                        //     controller: home.bannerController,
+                        //     onPageChanged: home.updateBannerIndex,
+                        //     itemCount: home.bannerImages.length,
+                        //     itemBuilder: (context, index) {
+                        //       return Image.asset(
+                        //         home.bannerImages[index],
+                        //         fit: BoxFit.cover,
+                        //         width: double.infinity,
+                        //       );
+                        //     },
+                        //   ),
+                        // ),
 
                         // 2. TOP NAVIGATION (Logo & Cart)
                         SafeArea(
@@ -92,60 +92,60 @@ class _ProductViewState extends State<ProductView> {
                         ),
 
                         // 3. PAGE INDICATOR (Bottom Center)
-                        Positioned(
-                          bottom: 30.h,
-                          left: 0,
-                          right: 0,
-                          child: Center(
-                            child: SmoothPageIndicator(
-                              controller: home.bannerController,
-                              count: home.bannerImages.length,
-                              effect: WormEffect(
-                                dotWidth: 8.r,
-                                dotHeight: 8.r,
-                                activeDotColor: Colors.white,
-                                dotColor: Colors.white.withAlpha(127),
-                              ),
-                            ),
-                          ),
-                        ),
+                        // Positioned(
+                        //   bottom: 30.h,
+                        //   left: 0,
+                        //   right: 0,
+                        //   child: Center(
+                        //     child: SmoothPageIndicator(
+                        //       controller: home.bannerController,
+                        //       count: home.bannerImages.length,
+                        //       effect: WormEffect(
+                        //         dotWidth: 8.r,
+                        //         dotHeight: 8.r,
+                        //         activeDotColor: Colors.white,
+                        //         dotColor: Colors.white.withAlpha(127),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
 
                         // 4. NEXT IMAGE PREVIEW & ARROW (Bottom Right)
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: GestureDetector(
-                            onTap: () => home.nextBanner(),
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                // The "Next" Image Background
-                                ClipRRect(
-                                  child: Image.asset(
-                                    // Show the next image in the list, or loop back to first
-                                    home.bannerImages[(home.currentBannerIndex +
-                                            1) %
-                                        home.bannerImages.length],
-                                    width: 100.w,
-                                    height: 120.h,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                // The Arrow Overlay
-                                Container(
-                                  width: 100.w,
-                                  height: 120.h,
-                                  color: Colors.black.withAlpha(54),
-                                  child: Icon(
-                                    Icons.arrow_forward_ios,
-                                    color: Colors.white,
-                                    size: 20.r,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                        // Positioned(
+                        //   bottom: 0,
+                        //   right: 0,
+                        //   child: GestureDetector(
+                        //     onTap: () => home.nextBanner(),
+                        //     child: Stack(
+                        //       alignment: Alignment.center,
+                        //       children: [
+                        //         // The "Next" Image Background
+                        //         ClipRRect(
+                        //           child: Image.asset(
+                        //             // Show the next image in the list, or loop back to first
+                        //             home.bannerImages[(home.currentBannerIndex +
+                        //                     1) %
+                        //                 home.bannerImages.length],
+                        //             width: 100.w,
+                        //             height: 120.h,
+                        //             fit: BoxFit.cover,
+                        //           ),
+                        //         ),
+                        //         // The Arrow Overlay
+                        //         Container(
+                        //           width: 100.w,
+                        //           height: 120.h,
+                        //           color: Colors.black.withAlpha(54),
+                        //           child: Icon(
+                        //             Icons.arrow_forward_ios,
+                        //             color: Colors.white,
+                        //             size: 20.r,
+                        //           ),
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ),
+                        // ),
 
                         // 5. TEXT CONTENT
                         Positioned(

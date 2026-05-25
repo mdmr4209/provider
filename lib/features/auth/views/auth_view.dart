@@ -58,7 +58,7 @@ class AuthView extends StatelessWidget {
                             AnimatedPositioned(
                               duration: const Duration(milliseconds: 200),
                               curve: Curves.easeIn,
-                              top: isKeyboardOpen ? -150.h : 170.h,
+                              top: isKeyboardOpen ? -150.h : 80.h,
                               left: 0,
                               right: 0,
                               bottom: 0,
@@ -97,6 +97,8 @@ class AuthView extends StatelessWidget {
                                     ),
                                     SizedBox(height: 16.h),
                                   ],
+
+                                  // Email Section
                                   Text(
                                     context.watchTr('email'),
                                     textAlign: TextAlign.left,
@@ -105,20 +107,17 @@ class AuthView extends StatelessWidget {
                                   ),
                                   SizedBox(height: 8.h),
                                   InputTextWidget(
-                                    hintText: context.watchTr(
-                                      'enter_your_email',
-                                    ),
+                                    hintText: context.watchTr('enter_your_email'),
                                     controller: auth.emailController,
                                     onChanged: (_) => auth.clearError(),
                                     keyboardType: TextInputType.emailAddress,
                                     leadingIcon: AppAssets.email,
                                     leadingColor: AppColors.iconColor,
-                                    leadingPadding: EdgeInsets.only(
-                                      left: 10.w,
-                                      right: 5.w,
-                                    ),
+                                    leadingPadding: EdgeInsets.only(left: 10.w, right: 5.w),
                                   ),
                                   SizedBox(height: 20.h),
+
+                                  // Password Section
                                   Text(
                                     context.watchTr('password'),
                                     textAlign: TextAlign.left,
@@ -127,21 +126,18 @@ class AuthView extends StatelessWidget {
                                   ),
                                   SizedBox(height: 8.h),
                                   InputTextWidget(
-                                    hintText: context.watchTr(
-                                      'enter_your_password',
-                                    ),
+                                    hintText: context.watchTr('enter_your_password'),
                                     obscureText: true,
                                     controller: auth.passwordController,
                                     onChanged: (_) => auth.clearError(),
                                     showObscureToggle: true,
                                     leadingIcon: AppAssets.pass,
                                     leadingColor: AppColors.iconColor,
-                                    leadingPadding: EdgeInsets.only(
-                                      left: 10.w,
-                                      right: 5.w,
-                                    ),
+                                    leadingPadding: EdgeInsets.only(left: 10.w, right: 5.w),
                                   ),
                                   SizedBox(height: 16.h),
+
+                                  // Remember Me & Forget Pass
                                   Row(
                                     children: [
                                       GestureDetector(
@@ -153,17 +149,12 @@ class AuthView extends StatelessWidget {
                                               height: 18.r,
                                               decoration: BoxDecoration(
                                                 color: auth.isRemembered
-                                                    ? Theme.of(
-                                                        context,
-                                                      ).colorScheme.primary
+                                                    ? Theme.of(context).colorScheme.primary
                                                     : Colors.transparent,
                                                 border: Border.all(
-                                                  color: Theme.of(
-                                                    context,
-                                                  ).dividerColor,
+                                                  color: Theme.of(context).dividerColor,
                                                 ),
-                                                borderRadius:
-                                                    BorderRadius.circular(4.r),
+                                                borderRadius: BorderRadius.circular(4.r),
                                               ),
                                               child: Center(
                                                 child: Icon(
@@ -178,17 +169,14 @@ class AuthView extends StatelessWidget {
                                             SizedBox(width: 10.w),
                                             Text(
                                               context.watchTr('remember_me'),
-                                              style: Theme.of(
-                                                context,
-                                              ).textTheme.bodyMedium,
+                                              style: Theme.of(context).textTheme.bodyMedium,
                                             ),
                                           ],
                                         ),
                                       ),
                                       const Spacer(),
                                       InkWell(
-                                        onTap: () =>
-                                            context.push(AppRoutes.forgetPass),
+                                        onTap: () => context.push(AppRoutes.forgetPass),
                                         child: Text(
                                           context.watchTr('forget_password'),
                                           style: Theme.of(context)
@@ -202,6 +190,8 @@ class AuthView extends StatelessWidget {
                                     ],
                                   ),
                                   SizedBox(height: 28.h),
+
+                                  // Login Button
                                   CustomButton(
                                     linearGradient: true,
                                     height: 48,
@@ -210,117 +200,77 @@ class AuthView extends StatelessWidget {
                                     loading: auth.isLoading,
                                   ),
                                   SizedBox(height: 20.h),
+
+                                  // Divider
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
                                     children: [
-                                      Expanded(
-                                        child: Divider(
-                                          color: AppColors.defaultColorLight,
-                                          thickness: 1.h,
-                                        ),
-                                      ),
+                                      Expanded(child: Divider(color: AppColors.defaultLightColor, thickness: 1.h)),
                                       Container(
                                         width: 50.w,
                                         height: 22.h,
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 16.w,
-                                        ),
+                                        alignment: Alignment.center,
                                         decoration: ShapeDecoration(
-                                          color: AppColors.defaultColorLight,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              44.r,
-                                            ),
-                                          ),
+                                          color: AppColors.defaultLightColor,
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(44.r)),
                                         ),
-                                        child: Text(
-                                          'or',
-                                          style: Theme.of(
-                                            context,
-                                          ).textTheme.bodyLarge,
-                                        ),
+                                        child: Text('or', style: Theme.of(context).textTheme.bodyLarge),
                                       ),
-                                      Expanded(
-                                        child: Divider(
-                                          color: AppColors.defaultColorLight,
-                                          thickness: 1.h,
-                                        ),
-                                      ),
+                                      Expanded(child: Divider(color: AppColors.defaultLightColor, thickness: 1.h)),
                                     ],
                                   ),
                                   SizedBox(height: 20.h),
+
+                                  // Google Login
                                   Container(
                                     width: 319.w,
                                     height: 48.h,
                                     decoration: ShapeDecoration(
                                       color: AppColors.defaultColorAlpha,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                          8.r,
-                                        ),
-                                      ),
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
                                     ),
                                     child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      spacing: 14.w,
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        Container(
-                                          width: 19.99.w,
-                                          height: 19.99.h,
-                                          clipBehavior: Clip.antiAlias,
-                                          decoration: BoxDecoration(),
-                                          child: SvgPicture.asset(
-                                            AppAssets.google,
-                                          ),
-                                        ),
+                                        SvgPicture.asset(AppAssets.google, width: 20.r, height: 20.r),
+                                        SizedBox(width: 14.w),
                                         Text(
                                           'Log in with Google',
                                           textAlign: TextAlign.center,
                                           style: Theme.of(context)
                                               .textTheme
                                               .titleSmall
-                                              ?.copyWith(
-                                                color: AppColors.whiteColor,
-                                              ),
+                                              ?.copyWith(color: AppColors.whiteColor),
                                         ),
                                       ],
                                     ),
                                   ),
                                   SizedBox(height: 20.h),
+
+                                  // Footer
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    spacing: 5.w,
                                     children: [
                                       Text(
                                         "${context.watchTr('no_account')} ",
-                                        style: Theme.of(
-                                          context,
-                                        ).textTheme.bodyMedium,
+                                        style: Theme.of(context).textTheme.bodyMedium,
                                       ),
                                       GestureDetector(
-                                        onTap: () =>
-                                            context.push(AppRoutes.signup),
+                                        onTap: () => context.push(AppRoutes.signup),
                                         child: Text(
                                           context.watchTr('sign_up_caps'),
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyMedium
                                               ?.copyWith(
-                                                color: AppColors.borderColor,
+                                                color: Theme.of(context).colorScheme.primary,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                         ),
                                       ),
                                     ],
                                   ),
-                                  SizedBox(height: 20.h),
+                                  SizedBox(height: 40.h),
                                 ],
                               ),
                             ),

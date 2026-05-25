@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import '../../../../core/services/api_service.dart';
 import '../../../../core/widgets/background_widget.dart';
 import '../../../../routes/app_router.dart';
 import '../../../../core/widgets/custom_button.dart';
@@ -99,7 +100,7 @@ const String _dummyLegalText = """
 4. for lawful, ethical purposes only. You must ensure compliance with applicable laws, including obtaining consent from all participants when recording conversations. CleverTalk disclaims liability for any misuse of its tools.
 """;
 
-// ── Views ────────────────────────────────────────────────────────────────────
+// ── Setup Views ──────────────────────────────────────────────────────────────
 
 // Step 3: post-name question
 class Setup1View extends StatefulWidget {
@@ -843,7 +844,11 @@ class SetupCompleteView extends StatelessWidget {
                   linearGradient: true,
                   buttonColor: const Color(0xFFC9A84C),
                   textColor: Colors.white,
-                  onPress: () async => context.go(AppRoutes.home),
+                  onPress: () async {
+                    // Set flag to show navigation guides in Navbar
+                    await ApiService.store(key: 'show_nav_guide', value: 'true');
+                    context.go(AppRoutes.home);
+                  },
                 ),
               ),
               SizedBox(height: 40.h),

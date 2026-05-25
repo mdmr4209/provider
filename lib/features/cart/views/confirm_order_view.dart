@@ -29,18 +29,18 @@ class ConfirmOrderView extends StatelessWidget {
                 SizedBox(height: 20.h),
                 SvgPicture.asset(AppAssets.title),
                 SizedBox(height: 15.h),
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Image.asset(AppAssets.bgIcon),
-                    Positioned(
-                      bottom: 0,
-                      child: SvgPicture.asset(
-                        origin == true ? AppAssets.bgThank : AppAssets.bgSorry,
-                      ),
-                    ),
-                  ],
-                ),
+                // Stack(
+                //   alignment: Alignment.center,
+                //   children: [
+                //     Image.asset(AppAssets.bgIcon),
+                //     Positioned(
+                //       bottom: 0,
+                //       child: SvgPicture.asset(
+                //         origin == true ? AppAssets.bgThank : AppAssets.bgSorry,
+                //       ),
+                //     ),
+                //   ],
+                // ),
                 Consumer<CartController>(
                   builder: (context, cart, _) => Expanded(
                     child: ListView(

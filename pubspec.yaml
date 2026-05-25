@@ -57,6 +57,7 @@ dependencies:
   flutter_native_splash: ^2.4.7
   smooth_page_indicator: ^2.0.1
   rename: ^3.1.0
+  syncfusion_flutter_gauges: ^33.2.7
 
 flutter_launcher_icons:
   android: true

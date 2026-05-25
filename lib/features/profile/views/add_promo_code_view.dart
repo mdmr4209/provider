@@ -48,16 +48,16 @@ class AddPromoCodeView extends StatelessWidget {
             child: ListView(
               children: [
                 SizedBox(height: 20.h),
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Image.asset(AppAssets.bgIcon),
-                    Positioned(
-                      bottom: 0,
-                      child: SvgPicture.asset(AppAssets.bgPromo),
-                    ),
-                  ],
-                ),
+                // Stack(
+                //   alignment: Alignment.center,
+                //   children: [
+                // Image.asset(AppAssets.bgIcon),
+                //     Positioned(
+                //       bottom: 0,
+                //       child: SvgPicture.asset(AppAssets.bgPromo),
+                //     ),
+                //   ],
+                // ),
                 Consumer<ProfileController>(
                   builder: (context, profile, _) => Column(
                     children: [

@@ -20,7 +20,7 @@ class AddNewAddress extends StatelessWidget {
         backgroundColor: AppColors.whiteColor,
         body: Stack(
           children: [
-            Image.asset(AppAssets.addressBg, fit: BoxFit.cover),
+            // Image.asset(AppAssets.addressBg, fit: BoxFit.cover),
             SafeArea(
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 10.h),

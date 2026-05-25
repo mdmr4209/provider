@@ -24,19 +24,19 @@ class Logout extends StatelessWidget {
           mainAxisSize: MainAxisSize.min, // Dialog should fit content
           children: [
             // Image/Illustration
-            SizedBox(
-              height: 180.h,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Image.asset(AppAssets.bgIcon),
-                  Positioned(
-                    bottom: 0,
-                    child: SvgPicture.asset(AppAssets.bgLogout),
-                  ),
-                ],
-              ),
-            ),
+            // SizedBox(
+            //   height: 180.h,
+            //   child: Stack(
+            //     alignment: Alignment.center,
+            //     children: [
+            //       Image.asset(AppAssets.bgIcon),
+            //       Positioned(
+            //         bottom: 0,
+            //         child: SvgPicture.asset(AppAssets.bgLogout),
+            //       ),
+            //     ],
+            //   ),
+            // ),
             SizedBox(height: 20.h),
 
             // Text Message

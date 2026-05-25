@@ -479,12 +479,12 @@ class _FilterViewState extends State<FilterView> {
 
         // Update controller
         final homeController = context.read<HomeController>();
-        homeController.setSortOption(_selectedSort);
-        homeController.setColors(_selectedColors);
-        homeController.setPriceRange(_priceRange);
-        homeController.setConditions(_selectedConditions);
-        homeController.setGenders(_selectedGenders);
-        homeController.setTags(_selectedTags);
+        // homeController.setSortOption(_selectedSort);
+        // homeController.setColors(_selectedColors);
+        // homeController.setPriceRange(_priceRange);
+        // homeController.setConditions(_selectedConditions);
+        // homeController.setGenders(_selectedGenders);
+        // homeController.setTags(_selectedTags);
 
         Navigator.pop(context);
       },

@@ -63,11 +63,11 @@ class AddNewCardView extends StatelessWidget {
                       child: Column(
                         children: [
                           SizedBox(height: 40.h),
-                          SvgPicture.asset(
-                            AppAssets.card3,
-                            width: 279.w,
-                            height: 170.h,
-                          ),
+                          // SvgPicture.asset(
+                          //   AppAssets.card3,
+                          //   width: 279.w,
+                          //   height: 170.h,
+                          // ),
                           SizedBox(height: 30.h),
                           _inputCard('Enter your full name'),
                           SizedBox(height: 10.h),
