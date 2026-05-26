@@ -289,7 +289,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
                 BoxShadow(
                   color:
                       widget.shadowColor ??
-                      AppColors.boxShadowColor.withValues(alpha: 0.1),
+                      AppColors.boxShadowColor,
                   blurRadius: widget.shadowBlur,
                   offset: widget.shadowOffset,
                 ),

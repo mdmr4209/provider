@@ -6,6 +6,7 @@ class AppColors {
   static const Color blackLiteColor = Color(0xFF31432F);
   static const Color defaultColor = Color(0xFF22331F);
   static const Color defaultColorLight = Color(0xFF4A6741);
+  static const Color defaultColorAlpha2 = Color(0xFF1F3A2F);
   static const Color secondaryColorLight = Color(0xFFFFD258);
   static const Color backgroundColor = Color(0xFFFCEDEA);
   static const Color defaultLightColor = Color(0xFFFFD7E3);

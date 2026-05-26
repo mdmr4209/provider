@@ -2,17 +2,15 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import '../../../core/widgets/showBreathingDialog.dart';
+import '../models/dashboard_model.dart';
 
 /// Controller for the Home Dashboard and Guides.
-/// Follows the pattern of using dummy data as specified in JSON.md.
 class HomeController extends ChangeNotifier {
-  // ── State ──────────────────────────────────────────────────────────────────
-
-  Map<String, dynamic> _dashboardData = {};
+  DashboardModel? _dashboardModel;
   List<Map<String, dynamic>> _guideData = [];
   bool _isLoading = false;
 
-  Map<String, dynamic> get dashboardData => _dashboardData;
+  DashboardModel? get dashboardModel => _dashboardModel;
   List<Map<String, dynamic>> get guideData => _guideData;
   bool get isLoading => _isLoading;
 
@@ -21,14 +19,13 @@ class HomeController extends ChangeNotifier {
     fetchGuideData();
   }
 
-  /// Mimics fetching Dashboard data from an API (JSON.md #4.1)
   Future<void> fetchDashboardData() async {
     _isLoading = true;
     notifyListeners();
 
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 1500));
 
-    _dashboardData = {
+    final Map<String, dynamic> rawData = {
       "status": "success",
       "data": {
         "user": {"name": "Jonathan", "status": "YOU ARE\nSTRONG ✨"},
@@ -51,79 +48,61 @@ class HomeController extends ChangeNotifier {
       },
     };
 
+    _dashboardModel = DashboardModel.fromJson(rawData);
     _isLoading = false;
     notifyListeners();
   }
 
-  /// Mimics fetching Navigation Guide data from an API (JSON.md #5)
   Future<void> fetchGuideData() async {
     await Future.delayed(const Duration(milliseconds: 300));
-
     _guideData = [
-      {
-        "index": 0,
-        "title": "Home",
-        "message":
-            "Lorem ipsum dolor Mauris sit amet consectetur. Vel ligula nunc sed amet erat cursus. Mauris.",
-      },
-      {
-        "index": 1,
-        "title": "The Circle",
-        "message":
-            "Connect with others in our community forum and share your progress.",
-      },
-      {
-        "index": 2,
-        "title": "Find Coaches",
-        "message":
-            "Need expert help? Browse and book specialized coaches for one-on-one support.",
-      },
-      {
-        "index": 3,
-        "title": "Inbox",
-        "message":
-            "Stay updated with your latest messages and community notifications.",
-      },
-      {
-        "index": 4,
-        "title": "Profile",
-        "message":
-            "Customize your experience and track your personal growth metrics here.",
-      },
+      {"index": 0, "title": "Home", "message": "Explore your dashboard."},
+      {"index": 1, "title": "The Circle", "message": "Connect with others."},
+      {"index": 2, "title": "Find Coaches", "message": "Get expert help."},
+      {"index": 3, "title": "Inbox", "message": "Stay updated."},
+      {"index": 4, "title": "Profile", "message": "Track your growth."},
     ];
     notifyListeners();
   }
 
-  // ── Actions ────────────────────────────────────────────────────────────────
-
   void resetTimer() {
-    if (_dashboardData.containsKey('data')) {
-      _dashboardData['data']['timer']['days'] = 0;
-      _dashboardData['data']['timer']['hours'] = 0;
-      _dashboardData['data']['timer']['mins'] = 0;
+    if (_dashboardModel?.data?.timer != null) {
+      final currentData = _dashboardModel!.data!;
+      _dashboardModel = DashboardModel(
+        status: _dashboardModel!.status,
+        data: DashboardData(
+          user: currentData.user,
+          timer: TimerData(days: 0, hours: 0, mins: 0, startDate: currentData.timer?.startDate),
+          dailyWisdom: currentData.dailyWisdom,
+          journal: currentData.journal,
+          notifications: currentData.notifications,
+        ),
+      );
       notifyListeners();
     }
   }
 
   void handleBreakNoContact(BuildContext context) => showBreathingDialog(
     context,
-    title: "Take A Breath, [Name]",
+    title: "Take A Breath, ${dashboardModel?.data?.user?.name ?? '[Name]'}",
     description:
-        "\"Stop. Don't press send. Before you do anything, let's take a quick 30 seconds and breathe. Do it with me 4 seconds breath in, 4 seconds hold, 4 seconds breathe out.\"",
-    primaryButtonText: "\"Start Breathing\"",
+        "\"Stop. Don't press send. Before you do anything, let's take a quick 30 seconds and breathe.\"",
+    primaryButtonText: "Start Breathing",
     onPrimaryTap: () {
-      /// CLOSE FIRST DIALOG
-      Navigator.pop(context);
+      // Add navigation or specific logic here if needed
+      debugPrint("Started breathing session for No Contact break.");
     },
   );
+
   void handleRelapsePrevention(BuildContext context) => showBreathingDialog(
     context,
-    title: "How do you feel now [Name]?",
+    title: "How do you feel, ${dashboardModel?.data?.user?.name ?? '[Name]'}?",
     description:
-        "\"Take a breath, [Name]. This happens. Breaking No Contact doesn't mean you've failed; it just means you're human.\"",
-    primaryButtonText: "\"Yes, I need to speak to someone.\" 📞",
+        "\"Take a breath. This happens. Breaking No Contact doesn't mean you've failed; it just means you're human.\"",
+    primaryButtonText: "I need to speak to someone 📞",
     onPrimaryTap: () {
-      Navigator.pop(context);
+      // Logic for contacting someone
+      debugPrint("User requested to speak to someone.");
     },
   );
 }

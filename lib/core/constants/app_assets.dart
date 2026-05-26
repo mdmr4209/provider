@@ -5,6 +5,7 @@ class AppAssets {
   static const String splash = 'assets/images/splash.png';
   static const String title = 'assets/image/title.svg';
   static const String sb2Logo = 'assets/images/logo2.png'; // Using logo2 as the SB2 circle logo
+  static const String sb1Logo = 'assets/images/logo1.png'; // Using logo2 as the SB2 circle logo
 
   // ── Navigation Icons (SVG) ────────────────────────────────────────────────
   static const String home = 'assets/icons/home.svg';
@@ -31,6 +32,7 @@ class AppAssets {
   static const String background = 'assets/image/bg.png';
   static const String background1 = 'assets/images/bg1.png';
   static const String bgHome = 'assets/images/bgHome.png';
+  static const String bgSplash = 'assets/images/bgSplash.png';
 
   // ── General / UI ───────────────────────────────────────────────────────────
   static const String cart = 'assets/image/cart.svg';

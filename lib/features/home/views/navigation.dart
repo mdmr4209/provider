@@ -108,11 +108,11 @@ class _NavbarState extends State<Navbar> {
           bottomNavigationBar: Container(
             height: 88.h,
             decoration: BoxDecoration(
-              color: const Color(0xFF1F3A2F),
+              color: AppColors.defaultColorAlpha2,
               borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
+                  color: AppColors.blackColor.withOpacity(0.2),
                   blurRadius: 10,
                   offset: const Offset(0, -4),
                 ),

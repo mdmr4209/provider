@@ -7,6 +7,7 @@ import 'package:syncfusion_flutter_gauges/gauges.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/widgets/background_widget.dart';
+import '../../../core/widgets/custom_loader.dart';
 import '../../../core/widgets/glass_widget.dart';
 import '../controllers/home_controller.dart';
 
@@ -15,6 +16,7 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return BackgroundWidget(
       imagePath: AppAssets.bgHome,
       child: GestureDetector(
@@ -24,17 +26,15 @@ class HomeView extends StatelessWidget {
               Colors.transparent, // Background handled by BackgroundWidget
           body: Consumer<HomeController>(
             builder: (context, home, _) {
-              if (home.isLoading || home.dashboardData.isEmpty) {
-                return const Center(
-                  child: CircularProgressIndicator(color: Color(0xFFF3D194)),
-                );
+              if (home.isLoading || home.dashboardModel == null) {
+                return _buildShimmerHome(context);
               }
 
-              final data = home.dashboardData['data'] ?? {};
-              final user = data['user'] ?? {};
-              final timer = data['timer'] ?? {};
-              final wisdom = data['dailyWisdom'] ?? {};
-              final journal = data['journal'] ?? {};
+              final dashboard = home.dashboardModel!.data;
+              final user = dashboard?.user;
+              final timer = dashboard?.timer;
+              final wisdom = dashboard?.dailyWisdom;
+              final journal = dashboard?.journal;
 
               return SafeArea(
                 child: ListView(
@@ -51,19 +51,17 @@ class HomeView extends StatelessWidget {
                           children: [
                             Text(
                               "WELCOME BACK",
-                              style: Theme.of(context).textTheme.bodyMedium
-                                  ?.copyWith(
-                                    fontFamily: 'Georgia',
-                                    color: AppColors.whiteColor,
-                                  ),
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                fontFamily: 'Georgia',
+                                color: AppColors.whiteColor,
+                              ),
                             ),
                             Text(
-                              "${user['name'] ?? 'Jonathan'} 👋",
-                              style: Theme.of(context).textTheme.titleLarge
-                                  ?.copyWith(
-                                    fontFamily: 'Georgia',
-                                    color: AppColors.whiteColor,
-                                  ),
+                              "${user?.name ?? 'Jonathan'} 👋",
+                              style: theme.textTheme.titleLarge?.copyWith(
+                                fontFamily: 'Georgia',
+                                color: AppColors.whiteColor,
+                              ),
                             ),
                           ],
                         ),
@@ -130,27 +128,18 @@ class HomeView extends StatelessWidget {
                                   ),
                                   pointers: [
                                     RangePointer(
-                                      value:
-                                          ((timer['progress'] as num?)
-                                                  ?.toDouble() ??
-                                              0.8) *
-                                          100,
+                                      value: (timer?.progress ?? 0.8) * 100,
                                       width: 14.r,
                                       sizeUnit: GaugeSizeUnit.logicalPixel,
                                       cornerStyle: CornerStyle.bothCurve,
                                       gradient: const SweepGradient(
                                         colors: [
-                                          // still transparent
-                                          Color(
-                                            0x55E6DBC9,
-                                          ), // faint cream starts
-                                          Color(
-                                            0xAAE6DBC9,
-                                          ), // faint cream starts
-                                          Color(0xAAE6DBC9), // mid cream
-                                          Color(0xFFE6DBC9), // mid cream
-                                          Color(0xFFE6DBC9), // full cream
-                                          Color(0xFFFFFFFF), // bright white tip
+                                          Color(0x55E6DBC9),
+                                          Color(0xAAE6DBC9),
+                                          Color(0xAAE6DBC9),
+                                          Color(0xFFE6DBC9),
+                                          Color(0xFFE6DBC9),
+                                          Color(0xFFFFFFFF),
                                         ],
                                         stops: [
                                           0.0,
@@ -192,26 +181,25 @@ class HomeView extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                user['status'] ?? "YOU ARE\nSTRONG ✨",
+                                user?.status ?? "YOU ARE\nSTRONG ✨",
                                 textAlign: TextAlign.center,
-                                style: Theme.of(context).textTheme.bodyMedium
-                                    ?.copyWith(
-                                      fontFamily: 'Georgia',
-                                      color: AppColors.whiteColor,
-                                    ),
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  fontFamily: 'Georgia',
+                                  color: AppColors.whiteColor,
+                                ),
                               ),
                               SizedBox(height: 10.h),
                               Text(
-                                "${timer['days'] ?? '32'}:${timer['hours'] ?? '00'}:${timer['mins'] ?? '11'}",
-                                style: Theme.of(context).textTheme.displayLarge
-                                    ?.copyWith(
-                                      color: AppColors.secondaryColorLight,
-                                    ),
+                                "${timer?.days ?? '32'}:${timer?.hours?.toString().padLeft(2, '0') ?? '00'}:${timer?.mins?.toString().padLeft(2, '0') ?? '11'}",
+                                style: theme.textTheme.displayLarge?.copyWith(
+                                  color: AppColors.secondaryColorLight,
+                                ),
                               ),
                               Text(
                                 "Days    Hours    Mins",
-                                style: Theme.of(context).textTheme.bodyLarge
-                                    ?.copyWith(color: AppColors.textColor),
+                                style: theme.textTheme.bodyLarge?.copyWith(
+                                  color: AppColors.textColor,
+                                ),
                               ),
                               SizedBox(height: 18.h),
                               GestureDetector(
@@ -246,9 +234,7 @@ class HomeView extends StatelessWidget {
                                     children: [
                                       Text(
                                         "Reset ",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium
+                                        style: theme.textTheme.bodyMedium
                                             ?.copyWith(
                                               color:
                                                   AppColors.secondaryColorLight,
@@ -288,7 +274,6 @@ class HomeView extends StatelessWidget {
 
                     SizedBox(height: 24.h),
 
-                    // ── Daily Wisdom Card ────────────────────────────────────────
                     Container(
                       width: double.infinity,
                       padding: EdgeInsets.all(24.r),
@@ -327,32 +312,29 @@ class HomeView extends StatelessWidget {
                               SizedBox(width: 8.w),
                               Text(
                                 "DAILY WISDOM",
-                                style: Theme.of(context).textTheme.bodyMedium
-                                    ?.copyWith(
-                                      fontFamily: 'Georgia',
-                                      color: AppColors.blackColor,
-                                    ),
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  fontFamily: 'Georgia',
+                                  color: AppColors.blackColor,
+                                ),
                               ),
                             ],
                           ),
                           SizedBox(height: 16.h),
                           Text(
-                            "\"${wisdom['quote'] ?? ''}\"",
-                            style: Theme.of(context).textTheme.bodyLarge
-                                ?.copyWith(
-                                  fontFamily: 'Georgia',
-                                  color: AppColors.blackColor,
-                                  fontStyle: FontStyle.italic,
-                                ),
+                            "\"${wisdom?.quote ?? ''}\"",
+                            style: theme.textTheme.bodyLarge?.copyWith(
+                              fontFamily: 'Georgia',
+                              color: AppColors.blackColor,
+                              fontStyle: FontStyle.italic,
+                            ),
                           ),
                           SizedBox(height: 14.h),
                           Text(
-                            "— ${wisdom['author'] ?? ''}",
-                            style: Theme.of(context).textTheme.bodyMedium
-                                ?.copyWith(
-                                  fontFamily: 'Georgia',
-                                  color: AppColors.whiteColor,
-                                ),
+                            "— ${wisdom?.author ?? ''}",
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              fontFamily: 'Georgia',
+                              color: AppColors.whiteColor,
+                            ),
                           ),
                         ],
                       ),
@@ -363,61 +345,69 @@ class HomeView extends StatelessWidget {
                     // ── Today's Journal Card ─────────────────────────────────────
                     GlassWidget(
                       width: double.infinity,
-                      height: 72,
+                      height: 72.h,
                       child: Container(
                         width: double.infinity,
-                        padding: EdgeInsets.all(20.r),
+                        padding: EdgeInsets.all(15.r),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF1F3A2F).withOpacity(0.3),
+                          color: AppColors.defaultColorAlpha2.withOpacity(0.3),
                           borderRadius: BorderRadius.circular(16.r),
                           border: Border.all(
-                            color: Colors.white.withOpacity(0.08),
+                            color: AppColors.whiteColor.withOpacity(0.08),
                           ),
                         ),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          spacing: 10.w,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SvgPicture.asset(
-                              AppAssets.journal,
-                              colorFilter: ColorFilter.mode(
-                                Colors.white.withOpacity(0.8),
-                                BlendMode.srcIn,
-                              ),
-                              width: 26.r,
-                            ),
-                            SizedBox(width: 14.w),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Text(
-                                    "Today's Journal",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Segoe UI',
-                                    ),
+                                  Row(
+                                    children: [
+                                      SvgPicture.asset(
+                                        AppAssets.journal,
+                                        colorFilter: ColorFilter.mode(
+                                          Colors.white.withOpacity(0.8),
+                                          BlendMode.srcIn,
+                                        ),
+                                        width: 22.30.w,
+                                        height: 21.h,
+                                      ),
+                                      SizedBox(width: 8.w),
+                                      Text(
+                                        "Today's Journal",
+                                        style: theme.textTheme.bodyLarge
+                                            ?.copyWith(
+                                              fontFamily: 'Georgia',
+                                              color: AppColors.textColor,
+                                            ),
+                                      ),
+                                    ],
                                   ),
-                                  SizedBox(height: 2.h),
+                                  SizedBox(height: 5.h),
                                   Text(
-                                    journal['prompt'] ??
+                                    journal?.prompt ??
                                         "Tap to write about your day...",
-                                    style: TextStyle(
-                                      color: Colors.white.withOpacity(0.5),
-                                      fontSize: 13,
-                                      fontFamily: 'Segoe UI',
+                                    style: theme.textTheme.bodyMedium?.copyWith(
+                                      fontFamily: 'Georgia',
+                                      fontStyle: FontStyle.italic,
+                                      color: AppColors.textColor,
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                            Text(
-                              journal['actionText'] ?? "Write →",
-                              style: const TextStyle(
-                                color: Color(0xFFF3D194),
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Segoe UI',
+                            Padding(
+                              padding: EdgeInsets.all(4.r),
+                              child: Text(
+                                journal?.actionText ?? "Write →",
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  color: AppColors.iconColor,
+                                ),
                               ),
                             ),
                           ],
@@ -435,12 +425,75 @@ class HomeView extends StatelessWidget {
     );
   }
 
+  Widget _buildShimmerHome(BuildContext context) {
+    return SafeArea(
+      child: ListView(
+        padding: EdgeInsets.symmetric(horizontal: 24.w),
+        children: [
+          SizedBox(height: 10.h),
+          // Header Shimmer
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ShimmerLoader(width: 100.w, height: 16.h),
+                  SizedBox(height: 8.h),
+                  ShimmerLoader(width: 150.w, height: 24.h),
+                ],
+              ),
+              ShimmerLoader(width: 28.r, height: 28.r, borderRadius: 14.r),
+            ],
+          ),
+          SizedBox(height: 40.h),
+          // Timer Shimmer
+          Center(
+            child: ShimmerLoader(
+              width: 240.r,
+              height: 240.r,
+              borderRadius: 120.r,
+            ),
+          ),
+          SizedBox(height: 60.h),
+          // Buttons Shimmer
+          ShimmerLoader(
+            width: double.infinity,
+            height: 58.h,
+            borderRadius: 14.r,
+          ),
+          SizedBox(height: 16.h),
+          ShimmerLoader(
+            width: double.infinity,
+            height: 58.h,
+            borderRadius: 14.r,
+          ),
+          SizedBox(height: 24.h),
+          // Wisdom Card Shimmer
+          ShimmerLoader(
+            width: double.infinity,
+            height: 160.h,
+            borderRadius: 16.r,
+          ),
+          SizedBox(height: 16.h),
+          // Journal Card Shimmer
+          ShimmerLoader(
+            width: double.infinity,
+            height: 72.h,
+            borderRadius: 16.r,
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildActionButton({
     required BuildContext context,
     required String title,
     required Color color,
     required VoidCallback onTap,
   }) {
+    final theme = Theme.of(context);
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -502,7 +555,7 @@ class HomeView extends StatelessWidget {
               child: Text(
                 title,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                style: theme.textTheme.bodyLarge?.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.w800,
                   fontSize: 16.sp,

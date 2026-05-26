@@ -80,14 +80,19 @@ class ShimmerLoader extends StatefulWidget {
 class _ShimmerLoaderState extends State<ShimmerLoader>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+  late Animation<double> _animation;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(seconds: 1),
+      duration: const Duration(milliseconds: 1500),
       vsync: this,
     )..repeat();
+    
+    _animation = Tween<double>(begin: -2.0, end: 2.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOutSine),
+    );
   }
 
   @override
@@ -99,7 +104,7 @@ class _ShimmerLoaderState extends State<ShimmerLoader>
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: _controller,
+      animation: _animation,
       builder: (context, child) {
         return Container(
           width: widget.width,
@@ -109,10 +114,17 @@ class _ShimmerLoaderState extends State<ShimmerLoader>
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [
-                AppColors.containerColor2.withValues(alpha: 0.3),
-                AppColors.containerColor2.withValues(alpha: 0.1),
+              stops: [
+                0.1,
+                0.5,
+                0.9,
               ],
+              colors: [
+                AppColors.whiteColor.withOpacity(0.05),
+                AppColors.whiteColor.withOpacity(0.15),
+                AppColors.whiteColor.withOpacity(0.05),
+              ],
+              transform: _SlidingGradientTransform(slidePercent: _animation.value),
             ),
           ),
         );
@@ -121,3 +133,15 @@ class _ShimmerLoaderState extends State<ShimmerLoader>
   }
 }
 
+class _SlidingGradientTransform extends GradientTransform {
+  const _SlidingGradientTransform({
+    required this.slidePercent,
+  });
+
+  final double slidePercent;
+
+  @override
+  Matrix4? transform(Rect bounds, {TextDirection? textDirection}) {
+    return Matrix4.translationValues(bounds.width * slidePercent, 0.0, 0.0);
+  }
+}
