@@ -8,27 +8,21 @@ import 'package:newproject/core/widgets/custom_button.dart';
 /// Uses exact solid colors for background and barrier as per preference.
 void showBreathingDialog(
   BuildContext context, {
+   bool isBreathing=false,
   required String title,
-  required String description,
+  required String? description,
   required String primaryButtonText,
   required VoidCallback onPrimaryTap,
 }) {
   showDialog(
     context: context,
     // Solid barrier color using exact color from AppColors (no alpha)
-    barrierColor: AppColors.defaultColor,
+    barrierColor: AppColors.defaultColor.withAlpha(177),
     builder: (dialogContext) {
       return Dialog(
         // Solid dialog background
         backgroundColor: AppColors.defaultColor,
         insetPadding: EdgeInsets.symmetric(horizontal: 24.w),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24.r),
-          side: BorderSide(
-            color: const Color(0xFFD4AF37).withOpacity(0.4),
-            width: 1.5,
-          ),
-        ),
         child: Container(
           width: double.infinity,
           padding: EdgeInsets.all(24.r),
@@ -48,11 +42,13 @@ void showBreathingDialog(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Logo at the top
+              if (isBreathing)
               Image.asset(
                 AppAssets.sb1Logo,
                 height: 65.h,
               ),
-              
+
+              if (isBreathing)
               SizedBox(height: 24.h),
 
               /// TITLE
@@ -69,15 +65,17 @@ void showBreathingDialog(
                 ),
               ),
 
+              if (description != null)
               SizedBox(height: 16.h),
 
               /// DESCRIPTION
+              if (description != null)
               Text(
                 description,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white.withOpacity(0.85),
-                  fontSize: 15.sp,
+                  fontSize: 13.sp,
                   height: 1.5,
                   fontFamily: 'Proxima Nova',
                 ),

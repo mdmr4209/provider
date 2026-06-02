@@ -17,6 +17,7 @@ import 'core/services/api_service.dart';
 import 'routes/app_router.dart';
 import 'core/utils/helpers/snack_bar_helper.dart';
 import 'core/widgets/background_widget.dart';
+import 'core/services/navigation_service.dart';
 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -77,6 +78,9 @@ class _MyAppState extends State<MyApp> {
     };
 
     _router = AppRouter.create(auth, onboard, widget.navigatorKey);
+    // Initialize NavigationService with the router instance
+    NavigationService.initRouter(_router!);
+
     setState(() {});
   }
 

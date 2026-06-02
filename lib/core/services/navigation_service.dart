@@ -52,7 +52,7 @@ class NavigationService {
     return navigatorKey.currentState?.canPop() ?? false;
   }
 
-  // ── Auth Navigation ───────────────────────────��────────────────────────
+  // ── Auth Navigation ────────────────────────────────────────────────────
   
   static void goToLogin() => go(AppRoutes.login);
   
@@ -71,9 +71,7 @@ class NavigationService {
       push(AppRoutes.changePass, extra: origin);
 
   // ── Product Navigation ─────────────────────────────────────────────────
-  
-  static void goToProduct(String productId) =>
-      push(AppRoutes.product, extra: productId);
+
   
   static void goToSearch() => go(AppRoutes.search);
   
@@ -84,7 +82,7 @@ class NavigationService {
   static void goToReview(String productId) =>
       push(AppRoutes.review, extra: productId);
 
-  // ── Cart & Checkout Navigation ───────────────────────────��─────────────
+  // ── Cart & Checkout Navigation ─────────────────────────────────────────
   
   static void goToCart() => go(AppRoutes.order);
   
@@ -120,6 +118,13 @@ class NavigationService {
   static void goToPoints() => push(AppRoutes.points);
   
   static void goToSettings() => push(AppRoutes.settings);
+
+  // ── Home Features Navigation ───────────────────────────────────────────
+  
+  static void goToBreathing({required String title, required String subtitle}) =>
+      push(AppRoutes.breathing, extra: {'title': title, 'subtitle': subtitle});
+
+  static void goToWriteJournal() => push(AppRoutes.writeJournal);
 
   // ── Utility Methods ────────────────────────────────────────────────────
   

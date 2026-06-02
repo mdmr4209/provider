@@ -60,22 +60,39 @@ class TimerData {
   final int? days;
   final int? hours;
   final int? mins;
+  final int? secs;
+  final double? progressValue;
   final String? startDate;
 
-  TimerData({this.days, this.hours, this.mins, this.startDate});
+  TimerData({this.days, this.hours, this.mins, this.secs, this.progressValue, this.startDate});
 
   factory TimerData.fromJson(Map<String, dynamic> json) {
     return TimerData(
       days: json['days'],
       hours: json['hours'],
       mins: json['mins'],
+      secs: json['secs'],
+      progressValue: json['progress']?.toDouble(),
       startDate: json['startDate'],
     );
   }
 
+  // Calculate current duration locally based on the startDate from JSON
+  Duration get _currentDuration {
+    if (startDate == null) return Duration.zero;
+    final start = DateTime.tryParse(startDate!);
+    if (start == null) return Duration.zero;
+    return DateTime.now().difference(start);
+  }
+
+  // Use JSON values if available, but update live locally if startDate is present
+  int get displayDays => startDate != null ? _currentDuration.inDays : (days ?? 0);
+  int get displayHours => startDate != null ? (_currentDuration.inHours % 24) : (hours ?? 0);
+  int get displayMins => startDate != null ? (_currentDuration.inMinutes % 60) : (mins ?? 0);
+  int get displaySecs => startDate != null ? (_currentDuration.inSeconds % 60) : (secs ?? 0);
+
   double get progress {
-    // Dummy logic for progress calculation or use a field if available
-    return 0.8; 
+    return progressValue ?? 0.8;
   }
 }
 

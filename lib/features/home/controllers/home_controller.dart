@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
+import '../../../core/services/navigation_service.dart';
 import '../../../core/widgets/showBreathingDialog.dart';
 import '../models/dashboard_model.dart';
 
@@ -9,14 +10,27 @@ class HomeController extends ChangeNotifier {
   DashboardModel? _dashboardModel;
   List<Map<String, dynamic>> _guideData = [];
   bool _isLoading = false;
+  Timer? _ticker;
+
+  // Added Journal Controller
+  final TextEditingController journalController = TextEditingController();
 
   DashboardModel? get dashboardModel => _dashboardModel;
   List<Map<String, dynamic>> get guideData => _guideData;
   bool get isLoading => _isLoading;
 
   HomeController() {
-    fetchDashboardData();
+    fetchDashboardData().then((_) => _startTicker());
     fetchGuideData();
+  }
+
+  void _startTicker() {
+    _ticker?.cancel();
+    _ticker = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_dashboardModel != null) {
+        notifyListeners();
+      }
+    });
   }
 
   Future<void> fetchDashboardData() async {
@@ -28,16 +42,18 @@ class HomeController extends ChangeNotifier {
     final Map<String, dynamic> rawData = {
       "status": "success",
       "data": {
-        "user": {"name": "Jonathan", "status": "YOU ARE\nSTRONG ✨"},
+        "user": {"name": "Jhonathan", "status": "YOU ARE\nSTRONG ✨"},
         "timer": {
           "days": 32,
           "hours": 0,
           "mins": 11,
-          "startDate": "2024-04-22T08:30:00Z",
+          "secs": 45,
+          "progress": 0.8,
+          "startDate": "2026-04-22T08:30:00Z",
         },
         "dailyWisdom": {
           "quote":
-              "Progress isn't a straight line. Every small step back is just preparation for a giant leap forward.",
+          "Progress isn't a straight line. Every small step back is just preparation for a giant leap forward.",
           "author": "Coach Pearl 🍃",
         },
         "journal": {
@@ -72,7 +88,14 @@ class HomeController extends ChangeNotifier {
         status: _dashboardModel!.status,
         data: DashboardData(
           user: currentData.user,
-          timer: TimerData(days: 0, hours: 0, mins: 0, startDate: currentData.timer?.startDate),
+          timer: TimerData(
+            days: 0,
+            hours: 0,
+            mins: 0,
+            secs: 0,
+            progressValue: 0.0,
+            startDate: DateTime.now().toIso8601String(),
+          ),
           dailyWisdom: currentData.dailyWisdom,
           journal: currentData.journal,
           notifications: currentData.notifications,
@@ -86,11 +109,13 @@ class HomeController extends ChangeNotifier {
     context,
     title: "Take A Breath, ${dashboardModel?.data?.user?.name ?? '[Name]'}",
     description:
-        "\"Stop. Don't press send. Before you do anything, let's take a quick 30 seconds and breathe.\"",
+    "Stop. Don't press send. You are feeling a temporary wave of emotion. Before you do anything, let's take a quick 30 seconds, and breathe. Do it with me 4 seconds breath in, 4 seconds hold, 4 seconds breathe out. Do it 3 times.",
     primaryButtonText: "Start Breathing",
-    onPrimaryTap: () {
-      // Add navigation or specific logic here if needed
-      debugPrint("Started breathing session for No Contact break.");
+    onPrimaryTap: () { 
+      NavigationService.goToBreathing(
+        title: "Stop. Don't press send. 🔴",
+        subtitle: "You are feeling a temporary wave of emotion.",
+      );
     },
   );
 
@@ -98,11 +123,25 @@ class HomeController extends ChangeNotifier {
     context,
     title: "How do you feel, ${dashboardModel?.data?.user?.name ?? '[Name]'}?",
     description:
-        "\"Take a breath. This happens. Breaking No Contact doesn't mean you've failed; it just means you're human.\"",
+    "Take a breath. This happens. Breaking No Contact doesn't mean you've failed; it just means you're human.",
     primaryButtonText: "I need to speak to someone 📞",
     onPrimaryTap: () {
       // Logic for contacting someone
-      debugPrint("User requested to speak to someone.");
     },
   );
+
+  void postJournal() {
+    if (journalController.text.isNotEmpty) {
+      // Handle post logic
+      journalController.clear();
+      NavigationService.pop();
+    }
+  }
+
+  @override
+  void dispose() {
+    _ticker?.cancel();
+    journalController.dispose();
+    super.dispose();
+  }
 }

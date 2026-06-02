@@ -1,352 +1,5 @@
-📄 API Schemas & JSON Responses - Complete Guide
-Table of Contents
-Authentication APIs
-User Profile APIs
-Setup APIs
-Error Responses
-Dummy Data Collections
-Response Codes
-API Endpoint Summary
----
-1. Authentication APIs
-   1.1 Login API
-   Endpoint: `POST /api/auth/login`
-   Request:
-```json
-{
-  "email": "user@example.com",
-  "password": "password123",
-  "rememberMe": true
-}
-```
-Success Response (200 OK):
-```json
-{
-  "status": "success",
-  "message": "Login successful",
-  "code": "AUTH_001",
-  "data": {
-    "user": {
-      "id": "user_123",
-      "name": "John Doe",
-      "email": "user@example.com",
-      "phoneNumber": "+1234567890",
-      "role": "customer",
-      "profilePictureUrl": "https://api.example.com/images/user_123.jpg",
-      "isEmailVerified": true,
-      "isPhoneVerified": false,
-      "accountStatus": "active",
-      "createdAt": "2026-05-20T08:00:00Z",
-      "lastLogin": "2026-05-24T10:30:00Z"
-    },
-    "tokens": {
-      "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-      "expiresIn": 3600,
-      "tokenType": "Bearer"
-    },
-    "session": {
-      "sessionId": "session_456",
-      "deviceId": "device_789",
-      "loginIp": "192.168.1.1",
-      "userAgent": "Mozilla/5.0...",
-      "lastActivity": "2026-05-24T10:30:00Z"
-    }
-  }
-}
-```
-Error Response (401 Unauthorized):
-```json
-{
-  "status": "error",
-  "message": "Invalid email or password",
-  "code": "AUTH_101",
-  "data": null,
-  "timestamp": "2026-05-24T10:30:00Z"
-}
-```
----
-1.2 Sign Up API
-Endpoint: `POST /api/auth/signup`
-Request:
-```json
-{
-  "name": "Jane Smith",
-  "email": "jane@example.com",
-  "password": "SecurePass123!",
-  "confirmPassword": "SecurePass123!",
-  "acceptTerms": true
-}
-```
-Success Response (201 Created):
-```json
-{
-  "status": "success",
-  "message": "Account created successfully",
-  "code": "AUTH_201",
-  "data": {
-    "user": {
-      "id": "user_456",
-      "name": "Jane Smith",
-      "email": "jane@example.com",
-      "phoneNumber": null,
-      "role": "customer",
-      "profilePictureUrl": null,
-      "isEmailVerified": false,
-      "isPhoneVerified": false,
-      "accountStatus": "pending_verification",
-      "createdAt": "2026-05-24T10:35:00Z",
-      "lastLogin": null
-    },
-    "tokens": {
-      "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-      "expiresIn": 3600,
-      "tokenType": "Bearer"
-    },
-    "verificationRequired": {
-      "email": true,
-      "phone": false,
-      "otp": "123456"
-    }
-  }
-}
-```
-Error Response (400 Bad Request):
-```json
-{
-  "status": "error",
-  "message": "Email already registered",
-  "code": "AUTH_102",
-  "errors": [
-    {
-      "field": "email",
-      "message": "Email already exists",
-      "code": "FIELD_EXISTS"
-    }
-  ],
-  "timestamp": "2026-05-24T10:35:00Z"
-}
-```
----
-1.3 OTP Verification API
-Endpoint: `POST /api/auth/verify-otp`
-Request:
-```json
-{
-  "email": "jane@example.com",
-  "otp": "123456",
-  "type": "email"
-}
-```
-Success Response (200 OK):
-```json
-{
-  "status": "success",
-  "message": "OTP verified successfully",
-  "code": "AUTH_202",
-  "data": {
-    "verified": true,
-    "verificationType": "email",
-    "email": "jane@example.com",
-    "verifiedAt": "2026-05-24T10:40:00Z",
-    "userId": "user_456"
-  }
-}
-```
-Error Response (400 Bad Request):
-```json
-{
-  "status": "error",
-  "message": "Invalid or expired OTP",
-  "code": "AUTH_103",
-  "data": {
-    "attemptsRemaining": 2,
-    "nextRetryAt": "2026-05-24T10:41:00Z"
-  }
-}
-```
----
-1.4 Resend OTP API
-Endpoint: `POST /api/auth/resend-otp`
-Request:
-```json
-{
-  "email": "jane@example.com",
-  "type": "email"
-}
-```
-Success Response (200 OK):
-```json
-{
-  "status": "success",
-  "message": "OTP sent successfully",
-  "code": "AUTH_203",
-  "data": {
-    "otpSentTo": "jane@example.com",
-    "expiresIn": 300,
-    "nextResendAfter": 60,
-    "deliveryMethod": "email"
-  }
-}
-```
----
-1.5 Forgot Password API
-Endpoint: `POST /api/auth/forgot-password`
-Request:
-```json
-{
-  "email": "user@example.com"
-}
-```
-Success Response (200 OK):
-```json
-{
-  "status": "success",
-  "message": "Password reset link sent to email",
-  "code": "AUTH_204",
-  "data": {
-    "resetToken": "reset_token_xyz",
-    "expiresIn": 1800,
-    "email": "user@example.com",
-    "resetLink": "https://app.example.com/reset?token=reset_token_xyz"
-  }
-}
-```
----
-1.6 Reset Password API
-Endpoint: `POST /api/auth/reset-password`
-Request:
-```json
-{
-  "token": "reset_token_xyz",
-  "newPassword": "NewSecurePass456!",
-  "confirmPassword": "NewSecurePass456!"
-}
-```
-Success Response (200 OK):
-```json
-{
-  "status": "success",
-  "message": "Password reset successfully",
-  "code": "AUTH_205",
-  "data": {
-    "userId": "user_123",
-    "resetAt": "2026-05-24T10:45:00Z",
-    "message": "You can now login with your new password"
-  }
-}
-```
----
-1.7 Change Password API
-Endpoint: `POST /api/auth/change-password`
-Headers: `Authorization: Bearer {accessToken}`
-Request:
-```json
-{
-  "currentPassword": "password123",
-  "newPassword": "NewSecurePass456!",
-  "confirmPassword": "NewSecurePass456!"
-}
-```
-Success Response (200 OK):
-```json
-{
-  "status": "success",
-  "message": "Password changed successfully",
-  "code": "AUTH_206",
-  "data": {
-    "userId": "user_123",
-    "changedAt": "2026-05-24T10:50:00Z"
-  }
-}
-```
----
-1.8 Social Login API
-Endpoint: `POST /api/auth/social-login`
-Request:
-```json
-{
-  "provider": "google",
-  "idToken": "google_id_token_xyz",
-  "accessToken": "google_access_token_xyz"
-}
-```
-Success Response (200 OK):
-```json
-{
-  "status": "success",
-  "message": "Social login successful",
-  "code": "AUTH_207",
-  "data": {
-    "user": {
-      "id": "user_789",
-      "name": "John Google",
-      "email": "john.google@gmail.com",
-      "profilePictureUrl": "https://google.com/avatar/john",
-      "isNewUser": true,
-      "accountStatus": "active"
-    },
-    "tokens": {
-      "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-      "expiresIn": 3600,
-      "tokenType": "Bearer"
-    },
-    "isSetupComplete": false
-  }
-}
-```
----
-1.9 Logout API
-Endpoint: `POST /api/auth/logout`
-Headers: `Authorization: Bearer {accessToken}`
-Request:
-```json
-{
-  "deviceId": "device_789",
-  "sessionId": "session_456"
-}
-```
-Success Response (200 OK):
-```json
-{
-  "status": "success",
-  "message": "Logged out successfully",
-  "code": "AUTH_208",
-  "data": {
-    "userId": "user_123",
-    "logoutAt": "2026-05-24T11:00:00Z",
-    "sessionCleared": true
-  }
-}
-```
----
-1.10 Refresh Token API
-Endpoint: `POST /api/auth/refresh-token`
-Request:
-```json
-{
-  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-}
-```
-Success Response (200 OK):
-```json
-{
-  "status": "success",
-  "message": "Token refreshed successfully",
-  "code": "AUTH_209",
-  "data": {
-    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-    "expiresIn": 3600,
-    "tokenType": "Bearer"
-  }
-}
-```
----
-2. User Profile APIs
-   2.1 Get User Profile
+## User Profile APIs
+### 2.1 Get User Profile
    Endpoint: `GET /api/user/profile`
    Headers: `Authorization: Bearer {accessToken}`
    Success Response (200 OK):
@@ -437,7 +90,7 @@ Success Response (200 OK):
 }
 ```
 ---
-3. Setup APIs
+3 . Setup APIs
    3.1 Get Setup Status
    Endpoint: `GET /api/user/setup-status`
    Headers: `Authorization: Bearer {accessToken}`
@@ -603,10 +256,11 @@ Success Response (200 OK):
     },
     "timer": {
       "days": 32,
-      "hours": 0,
-      "mins": 11,
+      "hours": 14,
+      "mins": 45,
+      "secs": 30,
       "progress": 0.8,
-      "startDate": "2024-04-22T08:30:00Z"
+      "startDate": "2026-04-22T08:30:00Z"
     },
     "dailyWisdom": {
       "id": "quote_789",
@@ -626,7 +280,7 @@ Success Response (200 OK):
 }
 ```
 ---
-4. Error Responses
+4 . Error Responses
    4.1 Authentication Errors
    401 Unauthorized - Invalid Token:
 ```json
@@ -697,7 +351,7 @@ Success Response (200 OK):
 
 ```
 ---
-5. Dummy Data Collections
+5 . Dummy Data Collections
    5.1 Users Collection
 ```json
 {
@@ -834,8 +488,8 @@ Success Response (200 OK):
 }
 ```
 ---
-6. Response Codes
-   6.1 Success Codes
+6 . Response Codes
+   6.1 Success Codes .
    Code	Meaning	HTTP Status
    AUTH_001	Login successful	200
    AUTH_201	Signup successful	201
@@ -855,85 +509,4 @@ Success Response (200 OK):
    SETUP_403	Step 2 complete	200
    SETUP_404	Setup complete	200
 ---
-6.2 Error Codes
-Code	Message	HTTP Status
-AUTH_101	Invalid credentials	401
-AUTH_102	Email already exists	400
-AUTH_103	Invalid OTP	400
-AUTH_104	Email not verified	403
-AUTH_105	Account locked	403
-AUTH_401	Invalid token	401
-AUTH_402	Missing auth header	401
-AUTH_403	Insufficient permissions	403
-VALIDATION_001	Validation failed	400
-USER_404	User not found	404
-SERVER_500	Internal error	500
----
-7. API Endpoint Summary
-   Authentication Endpoints
-```
-POST   /api/auth/login              Login with email/password
-POST   /api/auth/signup             Create new account
-POST   /api/auth/verify-otp         Verify OTP code
-POST   /api/auth/resend-otp         Resend OTP
-POST   /api/auth/forgot-password    Request password reset
-POST   /api/auth/reset-password     Reset password with token
-POST   /api/auth/change-password    Change existing password
-POST   /api/auth/social-login       Social provider login
-POST   /api/auth/logout             User logout
-POST   /api/auth/refresh-token      Refresh access token
-```
-User Endpoints
-```
-GET    /api/user/profile            Get user profile
-PUT    /api/user/profile            Update user profile
-POST   /api/user/profile-picture    Upload profile picture
-```
-Setup Endpoints
-```
-GET    /api/user/setup-status       Get current setup status
-POST   /api/user/setup/step1        Complete profile step
-POST   /api/user/setup/step2        Complete preferences step
-POST   /api/user/setup/complete     Complete entire setup
-```
----
-Request/Response Timeline Example
-```
-User Action                Time    API Endpoint                   Status
-────────────────────────────────────────────────────────────────────────
-1. Tap Login button        0ms     -                              Ready
-2. Enter email/password    0ms     -                              Waiting
-3. Tap Login               0ms     -                              Request
-4. Submit                  15ms    POST /api/auth/login           Sending
-5. Network delay           150ms   -                              In transit
-6. Server processing       200ms   -                              Processing
-7. Response waiting        100ms   -                              Pending
-8. Receive response        500ms   POST /api/auth/login           Success
-9. Parse JSON              30ms    -                              Parsing
-10. Update UI              20ms    -                              Rendering
-11. Navigate               30ms    -                              Navigation
-Total Response Time        500ms
-
-```
----
-Testing Checklist
-[ ] Test login with valid credentials
-[ ] Test login with invalid email
-[ ] Test login with wrong password
-[ ] Test signup with new email
-[ ] Test signup with existing email
-[ ] Test OTP verification
-[ ] Test OTP resend
-[ ] Test password reset flow
-[ ] Test password change
-[ ] Test profile update
-[ ] Test profile picture upload
-[ ] Test setup flow (all 3 steps)
-[ ] Test logout
-[ ] Test token refresh
-[ ] Test social login (Google, Facebook)
----
-Last Updated: May 24, 2026
-API Version: 1.0
-Status: ✅ Complete
-
+6.2

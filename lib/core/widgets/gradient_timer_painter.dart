@@ -11,77 +11,69 @@ class GradientTimerPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
-    final radius = (size.width - strokeWidth) / 2;
-    final rect = Rect.fromCircle(center: center, radius: radius);
-    final sweepAngle = 2 * math.pi * progress;
 
-    // Background track
-    canvas.drawCircle(
-      center,
-      radius,
-      Paint()
-        ..color = const Color(0xFF1B2C1A)
+    // Proportions based on the SfRadialGauge configuration (245 total width, 14 stroke, 200 inner)
+    final double radius = (size.width - strokeWidth) / 2;
+    final Rect rect = Rect.fromCircle(center: center, radius: radius);
+
+    // 1. Draw the decorative inner circle (Matches GaugeAnnotation)
+    // Scale 200/245 of the total available width
+    final double innerCircleRadius = (size.width * (200 / 245)) / 2;
+    final Paint innerPaint = Paint()
+      ..color = const Color(0xFF44523A)
+      ..style = PaintingStyle.fill;
+
+    final Paint innerBorderPaint = Paint()
+      ..color = const Color(0xFFFEEF8E)
+      ..strokeWidth = 1.r
+      ..style = PaintingStyle.stroke;
+
+    canvas.drawCircle(center, innerCircleRadius, innerPaint);
+    canvas.drawCircle(center, innerCircleRadius, innerBorderPaint);
+
+    // 2. Draw the background track (Matches AxisLineStyle)
+    final Paint trackPaint = Paint()
+      ..color = const Color(0xFF41503C)
+      ..strokeWidth = strokeWidth
+      ..style = PaintingStyle.stroke;
+    canvas.drawCircle(center, radius, trackPaint);
+
+    // 3. Draw the progress arc with gradient (Matches RangePointer)
+    if (progress > 0) {
+      final Paint progressPaint = Paint()
         ..strokeWidth = strokeWidth
-        ..style = PaintingStyle.stroke,
-    );
+        ..style = PaintingStyle.stroke
+        ..strokeCap = StrokeCap.round; // Matches CornerStyle.bothCurve
 
-    // Draw arc as 150 tiny segments, each with interpolated color
-    const int segments = 150;
-    final double segAngle = sweepAngle / segments;
+      // Matches the SweepGradient colors and behavior from the snippet
+      final SweepGradient sweepGradient = SweepGradient(
+        startAngle: -math.pi / 2, // Starts at 270 degrees
+        endAngle: (-math.pi / 2) + (2 * math.pi),
+        colors: const [
+          Color(0x55E6DBC9),
+          Color(0xAAE6DBC9),
+          Color(0xFFE6DBC9),
+          Color(0xFFFFFFFF),
+        ],
+        stops: const [0.0, 0.35, 0.7, 1.0],
+      );
 
-    for (int i = 0; i < segments; i++) {
-      final double t = i / (segments - 1); // 0.0 = tail, 1.0 = head
+      progressPaint.shader = sweepGradient.createShader(rect);
 
-      // Transparent for first 40%, then fade in cream, bright white at tip
-      final Color color;
-      if (t < 0.4) {
-        color = const Color(0x00000000);
-      } else if (t < 0.75) {
-        final double fade = (t - 0.4) / 0.35;
-        color = Color.fromARGB(
-          (fade * 160).round(),
-          230, 219, 201, // 0xFFE6DBC9
-        );
-      } else {
-        final double fade = (t - 0.75) / 0.25;
-        color = Color.lerp(
-          const Color(0xA0E6DBC9),
-          Colors.white,
-          fade,
-        )!;
-      }
-
+      // Draw the arc starting from the top (-pi/2)
       canvas.drawArc(
         rect,
-        -math.pi / 2 + i * segAngle,
-        segAngle + 0.005, // tiny overlap to avoid gaps
+        -math.pi / 2,
+        2 * math.pi * progress,
         false,
-        Paint()
-          ..color = color
-          ..strokeWidth = strokeWidth
-          ..style = PaintingStyle.stroke
-          ..strokeCap = StrokeCap.butt,
+        progressPaint,
       );
     }
-
-    // Glowing white dot at leading tip
-    final tipAngle = -math.pi / 2 + sweepAngle;
-    final tip = Offset(
-      center.dx + radius * math.cos(tipAngle),
-      center.dy + radius * math.sin(tipAngle),
-    );
-
-    canvas.drawCircle(
-      tip,
-      strokeWidth * 0.7,
-      Paint()
-        ..color = const Color(0x44FFFFFF)
-        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8),
-    );
-    canvas.drawCircle(tip, strokeWidth * 0.45, Paint()..color = Colors.white);
   }
 
   @override
-  bool shouldRepaint(covariant GradientTimerPainter old) =>
-      old.progress != progress;
+  bool shouldRepaint(covariant GradientTimerPainter oldDelegate) {
+    return oldDelegate.progress != progress ||
+        oldDelegate.strokeWidth != strokeWidth;
+  }
 }

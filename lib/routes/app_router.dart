@@ -18,14 +18,10 @@ import '../features/cart/views/order_history.dart';
 import '../features/cart/views/order_view.dart';
 import '../features/cart/views/payment_method.dart';
 import '../features/cart/views/shipping_details.dart';
-import '../features/home/views/comment_review_view.dart';
-import '../features/home/views/filter_view.dart';
 import '../features/home/views/home_view.dart';
 import '../features/home/views/navigation.dart';
-import '../features/home/views/product_view.dart';
-import '../features/home/views/review_view.dart';
-import '../features/home/views/search_view.dart';
-import '../features/home/views/wishlist_view.dart';
+import '../features/home/views/breathing_view.dart';
+import '../features/home/views/write_journal_view.dart';
 import '../features/onboarding/controllers/onboarding_controller.dart';
 import '../features/onboarding/views/onboarding_view.dart';
 import '../features/profile/views/add_new_address.dart';
@@ -56,7 +52,6 @@ abstract class AppRoutes {
   static const goToHome = '/go-home';
   static const commentReview = '/comment-review';
   static const filter = '/filter';
-  static const product = '/product';
   static const review = '/review';
   static const search = '/search';
   static const wishlist = '/wishlist';
@@ -78,6 +73,8 @@ abstract class AppRoutes {
   static const checkout = '/checkout';
   static const addPromoCodeView = '/addPromoCodeView';
   static const settings = '/settings';
+  static const breathing = '/breathing';
+  static const writeJournal = '/write-journal';
 
   // Setup Routes
   static const setup1 = '/setup1';
@@ -148,6 +145,8 @@ class AppRouter {
             loc == AppRoutes.order ||
             loc == AppRoutes.checkout ||
             loc == AppRoutes.setupComplete ||
+            loc == AppRoutes.breathing ||
+            loc == AppRoutes.writeJournal ||
             loc.startsWith('/setup');
 
         if (!isLoggedIn && isAuthScreen) {
@@ -179,24 +178,8 @@ class AppRouter {
             StatefulShellBranch(
               routes: [
                 GoRoute(
-                  path: AppRoutes.search,
-                  builder: (context, state) => const SearchView(),
-                ),
-              ],
-            ),
-            StatefulShellBranch(
-              routes: [
-                GoRoute(
                   path: AppRoutes.order,
                   builder: (context, state) => const OrderScreen(),
-                ),
-              ],
-            ),
-            StatefulShellBranch(
-              routes: [
-                GoRoute(
-                  path: AppRoutes.wishlist,
-                  builder: (context, state) => const WishlistView(),
                 ),
               ],
             ),
@@ -326,27 +309,6 @@ class AppRouter {
 
         // ── Protected ─────────────────────────────────────────────────────────
         GoRoute(
-          path: AppRoutes.review,
-          name: 'review',
-          pageBuilder: (_, __) => const MaterialPage(child: ReviewView()),
-        ),
-        GoRoute(
-          path: AppRoutes.product,
-          name: 'product',
-          pageBuilder: (_, __) => MaterialPage(child: ProductView()),
-        ),
-        GoRoute(
-          path: AppRoutes.filter,
-          name: 'filter',
-          pageBuilder: (_, __) => const MaterialPage(child: FilterView()),
-        ),
-        GoRoute(
-          path: AppRoutes.commentReview,
-          name: 'commentReview',
-          pageBuilder: (_, __) =>
-              const MaterialPage(child: CommentReviewView()),
-        ),
-        GoRoute(
           path: AppRoutes.logout,
           name: 'logout',
           pageBuilder: (_, __) => const MaterialPage(child: Logout()),
@@ -429,6 +391,24 @@ class AppRouter {
           pageBuilder: (_, state) => MaterialPage(
             child: ConfirmOrderView(origin: state.extra as bool?),
           ),
+        ),
+        GoRoute(
+          path: AppRoutes.breathing,
+          name: 'breathing',
+          pageBuilder: (context, state) {
+            final Map<String, dynamic> extras =
+                state.extra as Map<String, dynamic>? ?? {};
+            return MaterialPage(
+              child: BreathingView(
+                title: extras['title'] ?? 'Take a Breath',
+                subtitle: extras['subtitle'] ?? 'Let\'s breathe together.',
+              ),
+            );
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.writeJournal,
+          builder: (context, state) => const WriteJournalView(),
         ),
       ],
 
