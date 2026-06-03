@@ -277,6 +277,7 @@ class _BreathingViewState extends State<BreathingView> {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Container(
@@ -305,10 +306,8 @@ class _BreathingViewState extends State<BreathingView> {
                 child: Text(
                   widget.title,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24.sp,
-                    fontFamily: 'Georgia',
+                  style:textTheme.titleSmall?.copyWith(
+                    color: AppColors.whiteColor,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
@@ -319,10 +318,9 @@ class _BreathingViewState extends State<BreathingView> {
                 child: Text(
                   widget.subtitle,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white.withOpacity(0.85),
-                    fontSize: 15.sp,
-                    fontFamily: 'Proxima Nova',
+                  style: textTheme.bodyLarge?.copyWith(
+                    color: AppColors.whiteColor,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
               ),
@@ -335,53 +333,38 @@ class _BreathingViewState extends State<BreathingView> {
                     height: 270.r,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 40,
-                          spreadRadius: 2,
-                        ),
-                      ],
                     ),
                   ),
                   SizedBox(
                     width: 250.r,
                     height: 250.r,
-                    child: CustomPaint(
-                      painter: GradientTimerPainter(
-                        progress: _progress,
-                        strokeWidth: 15.r,
-                      ),
-                    ),
+                    child: GradientTimerGauge(progress: _progress, size: 250),
                   ),
                   Column(
-                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         "00:${_secondsRemaining.toString().padLeft(2, '0')}",
-                        style: TextStyle(
-                          color: Colors.white.withOpacity(0.5),
-                          fontSize: 16.sp,
-                          fontFamily: 'Proxima Nova',
+                        style: textTheme.titleSmall?.copyWith(
+                          color: AppColors.whiteColor,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
-                      SizedBox(height: 12.h),
+                      SizedBox(height: 25.h),
                       Text(
                         _phaseText,
-                        style: TextStyle(
-                          color: const Color(0xFFF3D194),
-                          fontSize: 34.sp,
-                          fontWeight: FontWeight.bold,
+                        style: textTheme.displayMedium?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.secondaryColorLight,
                           fontFamily: 'Georgia',
                         ),
                       ),
-                      SizedBox(height: 12.h),
+                      SizedBox(height: 25.h),
                       Text(
                         "Round $_currentRound/3",
-                        style: TextStyle(
-                          color: Colors.white.withOpacity(0.5),
-                          fontSize: 15.sp,
-                          fontFamily: 'Proxima Nova',
+                        style: textTheme.bodyLarge?.copyWith(
+                          color: AppColors.whiteColor,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                     ],
@@ -391,11 +374,9 @@ class _BreathingViewState extends State<BreathingView> {
               const Spacer(flex: 2),
               Text(
                 "4 sec each · 3 rounds · guided breathing",
-                style: TextStyle(
-                  color: Colors.white.withOpacity(0.6),
-                  fontSize: 13.sp,
-                  fontFamily: 'Proxima Nova',
-                  letterSpacing: 0.5,
+                style: textTheme.bodyLarge?.copyWith(
+                  color: AppColors.whiteColor,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
               SizedBox(height: 60.h),

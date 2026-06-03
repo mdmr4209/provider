@@ -280,6 +280,73 @@ Success Response (200 OK):
 }
 ```
 ---
+## Circle Screen APIs
+### 4.1 Get Circle Posts
+**Endpoint**: `GET /api/circle/posts`
+**Headers**: `Authorization: Bearer {accessToken}`
+**Success Response** (200 OK):
+```json
+{
+  "status": "success",
+  "message": "Posts retrieved successfully",
+  "data": {
+    "posts": [
+      {
+        "id": "post_001",
+        "userName": "Sarah M.",
+        "userAvatar": "https://api.example.com/avatars/sarah_m.jpg",
+        "timeAgo": "2 min ago",
+        "content": "Day 14. Didn't reach out even though I wanted to. Proud of myself 💪",
+        "likes": 47,
+        "claps": 12,
+        "isLiked": false,
+        "isClapped": true,
+        "commentsCount": 5
+      },
+      {
+        "id": "post_002",
+        "userName": "Alex R.",
+        "userAvatar": "https://api.example.com/avatars/alex.jpg",
+        "timeAgo": "15 min ago",
+        "content": "Staying consistent is key! Feeling great today.",
+        "likes": 23,
+        "claps": 5,
+        "isLiked": true,
+        "isClapped": false
+      }
+    ],
+    "members": [
+      {
+        "id": "mem_001",
+        "name": "You",
+        "avatar": "https://api.example.com/avatars/you.jpg",
+        "isYou": true
+      },
+      {
+        "id": "mem_002",
+        "name": "Sarah",
+        "avatar": "https://api.example.com/avatars/sarah.jpg"
+      },
+      {
+        "id": "mem_003",
+        "name": "Alex",
+        "avatar": "https://api.example.com/avatars/alex.jpg"
+      },
+      {
+        "id": "mem_004",
+        "name": "Jordan",
+        "avatar": "https://api.example.com/avatars/jordan.jpg"
+      },
+      {
+        "id": "mem_005",
+        "name": "Maya",
+        "avatar": "https://api.example.com/avatars/maya.jpg"
+      }
+    ]
+  }
+}
+```
+---
 4 . Error Responses
    4.1 Authentication Errors
    401 Unauthorized - Invalid Token:
@@ -348,165 +415,4 @@ Success Response (200 OK):
   "code": "USER_404",
   "timestamp": "2026-05-24T11:15:00Z"
 }
-
 ```
----
-5 . Dummy Data Collections
-   5.1 Users Collection
-```json
-{
-  "users": [
-    {
-      "id": "user_123",
-      "name": "John Doe",
-      "email": "user@example.com",
-      "passwordHash": "$2b$10$hashed_password123",
-      "phoneNumber": "+1234567890",
-      "role": "customer",
-      "profilePictureUrl": "https://api.example.com/images/user_123.jpg",
-      "bio": "Software Developer",
-      "dateOfBirth": "1995-05-15",
-      "gender": "male",
-      "isEmailVerified": true,
-      "isPhoneVerified": true,
-      "accountStatus": "active",
-      "twoFactorEnabled": false,
-      "createdAt": "2026-05-20T08:00:00Z",
-      "updatedAt": "2026-05-24T11:00:00Z",
-      "lastLogin": "2026-05-24T10:30:00Z",
-      "loginAttempts": 0,
-      "lockedUntil": null,
-      "setupCompleted": true,
-      "setupCompletedAt": "2026-05-22T14:30:00Z"
-    },
-    {
-      "id": "user_456",
-      "name": "Jane Smith",
-      "email": "jane@example.com",
-      "passwordHash": "$2b$10$hashed_password456",
-      "phoneNumber": null,
-      "role": "customer",
-      "profilePictureUrl": null,
-      "bio": null,
-      "dateOfBirth": null,
-      "gender": null,
-      "isEmailVerified": false,
-      "isPhoneVerified": false,
-      "accountStatus": "pending_verification",
-      "twoFactorEnabled": false,
-      "createdAt": "2026-05-24T10:35:00Z",
-      "updatedAt": "2026-05-24T10:35:00Z",
-      "lastLogin": null,
-      "loginAttempts": 0,
-      "lockedUntil": null,
-      "setupCompleted": false,
-      "setupCompletedAt": null
-    }
-  ]
-}
-```
----
-5.2 User Preferences Collection
-```json
-{
-  "preferences": [
-    {
-      "userId": "user_123",
-      "notificationsEnabled": true,
-      "emailNotificationsEnabled": true,
-      "pushNotificationsEnabled": true,
-      "smsNotificationsEnabled": false,
-      "newsletterSubscribed": true,
-      "categoryInterest": "Technology",
-      "marketingEmails": true,
-      "dataCollection": true,
-      "language": "en",
-      "timezone": "UTC+0",
-      "theme": "light",
-      "updatedAt": "2026-05-24T11:00:00Z"
-    }
-  ]
-}
-```
----
-5.3 Setup Sessions Collection
-```json
-{
-  "setupSessions": [
-    {
-      "sessionId": "setup_session_789",
-      "userId": "user_456",
-      "startedAt": "2026-05-24T10:35:00Z",
-      "completedAt": null,
-      "isComplete": false,
-      "currentStep": 2,
-      "totalSteps": 3,
-      "completedSteps": [1],
-      "stepData": {
-        "step1": {
-          "bio": "I am a software engineer",
-          "phoneNumber": "+1234567890",
-          "profilePhotoUrl": "https://api.example.com/images/user_456.jpg",
-          "completedAt": "2026-05-24T10:40:00Z"
-        },
-        "step2": {
-          "notificationsEnabled": true,
-          "newsletterSubscribed": true,
-          "categoryInterest": "Technology",
-          "completedAt": null
-        },
-        "step3": {
-          "confirmAll": null,
-          "acceptedTerms": null,
-          "completedAt": null
-        }
-      },
-      "progress": 66
-    }
-  ]
-}
-```
----
-5.4 Login Sessions Collection
-```json
-{
-  "sessions": [
-    {
-      "sessionId": "session_456",
-      "userId": "user_123",
-      "deviceId": "device_789",
-      "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-      "loginIp": "192.168.1.1",
-      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)...",
-      "loginAt": "2026-05-24T10:30:00Z",
-      "expiresAt": "2026-05-24T14:30:00Z",
-      "lastActivityAt": "2026-05-24T10:30:00Z",
-      "isActive": true
-    }
-  ]
-}
-```
----
-6 . Response Codes
-   6.1 Success Codes .
-   Code	Meaning	HTTP Status
-   AUTH_001	Login successful	200
-   AUTH_201	Signup successful	201
-   AUTH_202	OTP verified	200
-   AUTH_203	OTP sent	200
-   AUTH_204	Reset link sent	200
-   AUTH_205	Password reset success	200
-   AUTH_206	Password changed	200
-   AUTH_207	Social login success	200
-   AUTH_208	Logout success	200
-   AUTH_209	Token refreshed	200
-   USER_301	Profile retrieved	200
-   USER_302	Profile updated	200
-   USER_303	Picture uploaded	200
-   SETUP_401	Status retrieved	200
-   SETUP_402	Step 1 complete	200
-   SETUP_403	Step 2 complete	200
-   SETUP_404	Setup complete	200
----
-6.2

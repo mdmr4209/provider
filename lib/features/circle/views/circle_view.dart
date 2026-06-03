@@ -1,0 +1,251 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+import '../../../core/constants/app_assets.dart';
+import '../../../core/constants/app_colors.dart';
+import '../../../core/widgets/background_widget.dart';
+import '../../../core/widgets/custom_loader.dart';
+import '../controllers/circle_controller.dart';
+import '../widgets/circle_member_list.dart';
+import '../widgets/circle_post_card.dart';
+
+class CircleView extends StatefulWidget {
+  const CircleView({super.key});
+
+  @override
+  State<CircleView> createState() => _CircleViewState();
+}
+
+class _CircleViewState extends State<CircleView> with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<CircleController>().fetchCircleData();
+    });
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
+    return BackgroundWidget(
+      imagePath: AppAssets.bgHome,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
+          child: Column(
+            children: [
+              SizedBox(height: 10.h),
+              const CircleMemberList(),
+              SizedBox(height: 20.h),
+              
+              // Search/Post Input Bar
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                  decoration: BoxDecoration(
+                    color: AppColors.whiteColor.withOpacity(0.05),
+                    borderRadius: BorderRadius.circular(30.r),
+                    border: Border.all(color: AppColors.whiteColor.withOpacity(0.1)),
+                  ),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        AppAssets.feather,
+                        colorFilter: ColorFilter.mode(
+                          AppColors.whiteColor.withOpacity(0.6), 
+                          BlendMode.srcIn,
+                        ),
+                        width: 20.r,
+                      ),
+                      SizedBox(width: 12.w),
+                      Text(
+                        "Word Your Thoughts",
+                        style: theme.textTheme.bodyLarge?.copyWith(
+                          color: AppColors.whiteColor.withOpacity(0.6),
+                          fontSize: 16.sp,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              
+              SizedBox(height: 20.h),
+              
+              // Tabs and Groups Action
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TabBar(
+                        controller: _tabController,
+                        isScrollable: true,
+                        indicatorColor: AppColors.secondaryColorLight,
+                        labelColor: AppColors.secondaryColorLight,
+                        unselectedLabelColor: AppColors.whiteColor.withOpacity(0.6),
+                        dividerColor: Colors.transparent,
+                        tabAlignment: TabAlignment.start,
+                        labelPadding: EdgeInsets.only(right: 24.w),
+                        labelStyle: theme.textTheme.titleMedium?.copyWith(
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        unselectedLabelStyle: theme.textTheme.titleMedium?.copyWith(
+                          fontSize: 18.sp,
+                        ),
+                        tabs: const [
+                          Tab(text: "Everyone"),
+                          Tab(text: "Friends"),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                      decoration: BoxDecoration(
+                        color: AppColors.whiteColor.withOpacity(0.05),
+                        borderRadius: BorderRadius.circular(20.r),
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            "My Groups",
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: AppColors.secondaryColorLight,
+                              fontSize: 12.sp,
+                            ),
+                          ),
+                          SizedBox(width: 4.w),
+                          SvgPicture.asset(
+                            AppAssets.group,
+                            colorFilter: const ColorFilter.mode(
+                              AppColors.secondaryColorLight, 
+                              BlendMode.srcIn,
+                            ),
+                            width: 16.r,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              
+              Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    const _PostsList(),
+                    Center(
+                      child: Text(
+                        "Friends Posts Coming Soon",
+                        style: theme.textTheme.bodyLarge?.copyWith(
+                          color: AppColors.whiteColor.withOpacity(0.7),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PostsList extends StatelessWidget {
+  const _PostsList();
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<CircleController>(
+      builder: (context, controller, child) {
+        if (controller.isLoading) {
+          return ListView.builder(
+            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+            itemCount: 3,
+            itemBuilder: (context, index) => const _PostShimmer(),
+          );
+        }
+        
+        if (controller.posts.isEmpty) {
+          return Center(
+            child: Text(
+              "No posts available",
+              style: TextStyle(color: AppColors.whiteColor.withOpacity(0.5)),
+            ),
+          );
+        }
+
+        return ListView.builder(
+          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+          itemCount: controller.posts.length,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: EdgeInsets.only(bottom: 16.h),
+              child: CirclePostCard(post: controller.posts[index]),
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+class _PostShimmer extends StatelessWidget {
+  const _PostShimmer();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 16.h),
+      child: Container(
+        padding: EdgeInsets.all(16.r),
+        decoration: BoxDecoration(
+          color: AppColors.whiteColor.withOpacity(0.05),
+          borderRadius: BorderRadius.circular(20.r),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                ShimmerLoader(width: 40.r, height: 40.r, borderRadius: 20.r),
+                SizedBox(width: 12.w),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ShimmerLoader(width: 100.w, height: 12.h, borderRadius: 4.r),
+                    SizedBox(height: 6.h),
+                    ShimmerLoader(width: 60.w, height: 10.h, borderRadius: 4.r),
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(height: 16.h),
+            ShimmerLoader(width: double.infinity, height: 14.h, borderRadius: 4.r),
+            SizedBox(height: 8.h),
+            ShimmerLoader(width: 200.w, height: 14.h, borderRadius: 4.r),
+            SizedBox(height: 16.h),
+            ShimmerLoader(width: double.infinity, height: 150.h, borderRadius: 12.r),
+          ],
+        ),
+      ),
+    );
+  }
+}

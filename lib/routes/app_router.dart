@@ -18,6 +18,7 @@ import '../features/cart/views/order_history.dart';
 import '../features/cart/views/order_view.dart';
 import '../features/cart/views/payment_method.dart';
 import '../features/cart/views/shipping_details.dart';
+import '../features/circle/views/circle_view.dart';
 import '../features/home/views/home_view.dart';
 import '../features/home/views/navigation.dart';
 import '../features/home/views/breathing_view.dart';
@@ -48,6 +49,9 @@ abstract class AppRoutes {
   static const otpVerify = '/otp-verify';
   static const changePass = '/change-password';
   static const home = '/home';
+  static const circle = '/circle';
+  static const coaches = '/coaches';
+  static const inbox = '/inbox';
   static const onboarding = '/onboarding';
   static const goToHome = '/go-home';
   static const commentReview = '/comment-review';
@@ -137,6 +141,9 @@ class AppRouter {
 
         final bool isAuthScreen =
             loc == AppRoutes.home ||
+            loc == AppRoutes.circle ||
+            loc == AppRoutes.coaches ||
+            loc == AppRoutes.inbox ||
             loc == AppRoutes.roleSelection ||
             loc == AppRoutes.nameInput ||
             loc == AppRoutes.profile ||
@@ -178,8 +185,24 @@ class AppRouter {
             StatefulShellBranch(
               routes: [
                 GoRoute(
-                  path: AppRoutes.order,
-                  builder: (context, state) => const OrderScreen(),
+                  path: AppRoutes.circle,
+                  builder: (context, state) => const CircleView(),
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: AppRoutes.coaches,
+                  builder: (context, state) => const Center(child: Text('Coaches Screen')),
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: AppRoutes.inbox,
+                  builder: (context, state) => const Center(child: Text('Inbox Screen')),
                 ),
               ],
             ),

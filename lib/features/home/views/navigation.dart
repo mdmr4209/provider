@@ -382,17 +382,14 @@ class _NavbarState extends State<Navbar> {
                         ],
                       ),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(2),
+                        borderRadius: BorderRadius.circular(2.r),
                       ),
                     ),
                   )
                 else
-                  SizedBox(
-                    width: 14.w,
-                    height: 2.h,
-                  ),
+                  SizedBox(width: 14.w, height: 2.h),
               ],
-            )
+            ),
           ],
         ),
       ),
