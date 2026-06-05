@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:newproject/core/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/widgets/background_widget.dart';
 import '../../../core/widgets/custom_loader.dart';
 import '../controllers/circle_controller.dart';
+import '../models/circle_post_model.dart';
 import '../widgets/circle_member_list.dart';
 import '../widgets/circle_post_card.dart';
 
@@ -17,7 +19,8 @@ class CircleView extends StatefulWidget {
   State<CircleView> createState() => _CircleViewState();
 }
 
-class _CircleViewState extends State<CircleView> with SingleTickerProviderStateMixin {
+class _CircleViewState extends State<CircleView>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -38,7 +41,7 @@ class _CircleViewState extends State<CircleView> with SingleTickerProviderStateM
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return BackgroundWidget(
       imagePath: AppAssets.bgHome,
       child: Scaffold(
@@ -49,23 +52,28 @@ class _CircleViewState extends State<CircleView> with SingleTickerProviderStateM
               SizedBox(height: 10.h),
               const CircleMemberList(),
               SizedBox(height: 20.h),
-              
+
               // Search/Post Input Bar
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16.w,
+                    vertical: 12.h,
+                  ),
                   decoration: BoxDecoration(
-                    color: AppColors.whiteColor.withOpacity(0.05),
+                    color: AppColors.postCardColor,
                     borderRadius: BorderRadius.circular(30.r),
-                    border: Border.all(color: AppColors.whiteColor.withOpacity(0.1)),
+                    border: Border.all(
+                      color: AppColors.whiteColor.withOpacity(0.1),
+                    ),
                   ),
                   child: Row(
                     children: [
                       SvgPicture.asset(
                         AppAssets.feather,
                         colorFilter: ColorFilter.mode(
-                          AppColors.whiteColor.withOpacity(0.6), 
+                          AppColors.whiteColor.withOpacity(0.6),
                           BlendMode.srcIn,
                         ),
                         width: 20.r,
@@ -82,12 +90,12 @@ class _CircleViewState extends State<CircleView> with SingleTickerProviderStateM
                   ),
                 ),
               ),
-              
+
               SizedBox(height: 20.h),
-              
+
               // Tabs and Groups Action
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
                 child: Row(
                   children: [
                     Expanded(
@@ -96,7 +104,9 @@ class _CircleViewState extends State<CircleView> with SingleTickerProviderStateM
                         isScrollable: true,
                         indicatorColor: AppColors.secondaryColorLight,
                         labelColor: AppColors.secondaryColorLight,
-                        unselectedLabelColor: AppColors.whiteColor.withOpacity(0.6),
+                        unselectedLabelColor: AppColors.whiteColor.withOpacity(
+                          0.6,
+                        ),
                         dividerColor: Colors.transparent,
                         tabAlignment: TabAlignment.start,
                         labelPadding: EdgeInsets.only(right: 24.w),
@@ -104,9 +114,8 @@ class _CircleViewState extends State<CircleView> with SingleTickerProviderStateM
                           fontSize: 18.sp,
                           fontWeight: FontWeight.bold,
                         ),
-                        unselectedLabelStyle: theme.textTheme.titleMedium?.copyWith(
-                          fontSize: 18.sp,
-                        ),
+                        unselectedLabelStyle: theme.textTheme.titleMedium
+                            ?.copyWith(fontSize: 18.sp),
                         tabs: const [
                           Tab(text: "Everyone"),
                           Tab(text: "Friends"),
@@ -114,7 +123,10 @@ class _CircleViewState extends State<CircleView> with SingleTickerProviderStateM
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 12.w,
+                        vertical: 6.h,
+                      ),
                       decoration: BoxDecoration(
                         color: AppColors.whiteColor.withOpacity(0.05),
                         borderRadius: BorderRadius.circular(20.r),
@@ -132,7 +144,7 @@ class _CircleViewState extends State<CircleView> with SingleTickerProviderStateM
                           SvgPicture.asset(
                             AppAssets.group,
                             colorFilter: const ColorFilter.mode(
-                              AppColors.secondaryColorLight, 
+                              AppColors.secondaryColorLight,
                               BlendMode.srcIn,
                             ),
                             width: 16.r,
@@ -143,7 +155,7 @@ class _CircleViewState extends State<CircleView> with SingleTickerProviderStateM
                   ],
                 ),
               ),
-              
+
               Expanded(
                 child: TabBarView(
                   controller: _tabController,
@@ -177,12 +189,12 @@ class _PostsList extends StatelessWidget {
       builder: (context, controller, child) {
         if (controller.isLoading) {
           return ListView.builder(
-            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
             itemCount: 3,
             itemBuilder: (context, index) => const _PostShimmer(),
           );
         }
-        
+
         if (controller.posts.isEmpty) {
           return Center(
             child: Text(
@@ -192,17 +204,148 @@ class _PostsList extends StatelessWidget {
           );
         }
 
+        // We insert SuggestionsSection after the 2nd post (index 1)
+        // If there are 2 or more posts, itemCount increases by 1
+        final bool showSuggestions = controller.posts.length >= 2;
+        final int itemCount = showSuggestions
+            ? controller.posts.length + 1
+            : controller.posts.length;
+
         return ListView.builder(
-          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
-          itemCount: controller.posts.length,
+          padding: EdgeInsets.symmetric(vertical: 16.h),
+          itemCount: itemCount,
           itemBuilder: (context, index) {
+            // Index 2 is where we show suggestions (after 0 and 1)
+            if (showSuggestions && index == 2) {
+              return const _SuggestionsSection();
+            }
+
+            // Map the current index to the correct post index
+            final int postIndex = (showSuggestions && index > 2)
+                ? index - 1
+                : index;
+
             return Padding(
-              padding: EdgeInsets.only(bottom: 16.h),
-              child: CirclePostCard(post: controller.posts[index]),
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+              child: CirclePostCard(post: controller.posts[postIndex]),
             );
           },
         );
       },
+    );
+  }
+}
+
+class _SuggestionsSection extends StatelessWidget {
+  const _SuggestionsSection();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Suggestions",
+                style: theme.textTheme.titleMedium?.copyWith(
+                  color: AppColors.whiteColor.withOpacity(0.9),
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              Text(
+                "View All",
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: AppColors.secondaryColorLight,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: 150.h,
+          child: Consumer<CircleController>(
+            builder: (context, controller, child) {
+              return ListView.builder(
+                padding: EdgeInsets.only(left: 16.w, right: 8.w),
+                scrollDirection: Axis.horizontal,
+                itemCount: controller.members.length,
+                itemBuilder: (context, index) {
+                  return _SuggestionCard(suggestion: controller.members[index]);
+                },
+              );
+            },
+          ),
+        ),
+        SizedBox(height: 16.h),
+      ],
+    );
+  }
+}
+
+class _SuggestionCard extends StatelessWidget {
+  final SuggestionModel suggestion;
+  const _SuggestionCard({required this.suggestion});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Container(
+      width: 125.w,
+      margin: EdgeInsets.only(right: 8.w),
+      padding: EdgeInsets.fromLTRB(8.w, 11.h, 8.w, 9.h),
+      decoration: BoxDecoration(
+        color: AppColors
+            .postCardColor, // Dark green background matching the design
+        borderRadius: BorderRadius.circular(10.r),
+        border: Border.all(color: AppColors.whiteColor.withOpacity(0.05)),
+      ),
+      child: Column(
+        children: [
+          SizedBox(
+            width: 55.04.w,
+            height: 56.h,
+            child: CircleAvatar(
+              radius: 35.r,
+              backgroundImage: NetworkImage(suggestion.avatar),
+              backgroundColor: AppColors.whiteColor.withOpacity(0.1),
+            ),
+          ),
+          SizedBox(height: 5.h),
+          Text(
+            suggestion.name,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: AppColors.whiteColor,
+              fontWeight: FontWeight.bold,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          Text(
+            "${suggestion.mutualFriends} mutual Friend",
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: AppColors.whiteColor.withOpacity(0.5),
+            ),
+          ),
+          const Spacer(),
+          CustomButton(
+            onPress: () async {},
+            title: "Add Friend",
+            fontWeight: FontWeight.w400,
+            linearGradient: true,
+            height: 23.h,
+            borderColor: AppColors.postCardColor,
+            radius: 4.r,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -213,7 +356,7 @@ class _PostShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 16.h),
+      padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
       child: Container(
         padding: EdgeInsets.all(16.r),
         decoration: BoxDecoration(
@@ -230,7 +373,11 @@ class _PostShimmer extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ShimmerLoader(width: 100.w, height: 12.h, borderRadius: 4.r),
+                    ShimmerLoader(
+                      width: 100.w,
+                      height: 12.h,
+                      borderRadius: 4.r,
+                    ),
                     SizedBox(height: 6.h),
                     ShimmerLoader(width: 60.w, height: 10.h, borderRadius: 4.r),
                   ],
@@ -238,11 +385,19 @@ class _PostShimmer extends StatelessWidget {
               ],
             ),
             SizedBox(height: 16.h),
-            ShimmerLoader(width: double.infinity, height: 14.h, borderRadius: 4.r),
+            ShimmerLoader(
+              width: double.infinity,
+              height: 14.h,
+              borderRadius: 4.r,
+            ),
             SizedBox(height: 8.h),
             ShimmerLoader(width: 200.w, height: 14.h, borderRadius: 4.r),
             SizedBox(height: 16.h),
-            ShimmerLoader(width: double.infinity, height: 150.h, borderRadius: 12.r),
+            ShimmerLoader(
+              width: double.infinity,
+              height: 150.h,
+              borderRadius: 12.r,
+            ),
           ],
         ),
       ),

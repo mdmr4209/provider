@@ -18,11 +18,11 @@ class CircleMemberList extends StatelessWidget {
           return SizedBox(
             height: 100.h,
             child: ListView.builder(
-              padding: EdgeInsets.symmetric(horizontal: 24.w),
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
               scrollDirection: Axis.horizontal,
               itemCount: 5,
               itemBuilder: (context, index) => Padding(
-                padding: EdgeInsets.only(right: 16.w),
+                padding: EdgeInsets.only(right: 12.w),
                 child: Column(
                   children: [
                     ShimmerLoader(
@@ -46,7 +46,7 @@ class CircleMemberList extends StatelessWidget {
         return SizedBox(
           height: 100.h,
           child: ListView.builder(
-            padding: EdgeInsets.symmetric(horizontal: 24.w),
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
             scrollDirection: Axis.horizontal,
             itemCount: controller.members.length,
             itemBuilder: (context, index) {
@@ -54,7 +54,7 @@ class CircleMemberList extends StatelessWidget {
               final bool isFirst = index == 0;
               
               return Padding(
-                padding: EdgeInsets.only(right: 16.w),
+                padding: EdgeInsets.only(right: 12.w),
                 child: Column(
                   children: [
                     Container(

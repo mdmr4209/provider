@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../features/auth/controllers/auth_controller.dart';
-import '../features/cart/controllers/cart_controller.dart';
 import '../features/circle/controllers/circle_controller.dart';
 import '../features/home/controllers/home_controller.dart';
 import '../features/localization/controllers/localization_controller.dart';
@@ -17,7 +16,6 @@ Widget appProviders({required Widget child}) {
       ChangeNotifierProvider(create: (_) => AuthController()),
       ChangeNotifierProvider(create: (_) => HomeController()),
       ChangeNotifierProvider(create: (_) => ProfileController()),
-      ChangeNotifierProvider(create: (_) => CartController()),
       ChangeNotifierProvider(create: (_) => ThemeController()),
       ChangeNotifierProvider(create: (_) => LocalizationController()),
       ChangeNotifierProvider(create: (_) => CircleController()),

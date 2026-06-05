@@ -29,26 +29,24 @@ class CustomDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final dialogTheme = theme.dialogTheme;
+
     return Dialog(
-      backgroundColor: AppColors.defaultColor,
+      backgroundColor: dialogTheme.backgroundColor,
       insetPadding: EdgeInsets.symmetric(horizontal: 24.w),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24.r),
-        side: BorderSide(
-          color: const Color(0xFFD4AF37).withOpacity(0.4),
-          width: 1.5,
-        ),
-      ),
+      shape: dialogTheme.shape,
+      surfaceTintColor: dialogTheme.surfaceTintColor,
       child: Container(
         padding: EdgeInsets.all(24.r),
         decoration: BoxDecoration(
-          color: AppColors.defaultColor,
-          borderRadius: BorderRadius.circular(24.r),
+          color: dialogTheme.backgroundColor,
+          borderRadius: (dialogTheme.shape as RoundedRectangleBorder).borderRadius,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.5),
-              blurRadius: 40,
-              offset: const Offset(0, 15),
+              color: Colors.black.withOpacity(0.4),
+              blurRadius: 30,
+              offset: const Offset(0, 10),
             ),
           ],
         ),
@@ -71,13 +69,7 @@ class CustomDialog extends StatelessWidget {
             Text(
               title,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 22.sp,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Georgia',
-                letterSpacing: 0.5,
-              ),
+              style: dialogTheme.titleTextStyle,
             ),
 
             SizedBox(height: 12.h),
@@ -86,12 +78,7 @@ class CustomDialog extends StatelessWidget {
             Text(
               description,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white.withOpacity(0.85),
-                fontSize: 15.sp,
-                height: 1.5,
-                fontFamily: 'Proxima Nova',
-              ),
+              style: dialogTheme.contentTextStyle,
             ),
 
             SizedBox(height: 32.h),
@@ -122,7 +109,7 @@ class CustomDialog extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12.r),
                     border: Border.all(
-                      color: AppColors.iconColor.withOpacity(0.6),
+                      color: AppColors.iconColor.withOpacity(0.4),
                       width: 1.2,
                     ),
                   ),
@@ -130,7 +117,7 @@ class CustomDialog extends StatelessWidget {
                     secondaryText!,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.95),
+                      color: dialogTheme.contentTextStyle?.color?.withOpacity(0.9),
                       fontSize: 15.sp,
                       fontWeight: FontWeight.w600,
                     ),
@@ -161,8 +148,7 @@ void showAppCustomDialog(
   showDialog(
     context: context,
     barrierDismissible: barrierDismissible,
-    // Solid barrier color using exact color (no alpha) as requested
-    barrierColor: AppColors.defaultColor,
+    barrierColor: Colors.black.withOpacity(0.65),
     builder: (context) => CustomDialog(
       title: title,
       description: description,

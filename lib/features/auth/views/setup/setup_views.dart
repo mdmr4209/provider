@@ -11,6 +11,7 @@ import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/input_text_widget.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_assets.dart';
+import '../../../../core/widgets/custom_dialog.dart';
 import '../../controllers/auth_controller.dart';
 import 'setup_base_view.dart';
 
@@ -409,67 +410,12 @@ class _Setup7ViewState extends State<Setup7View> {
   ];
 
   void _showPopup(BuildContext context) {
-    showGeneralDialog(
-      context: context,
-      barrierDismissible: true,
-      barrierLabel: '',
-      transitionDuration: const Duration(milliseconds: 400),
-      pageBuilder: (context, anim1, anim2) {
-        // Auto dismiss after 5 seconds
-        Timer(const Duration(seconds: 5), () {
-          if (context.mounted) {
-            Navigator.of(context).pop();
-          }
-        });
-
-        return Center(
-          child: Material(
-            color: Colors.transparent,
-            child: Container(
-              width: 323,
-              height: 169,
-              decoration: ShapeDecoration(
-                color: const Color(0xFF20341F),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                shadows: const [
-                  BoxShadow(
-                    color: Color(0x0A1E1E01),
-                    blurRadius: 10,
-                    offset: Offset(0, 0),
-                    spreadRadius: 0,
-                  )
-                ],
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "“Congrats”",
-                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  SizedBox(height: 12.h),
-                  Text(
-                    "On taking this big FIRST\nSTEP and starting No Contact Today 😀",
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-      transitionBuilder: (context, anim1, anim2, child) {
-        return ScaleTransition(
-          scale: anim1,
-          child: FadeTransition(opacity: anim1, child: child),
-        );
-      },
+    showAppCustomDialog(
+      context,
+      title: "“Congrats”",
+      description: "On taking this big FIRST\nSTEP and starting No Contact Today 😀",
+      primaryText: "Continue",
+      onPrimaryTap: () {},
     );
   }
 

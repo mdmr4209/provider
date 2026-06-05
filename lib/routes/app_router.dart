@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../core/theme/design_system.dart';
 import '../features/auth/controllers/auth_controller.dart';
 import '../features/auth/views/auth_view.dart';
 import '../features/auth/views/change_password_view.dart';
@@ -12,12 +13,6 @@ import '../features/auth/views/role_selection_view.dart';
 import '../features/auth/views/name_input_view.dart';
 import '../features/auth/views/splash_screen.dart';
 import '../features/auth/views/setup/setup_views.dart';
-import '../features/cart/views/checkout.dart';
-import '../features/cart/views/confirm_order_view.dart';
-import '../features/cart/views/order_history.dart';
-import '../features/cart/views/order_view.dart';
-import '../features/cart/views/payment_method.dart';
-import '../features/cart/views/shipping_details.dart';
 import '../features/circle/views/circle_view.dart';
 import '../features/home/views/home_view.dart';
 import '../features/home/views/navigation.dart';
@@ -38,7 +33,8 @@ import '../features/profile/views/promo_code_view.dart';
 import '../features/profile/views/settings_view.dart';
 import '../features/profile/views/track_order.dart';
 
-// ── Route name constants ────────────────────────────────────────────────────
+enum TransitionType { fadeThrough, slideHorizontal, slideUp, none }
+
 abstract class AppRoutes {
   static const splash = '/splash';
   static const login = '/login';
@@ -54,33 +50,9 @@ abstract class AppRoutes {
   static const inbox = '/inbox';
   static const onboarding = '/onboarding';
   static const goToHome = '/go-home';
-  static const commentReview = '/comment-review';
-  static const filter = '/filter';
-  static const review = '/review';
-  static const search = '/search';
-  static const wishlist = '/wishlist';
-  static const orderHistory = '/orderHistory';
-  static const paymentMethod = '/paymentMethod';
-  static const address = '/address';
-  static const promoCode = '/promoCode';
-  static const trackOrder = '/trackOrder';
-  static const points = '/points';
-  static const logout = '/logout';
-  static const addCard = '/addCard';
-  static const addAddress = '/addAddress';
-  static const editProfile = '/editProfile';
-  static const order = '/order';
-  static const payment = '/payment';
-  static const shipping = '/shipping';
-  static const profile = '/profile';
-  static const confirm = '/confirm';
-  static const checkout = '/checkout';
-  static const addPromoCodeView = '/addPromoCodeView';
   static const settings = '/settings';
   static const breathing = '/breathing';
   static const writeJournal = '/write-journal';
-
-  // Setup Routes
   static const setup1 = '/setup1';
   static const setup2 = '/setup2';
   static const setup3 = '/setup3';
@@ -95,10 +67,76 @@ abstract class AppRoutes {
   static const setup12 = '/setup12';
   static const setup13 = '/setup13';
   static const setupComplete = '/setup-complete';
+  static const logout = '/logout';
+  static const paymentMethod = '/paymentMethod';
+  static const address = '/address';
+  static const promoCode = '/promoCode';
+  static const trackOrder = '/trackOrder';
+  static const editProfile = '/editProfile';
+  static const addCard = '/addCard';
+  static const addAddress = '/addAddress';
+  static const points = '/points';
+  static const addPromoCodeView = '/addPromoCodeView';
+  static const orderHistory = '/orderHistory';
+  static const wishlist = '/wishlist';
+  static const filter = '/filter';
+  static const search = '/search';
+  static const review = '/review';
+  static const order = '/order';
+  static const checkout = '/checkout';
+  static const shipping = '/shipping';
+  static const payment = '/payment';
+  static const confirm = '/confirm';
+  static const profile = '/profile';
 }
 
-// ── Router factory ──────────────────────────────────────────────────────────
 class AppRouter {
+  static CustomTransitionPage _buildPageWithTransition({
+    required BuildContext context,
+    required GoRouterState state,
+    required Widget child,
+    TransitionType type = TransitionType.fadeThrough,
+  }) {
+    final designSystem = Theme.of(context).extension<AppDesignSystem>();
+    final duration = designSystem?.navDuration ?? const Duration(milliseconds: 400);
+
+    return CustomTransitionPage(
+      key: state.pageKey,
+      child: child,
+      transitionDuration: duration,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        switch (type) {
+          case TransitionType.fadeThrough:
+            return FadeTransition(
+              opacity: animation,
+              child: ScaleTransition(
+                scale: Tween<double>(begin: 0.98, end: 1.0).animate(animation),
+                child: child,
+              ),
+            );
+          case TransitionType.slideHorizontal:
+            return SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(1.0, 0.0),
+                end: Offset.zero,
+              ).animate(CurvedAnimation(parent: animation, curve: Curves.easeInOut)),
+              child: child,
+            );
+          case TransitionType.slideUp:
+            return SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(0.0, 1.0),
+                end: Offset.zero,
+              ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)),
+              child: child,
+            );
+          case TransitionType.none:
+            return child;
+        }
+      },
+    );
+  }
+
   static GoRouter create(
     AuthController auth,
     OnboardingController onboard,
@@ -108,338 +146,90 @@ class AppRouter {
       navigatorKey: navigatorKey,
       initialLocation: AppRoutes.splash,
       refreshListenable: Listenable.merge([auth, onboard]),
-      debugLogDiagnostics: true,
-
       redirect: (context, state) {
         if (onboard.isLoading || auth.isCheckingToken) return null;
-
         final bool hasOnboarded = onboard.hasCompletedOnboarding;
         final bool isLoggedIn = auth.isLoggedIn;
         final String loc = state.matchedLocation;
 
-        // Always allow splash screen
-        if (loc == AppRoutes.splash) {
-          return null;
-        }
+        if (loc == AppRoutes.splash) return null;
+        if (!hasOnboarded && loc != AppRoutes.onboarding) return AppRoutes.onboarding;
+        if (hasOnboarded && loc == AppRoutes.onboarding) return isLoggedIn ? AppRoutes.home : AppRoutes.login;
 
-        if (!hasOnboarded && loc != AppRoutes.onboarding) {
-          return AppRoutes.onboarding;
-        }
+        final bool isPublicOnlyScreen = loc == AppRoutes.login || loc == AppRoutes.signup || loc == AppRoutes.forgetPass;
+        if (isLoggedIn && isPublicOnlyScreen) return AppRoutes.home;
 
-        if (hasOnboarded && loc == AppRoutes.onboarding) {
-          return isLoggedIn ? AppRoutes.home : AppRoutes.login;
-        }
-
-        final bool isPublicOnlyScreen =
-            loc == AppRoutes.login ||
-            loc == AppRoutes.signup ||
-            loc == AppRoutes.forgetPass;
-
-        if (isLoggedIn && isPublicOnlyScreen) {
-          return AppRoutes.home;
-        }
-
-        final bool isAuthScreen =
-            loc == AppRoutes.home ||
-            loc == AppRoutes.circle ||
-            loc == AppRoutes.coaches ||
-            loc == AppRoutes.inbox ||
-            loc == AppRoutes.roleSelection ||
-            loc == AppRoutes.nameInput ||
-            loc == AppRoutes.profile ||
-            loc == AppRoutes.wishlist ||
-            loc == AppRoutes.search ||
-            loc == AppRoutes.order ||
-            loc == AppRoutes.checkout ||
-            loc == AppRoutes.setupComplete ||
-            loc == AppRoutes.breathing ||
-            loc == AppRoutes.writeJournal ||
-            loc.startsWith('/setup');
-
-        if (!isLoggedIn && isAuthScreen) {
-          return AppRoutes.login;
-        }
+        final bool isAuthScreen = loc == AppRoutes.home || loc == AppRoutes.circle || loc == AppRoutes.profile || loc == AppRoutes.breathing || loc == AppRoutes.writeJournal || loc.startsWith('/setup');
+        if (!isLoggedIn && isAuthScreen) return AppRoutes.login;
 
         return null;
       },
       routes: [
-        // ── Splash Screen ──────────────────────────────────────────────────
         GoRoute(
           path: AppRoutes.splash,
           builder: (context, state) => const SplashScreen(),
         ),
-
         StatefulShellRoute.indexedStack(
-          builder: (context, state, navigationShell) {
-            return Navbar(navigationShell: navigationShell);
-          },
+          builder: (context, state, navigationShell) => Navbar(navigationShell: navigationShell),
           branches: [
-            StatefulShellBranch(
-              routes: [
-                GoRoute(
-                  path: AppRoutes.home,
-                  builder: (context, state) => const HomeView(),
-                ),
-              ],
-            ),
-            StatefulShellBranch(
-              routes: [
-                GoRoute(
-                  path: AppRoutes.circle,
-                  builder: (context, state) => const CircleView(),
-                ),
-              ],
-            ),
-            StatefulShellBranch(
-              routes: [
-                GoRoute(
-                  path: AppRoutes.coaches,
-                  builder: (context, state) => const Center(child: Text('Coaches Screen')),
-                ),
-              ],
-            ),
-            StatefulShellBranch(
-              routes: [
-                GoRoute(
-                  path: AppRoutes.inbox,
-                  builder: (context, state) => const Center(child: Text('Inbox Screen')),
-                ),
-              ],
-            ),
-            StatefulShellBranch(
-              routes: [
-                GoRoute(
-                  path: AppRoutes.profile,
-                  builder: (context, state) => const ProfileView(),
-                ),
-              ],
-            ),
+            StatefulShellBranch(routes: [GoRoute(path: AppRoutes.home, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const HomeView()))]),
+            StatefulShellBranch(routes: [GoRoute(path: AppRoutes.circle, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const CircleView()))]),
+            StatefulShellBranch(routes: [GoRoute(path: AppRoutes.coaches, builder: (context, state) => const Center(child: Text('Coaches')))]),
+            StatefulShellBranch(routes: [GoRoute(path: AppRoutes.inbox, builder: (context, state) => const Center(child: Text('Inbox')))]),
+            StatefulShellBranch(routes: [GoRoute(path: AppRoutes.profile, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const ProfileView()))]),
           ],
         ),
+        GoRoute(path: AppRoutes.onboarding, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const OnboardingView())),
+        GoRoute(path: AppRoutes.login, name: 'login', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const AuthView())),
+        GoRoute(path: AppRoutes.signup, name: 'signup', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const SignUpView())),
+        GoRoute(path: AppRoutes.roleSelection, name: 'roleSelection', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const RoleSelectionView())),
+        GoRoute(path: AppRoutes.nameInput, name: 'nameInput', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: NameInputView(role: state.extra as String? ?? 'User'))),
 
-        GoRoute(
-          path: AppRoutes.onboarding,
-          builder: (context, state) => const OnboardingView(),
-        ),
+        // Setup Flow (Horizontal Slides)
+        GoRoute(path: AppRoutes.setup1, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const Setup1View(), type: TransitionType.slideHorizontal)),
+        GoRoute(path: AppRoutes.setup2, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const Setup2View(), type: TransitionType.slideHorizontal)),
+        GoRoute(path: AppRoutes.setup3, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const Setup3View(), type: TransitionType.slideHorizontal)),
+        GoRoute(path: AppRoutes.setup4, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const Setup4View(), type: TransitionType.slideHorizontal)),
+        GoRoute(path: AppRoutes.setup5, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const Setup5View(), type: TransitionType.slideHorizontal)),
+        GoRoute(path: AppRoutes.setup6, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const Setup6View(), type: TransitionType.slideHorizontal)),
+        GoRoute(path: AppRoutes.setup7, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const Setup7View(), type: TransitionType.slideHorizontal)),
+        GoRoute(path: AppRoutes.setup8, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const Setup8View(), type: TransitionType.slideHorizontal)),
+        GoRoute(path: AppRoutes.setup9, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const Setup9View(), type: TransitionType.slideHorizontal)),
+        GoRoute(path: AppRoutes.setup10, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const Setup10View(), type: TransitionType.slideHorizontal)),
+        GoRoute(path: AppRoutes.setup11, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const Setup11View(), type: TransitionType.slideHorizontal)),
+        GoRoute(path: AppRoutes.setup12, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const Setup12View(), type: TransitionType.slideHorizontal)),
+        GoRoute(path: AppRoutes.setup13, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const Setup13View(), type: TransitionType.slideHorizontal)),
+        GoRoute(path: AppRoutes.setupComplete, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const SetupCompleteView())),
 
-        // ── Auth ──────────────────────────────────────────────────────────────
-        GoRoute(
-          path: AppRoutes.login,
-          name: 'login',
-          pageBuilder: (_, __) => const NoTransitionPage(child: AuthView()),
-        ),
-        GoRoute(
-          path: AppRoutes.signup,
-          name: 'signup',
-          pageBuilder: (_, __) => const MaterialPage(child: SignUpView()),
-        ),
-        GoRoute(
-          path: AppRoutes.roleSelection,
-          name: 'roleSelection',
-          pageBuilder: (_, __) =>
-              const MaterialPage(child: RoleSelectionView()),
-        ),
-        GoRoute(
-          path: AppRoutes.nameInput,
-          name: 'nameInput',
-          pageBuilder: (_, state) => MaterialPage(
-            child: NameInputView(role: state.extra as String? ?? 'User'),
-          ),
-        ),
+        GoRoute(path: AppRoutes.forgetPass, name: 'forgetPassword', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const ForgetPasswordView())),
+        GoRoute(path: AppRoutes.otpVerify, name: 'otpVerify', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: OtpVerifyView(origin: state.extra as String?))),
+        GoRoute(path: AppRoutes.changePass, name: 'changePassword', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const ChangePasswordView())),
+        GoRoute(path: AppRoutes.goToHome, name: 'goToHome', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: GoToHome(origin: state.extra as String?))),
 
-        // Setup Routes
-        GoRoute(
-          path: AppRoutes.setup1,
-          builder: (context, state) => const Setup1View(),
-        ),
-        GoRoute(
-          path: AppRoutes.setup2,
-          builder: (context, state) => const Setup2View(),
-        ),
-        GoRoute(
-          path: AppRoutes.setup3,
-          builder: (context, state) => const Setup3View(),
-        ),
-        GoRoute(
-          path: AppRoutes.setup4,
-          builder: (context, state) => const Setup4View(),
-        ),
-        GoRoute(
-          path: AppRoutes.setup5,
-          builder: (context, state) => const Setup5View(),
-        ),
-        GoRoute(
-          path: AppRoutes.setup6,
-          builder: (context, state) => const Setup6View(),
-        ),
-        GoRoute(
-          path: AppRoutes.setup7,
-          builder: (context, state) => const Setup7View(),
-        ),
-        GoRoute(
-          path: AppRoutes.setup8,
-          builder: (context, state) => const Setup8View(),
-        ),
-        GoRoute(
-          path: AppRoutes.setup9,
-          builder: (context, state) => const Setup9View(),
-        ),
-        GoRoute(
-          path: AppRoutes.setup10,
-          builder: (context, state) => const Setup10View(),
-        ),
-        GoRoute(
-          path: AppRoutes.setup11,
-          builder: (context, state) => const Setup11View(),
-        ),
-        GoRoute(
-          path: AppRoutes.setup12,
-          builder: (context, state) => const Setup12View(),
-        ),
-        GoRoute(
-          path: AppRoutes.setup13,
-          builder: (context, state) => const Setup13View(),
-        ),
-        GoRoute(
-          path: AppRoutes.setupComplete,
-          builder: (context, state) => const SetupCompleteView(),
-        ),
+        GoRoute(path: AppRoutes.logout, name: 'logout', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const Logout())),
+        GoRoute(path: AppRoutes.paymentMethod, name: 'paymentMethod', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const PaymentView())),
+        GoRoute(path: AppRoutes.address, name: 'address', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const MyAddress())),
+        GoRoute(path: AppRoutes.promoCode, name: 'promoCode', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const PromoCodeView())),
+        GoRoute(path: AppRoutes.trackOrder, name: 'trackOrder', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const TrackOrder())),
+        GoRoute(path: AppRoutes.editProfile, name: 'editProfile', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const EditView())),
+        GoRoute(path: AppRoutes.addCard, name: 'addCard', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const AddNewCardView())),
+        GoRoute(path: AppRoutes.addAddress, name: 'addAddress', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const AddNewAddress())),
+        GoRoute(path: AppRoutes.points, name: 'points', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const PointView())),
+        GoRoute(path: AppRoutes.addPromoCodeView, name: 'addPromoCodeView', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const AddPromoCodeView())),
+        GoRoute(path: AppRoutes.settings, name: 'settings', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const SettingsView())),
 
-        GoRoute(
-          path: AppRoutes.forgetPass,
-          name: 'forgetPassword',
-          pageBuilder: (_, __) =>
-              const MaterialPage(child: ForgetPasswordView()),
-        ),
-        GoRoute(
-          path: AppRoutes.otpVerify,
-          name: 'otpVerify',
-          pageBuilder: (_, state) => MaterialPage(
-            child: OtpVerifyView(origin: state.extra as String?),
-          ),
-        ),
-        GoRoute(
-          path: AppRoutes.changePass,
-          name: 'changePassword',
-          pageBuilder: (_, state) => MaterialPage(child: ChangePasswordView()),
-        ),
-        GoRoute(
-          path: AppRoutes.goToHome,
-          name: 'goToHome',
-          pageBuilder: (_, state) =>
-              MaterialPage(child: GoToHome(origin: state.extra as String?)),
-        ),
-
-        // ── Protected ─────────────────────────────────────────────────────────
-        GoRoute(
-          path: AppRoutes.logout,
-          name: 'logout',
-          pageBuilder: (_, __) => const MaterialPage(child: Logout()),
-        ),
-        GoRoute(
-          path: AppRoutes.orderHistory,
-          name: 'orderHistory',
-          pageBuilder: (_, __) => const MaterialPage(child: OrderHistory()),
-        ),
-        GoRoute(
-          path: AppRoutes.paymentMethod,
-          name: 'paymentMethod',
-          pageBuilder: (_, __) => const MaterialPage(child: PaymentView()),
-        ),
-        GoRoute(
-          path: AppRoutes.address,
-          name: 'address',
-          pageBuilder: (_, __) => const MaterialPage(child: MyAddress()),
-        ),
-        GoRoute(
-          path: AppRoutes.promoCode,
-          name: 'promoCode',
-          pageBuilder: (_, __) => const MaterialPage(child: PromoCodeView()),
-        ),
-        GoRoute(
-          path: AppRoutes.trackOrder,
-          name: 'trackOrder',
-          pageBuilder: (_, __) => const MaterialPage(child: TrackOrder()),
-        ),
-        GoRoute(
-          path: AppRoutes.editProfile,
-          name: 'editProfile',
-          pageBuilder: (_, __) => const MaterialPage(child: EditView()),
-        ),
-        GoRoute(
-          path: AppRoutes.addCard,
-          name: 'addCard',
-          pageBuilder: (_, __) => const MaterialPage(child: AddNewCardView()),
-        ),
-        GoRoute(
-          path: AppRoutes.addAddress,
-          name: 'addAddress',
-          pageBuilder: (_, __) => const MaterialPage(child: AddNewAddress()),
-        ),
-        GoRoute(
-          path: AppRoutes.points,
-          name: 'points',
-          pageBuilder: (_, __) => const MaterialPage(child: PointView()),
-        ),
-        GoRoute(
-          path: AppRoutes.payment,
-          name: 'payment',
-          pageBuilder: (_, __) =>
-              const MaterialPage(child: PaymentMethodScreen()),
-        ),
-        GoRoute(
-          path: AppRoutes.shipping,
-          name: 'shipping',
-          pageBuilder: (_, __) =>
-              const MaterialPage(child: ShippingDetailsScreen()),
-        ),
-        GoRoute(
-          path: AppRoutes.checkout,
-          name: 'checkout',
-          pageBuilder: (_, __) => const MaterialPage(child: CheckoutScreen()),
-        ),
-        GoRoute(
-          path: AppRoutes.addPromoCodeView,
-          name: 'addPromoCodeView',
-          pageBuilder: (_, __) => const MaterialPage(child: AddPromoCodeView()),
-        ),
-        GoRoute(
-          path: AppRoutes.settings,
-          name: 'settings',
-          pageBuilder: (_, __) => const MaterialPage(child: SettingsView()),
-        ),
-        GoRoute(
-          path: AppRoutes.confirm,
-          name: 'confirm',
-          pageBuilder: (_, state) => MaterialPage(
-            child: ConfirmOrderView(origin: state.extra as bool?),
-          ),
-        ),
+        // Special Views (Slide Up)
         GoRoute(
           path: AppRoutes.breathing,
           name: 'breathing',
           pageBuilder: (context, state) {
-            final Map<String, dynamic> extras =
-                state.extra as Map<String, dynamic>? ?? {};
-            return MaterialPage(
-              child: BreathingView(
-                title: extras['title'] ?? 'Take a Breath',
-                subtitle: extras['subtitle'] ?? 'Let\'s breathe together.',
-              ),
-            );
+            final extras = state.extra as Map<String, dynamic>? ?? {};
+            return _buildPageWithTransition(context: context, state: state, child: BreathingView(title: extras['title'] ?? 'Take a Breath', subtitle: extras['subtitle'] ?? 'Let\'s breathe together.'), type: TransitionType.slideUp);
           },
         ),
-        GoRoute(
-          path: AppRoutes.writeJournal,
-          builder: (context, state) => const WriteJournalView(),
-        ),
+        GoRoute(path: AppRoutes.writeJournal, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const WriteJournalView(), type: TransitionType.slideUp)),
       ],
-
-      errorPageBuilder: (_, state) => MaterialPage(
-        child: Scaffold(
-          body: Center(child: Text('Page not found: ${state.error}')),
-        ),
-      ),
+      errorPageBuilder: (context, state) => MaterialPage(child: Scaffold(body: Center(child: Text('Page not found: ${state.error}')))),
     );
   }
 }

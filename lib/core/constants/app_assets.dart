@@ -55,30 +55,30 @@ class AppAssets {
 
 
   // ── Circle flow, Group , Friends connection───────────────────────────────────────────────────────────
-  static const String anno = 'assets/image/anno.svg';
-  static const String block = 'assets/image/block.svg';
-  static const String clap = 'assets/image/clap.svg';
-  static const String comment = 'assets/image/comment.svg';
-  static const String delete = 'assets/image/delete.svg';
-  static const String edit = 'assets/image/edit.svg';
-  static const String freeGroup = 'assets/image/freeGroup.svg';
-  static const String group = 'assets/image/group.svg';
-  static const String image = 'assets/image/image.svg';
-  static const String invite = 'assets/image/invite.svg';
-  static const String leave = 'assets/image/leave.svg';
-  static const String like = 'assets/image/like.svg';
-  static const String menu = 'assets/image/menu.svg';
-  static const String play = 'assets/image/play.svg';
-  static const String remove = 'assets/image/remove.svg';
-  static const String reportMenu = 'assets/image/reportMenu.svg';
-  static const String search = 'assets/image/search.svg';
-  static const String see = 'assets/image/see.svg';
-  static const String send = 'assets/image/send.svg';
-  static const String shareMenu = 'assets/image/shareMenu.svg';
-  static const String unfollow = 'assets/image/unfollow.svg';
-  static const String unlock = 'assets/image/unlock.svg';
-  static const String video = 'assets/image/video.svg';
-  static const String view = 'assets/image/view.svg';
-  // static const String  = 'assets/image/.svg';
+  static const String anno = 'assets/icons/anno.svg';
+  static const String block = 'assets/icons/block.svg';
+  static const String clap = 'assets/icons/clap.svg';
+  static const String comment = 'assets/icons/comment.svg';
+  static const String delete = 'assets/icons/delete.svg';
+  static const String edit = 'assets/icons/edit.svg';
+  static const String freeGroup = 'assets/icons/freeGroup.svg';
+  static const String group = 'assets/icons/group.svg';
+  static const String image = 'assets/icons/image.svg';
+  static const String invite = 'assets/icons/invite.svg';
+  static const String leave = 'assets/icons/leave.svg';
+  static const String like = 'assets/icons/like.svg';
+  static const String menu = 'assets/icons/menu.svg';
+  static const String play = 'assets/icons/play.svg';
+  static const String remove = 'assets/icons/remove.svg';
+  static const String reportMenu = 'assets/icons/reportMenu.svg';
+  static const String search = 'assets/icons/search.svg';
+  static const String see = 'assets/icons/see.svg';
+  static const String send = 'assets/icons/send.svg';
+  static const String shareMenu = 'assets/icons/share.png';
+  static const String unfollow = 'assets/icons/unfollow.svg';
+  static const String unlock = 'assets/icons/unlock.svg';
+  static const String video = 'assets/icons/video.svg';
+  static const String view = 'assets/icons/view.svg';
+  // static const String  = 'assets/icons/.svg';
 
 }

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../constants/app_colors.dart';
+import '../theme/design_system.dart';
 
 class CustomButton extends StatelessWidget {
   const CustomButton({
@@ -81,6 +82,7 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final designSystem = theme.extension<AppDesignSystem>();
     final buttonStyle = theme.elevatedButtonTheme.style;
 
     // Resolve colors from theme if they are defaults
@@ -92,6 +94,16 @@ class CustomButton extends StatelessWidget {
         : textColor;
     final effectiveIconColor = iconColor ?? effectiveTextColor;
 
+    // Determine Gradient
+    final Gradient? effectiveGradient = linearGradient
+        ? (designSystem?.primaryGradient ??
+            LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [buttonColor, buttonColor1, buttonColor],
+            ))
+        : null;
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -101,26 +113,21 @@ class CustomButton extends StatelessWidget {
           height: height.h,
           width: width.w,
           decoration: ShapeDecoration(
-            color: linearGradient ? null : effectiveButtonColor,
-            gradient: linearGradient
-                ? LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [buttonColor, buttonColor1, buttonColor],
-                  )
-                : null,
+            color: effectiveGradient == null ? effectiveButtonColor : null,
+            gradient: effectiveGradient,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(radius.r),
               side: BorderSide(color: borderColor, width: 1.w),
             ),
             shadows: [
               if (borderShadowColor != Colors.transparent)
-                BoxShadow(
-                  color: borderShadowColor,
-                  blurRadius: 12,
-                  offset: Offset(0, 12),
-                  spreadRadius: 0,
-                ),
+                designSystem?.softShadow ??
+                    BoxShadow(
+                      color: borderShadowColor,
+                      blurRadius: 12,
+                      offset: const Offset(0, 12),
+                      spreadRadius: 0,
+                    ),
             ],
           ),
           child: Padding(
@@ -191,9 +198,9 @@ class CustomButton extends StatelessWidget {
             fontFamily: fontFamily,
             shadows: [
               Shadow(
-                offset: Offset(0, 0),
+                offset: const Offset(0, 0),
                 blurRadius: 5,
-                color: Color(0xFF000000).withOpacity(0.91),
+                color: const Color(0xFF000000).withAlpha(232),
               ),
             ],
           ),

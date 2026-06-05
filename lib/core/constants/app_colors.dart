@@ -33,6 +33,8 @@ class AppColors {
 
   static const Color whiteColor = Color(0xFFFFFFFF);
   static const Color defaultColorAlpha = Color(0xFF334931);
+  static const Color postCardColor = Color(0xFF20311D);
+  static const Color commentCardColor = Color(0xFF263923);
   static const Color blackColor = Color(0xFF000000);
   static const Color redColor = Color(0xFFFF0000);
   static const Color greenColor = Color(0xFF00824B);

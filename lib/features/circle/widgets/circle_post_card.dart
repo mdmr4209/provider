@@ -21,12 +21,11 @@ class _CirclePostCardState extends State<CirclePostCard> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.whiteColor.withOpacity(0.05),
-        borderRadius: BorderRadius.circular(20.r),
-        border: Border.all(color: AppColors.whiteColor.withOpacity(0.05)),
+        color: AppColors.postCardColor,
+        borderRadius: BorderRadius.circular(8.r),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,21 +38,28 @@ class _CirclePostCardState extends State<CirclePostCard> {
               children: [
                 // Header: Avatar, Name, Time, More
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.secondaryColorLight.withOpacity(0.3), width: 1.r),
+                        border: Border.all(
+                          color: AppColors.secondaryColorLight.withOpacity(0.3),
+                          width: 1.r,
+                        ),
                       ),
                       child: CircleAvatar(
                         radius: 20.r,
                         backgroundColor: AppColors.whiteColor.withOpacity(0.1),
-                        backgroundImage: widget.post.userAvatar.isNotEmpty 
-                          ? NetworkImage(widget.post.userAvatar) 
-                          : null,
-                        child: widget.post.userAvatar.isEmpty 
-                          ? Text(widget.post.userName[0], style: TextStyle(fontSize: 14.sp)) 
-                          : null,
+                        backgroundImage: widget.post.userAvatar.isNotEmpty
+                            ? NetworkImage(widget.post.userAvatar)
+                            : null,
+                        child: widget.post.userAvatar.isEmpty
+                            ? Text(
+                                widget.post.userName[0],
+                                style: TextStyle(fontSize: 14.sp),
+                              )
+                            : null,
                       ),
                     ),
                     SizedBox(width: 12.w),
@@ -79,16 +85,18 @@ class _CirclePostCardState extends State<CirclePostCard> {
                         ],
                       ),
                     ),
-                    IconButton(
-                      icon: Icon(Icons.more_horiz, color: AppColors.whiteColor.withOpacity(0.6), size: 24.r),
-                      onPressed: () {},
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
+                    InkWell(
+                      child: SvgPicture.asset(
+                        AppAssets.menu,
+                        height: 16.r,
+                        width: 16.r,
+                      ),
+                      onTap: () {},
                     ),
                   ],
                 ),
                 SizedBox(height: 16.h),
-                
+
                 // Content Text
                 Text(
                   widget.post.content,
@@ -98,15 +106,16 @@ class _CirclePostCardState extends State<CirclePostCard> {
                     height: 1.5,
                   ),
                 ),
-                
+
                 // Image/Video Grid
-                if (widget.post.images != null && widget.post.images!.isNotEmpty) ...[
+                if (widget.post.images != null &&
+                    widget.post.images!.isNotEmpty) ...[
                   SizedBox(height: 12.h),
                   _buildImageGrid(widget.post.images!),
                 ],
-                
+
                 SizedBox(height: 16.h),
-                
+
                 // Action Buttons Footer: Like, Comment, Share
                 Row(
                   children: [
@@ -129,19 +138,16 @@ class _CirclePostCardState extends State<CirclePostCard> {
                     InkWell(
                       onTap: () {},
                       child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          SvgPicture.asset(
-                            AppAssets.shareMenu,
-                            width: 18.r,
-                            colorFilter: const ColorFilter.mode(
-                                AppColors.iconColor, BlendMode.srcIn),
-                          ),
+                          Image.asset(AppAssets.shareMenu, width: 14.r),
                           SizedBox(width: 8.w),
                           Text(
                             "Share",
                             style: theme.textTheme.bodyMedium?.copyWith(
                               color: AppColors.whiteColor,
-                              fontSize: 14.sp,
                             ),
                           ),
                         ],
@@ -158,8 +164,10 @@ class _CirclePostCardState extends State<CirclePostCard> {
             Container(
               padding: EdgeInsets.all(16.r),
               decoration: BoxDecoration(
-                color: AppColors.blackColor.withOpacity(0.2),
-                borderRadius: BorderRadius.vertical(bottom: Radius.circular(20.r)),
+                color: AppColors.commentCardColor,
+                borderRadius: BorderRadius.vertical(
+                  bottom: Radius.circular(12.r),
+                ),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -169,56 +177,62 @@ class _CirclePostCardState extends State<CirclePostCard> {
                     onTap: () => setState(() => _isExpanded = false),
                     child: Row(
                       children: [
-                        Icon(Icons.arrow_back_ios,
-                            size: 14.sp, color: AppColors.whiteColor.withOpacity(0.6)),
+                        Icon(
+                          Icons.arrow_back_ios,
+                          size: 10.sp,
+                          color: AppColors.whiteColor.withOpacity(0.8),
+                        ),
                         SizedBox(width: 4.w),
                         Text(
                           "Comments",
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: AppColors.whiteColor.withOpacity(0.6),
-                            fontSize: 14.sp,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: AppColors.whiteColor.withOpacity(0.8),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(height: 20.h),
-                  
+                  SizedBox(height: 12.h),
+
                   // Render Comment Items
                   if (widget.post.comments != null)
-                    ...widget.post.comments!
-                        .map((comment) => _buildCommentItem(comment, theme)),
-                  
-                  SizedBox(height: 16.h),
+                    ...widget.post.comments!.map(
+                      (comment) => _buildCommentItem(comment, theme),
+                    ),
                   Text(
                     "Write comment",
-                    style: theme.textTheme.titleSmall?.copyWith(
+                    style: theme.textTheme.bodySmall?.copyWith(
                       color: AppColors.whiteColor,
-                      fontSize: 14.sp,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 12.h),
-                  
+                  SizedBox(height: 4.h),
+
                   // Comment Input row
                   Row(
                     children: [
                       Expanded(
                         child: Container(
-                          height: 48.h,
+                          height: 31.h,
                           padding: EdgeInsets.symmetric(horizontal: 16.w),
                           decoration: BoxDecoration(
                             color: AppColors.whiteColor.withOpacity(0.05),
                             borderRadius: BorderRadius.circular(24.r),
                           ),
                           child: TextField(
-                            style: TextStyle(color: AppColors.whiteColor, fontSize: 14.sp),
+                            style: TextStyle(
+                              color: AppColors.whiteColor,
+                              fontSize: 14.sp,
+                            ),
                             decoration: InputDecoration(
                               hintText: "Start typing...",
                               hintStyle: TextStyle(
-                                  color: AppColors.whiteColor.withOpacity(0.3)),
+                                color: AppColors.whiteColor.withOpacity(0.3),
+                              ),
                               border: InputBorder.none,
-                              contentPadding: EdgeInsets.symmetric(vertical: 12.h),
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 8.h,
+                              ),
                             ),
                           ),
                         ),
@@ -236,7 +250,9 @@ class _CirclePostCardState extends State<CirclePostCard> {
                             AppAssets.send,
                             width: 20.r,
                             colorFilter: const ColorFilter.mode(
-                                AppColors.whiteColor, BlendMode.srcIn),
+                              AppColors.whiteColor,
+                              BlendMode.srcIn,
+                            ),
                           ),
                         ),
                       ),
@@ -267,8 +283,8 @@ class _CirclePostCardState extends State<CirclePostCard> {
               borderRadius: 12.r,
             );
           },
-          errorBuilder: (context, error, stackTrace) => 
-            ShimmerLoader(height: 200.h, borderRadius: 12.r),
+          errorBuilder: (context, error, stackTrace) =>
+              ShimmerLoader(height: 200.h, borderRadius: 12.r),
         ),
       );
     }
@@ -293,8 +309,8 @@ class _CirclePostCardState extends State<CirclePostCard> {
                       borderRadius: 12.r,
                     );
                   },
-                  errorBuilder: (context, error, stackTrace) => 
-                    ShimmerLoader(height: 180.h, borderRadius: 12.r),
+                  errorBuilder: (context, error, stackTrace) =>
+                      ShimmerLoader(height: 180.h, borderRadius: 12.r),
                 ),
               ),
               Container(
@@ -303,8 +319,11 @@ class _CirclePostCardState extends State<CirclePostCard> {
                   color: AppColors.whiteColor,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(Icons.play_arrow,
-                    color: AppColors.backgroundColor, size: 20.r),
+                child: Icon(
+                  Icons.play_arrow,
+                  color: AppColors.backgroundColor,
+                  size: 20.r,
+                ),
               ),
             ],
           ),
@@ -326,8 +345,8 @@ class _CirclePostCardState extends State<CirclePostCard> {
                   borderRadius: 12.r,
                 );
               },
-              errorBuilder: (context, error, stackTrace) => 
-                ShimmerLoader(height: 180.h, borderRadius: 12.r),
+              errorBuilder: (context, error, stackTrace) =>
+                  ShimmerLoader(height: 180.h, borderRadius: 12.r),
             ),
           ),
         ),
@@ -337,20 +356,24 @@ class _CirclePostCardState extends State<CirclePostCard> {
 
   Widget _buildCommentItem(CircleComment comment, ThemeData theme) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 16.h),
+      padding: EdgeInsets.only(bottom: 8.h, left: 10.w),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CircleAvatar(
-            radius: 16.r,
-            backgroundImage: NetworkImage(comment.userAvatar),
+          SizedBox(
+            width: 23.85.r,
+            height: 23.85.r,
+            child: CircleAvatar(
+              radius: 16.r,
+              backgroundImage: NetworkImage(comment.userAvatar),
+            ),
           ),
-          SizedBox(width: 12.w),
+          SizedBox(width: 10.w),
           Expanded(
             child: Container(
-              padding: EdgeInsets.all(12.r),
+              padding: EdgeInsets.symmetric(horizontal: 13.w, vertical: 6.h),
               decoration: BoxDecoration(
-                color: AppColors.whiteColor.withOpacity(0.05),
+                color: AppColors.postCardColor,
                 borderRadius: BorderRadius.circular(12.r),
               ),
               child: Column(
@@ -358,18 +381,15 @@ class _CirclePostCardState extends State<CirclePostCard> {
                 children: [
                   Text(
                     comment.userName,
-                    style: theme.textTheme.titleSmall?.copyWith(
+                    style: theme.textTheme.bodyMedium?.copyWith(
                       color: AppColors.whiteColor,
-                      fontSize: 14.sp,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 4.h),
                   Text(
                     comment.content,
-                    style: theme.textTheme.bodyMedium?.copyWith(
+                    style: theme.textTheme.bodySmall?.copyWith(
                       color: AppColors.whiteColor.withOpacity(0.8),
-                      fontSize: 13.sp,
                     ),
                   ),
                 ],
@@ -397,40 +417,33 @@ class _ActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(20.r),
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-        decoration: BoxDecoration(
-          color: AppColors.whiteColor.withOpacity(0.05),
-          borderRadius: BorderRadius.circular(20.r),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              padding: EdgeInsets.all(4.r),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                    color: AppColors.iconColor.withOpacity(0.5)),
-              ),
-              child: SvgPicture.asset(
-                icon,
-                width: 12.r,
-                colorFilter: const ColorFilter.mode(
-                    AppColors.iconColor, BlendMode.srcIn),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 22.r,
+            height: 22.r,
+            padding: EdgeInsets.all(3.r),
+            decoration: BoxDecoration(
+              color: AppColors.whiteColor.withOpacity(0.05),
+              borderRadius: BorderRadius.circular(20.r),
+            ),
+            child: SvgPicture.asset(
+              icon,
+              width: 14.r,
+              colorFilter: const ColorFilter.mode(
+                AppColors.iconColor,
+                BlendMode.srcIn,
               ),
             ),
-            SizedBox(width: 8.w),
-            Text(
-              count.toString(),
-              style: TextStyle(
-                color: AppColors.whiteColor,
-                fontSize: 14.sp,
-              ),
-            ),
-          ],
-        ),
+          ),
+
+          SizedBox(width: 8.w),
+          Text(
+            count.toString(),
+            style: TextStyle(color: AppColors.whiteColor, fontSize: 14.sp),
+          ),
+        ],
       ),
     );
   }
