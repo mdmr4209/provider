@@ -59,7 +59,7 @@ class HomeView extends StatelessWidget {
                             "WELCOME BACK",
                             style: theme.textTheme.bodySmall?.copyWith(
                               fontFamily: 'Georgia',
-                              color: AppColors.whiteColor.withOpacity(0.8),
+                              color: AppColors.whiteColor.withAlpha(204),
                               fontSize: 10.sp,
                             ),
                           ),
@@ -117,7 +117,7 @@ class HomeView extends StatelessWidget {
                                   border: Border.all(
                                     color: const Color(
                                       0xFFCDC175,
-                                    ).withOpacity(0.5),
+                                    ).withAlpha(128),
                                     width: 1.r,
                                   ),
                                   shape: BoxShape.circle,
@@ -125,7 +125,7 @@ class HomeView extends StatelessWidget {
                                     BoxShadow(
                                       color: const Color(
                                         0xFFCDC175,
-                                      ).withOpacity(0.50),
+                                      ).withAlpha(128),
                                       blurRadius: 80,
                                       spreadRadius: 10,
                                     ),
@@ -366,8 +366,8 @@ class HomeView extends StatelessWidget {
                           child: Container(
                             padding: EdgeInsets.all(15.r),
                             decoration: BoxDecoration(
-                              color: AppColors.defaultColorAlpha2.withOpacity(
-                                0.3,
+                              color: AppColors.defaultColorAlpha2.withAlpha(
+                                77,
                               ),
                               borderRadius: BorderRadius.circular(16.r),
                             ),
@@ -411,7 +411,8 @@ class HomeView extends StatelessWidget {
                                   ),
                                 ),
                                 InkWell(
-                                  onTap: () => NavigationService.goToWriteJournal(),
+                                  onTap: () =>
+                                      NavigationService.goToWriteJournal(),
                                   child: Text(
                                     journal?.actionText ?? "Write →",
                                     style: theme.textTheme.bodyMedium?.copyWith(
@@ -452,7 +453,7 @@ class HomeView extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            color: AppColors.textColor.withOpacity(0.7),
+            color: AppColors.textColor.withAlpha(179),
             fontSize: 10.sp,
             fontFamily: 'Georgia',
           ),
@@ -541,10 +542,10 @@ class HomeView extends StatelessWidget {
         width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14.r),
-          gradient: LinearGradient(colors: [color.withOpacity(0.95), color]),
+          gradient: LinearGradient(colors: [color.withAlpha(242), color]),
           boxShadow: [
             BoxShadow(
-              color: color.withOpacity(0.35),
+              color: color.withAlpha(89),
               blurRadius: 16,
               offset: const Offset(0, 8),
             ),

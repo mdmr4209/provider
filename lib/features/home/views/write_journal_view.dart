@@ -34,7 +34,10 @@ class WriteJournalView extends StatelessWidget {
             ), // ── Header ────────────────────────────────────────────────────────
             title: Text(
               "Write Journals",
-              style: textTheme.titleMedium?.copyWith(color: AppColors.whiteColor,fontFamily: 'Georgia'),
+              style: textTheme.titleMedium?.copyWith(
+                color: AppColors.whiteColor,
+                fontFamily: 'Georgia',
+              ),
             ),
             centerTitle: true,
           ),
@@ -44,15 +47,18 @@ class WriteJournalView extends StatelessWidget {
               children: [
                 // ── Journal Input Area ─────────────────────────────────────────────
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16.w,
+                    vertical: 16.h,
+                  ),
                   child: Container(
                     width: double.infinity,
                     height: 245.h,
                     padding: EdgeInsets.all(20.r),
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.3),
+                      color: Colors.black.withAlpha(77),
                       borderRadius: BorderRadius.circular(20.r),
-                      border: Border.all(color: Colors.white.withOpacity(0.05)),
+                      border: Border.all(color: Colors.white.withAlpha(13)),
                     ),
                     child: TextField(
                       controller: homeController.journalController,
@@ -66,7 +72,7 @@ class WriteJournalView extends StatelessWidget {
                       decoration: InputDecoration(
                         hintText: " 🪶  Share Your Thoughts",
                         hintStyle: TextStyle(
-                          color: Colors.white.withOpacity(0.3),
+                          color: Colors.white.withAlpha(77),
                           fontSize: 13.sp,
                         ),
                         border: InputBorder.none,
@@ -76,7 +82,6 @@ class WriteJournalView extends StatelessWidget {
                     ),
                   ),
                 ),
-
 
                 // ── Post Button ────────────────────────────────────────────────────
                 Padding(

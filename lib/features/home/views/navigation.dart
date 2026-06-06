@@ -112,7 +112,7 @@ class _NavbarState extends State<Navbar> {
               borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.blackColor.withOpacity(0.2),
+                  color: AppColors.blackColor.withAlpha(51),
                   blurRadius: 10,
                   offset: const Offset(0, -4),
                 ),
@@ -146,7 +146,7 @@ class _NavbarState extends State<Navbar> {
             child: Material(
               color: Colors.transparent,
               child: Container(
-                color: Colors.black.withOpacity(0.6),
+                color: Colors.black.withAlpha(153),
                 child: Stack(
                   children: [
                     // Dismiss by tapping background

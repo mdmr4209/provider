@@ -1,8 +1,10 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+
 import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/widgets/custom_app_dialog.dart';
@@ -26,7 +28,6 @@ class _BreathingViewState extends State<BreathingView> {
   String _phaseText = "Breathe In";
   Timer? _timer;
   double _progress = 1.0;
-  int _totalSecondsElapsed = 0;
   int _ticksInPhase = 0;
 
   @override
@@ -44,9 +45,7 @@ class _BreathingViewState extends State<BreathingView> {
         _secondsRemaining = 4 - (_ticksInPhase ~/ 10);
         if (_secondsRemaining < 1) _secondsRemaining = 1;
 
-        if (timer.tick % 10 == 0) {
-          _totalSecondsElapsed++;
-        }
+        if (timer.tick % 10 == 0) {}
 
         if (_ticksInPhase >= 40) {
           _ticksInPhase = 0;
@@ -112,7 +111,7 @@ class _BreathingViewState extends State<BreathingView> {
 
     showDialog(
       context: context,
-      barrierColor: AppColors.defaultColor.withOpacity(0.9),
+      barrierColor: AppColors.defaultColor.withAlpha(230),
       builder: (context) => Dialog(
         backgroundColor: Colors.transparent,
         insetPadding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -122,7 +121,7 @@ class _BreathingViewState extends State<BreathingView> {
             color: AppColors.defaultColor,
             borderRadius: BorderRadius.circular(24.r),
             border: Border.all(
-              color: const Color(0xFFD4AF37).withOpacity(0.4),
+              color: const Color(0xFFD4AF37).withAlpha(102),
               width: 1.5,
             ),
           ),
@@ -146,7 +145,7 @@ class _BreathingViewState extends State<BreathingView> {
                 "Sorry you are not feeling any better, what is going on?",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.85),
+                  color: Colors.white.withAlpha(217),
                   fontSize: 14.sp,
                   fontFamily: 'Proxima Nova',
                 ),
@@ -157,9 +156,9 @@ class _BreathingViewState extends State<BreathingView> {
                 style: const TextStyle(color: Colors.white),
                 decoration: InputDecoration(
                   hintText: "Write here",
-                  hintStyle: TextStyle(color: Colors.white.withOpacity(0.4)),
+                  hintStyle: TextStyle(color: Colors.white.withAlpha(102)),
                   filled: true,
-                  fillColor: Colors.black.withOpacity(0.2),
+                  fillColor: Colors.black.withAlpha(51),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.r),
                     borderSide: BorderSide.none,
@@ -186,7 +185,7 @@ class _BreathingViewState extends State<BreathingView> {
   void _showSorrySupportDialog() {
     showDialog(
       context: context,
-      barrierColor: AppColors.defaultColor.withOpacity(0.9),
+      barrierColor: AppColors.defaultColor.withAlpha(230),
       builder: (context) => Dialog(
         backgroundColor: Colors.transparent,
         insetPadding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -196,7 +195,7 @@ class _BreathingViewState extends State<BreathingView> {
             color: AppColors.defaultColor,
             borderRadius: BorderRadius.circular(24.r),
             border: Border.all(
-              color: const Color(0xFFD4AF37).withOpacity(0.4),
+              color: const Color(0xFFD4AF37).withAlpha(102),
               width: 1.5,
             ),
           ),
@@ -220,7 +219,7 @@ class _BreathingViewState extends State<BreathingView> {
                 "Would you like me to redirect you to one of our expert coaches, who can help you?",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.85),
+                  color: Colors.white.withAlpha(217),
                   fontSize: 14.sp,
                   fontFamily: 'Proxima Nova',
                 ),
@@ -237,7 +236,7 @@ class _BreathingViewState extends State<BreathingView> {
                   padding: EdgeInsets.symmetric(vertical: 14.h),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12.r),
-                    border: Border.all(color: Colors.white.withOpacity(0.4)),
+                    border: Border.all(color: Colors.white.withAlpha(102)),
                   ),
                   child: Text(
                     "Yes, Connect me with a coach",
@@ -306,7 +305,7 @@ class _BreathingViewState extends State<BreathingView> {
                 child: Text(
                   widget.title,
                   textAlign: TextAlign.center,
-                  style:textTheme.titleSmall?.copyWith(
+                  style: textTheme.titleSmall?.copyWith(
                     color: AppColors.whiteColor,
                     fontWeight: FontWeight.w400,
                   ),
@@ -331,9 +330,7 @@ class _BreathingViewState extends State<BreathingView> {
                   Container(
                     width: 270.r,
                     height: 270.r,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                    ),
+                    decoration: BoxDecoration(shape: BoxShape.circle),
                   ),
                   SizedBox(
                     width: 250.r,

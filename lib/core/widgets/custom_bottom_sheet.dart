@@ -34,7 +34,7 @@ class CustomBottomSheet extends StatelessWidget {
               width: 40.w,
               height: 4.h,
               decoration: BoxDecoration(
-                color: theme.dividerColor.withOpacity(0.3),
+                color: theme.dividerColor.withAlpha(77),
                 borderRadius: BorderRadius.circular(2.r),
               ),
             ),

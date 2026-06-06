@@ -49,7 +49,9 @@ Widget _buildContinueButton({
     buttonColor: isEnabled ? AppColors.buttonColor3 : AppColors.buttonColor4,
     textColor: isEnabled ? AppColors.textColor3 : AppColors.whiteColor,
     borderColor: isEnabled ? Colors.transparent : AppColors.buttonBorderColor4,
-    borderShadowColor: isEnabled ? Colors.transparent : AppColors.buttonShadowColor4,
+    borderShadowColor: isEnabled
+        ? Colors.transparent
+        : AppColors.buttonShadowColor4,
     onPress: isEnabled ? () async => onPress() : null,
   );
 }
@@ -77,7 +79,7 @@ Widget _buildLegalContent(String title, String content) {
             child: Text(
               content,
               style: TextStyle(
-                color: AppColors.whiteColor.withOpacity(0.8),
+                color: AppColors.whiteColor.withAlpha(204),
                 fontSize: 16.sp,
                 fontFamily: 'Segoe UI',
                 height: 1.6,
@@ -146,9 +148,18 @@ class _Setup1ViewState extends State<Setup1View> {
               ).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
             ),
             SizedBox(height: 32.h),
-            ..._options.map((o) => _buildOptionButton(option: o, selectedOption: _selectedOption, onSelect: (v) => setState(() => _selectedOption = v))),
+            ..._options.map(
+              (o) => _buildOptionButton(
+                option: o,
+                selectedOption: _selectedOption,
+                onSelect: (v) => setState(() => _selectedOption = v),
+              ),
+            ),
             const Spacer(),
-            _buildContinueButton(isEnabled: _selectedOption != null, onPress: () => context.push(AppRoutes.setup2)),
+            _buildContinueButton(
+              isEnabled: _selectedOption != null,
+              onPress: () => context.push(AppRoutes.setup2),
+            ),
             SizedBox(height: 40.h),
           ],
         ),
@@ -166,7 +177,13 @@ class Setup2View extends StatefulWidget {
 
 class _Setup2ViewState extends State<Setup2View> {
   String? _selectedOption;
-  final List<String> _options = ["Under 3 Months 🌱", "3 to 12 Months ☀️", "1 to 3 Years ✨", "3 to 10 Years 🌳", "10+ Years ♾️"];
+  final List<String> _options = [
+    "Under 3 Months 🌱",
+    "3 to 12 Months ☀️",
+    "1 to 3 Years ✨",
+    "3 to 10 Years 🌳",
+    "10+ Years ♾️",
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -178,13 +195,33 @@ class _Setup2ViewState extends State<Setup2View> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 20.h),
-            Text("How long were you together?", style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'Georgia', color: AppColors.whiteColor)),
+            Text(
+              "How long were you together?",
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontFamily: 'Georgia',
+                color: AppColors.whiteColor,
+              ),
+            ),
             SizedBox(height: 8.h),
-            Text("Every bond is significant, no matter how long or short you were together.", style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.textColor)),
+            Text(
+              "Every bond is significant, no matter how long or short you were together.",
+              style: Theme.of(
+                context,
+              ).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
+            ),
             SizedBox(height: 32.h),
-            ..._options.map((o) => _buildOptionButton(option: o, selectedOption: _selectedOption, onSelect: (v) => setState(() => _selectedOption = v))),
+            ..._options.map(
+              (o) => _buildOptionButton(
+                option: o,
+                selectedOption: _selectedOption,
+                onSelect: (v) => setState(() => _selectedOption = v),
+              ),
+            ),
             const Spacer(),
-            _buildContinueButton(isEnabled: _selectedOption != null, onPress: () => context.push(AppRoutes.setup3)),
+            _buildContinueButton(
+              isEnabled: _selectedOption != null,
+              onPress: () => context.push(AppRoutes.setup3),
+            ),
             SizedBox(height: 40.h),
           ],
         ),
@@ -202,7 +239,14 @@ class Setup3View extends StatefulWidget {
 
 class _Setup3ViewState extends State<Setup3View> {
   String? _selectedOption;
-  final List<String> _options = ["0–30 Days 🌊", "1–3 Months ⛅️", "4–6 Months 🍃", "7–12 Months 🍂", "1–2 Years ️🕯️", "2+ Years 🕰️️"];
+  final List<String> _options = [
+    "0–30 Days 🌊",
+    "1–3 Months ⛅️",
+    "4–6 Months 🍃",
+    "7–12 Months 🍂",
+    "1–2 Years ️🕯️",
+    "2+ Years 🕰️️",
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -214,13 +258,33 @@ class _Setup3ViewState extends State<Setup3View> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 20.h),
-            Text("How long since the split?", style: Theme.of(context).textTheme.titleLarge?.copyWith(fontFamily: 'Georgia', color: AppColors.whiteColor)),
+            Text(
+              "How long since the split?",
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontFamily: 'Georgia',
+                color: AppColors.whiteColor,
+              ),
+            ),
             SizedBox(height: 8.h),
-            Text("Whether it’s been a day or over a year, your feelings are valid 🩹", style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.textColor)),
+            Text(
+              "Whether it’s been a day or over a year, your feelings are valid 🩹",
+              style: Theme.of(
+                context,
+              ).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
+            ),
             SizedBox(height: 32.h),
-            ..._options.map((o) => _buildOptionButton(option: o, selectedOption: _selectedOption, onSelect: (v) => setState(() => _selectedOption = v))),
+            ..._options.map(
+              (o) => _buildOptionButton(
+                option: o,
+                selectedOption: _selectedOption,
+                onSelect: (v) => setState(() => _selectedOption = v),
+              ),
+            ),
             const Spacer(),
-            _buildContinueButton(isEnabled: _selectedOption != null, onPress: () => context.push(AppRoutes.setup4)),
+            _buildContinueButton(
+              isEnabled: _selectedOption != null,
+              onPress: () => context.push(AppRoutes.setup4),
+            ),
             SizedBox(height: 40.h),
           ],
         ),
@@ -243,7 +307,7 @@ class _Setup4ViewState extends State<Setup4View> {
     "Occasional 'Breadcrumbs' 🍞",
     "Active Contact 💥",
     "Necessary Contact (for kids, bills etc) 🩰",
-    "I'm Blocked 🚫"
+    "I'm Blocked 🚫",
   ];
 
   @override
@@ -271,7 +335,13 @@ class _Setup4ViewState extends State<Setup4View> {
               ).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
             ),
             SizedBox(height: 32.h),
-            ..._options.map((o) => _buildOptionButton(option: o, selectedOption: _selectedOption, onSelect: (v) => setState(() => _selectedOption = v))),
+            ..._options.map(
+              (o) => _buildOptionButton(
+                option: o,
+                selectedOption: _selectedOption,
+                onSelect: (v) => setState(() => _selectedOption = v),
+              ),
+            ),
             const Spacer(),
             _buildContinueButton(
               isEnabled: _selectedOption != null,
@@ -326,7 +396,13 @@ class _Setup5ViewState extends State<Setup5View> {
               ).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
             ),
             SizedBox(height: 32.h),
-            ..._options.map((o) => _buildOptionButton(option: o, selectedOption: _selectedOption, onSelect: (v) => setState(() => _selectedOption = v))),
+            ..._options.map(
+              (o) => _buildOptionButton(
+                option: o,
+                selectedOption: _selectedOption,
+                onSelect: (v) => setState(() => _selectedOption = v),
+              ),
+            ),
             const Spacer(),
             _buildContinueButton(
               isEnabled: _selectedOption != null,
@@ -381,7 +457,13 @@ class _Setup6ViewState extends State<Setup6View> {
               ).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
             ),
             SizedBox(height: 32.h),
-            ..._options.map((o) => _buildOptionButton(option: o, selectedOption: _selectedOption, onSelect: (v) => setState(() => _selectedOption = v))),
+            ..._options.map(
+              (o) => _buildOptionButton(
+                option: o,
+                selectedOption: _selectedOption,
+                onSelect: (v) => setState(() => _selectedOption = v),
+              ),
+            ),
             const Spacer(),
             _buildContinueButton(
               isEnabled: _selectedOption != null,
@@ -413,7 +495,8 @@ class _Setup7ViewState extends State<Setup7View> {
     showAppCustomDialog(
       context,
       title: "“Congrats”",
-      description: "On taking this big FIRST\nSTEP and starting No Contact Today 😀",
+      description:
+          "On taking this big FIRST\nSTEP and starting No Contact Today 😀",
       primaryText: "Continue",
       onPrimaryTap: () {},
     );
@@ -754,7 +837,10 @@ class SetupCompleteView extends StatelessWidget {
                   ),
                   Positioned.fill(
                     child: Center(
-                      child: Text("✨ 🎉 🥳", style: TextStyle(fontSize: 100.sp)),
+                      child: Text(
+                        "✨ 🎉 🥳",
+                        style: TextStyle(fontSize: 100.sp),
+                      ),
                     ),
                   ),
                 ],
@@ -792,7 +878,10 @@ class SetupCompleteView extends StatelessWidget {
                   textColor: Colors.white,
                   onPress: () async {
                     // Set flag to show navigation guides in Navbar
-                    await ApiService.store(key: 'show_nav_guide', value: 'true');
+                    await ApiService.store(
+                      key: 'show_nav_guide',
+                      value: 'true',
+                    );
                     context.go(AppRoutes.home);
                   },
                 ),

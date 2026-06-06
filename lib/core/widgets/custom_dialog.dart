@@ -41,10 +41,11 @@ class CustomDialog extends StatelessWidget {
         padding: EdgeInsets.all(24.r),
         decoration: BoxDecoration(
           color: dialogTheme.backgroundColor,
-          borderRadius: (dialogTheme.shape as RoundedRectangleBorder).borderRadius,
+          borderRadius:
+              (dialogTheme.shape as RoundedRectangleBorder).borderRadius,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.4),
+              color: Colors.black.withAlpha(102),
               blurRadius: 30,
               offset: const Offset(0, 10),
             ),
@@ -58,11 +59,8 @@ class CustomDialog extends StatelessWidget {
             if (topWidget != null)
               topWidget!
             else if (showLogo)
-              Image.asset(
-                AppAssets.sb1Logo,
-                height: 65.h,
-              ),
-            
+              Image.asset(AppAssets.sb1Logo, height: 65.h),
+
             SizedBox(height: 20.h),
 
             /// TITLE
@@ -97,6 +95,7 @@ class CustomDialog extends StatelessWidget {
 
             if (secondaryText != null) ...[
               SizedBox(height: 14.h),
+
               /// SECONDARY BUTTON
               GestureDetector(
                 onTap: () {
@@ -109,7 +108,7 @@ class CustomDialog extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12.r),
                     border: Border.all(
-                      color: AppColors.iconColor.withOpacity(0.4),
+                      color: AppColors.iconColor.withAlpha(102),
                       width: 1.2,
                     ),
                   ),
@@ -117,7 +116,9 @@ class CustomDialog extends StatelessWidget {
                     secondaryText!,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: dialogTheme.contentTextStyle?.color?.withOpacity(0.9),
+                      color: dialogTheme.contentTextStyle?.color?.withAlpha(
+                        230,
+                      ),
                       fontSize: 15.sp,
                       fontWeight: FontWeight.w600,
                     ),
@@ -148,7 +149,7 @@ void showAppCustomDialog(
   showDialog(
     context: context,
     barrierDismissible: barrierDismissible,
-    barrierColor: Colors.black.withOpacity(0.65),
+    barrierColor: Colors.black.withAlpha(166),
     builder: (context) => CustomDialog(
       title: title,
       description: description,

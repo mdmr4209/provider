@@ -14,6 +14,7 @@ import '../features/auth/views/name_input_view.dart';
 import '../features/auth/views/splash_screen.dart';
 import '../features/auth/views/setup/setup_views.dart';
 import '../features/circle/views/circle_view.dart';
+import '../features/circle/views/create_post_view.dart';
 import '../features/home/views/home_view.dart';
 import '../features/home/views/navigation.dart';
 import '../features/home/views/breathing_view.dart';
@@ -46,6 +47,7 @@ abstract class AppRoutes {
   static const changePass = '/change-password';
   static const home = '/home';
   static const circle = '/circle';
+  static const createPost = '/create-post';
   static const coaches = '/coaches';
   static const inbox = '/inbox';
   static const onboarding = '/onboarding';
@@ -230,6 +232,7 @@ class AppRouter {
         GoRoute(path: AppRoutes.signup, name: 'signup', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const SignUpView())),
         GoRoute(path: AppRoutes.roleSelection, name: 'roleSelection', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const RoleSelectionView())),
         GoRoute(path: AppRoutes.nameInput, name: 'nameInput', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: NameInputView(role: state.extra as String? ?? 'User'))),
+        GoRoute(path: AppRoutes.createPost, name: 'createPost', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const CreatePostView())),
 
         // Setup Flow (Horizontal Slides)
         GoRoute(path: AppRoutes.setup1, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const Setup1View(), type: TransitionType.slideHorizontal)),

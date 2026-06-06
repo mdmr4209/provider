@@ -37,12 +37,12 @@ class CustomAppDialog extends StatelessWidget {
           color: AppColors.defaultColor,
           borderRadius: BorderRadius.circular(24.r),
           border: Border.all(
-            color: const Color(0xFFD4AF37).withOpacity(0.4),
+            color: const Color(0xFFD4AF37).withAlpha(102),
             width: 1.5,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.5),
+              color: Colors.black.withAlpha(128),
               blurRadius: 40,
               offset: const Offset(0, 15),
             ),
@@ -82,7 +82,7 @@ class CustomAppDialog extends StatelessWidget {
               description,
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Colors.white.withOpacity(0.85),
+                color: Colors.white.withAlpha(217),
                 fontSize: 15.sp,
                 height: 1.5,
                 fontFamily: 'Proxima Nova',
@@ -115,7 +115,7 @@ class CustomAppDialog extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12.r),
                     border: Border.all(
-                      color: AppColors.iconColor.withOpacity(0.6),
+                      color: AppColors.iconColor.withAlpha(153),
                       width: 1.2,
                     ),
                   ),
@@ -123,7 +123,7 @@ class CustomAppDialog extends StatelessWidget {
                     secondaryText!,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.95),
+                      color: Colors.white.withAlpha(242),
                       fontSize: 15.sp,
                       fontWeight: FontWeight.w600,
                     ),

@@ -63,7 +63,7 @@ class _CustomLoaderState extends State<CustomLoader>
 
   @override
   Widget build(BuildContext context) {
-    final effectiveColor = widget.color ?? Theme.of(context).primaryColorDark;
+    final effectiveColor = widget.color ?? Theme.of(context).primaryColor;
 
     return AnimatedBuilder(
       animation: Listenable.merge([_rotateController, _pendulumAnim]),
@@ -145,14 +145,14 @@ class _WaterDropPainter extends CustomPainter {
 
     // --- Soft glow ---
     final glowPaint = Paint()
-      ..color = color.withOpacity(opacity * 0.35)
+      ..color = color.withAlpha((opacity * 89).round())
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 7)
       ..style = PaintingStyle.fill;
     canvas.drawPath(path, glowPaint);
 
     // --- Main fill ---
     final fillPaint = Paint()
-      ..color = color.withOpacity(opacity)
+      ..color = color.withAlpha((opacity * 255).round())
       ..style = PaintingStyle.fill;
     canvas.drawPath(path, fillPaint);
 
@@ -160,7 +160,7 @@ class _WaterDropPainter extends CustomPainter {
     if (morph > 0.05) {
       final double tipR = lerpDouble(r, r * 1.30, morph)!;
       final highlightPaint = Paint()
-        ..color = Colors.white.withOpacity(opacity * morph * 0.55)
+        ..color = Colors.white.withAlpha((opacity * morph * 140).round())
         ..style = PaintingStyle.fill;
       canvas.drawOval(
         Rect.fromCenter(

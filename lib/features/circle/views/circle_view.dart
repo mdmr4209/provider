@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:newproject/core/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 
@@ -8,6 +9,7 @@ import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/widgets/custom_input.dart';
 import '../../../core/widgets/custom_loader.dart';
+import '../../../routes/app_router.dart';
 import '../controllers/circle_controller.dart';
 import '../models/circle_post_model.dart';
 import '../widgets/circle_member_list.dart';
@@ -43,113 +45,122 @@ class _CircleViewState extends State<CircleView>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            SizedBox(height: 10.h),
-            const CircleMemberList(),
+    return GestureDetector(
+      onTap: FocusScope.of(context).unfocus,
+      child: Scaffold(
+        body: SafeArea(
+          child: Column(
+            children: [
+              SizedBox(height: 10.h),
+              const CircleMemberList(),
 
-            // Search/Post Input Bar
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              child: CustomInput(
-                height: 50,
-                hintText: "Word Your Thoughts",
-                fontSize: 14,
-                hintColor: AppColors.greyColor,
-                hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: AppColors.whiteColor.withOpacity(0.6),
-                  fontSize: 14.sp,
+              // Search/Post Input Bar
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                child: GestureDetector(
+                  onTap: () => context.push(AppRoutes.createPost),
+                  child: AbsorbPointer(
+                    child: CustomInput(
+                      height: 50,
+                      hintText: "Word Your Thoughts",
+                      fontSize: 14,
+                      hintColor: AppColors.greyColor,
+                      hintStyle: Theme.of(context).textTheme.bodyLarge
+                          ?.copyWith(
+                            color: AppColors.whiteColor.withAlpha(153),
+                            fontSize: 14.sp,
+                          ),
+                      shadow: true,
+                      leadingIcon: AppAssets.feather,
+                      leadingPadding: EdgeInsets.only(left: 16.w, right: 8.w),
+                    ),
+                  ),
                 ),
-                shadow: true,
-                leadingIcon: AppAssets.feather,
-                leadingPadding: EdgeInsets.only(left: 16.w, right: 8.w),
               ),
-            ),
 
-            SizedBox(height: 11.h),
+              SizedBox(height: 11.h),
 
-            // Tabs and Groups Action
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TabBar(
-                      controller: _tabController,
-                      isScrollable: true,
-                      indicatorColor: AppColors.secondaryColorLight,
-                      labelColor: AppColors.secondaryColorLight,
-                      unselectedLabelColor: AppColors.whiteColor.withOpacity(
-                        0.6,
-                      ),
-                      dividerColor: Colors.transparent,
-                      tabAlignment: TabAlignment.start,
-                      labelPadding: EdgeInsets.only(right: 24.w),
-                      labelStyle: theme.textTheme.titleMedium?.copyWith(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      unselectedLabelStyle: theme.textTheme.titleMedium
-                          ?.copyWith(fontSize: 18.sp),
-                      tabs: const [
-                        Tab(text: "Everyone"),
-                        Tab(text: "Friends"),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 12.w,
-                      vertical: 6.h,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.whiteColor.withOpacity(0.05),
-                      borderRadius: BorderRadius.circular(20.r),
-                    ),
-                    child: Row(
-                      children: [
-                        Text(
-                          "My Groups",
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: AppColors.secondaryColorLight,
-                            fontSize: 12.sp,
-                          ),
+              // Tabs and Groups Action
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TabBar(
+                        controller: _tabController,
+                        isScrollable: true,
+                        indicatorColor: AppColors.secondaryColorLight,
+                        labelColor: AppColors.secondaryColorLight,
+                        unselectedLabelColor: AppColors.whiteColor.withAlpha(
+                          153,
                         ),
-                        SizedBox(width: 4.w),
-                        SvgPicture.asset(
-                          AppAssets.group,
-                          colorFilter: const ColorFilter.mode(
-                            AppColors.secondaryColorLight,
-                            BlendMode.srcIn,
-                          ),
-                          width: 16.r,
+                        dividerColor: Colors.transparent,
+                        tabAlignment: TabAlignment.start,
+                        labelPadding: EdgeInsets.only(right: 24.w),
+                        labelStyle: theme.textTheme.titleMedium?.copyWith(
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.bold,
                         ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: [
-                  const _PostsList(),
-                  Center(
-                    child: Text(
-                      "Friends Posts Coming Soon",
-                      style: theme.textTheme.bodyLarge?.copyWith(
-                        color: AppColors.whiteColor.withOpacity(0.7),
+                        unselectedLabelStyle: theme.textTheme.titleMedium
+                            ?.copyWith(fontSize: 18.sp),
+                        tabs: const [
+                          Tab(text: "Everyone"),
+                          Tab(text: "Friends"),
+                        ],
                       ),
                     ),
-                  ),
-                ],
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 12.w,
+                        vertical: 6.h,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.whiteColor.withAlpha(13),
+                        borderRadius: BorderRadius.circular(20.r),
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            "My Groups",
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: AppColors.secondaryColorLight,
+                              fontSize: 12.sp,
+                            ),
+                          ),
+                          SizedBox(width: 4.w),
+                          SvgPicture.asset(
+                            AppAssets.group,
+                            colorFilter: const ColorFilter.mode(
+                              AppColors.secondaryColorLight,
+                              BlendMode.srcIn,
+                            ),
+                            width: 16.r,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+
+              Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    const _PostsList(),
+                    Center(
+                      child: Text(
+                        "Friends Posts Coming Soon",
+                        style: theme.textTheme.bodyLarge?.copyWith(
+                          color: AppColors.whiteColor.withAlpha(179),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -189,7 +200,7 @@ class _PostsList extends StatelessWidget {
                       child: Text(
                         "No posts available",
                         style: TextStyle(
-                          color: AppColors.whiteColor.withOpacity(0.5),
+                          color: AppColors.whiteColor.withAlpha(128),
                         ),
                       ),
                     ),
@@ -249,7 +260,7 @@ class _PostsList extends StatelessWidget {
                 top: 16.h,
                 left: 0,
                 right: 0,
-                child: const Center(child: CustomLoader(size: 40)),
+                child: const Center(child: CustomLoader(size: 140)),
               ),
           ],
         );
@@ -275,7 +286,7 @@ class _SuggestionsSection extends StatelessWidget {
               Text(
                 "Suggestions",
                 style: theme.textTheme.titleMedium?.copyWith(
-                  color: AppColors.whiteColor.withOpacity(0.9),
+                  color: AppColors.whiteColor.withAlpha(230),
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
                 ),
@@ -327,7 +338,7 @@ class _SuggestionCard extends StatelessWidget {
         color: AppColors
             .postCardColor, // Dark green background matching the design
         borderRadius: BorderRadius.circular(10.r),
-        border: Border.all(color: AppColors.whiteColor.withOpacity(0.05)),
+        border: Border.all(color: AppColors.whiteColor.withAlpha(13)),
       ),
       child: Column(
         children: [
@@ -337,7 +348,7 @@ class _SuggestionCard extends StatelessWidget {
             child: CircleAvatar(
               radius: 35.r,
               backgroundImage: NetworkImage(suggestion.avatar),
-              backgroundColor: AppColors.whiteColor.withOpacity(0.1),
+              backgroundColor: AppColors.whiteColor.withAlpha(26),
             ),
           ),
           SizedBox(height: 5.h),
@@ -353,7 +364,7 @@ class _SuggestionCard extends StatelessWidget {
           Text(
             "${suggestion.mutualFriends} mutual Friend",
             style: theme.textTheme.bodySmall?.copyWith(
-              color: AppColors.whiteColor.withOpacity(0.5),
+              color: AppColors.whiteColor.withAlpha(128),
             ),
           ),
           const Spacer(),
@@ -365,6 +376,7 @@ class _SuggestionCard extends StatelessWidget {
             height: 23.h,
             borderColor: AppColors.postCardColor,
             radius: 4.r,
+            horizontalPadding: 0,
           ),
         ],
       ),
@@ -382,7 +394,7 @@ class _PostShimmer extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(16.r),
         decoration: BoxDecoration(
-          color: AppColors.whiteColor.withOpacity(0.05),
+          color: AppColors.whiteColor.withAlpha(13),
           borderRadius: BorderRadius.circular(20.r),
         ),
         child: Column(

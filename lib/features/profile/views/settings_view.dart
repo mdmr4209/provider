@@ -48,14 +48,14 @@ class SettingsView extends StatelessWidget {
                           : context.watchTr('off'),
                       trailing: Switch.adaptive(
                         value: isDark,
-                        onChanged: isSystem 
-                          ? null // Disable manual toggle if following system
-                          : (value) => themeCtrl.toggleTheme(context),
+                        onChanged: isSystem
+                            ? null // Disable manual toggle if following system
+                            : (value) => themeCtrl.toggleTheme(context),
                         activeThumbColor: Theme.of(context).colorScheme.primary,
                       ),
-                      onTap: isSystem 
-                        ? null 
-                        : () => themeCtrl.toggleTheme(context),
+                      onTap: isSystem
+                          ? null
+                          : () => themeCtrl.toggleTheme(context),
                     ),
                     SizedBox(height: 12.h),
                     _settingsTile(
@@ -69,14 +69,18 @@ class SettingsView extends StatelessWidget {
                             themeCtrl.setThemeMode(ThemeMode.system);
                           } else {
                             // If turning off system, set to current effective brightness
-                            themeCtrl.setThemeMode(isDark ? ThemeMode.dark : ThemeMode.light);
+                            themeCtrl.setThemeMode(
+                              isDark ? ThemeMode.dark : ThemeMode.light,
+                            );
                           }
                         },
                         activeColor: Theme.of(context).colorScheme.primary,
                       ),
                       onTap: () {
                         if (isSystem) {
-                          themeCtrl.setThemeMode(isDark ? ThemeMode.dark : ThemeMode.light);
+                          themeCtrl.setThemeMode(
+                            isDark ? ThemeMode.dark : ThemeMode.light,
+                          );
                         } else {
                           themeCtrl.setThemeMode(ThemeMode.system);
                         }
@@ -142,9 +146,11 @@ class SettingsView extends StatelessWidget {
         onTap: onTap,
         title: Text(title, style: Theme.of(context).textTheme.bodyLarge),
         subtitle: Text(
-          subtitle, 
+          subtitle,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.6),
+            color: Theme.of(
+              context,
+            ).textTheme.bodySmall?.color?.withAlpha(153),
           ),
         ),
         trailing: trailing,
@@ -162,7 +168,7 @@ class SettingsView extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 10.h),
       decoration: BoxDecoration(
         color: isSelected
-            ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
+            ? Theme.of(context).colorScheme.primary.withAlpha(26)
             : Theme.of(context).cardTheme.color,
         borderRadius: BorderRadius.circular(12.r),
         border: Border.all(

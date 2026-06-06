@@ -5,11 +5,12 @@ class CirclePostModel {
   final String timeAgo;
   final String content;
   final List<String>? images;
-  final int likes;
-  final int claps;
-  final bool isLiked;
-  final bool isClapped;
+  int likes;
+  int claps;
+  bool isLiked;
+  bool isClapped;
   final bool isOwnPost;
+  final int commentsCount;
   final List<CircleComment>? comments;
 
   CirclePostModel({
@@ -24,6 +25,7 @@ class CirclePostModel {
     this.isLiked = false,
     this.isClapped = false,
     this.isOwnPost = false,
+    this.commentsCount = 0,
     this.comments,
   });
 
@@ -40,12 +42,75 @@ class CirclePostModel {
       isLiked: json['isLiked'] ?? false,
       isClapped: json['isClapped'] ?? false,
       isOwnPost: json['isOwnPost'] ?? false,
+      commentsCount: json['commentsCount'] ?? 0,
       comments: json['comments'] != null
           ? (json['comments'] as List).map((i) => CircleComment.fromJson(i)).toList()
           : null,
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'userName': userName,
+      'userAvatar': userAvatar,
+      'timeAgo': timeAgo,
+      'content': content,
+      'images': images,
+      'likes': likes,
+      'claps': claps,
+      'isLiked': isLiked,
+      'isClapped': isClapped,
+      'isOwnPost': isOwnPost,
+      'commentsCount': commentsCount,
+      'comments': comments?.map((c) => c.toJson()).toList(),
+    };
+  }
+
+  /// Creates a copy of this post with optional field overrides.
+  CirclePostModel copyWith({
+    String? id,
+    String? userName,
+    String? userAvatar,
+    String? timeAgo,
+    String? content,
+    List<String>? images,
+    int? likes,
+    int? claps,
+    bool? isLiked,
+    bool? isClapped,
+    bool? isOwnPost,
+    int? commentsCount,
+    List<CircleComment>? comments,
+  }) {
+    return CirclePostModel(
+      id: id ?? this.id,
+      userName: userName ?? this.userName,
+      userAvatar: userAvatar ?? this.userAvatar,
+      timeAgo: timeAgo ?? this.timeAgo,
+      content: content ?? this.content,
+      images: images ?? this.images,
+      likes: likes ?? this.likes,
+      claps: claps ?? this.claps,
+      isLiked: isLiked ?? this.isLiked,
+      isClapped: isClapped ?? this.isClapped,
+      isOwnPost: isOwnPost ?? this.isOwnPost,
+      commentsCount: commentsCount ?? this.commentsCount,
+      comments: comments ?? this.comments,
+    );
+  }
+
+  // ── Dummy Image URLs for Create Post ────────────────────────────────────
+  static const List<String> dummyMediaImages = [
+    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&auto=format&fit=crop&q=60",
+    "https://images.unsplash.com/photo-1511447333015-45b65e60f6d5?w=800&auto=format&fit=crop&q=60",
+    "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&auto=format&fit=crop&q=60",
+    "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&auto=format&fit=crop&q=60",
+    "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&auto=format&fit=crop&q=60",
+    "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=800&auto=format&fit=crop&q=60",
+  ];
+
+  // ── Dummy Posts ────────────────────────────────────────────────────────────
   static List<CirclePostModel> dummyPosts = [
     CirclePostModel(
       id: "post_000",
@@ -56,6 +121,7 @@ class CirclePostModel {
       isOwnPost: true,
       likes: 5,
       claps: 2,
+      commentsCount: 0,
     ),
     CirclePostModel(
       id: "post_001",
@@ -65,6 +131,7 @@ class CirclePostModel {
       content: "Day 14. Didn't reach out even though I wanted to. Proud of myself 💪",
       likes: 47,
       claps: 12,
+      commentsCount: 1,
       images: [
         "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&auto=format&fit=crop&q=60",
         "https://images.unsplash.com/photo-1511447333015-45b65e60f6d5?w=800&auto=format&fit=crop&q=60",
@@ -91,6 +158,7 @@ class CirclePostModel {
       ],
       likes: 23,
       claps: 5,
+      commentsCount: 0,
       isLiked: true,
       isClapped: false,
     ),
@@ -105,6 +173,7 @@ class CirclePostModel {
       ],
       likes: 15,
       claps: 2,
+      commentsCount: 0,
       isLiked: false,
       isClapped: false,
     ),
@@ -132,6 +201,15 @@ class CircleComment {
       content: json['content'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'userName': userName,
+      'userAvatar': userAvatar,
+      'content': content,
+    };
+  }
 }
 
 class SuggestionModel {
@@ -154,6 +232,15 @@ class SuggestionModel {
       avatar: json['avatar'],
       mutualFriends: json['mutualFriends'] ?? 0,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'avatar': avatar,
+      'mutualFriends': mutualFriends,
+    };
   }
 
   static List<SuggestionModel> dummySuggestions = [

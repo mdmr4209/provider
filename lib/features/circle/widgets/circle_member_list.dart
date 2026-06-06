@@ -11,7 +11,7 @@ class CircleMemberList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Consumer<CircleController>(
       builder: (context, controller, child) {
         if (controller.isLoading) {
@@ -31,11 +31,7 @@ class CircleMemberList extends StatelessWidget {
                       borderRadius: 30.r,
                     ),
                     SizedBox(height: 8.h),
-                    ShimmerLoader(
-                      width: 45.w,
-                      height: 10.h,
-                      borderRadius: 4.r,
-                    ),
+                    ShimmerLoader(width: 45.w, height: 10.h, borderRadius: 4.r),
                   ],
                 ),
               ),
@@ -52,7 +48,7 @@ class CircleMemberList extends StatelessWidget {
             itemBuilder: (context, index) {
               final member = controller.members[index];
               final bool isFirst = index == 0;
-              
+
               return Padding(
                 padding: EdgeInsets.only(right: 12.w),
                 child: Column(
@@ -62,15 +58,17 @@ class CircleMemberList extends StatelessWidget {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: isFirst ? AppColors.secondaryColorLight : Colors.transparent,
+                          color: isFirst
+                              ? AppColors.secondaryColorLight
+                              : Colors.transparent,
                           width: 2.r,
                         ),
                       ),
                       child: CircleAvatar(
                         radius: 28.r,
-                        backgroundColor: AppColors.whiteColor.withOpacity(0.1),
-                        backgroundImage: member.avatar.isNotEmpty 
-                            ? NetworkImage(member.avatar) 
+                        backgroundColor: AppColors.whiteColor.withAlpha(26),
+                        backgroundImage: member.avatar.isNotEmpty
+                            ? NetworkImage(member.avatar)
                             : null,
                         child: member.avatar.isEmpty
                             ? Text(
@@ -87,7 +85,7 @@ class CircleMemberList extends StatelessWidget {
                     Text(
                       member.name,
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: AppColors.whiteColor.withOpacity(0.6),
+                        color: AppColors.whiteColor.withAlpha(153),
                         fontSize: 12.sp,
                       ),
                     ),

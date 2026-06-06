@@ -19,8 +19,12 @@ class BackgroundWidget extends StatelessWidget {
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
-        statusBarColor: isDefaultBg ? const Color(0xFF111B10) : Colors.transparent,
-        statusBarIconBrightness: isDefaultBg ? Brightness.light : Brightness.dark,
+        statusBarColor: isDefaultBg
+            ? const Color(0xFF111B10)
+            : Colors.transparent,
+        statusBarIconBrightness: isDefaultBg
+            ? Brightness.light
+            : Brightness.dark,
         statusBarBrightness: isDefaultBg ? Brightness.dark : Brightness.light,
       ),
       child: Container(
@@ -36,12 +40,9 @@ class BackgroundWidget extends StatelessWidget {
             ? Column(
                 children: [
                   // This container colors the status bar area
-                  Container(
-                    height: topPadding,
-                    color: const Color(0xFF111B10),
-                  ),
-                  // We MUST remove the top padding for the child, 
-                  // otherwise any SafeArea or AppBar inside 'child' 
+                  Container(height: topPadding, color: const Color(0xFF111B10)),
+                  // We MUST remove the top padding for the child,
+                  // otherwise any SafeArea or AppBar inside 'child'
                   // will add another gap, making it look "too big".
                   Expanded(
                     child: MediaQuery.removePadding(

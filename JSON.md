@@ -281,6 +281,60 @@ Success Response (200 OK):
 ```
 ---
 ## Circle Screen APIs
+
+### Circle Data Models
+
+#### CirclePostModel
+```json
+{
+  "id": "post_001",
+  "userName": "Sarah M.",
+  "userAvatar": "https://api.example.com/avatars/sarah_m.jpg",
+  "timeAgo": "2 min ago",
+  "content": "Day 14. Didn't reach out even though I wanted to. Proud of myself 💪",
+  "images": [
+    "https://api.example.com/images/post_001_1.jpg",
+    "https://api.example.com/images/post_001_2.jpg"
+  ],
+  "likes": 47,
+  "claps": 12,
+  "isLiked": false,
+  "isClapped": true,
+  "isOwnPost": false,
+  "commentsCount": 5,
+  "comments": [
+    {
+      "id": "comment_001",
+      "userName": "Mike Tyson",
+      "userAvatar": "https://api.example.com/avatars/mike.jpg",
+      "content": "Keep going! You got this."
+    }
+  ]
+}
+```
+
+#### CircleComment
+```json
+{
+  "id": "comment_001",
+  "userName": "Mike Tyson",
+  "userAvatar": "https://api.example.com/avatars/mike.jpg",
+  "content": "Keep going! You got this."
+}
+```
+
+#### SuggestionModel
+```json
+{
+  "id": "sug_001",
+  "name": "Sarah",
+  "avatar": "https://api.example.com/avatars/sarah.jpg",
+  "mutualFriends": 2
+}
+```
+
+---
+
 ### 4.1 Get Circle Posts
 **Endpoint**: `GET /api/circle/posts`
 **Headers**: `Authorization: Bearer {accessToken}`
@@ -297,52 +351,151 @@ Success Response (200 OK):
         "userAvatar": "https://api.example.com/avatars/sarah_m.jpg",
         "timeAgo": "2 min ago",
         "content": "Day 14. Didn't reach out even though I wanted to. Proud of myself 💪",
+        "images": [
+          "https://api.example.com/images/post_001_1.jpg",
+          "https://api.example.com/images/post_001_2.jpg"
+        ],
         "likes": 47,
         "claps": 12,
         "isLiked": false,
         "isClapped": true,
-        "commentsCount": 5
+        "isOwnPost": false,
+        "commentsCount": 1,
+        "comments": [
+          {
+            "id": "comment_001",
+            "userName": "Mike Tyson",
+            "userAvatar": "https://api.example.com/avatars/mike.jpg",
+            "content": "Keep going! You got this."
+          }
+        ]
       },
       {
         "id": "post_002",
         "userName": "Alex R.",
         "userAvatar": "https://api.example.com/avatars/alex.jpg",
         "timeAgo": "15 min ago",
-        "content": "Staying consistent is key! Feeling great today.",
+        "content": "Just finished a great workout. Feeling refreshed! 🧘‍♂️",
+        "images": [
+          "https://api.example.com/images/post_002_1.jpg"
+        ],
         "likes": 23,
         "claps": 5,
         "isLiked": true,
-        "isClapped": false
+        "isClapped": false,
+        "isOwnPost": false,
+        "commentsCount": 0,
+        "comments": null
       }
     ],
     "members": [
       {
-        "id": "mem_001",
+        "id": "sug_0",
         "name": "You",
         "avatar": "https://api.example.com/avatars/you.jpg",
-        "isYou": true
+        "mutualFriends": 0
       },
       {
-        "id": "mem_002",
+        "id": "sug_1",
         "name": "Sarah",
-        "avatar": "https://api.example.com/avatars/sarah.jpg"
+        "avatar": "https://api.example.com/avatars/sarah.jpg",
+        "mutualFriends": 2
       },
       {
-        "id": "mem_003",
+        "id": "sug_2",
         "name": "Alex",
-        "avatar": "https://api.example.com/avatars/alex.jpg"
+        "avatar": "https://api.example.com/avatars/alex.jpg",
+        "mutualFriends": 1
       },
       {
-        "id": "mem_004",
+        "id": "sug_3",
         "name": "Jordan",
-        "avatar": "https://api.example.com/avatars/jordan.jpg"
+        "avatar": "https://api.example.com/avatars/jordan.jpg",
+        "mutualFriends": 3
       },
       {
-        "id": "mem_005",
+        "id": "sug_4",
         "name": "Maya",
-        "avatar": "https://api.example.com/avatars/maya.jpg"
+        "avatar": "https://api.example.com/avatars/maya.jpg",
+        "mutualFriends": 2
       }
     ]
+  }
+}
+```
+---
+### 4.2 Create Circle Post
+**Endpoint**: `POST /api/circle/posts`
+**Headers**: `Authorization: Bearer {accessToken}`, `Content-Type: application/json`
+**Request**:
+```json
+{
+  "content": "Day 14. Didn't reach out even though I wanted to. Proud of myself 💪",
+  "images": [
+    "https://api.example.com/images/uploaded_1.jpg",
+    "https://api.example.com/images/uploaded_2.jpg"
+  ]
+}
+```
+**Success Response** (201 Created):
+```json
+{
+  "status": "success",
+  "message": "Post created successfully",
+  "data": {
+    "id": "post_123",
+    "userName": "joshua_l",
+    "userAvatar": "https://api.example.com/avatars/you.jpg",
+    "timeAgo": "Just now",
+    "content": "Day 14. Didn't reach out even though I wanted to. Proud of myself 💪",
+    "images": [
+      "https://api.example.com/images/post_123_1.jpg",
+      "https://api.example.com/images/post_123_2.jpg"
+    ],
+    "likes": 0,
+    "claps": 0,
+    "isLiked": false,
+    "isClapped": false,
+    "isOwnPost": true,
+    "commentsCount": 0,
+    "comments": null
+  }
+}
+```
+---
+### 4.3 Update Circle Post
+**Endpoint**: `PUT /api/circle/posts/{postId}`
+**Headers**: `Authorization: Bearer {accessToken}`, `Content-Type: application/json`
+**Request**:
+```json
+{
+  "content": "Updated: Day 14. Feeling even prouder now! 💪🌟",
+  "images": [
+    "https://api.example.com/images/updated_1.jpg"
+  ]
+}
+```
+**Success Response** (200 OK):
+```json
+{
+  "status": "success",
+  "message": "Post updated successfully",
+  "data": {
+    "id": "post_123",
+    "userName": "joshua_l",
+    "userAvatar": "https://api.example.com/avatars/you.jpg",
+    "timeAgo": "Just now",
+    "content": "Updated: Day 14. Feeling even prouder now! 💪🌟",
+    "images": [
+      "https://api.example.com/images/updated_1.jpg"
+    ],
+    "likes": 5,
+    "claps": 2,
+    "isLiked": false,
+    "isClapped": false,
+    "isOwnPost": true,
+    "commentsCount": 0,
+    "comments": null
   }
 }
 ```

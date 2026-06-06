@@ -27,12 +27,12 @@ class GradientTimerGauge extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
-                color: const Color(0xFFC4B65D).withOpacity(0.9),
+                color: const Color(0xFFC4B65D).withAlpha(230),
                 width: 1.2.r, // Sharp thin line like the mockup
               ),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFFC4B65D).withOpacity(0.5),
+                  color: const Color(0xFFC4B65D).withAlpha(128),
                   blurRadius: 80,
                   spreadRadius: 10,
                 ),
@@ -78,7 +78,7 @@ class GradientTimerGauge extends StatelessWidget {
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.5),
+                              color: Colors.black.withAlpha(128),
                               blurRadius: 10,
                               offset: const Offset(
                                 -2,
