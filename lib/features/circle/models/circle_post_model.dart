@@ -9,6 +9,7 @@ class CirclePostModel {
   final int claps;
   final bool isLiked;
   final bool isClapped;
+  final bool isOwnPost;
   final List<CircleComment>? comments;
 
   CirclePostModel({
@@ -22,6 +23,7 @@ class CirclePostModel {
     this.claps = 0,
     this.isLiked = false,
     this.isClapped = false,
+    this.isOwnPost = false,
     this.comments,
   });
 
@@ -37,6 +39,7 @@ class CirclePostModel {
       claps: json['claps'] ?? 0,
       isLiked: json['isLiked'] ?? false,
       isClapped: json['isClapped'] ?? false,
+      isOwnPost: json['isOwnPost'] ?? false,
       comments: json['comments'] != null
           ? (json['comments'] as List).map((i) => CircleComment.fromJson(i)).toList()
           : null,
@@ -45,6 +48,16 @@ class CirclePostModel {
 
   static List<CirclePostModel> dummyPosts = [
     CirclePostModel(
+      id: "post_000",
+      userName: "Sarah M. (You)",
+      userAvatar: "https://xsgames.co/randomusers/assets/avatars/female/1.jpg",
+      timeAgo: "Just now",
+      content: "Feeling great today! Just reached my 30-day milestone. Persistence is key! 🌟",
+      isOwnPost: true,
+      likes: 5,
+      claps: 2,
+    ),
+    CirclePostModel(
       id: "post_001",
       userName: "Sarah M.",
       userAvatar: "https://xsgames.co/randomusers/assets/avatars/female/1.jpg",
@@ -52,6 +65,10 @@ class CirclePostModel {
       content: "Day 14. Didn't reach out even though I wanted to. Proud of myself 💪",
       likes: 47,
       claps: 12,
+      images: [
+        "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&auto=format&fit=crop&q=60",
+        "https://images.unsplash.com/photo-1511447333015-45b65e60f6d5?w=800&auto=format&fit=crop&q=60",
+      ],
       isLiked: false,
       isClapped: true,
       comments: [

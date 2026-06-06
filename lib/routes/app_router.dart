@@ -33,7 +33,7 @@ import '../features/profile/views/promo_code_view.dart';
 import '../features/profile/views/settings_view.dart';
 import '../features/profile/views/track_order.dart';
 
-enum TransitionType { fadeThrough, slideHorizontal, slideUp, none }
+enum TransitionType { fadeThrough, slideHorizontal, slideLeft, slideRight, slideUp, none }
 
 abstract class AppRoutes {
   static const splash = '/splash';
@@ -104,13 +104,15 @@ class AppRouter {
       key: state.pageKey,
       child: child,
       transitionDuration: duration,
+      reverseTransitionDuration: duration,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         switch (type) {
           case TransitionType.fadeThrough:
+            final curve = CurvedAnimation(parent: animation, curve: Curves.easeOutCubic);
             return FadeTransition(
-              opacity: animation,
+              opacity: curve,
               child: ScaleTransition(
-                scale: Tween<double>(begin: 0.98, end: 1.0).animate(animation),
+                scale: Tween<double>(begin: 0.96, end: 1.0).animate(curve),
                 child: child,
               ),
             );
@@ -119,7 +121,23 @@ class AppRouter {
               position: Tween<Offset>(
                 begin: const Offset(1.0, 0.0),
                 end: Offset.zero,
-              ).animate(CurvedAnimation(parent: animation, curve: Curves.easeInOut)),
+              ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)),
+              child: child,
+            );
+          case TransitionType.slideLeft:
+            return SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(-1.0, 0.0),
+                end: Offset.zero,
+              ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)),
+              child: child,
+            );
+          case TransitionType.slideRight:
+            return SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(1.0, 0.0),
+                end: Offset.zero,
+              ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)),
               child: child,
             );
           case TransitionType.slideUp:
@@ -127,7 +145,7 @@ class AppRouter {
               position: Tween<Offset>(
                 begin: const Offset(0.0, 1.0),
                 end: Offset.zero,
-              ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)),
+              ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOutQuart)),
               child: child,
             );
           case TransitionType.none:
@@ -167,15 +185,43 @@ class AppRouter {
       routes: [
         GoRoute(
           path: AppRoutes.splash,
-          builder: (context, state) => const SplashScreen(),
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const SplashScreen(),
+          ),
         ),
-        StatefulShellRoute.indexedStack(
+        StatefulShellRoute(
           builder: (context, state, navigationShell) => Navbar(navigationShell: navigationShell),
+          navigatorContainerBuilder: (context, navigationShell, children) {
+            return _DirectionalBranchContainer(
+              navigationShell: navigationShell,
+              children: children,
+            );
+          },
           branches: [
             StatefulShellBranch(routes: [GoRoute(path: AppRoutes.home, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const HomeView()))]),
             StatefulShellBranch(routes: [GoRoute(path: AppRoutes.circle, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const CircleView()))]),
-            StatefulShellBranch(routes: [GoRoute(path: AppRoutes.coaches, builder: (context, state) => const Center(child: Text('Coaches')))]),
-            StatefulShellBranch(routes: [GoRoute(path: AppRoutes.inbox, builder: (context, state) => const Center(child: Text('Inbox')))]),
+            StatefulShellBranch(routes: [
+              GoRoute(
+                path: AppRoutes.coaches,
+                pageBuilder: (context, state) => _buildPageWithTransition(
+                  context: context,
+                  state: state,
+                  child: const Center(child: Text('Coaches')),
+                ),
+              )
+            ]),
+            StatefulShellBranch(routes: [
+              GoRoute(
+                path: AppRoutes.inbox,
+                pageBuilder: (context, state) => _buildPageWithTransition(
+                  context: context,
+                  state: state,
+                  child: const Center(child: Text('Inbox')),
+                ),
+              )
+            ]),
             StatefulShellBranch(routes: [GoRoute(path: AppRoutes.profile, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const ProfileView()))]),
           ],
         ),
@@ -199,7 +245,7 @@ class AppRouter {
         GoRoute(path: AppRoutes.setup11, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const Setup11View(), type: TransitionType.slideHorizontal)),
         GoRoute(path: AppRoutes.setup12, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const Setup12View(), type: TransitionType.slideHorizontal)),
         GoRoute(path: AppRoutes.setup13, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const Setup13View(), type: TransitionType.slideHorizontal)),
-        GoRoute(path: AppRoutes.setupComplete, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const SetupCompleteView())),
+        GoRoute(path: AppRoutes.setupComplete, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const SetupCompleteView(), type: TransitionType.slideHorizontal)),
 
         GoRoute(path: AppRoutes.forgetPass, name: 'forgetPassword', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const ForgetPasswordView())),
         GoRoute(path: AppRoutes.otpVerify, name: 'otpVerify', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: OtpVerifyView(origin: state.extra as String?))),
@@ -230,6 +276,64 @@ class AppRouter {
         GoRoute(path: AppRoutes.writeJournal, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const WriteJournalView(), type: TransitionType.slideUp)),
       ],
       errorPageBuilder: (context, state) => MaterialPage(child: Scaffold(body: Center(child: Text('Page not found: ${state.error}')))),
+    );
+  }
+}
+
+class _DirectionalBranchContainer extends StatefulWidget {
+  final StatefulNavigationShell navigationShell;
+  final List<Widget> children;
+
+  const _DirectionalBranchContainer({
+    required this.navigationShell,
+    required this.children,
+  });
+
+  @override
+  State<_DirectionalBranchContainer> createState() => _DirectionalBranchContainerState();
+}
+
+class _DirectionalBranchContainerState extends State<_DirectionalBranchContainer> {
+  int _previousIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _previousIndex = widget.navigationShell.currentIndex;
+  }
+
+  @override
+  void didUpdateWidget(_DirectionalBranchContainer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.navigationShell.currentIndex != widget.navigationShell.currentIndex) {
+      _previousIndex = oldWidget.navigationShell.currentIndex;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final int currentIndex = widget.navigationShell.currentIndex;
+
+    return Stack(
+      children: List.generate(widget.children.length, (index) {
+        final bool isActive = index == currentIndex;
+        
+        return IgnorePointer(
+          ignoring: !isActive,
+          child: AnimatedOpacity(
+            opacity: isActive ? 1.0 : 0.0,
+            duration: const Duration(milliseconds: 300),
+            child: AnimatedSlide(
+              offset: isActive
+                  ? Offset.zero
+                  : Offset(index < currentIndex ? -0.1 : 0.1, 0.0),
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeOutCubic,
+              child: widget.children[index],
+            ),
+          ),
+        );
+      }),
     );
   }
 }

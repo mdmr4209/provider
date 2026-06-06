@@ -75,6 +75,7 @@ class AppAssets {
   static const String see = 'assets/icons/see.svg';
   static const String send = 'assets/icons/send.svg';
   static const String shareMenu = 'assets/icons/share.png';
+  static const String shareMenu1 = 'assets/icons/share.png';
   static const String unfollow = 'assets/icons/unfollow.svg';
   static const String unlock = 'assets/icons/unlock.svg';
   static const String video = 'assets/icons/video.svg';

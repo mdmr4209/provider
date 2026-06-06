@@ -3,9 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:newproject/core/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
+
 import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_colors.dart';
-import '../../../core/widgets/background_widget.dart';
+import '../../../core/widgets/custom_input.dart';
 import '../../../core/widgets/custom_loader.dart';
 import '../controllers/circle_controller.dart';
 import '../models/circle_post_model.dart';
@@ -42,138 +43,113 @@ class _CircleViewState extends State<CircleView>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return BackgroundWidget(
-      imagePath: AppAssets.bgHome,
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: SafeArea(
-          child: Column(
-            children: [
-              SizedBox(height: 10.h),
-              const CircleMemberList(),
-              SizedBox(height: 20.h),
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            SizedBox(height: 10.h),
+            const CircleMemberList(),
 
-              // Search/Post Input Bar
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w),
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 16.w,
-                    vertical: 12.h,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.postCardColor,
-                    borderRadius: BorderRadius.circular(30.r),
-                    border: Border.all(
-                      color: AppColors.whiteColor.withOpacity(0.1),
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(
-                        AppAssets.feather,
-                        colorFilter: ColorFilter.mode(
-                          AppColors.whiteColor.withOpacity(0.6),
-                          BlendMode.srcIn,
-                        ),
-                        width: 20.r,
-                      ),
-                      SizedBox(width: 12.w),
-                      Text(
-                        "Word Your Thoughts",
-                        style: theme.textTheme.bodyLarge?.copyWith(
-                          color: AppColors.whiteColor.withOpacity(0.6),
-                          fontSize: 16.sp,
-                        ),
-                      ),
-                    ],
-                  ),
+            // Search/Post Input Bar
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              child: CustomInput(
+                height: 50,
+                hintText: "Word Your Thoughts",
+                fontSize: 14,
+                hintColor: AppColors.greyColor,
+                hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: AppColors.whiteColor.withOpacity(0.6),
+                  fontSize: 14.sp,
                 ),
+                shadow: true,
+                leadingIcon: AppAssets.feather,
+                leadingPadding: EdgeInsets.only(left: 16.w, right: 8.w),
               ),
+            ),
 
-              SizedBox(height: 20.h),
+            SizedBox(height: 11.h),
 
-              // Tabs and Groups Action
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TabBar(
-                        controller: _tabController,
-                        isScrollable: true,
-                        indicatorColor: AppColors.secondaryColorLight,
-                        labelColor: AppColors.secondaryColorLight,
-                        unselectedLabelColor: AppColors.whiteColor.withOpacity(
-                          0.6,
-                        ),
-                        dividerColor: Colors.transparent,
-                        tabAlignment: TabAlignment.start,
-                        labelPadding: EdgeInsets.only(right: 24.w),
-                        labelStyle: theme.textTheme.titleMedium?.copyWith(
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        unselectedLabelStyle: theme.textTheme.titleMedium
-                            ?.copyWith(fontSize: 18.sp),
-                        tabs: const [
-                          Tab(text: "Everyone"),
-                          Tab(text: "Friends"),
-                        ],
+            // Tabs and Groups Action
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TabBar(
+                      controller: _tabController,
+                      isScrollable: true,
+                      indicatorColor: AppColors.secondaryColorLight,
+                      labelColor: AppColors.secondaryColorLight,
+                      unselectedLabelColor: AppColors.whiteColor.withOpacity(
+                        0.6,
                       ),
+                      dividerColor: Colors.transparent,
+                      tabAlignment: TabAlignment.start,
+                      labelPadding: EdgeInsets.only(right: 24.w),
+                      labelStyle: theme.textTheme.titleMedium?.copyWith(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      unselectedLabelStyle: theme.textTheme.titleMedium
+                          ?.copyWith(fontSize: 18.sp),
+                      tabs: const [
+                        Tab(text: "Everyone"),
+                        Tab(text: "Friends"),
+                      ],
                     ),
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 12.w,
-                        vertical: 6.h,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.whiteColor.withOpacity(0.05),
-                        borderRadius: BorderRadius.circular(20.r),
-                      ),
-                      child: Row(
-                        children: [
-                          Text(
-                            "My Groups",
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: AppColors.secondaryColorLight,
-                              fontSize: 12.sp,
-                            ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 12.w,
+                      vertical: 6.h,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.whiteColor.withOpacity(0.05),
+                      borderRadius: BorderRadius.circular(20.r),
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          "My Groups",
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: AppColors.secondaryColorLight,
+                            fontSize: 12.sp,
                           ),
-                          SizedBox(width: 4.w),
-                          SvgPicture.asset(
-                            AppAssets.group,
-                            colorFilter: const ColorFilter.mode(
-                              AppColors.secondaryColorLight,
-                              BlendMode.srcIn,
-                            ),
-                            width: 16.r,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              Expanded(
-                child: TabBarView(
-                  controller: _tabController,
-                  children: [
-                    const _PostsList(),
-                    Center(
-                      child: Text(
-                        "Friends Posts Coming Soon",
-                        style: theme.textTheme.bodyLarge?.copyWith(
-                          color: AppColors.whiteColor.withOpacity(0.7),
                         ),
+                        SizedBox(width: 4.w),
+                        SvgPicture.asset(
+                          AppAssets.group,
+                          colorFilter: const ColorFilter.mode(
+                            AppColors.secondaryColorLight,
+                            BlendMode.srcIn,
+                          ),
+                          width: 16.r,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  const _PostsList(),
+                  Center(
+                    child: Text(
+                      "Friends Posts Coming Soon",
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        color: AppColors.whiteColor.withOpacity(0.7),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -185,51 +161,97 @@ class _PostsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Consumer<CircleController>(
       builder: (context, controller, child) {
         if (controller.isLoading) {
           return ListView.builder(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+            padding: EdgeInsets.symmetric(vertical: 16.h),
             itemCount: 3,
             itemBuilder: (context, index) => const _PostShimmer(),
           );
         }
 
         if (controller.posts.isEmpty) {
-          return Center(
-            child: Text(
-              "No posts available",
-              style: TextStyle(color: AppColors.whiteColor.withOpacity(0.5)),
-            ),
+          return Stack(
+            children: [
+              RefreshIndicator(
+                onRefresh: () => controller.fetchCircleData(isRefresh: true),
+                color: Colors.transparent,
+                backgroundColor: Colors.transparent,
+                strokeWidth: 0,
+                elevation: 0,
+                child: ListView(
+                  children: [
+                    SizedBox(height: 100.h),
+                    Center(
+                      child: Text(
+                        "No posts available",
+                        style: TextStyle(
+                          color: AppColors.whiteColor.withOpacity(0.5),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (controller.isRefreshing)
+                Positioned(
+                  top: 16.h,
+                  left: 0,
+                  right: 0,
+                  child: const Center(child: CustomLoader(size: 150)),
+                ),
+            ],
           );
         }
 
-        // We insert SuggestionsSection after the 2nd post (index 1)
-        // If there are 2 or more posts, itemCount increases by 1
         final bool showSuggestions = controller.posts.length >= 2;
         final int itemCount = showSuggestions
             ? controller.posts.length + 1
             : controller.posts.length;
 
-        return ListView.builder(
-          padding: EdgeInsets.symmetric(vertical: 16.h),
-          itemCount: itemCount,
-          itemBuilder: (context, index) {
-            // Index 2 is where we show suggestions (after 0 and 1)
-            if (showSuggestions && index == 2) {
-              return const _SuggestionsSection();
-            }
+        return Stack(
+          children: [
+            RefreshIndicator(
+              onRefresh: () => controller.fetchCircleData(isRefresh: true),
+              color: Colors.transparent,
+              backgroundColor: Colors.transparent,
+              strokeWidth: 0,
+              elevation: 0,
+              displacement: 20,
+              child: ListView.builder(
+                padding: EdgeInsets.symmetric(vertical: 16.h),
+                physics: const AlwaysScrollableScrollPhysics(),
+                itemCount: itemCount,
+                itemBuilder: (context, index) {
+                  if (showSuggestions && index == 2) {
+                    return const _SuggestionsSection();
+                  }
 
-            // Map the current index to the correct post index
-            final int postIndex = (showSuggestions && index > 2)
-                ? index - 1
-                : index;
+                  final int postIndex = (showSuggestions && index > 2)
+                      ? index - 1
+                      : index;
 
-            return Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-              child: CirclePostCard(post: controller.posts[postIndex]),
-            );
-          },
+                  return Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16.w,
+                      vertical: 8.h,
+                    ),
+                    child: CirclePostCard(post: controller.posts[postIndex]),
+                  );
+                },
+              ),
+            ),
+            if (controller.isRefreshing)
+              Positioned(
+                top: 16.h,
+                left: 0,
+                right: 0,
+                child: const Center(child: CustomLoader(size: 40)),
+              ),
+          ],
         );
       },
     );
@@ -356,7 +378,7 @@ class _PostShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       child: Container(
         padding: EdgeInsets.all(16.r),
         decoration: BoxDecoration(

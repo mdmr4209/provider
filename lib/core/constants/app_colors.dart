@@ -31,6 +31,7 @@ class AppColors {
   static const Color containerColor2 = Color(0xFFF5F5F5);
   static const Color cardBorderColor = Color(0xFFE8E8E8);
 
+  static const Color greyColor = Color(0xFF828282);
   static const Color whiteColor = Color(0xFFFFFFFF);
   static const Color defaultColorAlpha = Color(0xFF334931);
   static const Color postCardColor = Color(0xFF20311D);
@@ -44,13 +45,12 @@ class AppColors {
 
   static const Color yellowColor = Color(0xFFEEA100);
   static const Color defaultColor1 = Color(0x4D0B2088);
-  static const Color redAlphaColor = Color(0xCCF44336);
+  static const Color redAlphaColor = Color(0xFFF44336);
   static const Color black20Color = Color(0x33000000);
   static const Color defaultDeepColor = Color(0xFF0A1C79);
   static const Color defaultLightColor2 = Color(0xFFE3E9FF);
   static const Color alphaColor = Color(0x1E000000);
   static const Color textColor1 = Color(0xFF515F84);
-  static const Color greyColor = Color(0xFF4D4D4D);
   static const Color backgroundColor1 = Color(0xB3F6F8FF);
   static const Color chatColor = Color(0xFFE7E9F5);
   static const Color seeAllColor = Color(0xFF2E47C7);

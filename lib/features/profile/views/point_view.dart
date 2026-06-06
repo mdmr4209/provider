@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/widgets/custom_loader.dart';
 import '../controllers/profile_controller.dart';
 
 // ─── Main View ──────────────────────────────────────────────────────
@@ -33,11 +34,7 @@ class _PointViewState extends State<PointView> {
           backgroundColor: Colors.white,
           appBar: _buildAppBar(context),
           body: provider.isLoading
-              ? const Center(
-                  child: CircularProgressIndicator(
-                    color: AppColors.defaultColor,
-                  ),
-                )
+              ? const CustomLoader(size: 60)
               : SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -231,13 +228,10 @@ class _CircularProgressSection extends StatelessWidget {
                   SizedBox(
                     width: 160.w,
                     height: 160.w,
-                    child: CircularProgressIndicator(
-                      value: provider.tierProgressPercent,
-                      strokeWidth: 8.w,
-                      backgroundColor: AppColors.lightGrey,
-                      valueColor: const AlwaysStoppedAnimation<Color>(
-                        AppColors.defaultColor,
-                      ),
+                    child: CustomLoader(
+                      size: 160,
+                      // strokeWidth: 8,
+                      color: AppColors.primaryColor,
                     ),
                   ),
                   Text(

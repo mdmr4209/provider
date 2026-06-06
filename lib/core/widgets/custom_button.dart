@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 
 import '../constants/app_colors.dart';
 import '../theme/design_system.dart';
+import 'custom_loader.dart';
 
 class CustomButton extends StatelessWidget {
   const CustomButton({
@@ -133,15 +134,10 @@ class CustomButton extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: horizontalPadding.w),
             child: loading
-                ? Center(
-                    child: SizedBox(
-                      height: 20.h,
-                      width: 20.h,
-                      child: CircularProgressIndicator(
-                        color: effectiveTextColor,
-                        strokeWidth: 2.w,
-                      ),
-                    ),
+                ? CustomLoader(
+                    size: 20,
+                    color: effectiveTextColor,
+                    // strokeWidth: 2,
                   )
                 : _buildContent(
                     context,
