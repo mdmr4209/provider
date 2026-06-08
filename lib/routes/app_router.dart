@@ -15,6 +15,7 @@ import '../features/auth/views/splash_screen.dart';
 import '../features/auth/views/setup/setup_views.dart';
 import '../features/circle/views/circle_view.dart';
 import '../features/circle/views/create_post_view.dart';
+import '../features/find_coach/views/find_coaches_view.dart';
 import '../features/home/views/home_view.dart';
 import '../features/home/views/navigation.dart';
 import '../features/home/views/breathing_view.dart';
@@ -34,7 +35,14 @@ import '../features/profile/views/promo_code_view.dart';
 import '../features/profile/views/settings_view.dart';
 import '../features/profile/views/track_order.dart';
 
-enum TransitionType { fadeThrough, slideHorizontal, slideLeft, slideRight, slideUp, none }
+enum TransitionType {
+  fadeThrough,
+  slideHorizontal,
+  slideLeft,
+  slideRight,
+  slideUp,
+  none,
+}
 
 abstract class AppRoutes {
   static const splash = '/splash';
@@ -100,7 +108,8 @@ class AppRouter {
     TransitionType type = TransitionType.fadeThrough,
   }) {
     final designSystem = Theme.of(context).extension<AppDesignSystem>();
-    final duration = designSystem?.navDuration ?? const Duration(milliseconds: 400);
+    final duration =
+        designSystem?.navDuration ?? const Duration(milliseconds: 400);
 
     return CustomTransitionPage(
       key: state.pageKey,
@@ -110,7 +119,10 @@ class AppRouter {
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         switch (type) {
           case TransitionType.fadeThrough:
-            final curve = CurvedAnimation(parent: animation, curve: Curves.easeOutCubic);
+            final curve = CurvedAnimation(
+              parent: animation,
+              curve: Curves.easeOutCubic,
+            );
             return FadeTransition(
               opacity: curve,
               child: ScaleTransition(
@@ -120,34 +132,58 @@ class AppRouter {
             );
           case TransitionType.slideHorizontal:
             return SlideTransition(
-              position: Tween<Offset>(
-                begin: const Offset(1.0, 0.0),
-                end: Offset.zero,
-              ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)),
+              position:
+                  Tween<Offset>(
+                    begin: const Offset(1.0, 0.0),
+                    end: Offset.zero,
+                  ).animate(
+                    CurvedAnimation(
+                      parent: animation,
+                      curve: Curves.easeOutCubic,
+                    ),
+                  ),
               child: child,
             );
           case TransitionType.slideLeft:
             return SlideTransition(
-              position: Tween<Offset>(
-                begin: const Offset(-1.0, 0.0),
-                end: Offset.zero,
-              ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)),
+              position:
+                  Tween<Offset>(
+                    begin: const Offset(-1.0, 0.0),
+                    end: Offset.zero,
+                  ).animate(
+                    CurvedAnimation(
+                      parent: animation,
+                      curve: Curves.easeOutCubic,
+                    ),
+                  ),
               child: child,
             );
           case TransitionType.slideRight:
             return SlideTransition(
-              position: Tween<Offset>(
-                begin: const Offset(1.0, 0.0),
-                end: Offset.zero,
-              ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)),
+              position:
+                  Tween<Offset>(
+                    begin: const Offset(1.0, 0.0),
+                    end: Offset.zero,
+                  ).animate(
+                    CurvedAnimation(
+                      parent: animation,
+                      curve: Curves.easeOutCubic,
+                    ),
+                  ),
               child: child,
             );
           case TransitionType.slideUp:
             return SlideTransition(
-              position: Tween<Offset>(
-                begin: const Offset(0.0, 1.0),
-                end: Offset.zero,
-              ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOutQuart)),
+              position:
+                  Tween<Offset>(
+                    begin: const Offset(0.0, 1.0),
+                    end: Offset.zero,
+                  ).animate(
+                    CurvedAnimation(
+                      parent: animation,
+                      curve: Curves.easeOutQuart,
+                    ),
+                  ),
               child: child,
             );
           case TransitionType.none:
@@ -173,13 +209,24 @@ class AppRouter {
         final String loc = state.matchedLocation;
 
         if (loc == AppRoutes.splash) return null;
-        if (!hasOnboarded && loc != AppRoutes.onboarding) return AppRoutes.onboarding;
-        if (hasOnboarded && loc == AppRoutes.onboarding) return isLoggedIn ? AppRoutes.home : AppRoutes.login;
+        if (!hasOnboarded && loc != AppRoutes.onboarding)
+          return AppRoutes.onboarding;
+        if (hasOnboarded && loc == AppRoutes.onboarding)
+          return isLoggedIn ? AppRoutes.home : AppRoutes.login;
 
-        final bool isPublicOnlyScreen = loc == AppRoutes.login || loc == AppRoutes.signup || loc == AppRoutes.forgetPass;
+        final bool isPublicOnlyScreen =
+            loc == AppRoutes.login ||
+            loc == AppRoutes.signup ||
+            loc == AppRoutes.forgetPass;
         if (isLoggedIn && isPublicOnlyScreen) return AppRoutes.home;
 
-        final bool isAuthScreen = loc == AppRoutes.home || loc == AppRoutes.circle || loc == AppRoutes.profile || loc == AppRoutes.breathing || loc == AppRoutes.writeJournal || loc.startsWith('/setup');
+        final bool isAuthScreen =
+            loc == AppRoutes.home ||
+            loc == AppRoutes.circle ||
+            loc == AppRoutes.profile ||
+            loc == AppRoutes.breathing ||
+            loc == AppRoutes.writeJournal ||
+            loc.startsWith('/setup');
         if (!isLoggedIn && isAuthScreen) return AppRoutes.login;
 
         return null;
@@ -194,7 +241,8 @@ class AppRouter {
           ),
         ),
         StatefulShellRoute(
-          builder: (context, state, navigationShell) => Navbar(navigationShell: navigationShell),
+          builder: (context, state, navigationShell) =>
+              Navbar(navigationShell: navigationShell),
           navigatorContainerBuilder: (context, navigationShell, children) {
             return _DirectionalBranchContainer(
               navigationShell: navigationShell,
@@ -202,70 +250,386 @@ class AppRouter {
             );
           },
           branches: [
-            StatefulShellBranch(routes: [GoRoute(path: AppRoutes.home, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const HomeView()))]),
-            StatefulShellBranch(routes: [GoRoute(path: AppRoutes.circle, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const CircleView()))]),
-            StatefulShellBranch(routes: [
-              GoRoute(
-                path: AppRoutes.coaches,
-                pageBuilder: (context, state) => _buildPageWithTransition(
-                  context: context,
-                  state: state,
-                  child: const Center(child: Text('Coaches')),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: AppRoutes.home,
+                  pageBuilder: (context, state) => _buildPageWithTransition(
+                    context: context,
+                    state: state,
+                    child: const HomeView(),
+                  ),
                 ),
-              )
-            ]),
-            StatefulShellBranch(routes: [
-              GoRoute(
-                path: AppRoutes.inbox,
-                pageBuilder: (context, state) => _buildPageWithTransition(
-                  context: context,
-                  state: state,
-                  child: const Center(child: Text('Inbox')),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: AppRoutes.circle,
+                  pageBuilder: (context, state) => _buildPageWithTransition(
+                    context: context,
+                    state: state,
+                    child: const CircleView(),
+                  ),
                 ),
-              )
-            ]),
-            StatefulShellBranch(routes: [GoRoute(path: AppRoutes.profile, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const ProfileView()))]),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: AppRoutes.coaches,
+                  pageBuilder: (context, state) => _buildPageWithTransition(
+                    context: context,
+                    state: state,
+                    child: const FindCoachesView(),
+                  ),
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: AppRoutes.inbox,
+                  pageBuilder: (context, state) => _buildPageWithTransition(
+                    context: context,
+                    state: state,
+                    child: const Center(child: Text('Inbox')),
+                  ),
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: AppRoutes.profile,
+                  pageBuilder: (context, state) => _buildPageWithTransition(
+                    context: context,
+                    state: state,
+                    child: const ProfileView(),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
-        GoRoute(path: AppRoutes.onboarding, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const OnboardingView())),
-        GoRoute(path: AppRoutes.login, name: 'login', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const AuthView())),
-        GoRoute(path: AppRoutes.signup, name: 'signup', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const SignUpView())),
-        GoRoute(path: AppRoutes.roleSelection, name: 'roleSelection', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const RoleSelectionView())),
-        GoRoute(path: AppRoutes.nameInput, name: 'nameInput', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: NameInputView(role: state.extra as String? ?? 'User'))),
-        GoRoute(path: AppRoutes.createPost, name: 'createPost', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const CreatePostView())),
+        GoRoute(
+          path: AppRoutes.onboarding,
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const OnboardingView(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.login,
+          name: 'login',
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const AuthView(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.signup,
+          name: 'signup',
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const SignUpView(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.roleSelection,
+          name: 'roleSelection',
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const RoleSelectionView(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.nameInput,
+          name: 'nameInput',
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: NameInputView(role: state.extra as String? ?? 'User'),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.createPost,
+          name: 'createPost',
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const CreatePostView(),
+          ),
+        ),
 
         // Setup Flow (Horizontal Slides)
-        GoRoute(path: AppRoutes.setup1, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const Setup1View(), type: TransitionType.slideHorizontal)),
-        GoRoute(path: AppRoutes.setup2, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const Setup2View(), type: TransitionType.slideHorizontal)),
-        GoRoute(path: AppRoutes.setup3, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const Setup3View(), type: TransitionType.slideHorizontal)),
-        GoRoute(path: AppRoutes.setup4, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const Setup4View(), type: TransitionType.slideHorizontal)),
-        GoRoute(path: AppRoutes.setup5, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const Setup5View(), type: TransitionType.slideHorizontal)),
-        GoRoute(path: AppRoutes.setup6, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const Setup6View(), type: TransitionType.slideHorizontal)),
-        GoRoute(path: AppRoutes.setup7, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const Setup7View(), type: TransitionType.slideHorizontal)),
-        GoRoute(path: AppRoutes.setup8, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const Setup8View(), type: TransitionType.slideHorizontal)),
-        GoRoute(path: AppRoutes.setup9, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const Setup9View(), type: TransitionType.slideHorizontal)),
-        GoRoute(path: AppRoutes.setup10, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const Setup10View(), type: TransitionType.slideHorizontal)),
-        GoRoute(path: AppRoutes.setup11, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const Setup11View(), type: TransitionType.slideHorizontal)),
-        GoRoute(path: AppRoutes.setup12, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const Setup12View(), type: TransitionType.slideHorizontal)),
-        GoRoute(path: AppRoutes.setup13, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const Setup13View(), type: TransitionType.slideHorizontal)),
-        GoRoute(path: AppRoutes.setupComplete, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const SetupCompleteView(), type: TransitionType.slideHorizontal)),
+        GoRoute(
+          path: AppRoutes.setup1,
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const Setup1View(),
+            type: TransitionType.slideHorizontal,
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.setup2,
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const Setup2View(),
+            type: TransitionType.slideHorizontal,
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.setup3,
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const Setup3View(),
+            type: TransitionType.slideHorizontal,
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.setup4,
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const Setup4View(),
+            type: TransitionType.slideHorizontal,
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.setup5,
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const Setup5View(),
+            type: TransitionType.slideHorizontal,
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.setup6,
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const Setup6View(),
+            type: TransitionType.slideHorizontal,
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.setup7,
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const Setup7View(),
+            type: TransitionType.slideHorizontal,
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.setup8,
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const Setup8View(),
+            type: TransitionType.slideHorizontal,
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.setup9,
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const Setup9View(),
+            type: TransitionType.slideHorizontal,
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.setup10,
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const Setup10View(),
+            type: TransitionType.slideHorizontal,
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.setup11,
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const Setup11View(),
+            type: TransitionType.slideHorizontal,
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.setup12,
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const Setup12View(),
+            type: TransitionType.slideHorizontal,
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.setup13,
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const Setup13View(),
+            type: TransitionType.slideHorizontal,
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.setupComplete,
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const SetupCompleteView(),
+            type: TransitionType.slideHorizontal,
+          ),
+        ),
 
-        GoRoute(path: AppRoutes.forgetPass, name: 'forgetPassword', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const ForgetPasswordView())),
-        GoRoute(path: AppRoutes.otpVerify, name: 'otpVerify', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: OtpVerifyView(origin: state.extra as String?))),
-        GoRoute(path: AppRoutes.changePass, name: 'changePassword', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const ChangePasswordView())),
-        GoRoute(path: AppRoutes.goToHome, name: 'goToHome', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: GoToHome(origin: state.extra as String?))),
+        GoRoute(
+          path: AppRoutes.forgetPass,
+          name: 'forgetPassword',
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const ForgetPasswordView(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.otpVerify,
+          name: 'otpVerify',
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: OtpVerifyView(origin: state.extra as String?),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.changePass,
+          name: 'changePassword',
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const ChangePasswordView(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.goToHome,
+          name: 'goToHome',
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: GoToHome(origin: state.extra as String?),
+          ),
+        ),
 
-        GoRoute(path: AppRoutes.logout, name: 'logout', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const Logout())),
-        GoRoute(path: AppRoutes.paymentMethod, name: 'paymentMethod', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const PaymentView())),
-        GoRoute(path: AppRoutes.address, name: 'address', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const MyAddress())),
-        GoRoute(path: AppRoutes.promoCode, name: 'promoCode', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const PromoCodeView())),
-        GoRoute(path: AppRoutes.trackOrder, name: 'trackOrder', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const TrackOrder())),
-        GoRoute(path: AppRoutes.editProfile, name: 'editProfile', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const EditView())),
-        GoRoute(path: AppRoutes.addCard, name: 'addCard', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const AddNewCardView())),
-        GoRoute(path: AppRoutes.addAddress, name: 'addAddress', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const AddNewAddress())),
-        GoRoute(path: AppRoutes.points, name: 'points', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const PointView())),
-        GoRoute(path: AppRoutes.addPromoCodeView, name: 'addPromoCodeView', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const AddPromoCodeView())),
-        GoRoute(path: AppRoutes.settings, name: 'settings', pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const SettingsView())),
+        GoRoute(
+          path: AppRoutes.logout,
+          name: 'logout',
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const Logout(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.paymentMethod,
+          name: 'paymentMethod',
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const PaymentView(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.address,
+          name: 'address',
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const MyAddress(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.promoCode,
+          name: 'promoCode',
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const PromoCodeView(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.trackOrder,
+          name: 'trackOrder',
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const TrackOrder(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.editProfile,
+          name: 'editProfile',
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const EditView(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.addCard,
+          name: 'addCard',
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const AddNewCardView(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.addAddress,
+          name: 'addAddress',
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const AddNewAddress(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.points,
+          name: 'points',
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const PointView(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.addPromoCodeView,
+          name: 'addPromoCodeView',
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const AddPromoCodeView(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.settings,
+          name: 'settings',
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const SettingsView(),
+          ),
+        ),
 
         // Special Views (Slide Up)
         GoRoute(
@@ -273,12 +637,32 @@ class AppRouter {
           name: 'breathing',
           pageBuilder: (context, state) {
             final extras = state.extra as Map<String, dynamic>? ?? {};
-            return _buildPageWithTransition(context: context, state: state, child: BreathingView(title: extras['title'] ?? 'Take a Breath', subtitle: extras['subtitle'] ?? 'Let\'s breathe together.'), type: TransitionType.slideUp);
+            return _buildPageWithTransition(
+              context: context,
+              state: state,
+              child: BreathingView(
+                title: extras['title'] ?? 'Take a Breath',
+                subtitle: extras['subtitle'] ?? 'Let\'s breathe together.',
+              ),
+              type: TransitionType.slideUp,
+            );
           },
         ),
-        GoRoute(path: AppRoutes.writeJournal, pageBuilder: (context, state) => _buildPageWithTransition(context: context, state: state, child: const WriteJournalView(), type: TransitionType.slideUp)),
+        GoRoute(
+          path: AppRoutes.writeJournal,
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const WriteJournalView(),
+            type: TransitionType.slideUp,
+          ),
+        ),
       ],
-      errorPageBuilder: (context, state) => MaterialPage(child: Scaffold(body: Center(child: Text('Page not found: ${state.error}')))),
+      errorPageBuilder: (context, state) => MaterialPage(
+        child: Scaffold(
+          body: Center(child: Text('Page not found: ${state.error}')),
+        ),
+      ),
     );
   }
 }
@@ -293,10 +677,12 @@ class _DirectionalBranchContainer extends StatefulWidget {
   });
 
   @override
-  State<_DirectionalBranchContainer> createState() => _DirectionalBranchContainerState();
+  State<_DirectionalBranchContainer> createState() =>
+      _DirectionalBranchContainerState();
 }
 
-class _DirectionalBranchContainerState extends State<_DirectionalBranchContainer> {
+class _DirectionalBranchContainerState
+    extends State<_DirectionalBranchContainer> {
   int _previousIndex = 0;
 
   @override
@@ -308,7 +694,8 @@ class _DirectionalBranchContainerState extends State<_DirectionalBranchContainer
   @override
   void didUpdateWidget(_DirectionalBranchContainer oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.navigationShell.currentIndex != widget.navigationShell.currentIndex) {
+    if (oldWidget.navigationShell.currentIndex !=
+        widget.navigationShell.currentIndex) {
       _previousIndex = oldWidget.navigationShell.currentIndex;
     }
   }
@@ -320,7 +707,7 @@ class _DirectionalBranchContainerState extends State<_DirectionalBranchContainer
     return Stack(
       children: List.generate(widget.children.length, (index) {
         final bool isActive = index == currentIndex;
-        
+
         return IgnorePointer(
           ignoring: !isActive,
           child: AnimatedOpacity(

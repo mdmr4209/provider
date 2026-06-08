@@ -17,7 +17,7 @@ class CircleController extends ChangeNotifier {
   // ── New Post State ──────────────────────────────────────────────────────
   final TextEditingController postTextController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
-  
+
   /// Selected media files (images or videos) from the device for the new post.
   final List<XFile> _selectedMedia = [];
   List<XFile> get selectedMedia => _selectedMedia;

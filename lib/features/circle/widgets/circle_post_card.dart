@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../views/user_profile_view.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/theme/design_system.dart';
@@ -187,45 +188,63 @@ class _CirclePostCardState extends State<CirclePostCard> {
                           width: 1.r,
                         ),
                       ),
-                      child: CircleAvatar(
-                        radius: 20.r,
-                        backgroundColor: Colors.white.withValues(alpha: 0.1),
-                        backgroundImage: widget.post.userAvatar.isNotEmpty
-                            ? NetworkImage(widget.post.userAvatar)
-                            : null,
-                        child: widget.post.userAvatar.isEmpty
-                            ? Text(
-                                widget.post.userName[0],
-                                style: TextStyle(
-                                  fontSize: 14.sp,
-                                  color: Colors.white,
-                                ),
-                              )
-                            : null,
+                      child: GestureDetector(
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                UserProfileView(userId: widget.post.id),
+                          ),
+                        ),
+                        child: CircleAvatar(
+                          radius: 20.r,
+                          backgroundColor: Colors.white.withValues(alpha: 0.1),
+                          backgroundImage: widget.post.userAvatar.isNotEmpty
+                              ? NetworkImage(widget.post.userAvatar)
+                              : null,
+                          child: widget.post.userAvatar.isEmpty
+                              ? Text(
+                                  widget.post.userName[0],
+                                  style: TextStyle(
+                                    fontSize: 14.sp,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : null,
+                        ),
                       ),
                     ),
                     SizedBox(width: 12.w),
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            widget.post.userName,
-                            style: theme.textTheme.titleMedium?.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15.sp,
-                            ),
+                      child: GestureDetector(
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                UserProfileView(userId: widget.post.id),
                           ),
-                          Text(
-                            widget.post.timeAgo,
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: Colors.white.withValues(alpha: 0.6),
-                              fontSize: 12.sp,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              widget.post.userName,
+                              style: theme.textTheme.titleMedium?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15.sp,
+                              ),
                             ),
-                          ),
-                        ],
+                            Text(
+                              widget.post.timeAgo,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: Colors.white.withValues(alpha: 0.6),
+                                fontSize: 12.sp,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     GestureDetector(

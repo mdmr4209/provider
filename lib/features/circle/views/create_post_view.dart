@@ -16,7 +16,6 @@ class CreatePostView extends StatelessWidget {
     final theme = Theme.of(context);
     final controller = context.watch<CircleController>();
     return Scaffold(
-      backgroundColor: const Color(0xFF20341F), // Dark green background
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -79,9 +78,7 @@ class CreatePostView extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: Colors.white.withAlpha(13),
                         borderRadius: BorderRadius.circular(16.r),
-                        border: Border.all(
-                          color: Colors.white.withAlpha(20),
-                        ),
+                        border: Border.all(color: Colors.white.withAlpha(20)),
                       ),
                       child: Column(
                         children: [
@@ -111,6 +108,7 @@ class CreatePostView extends StatelessWidget {
                                     enabledBorder: InputBorder.none,
                                     focusedBorder: InputBorder.none,
                                     fillColor: Colors.transparent,
+                                    contentPadding: EdgeInsets.only()
                                   ),
                                 ),
                               ),
@@ -124,10 +122,6 @@ class CreatePostView extends StatelessWidget {
                                 icon: SvgPicture.asset(
                                   AppAssets.video,
                                   width: 24.r,
-                                  colorFilter: const ColorFilter.mode(
-                                    AppColors.greyColor,
-                                    BlendMode.srcIn,
-                                  ),
                                 ),
                                 onPressed: () =>
                                     controller.pickMedia(isVideo: true),
@@ -137,10 +131,6 @@ class CreatePostView extends StatelessWidget {
                                 icon: SvgPicture.asset(
                                   AppAssets.image,
                                   width: 24.r,
-                                  colorFilter: const ColorFilter.mode(
-                                    AppColors.greyColor,
-                                    BlendMode.srcIn,
-                                  ),
                                 ),
                                 onPressed: () =>
                                     controller.pickMedia(isVideo: false),
@@ -165,7 +155,8 @@ class CreatePostView extends StatelessWidget {
                         itemCount: controller.selectedMedia.length,
                         itemBuilder: (context, index) {
                           final file = controller.selectedMedia[index];
-                          final isVideo = file.path.toLowerCase().endsWith('.mp4') ||
+                          final isVideo =
+                              file.path.toLowerCase().endsWith('.mp4') ||
                               file.path.toLowerCase().endsWith('.mov') ||
                               file.path.toLowerCase().endsWith('.avi');
                           return Stack(

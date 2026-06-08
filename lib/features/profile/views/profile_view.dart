@@ -1,193 +1,108 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../routes/app_router.dart';
 import '../controllers/profile_controller.dart';
 import 'logout.dart';
 import '../../localization/localization_extension.dart';
 
-class ProfileView extends StatelessWidget {
+class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
 
   @override
+  State<ProfileView> createState() => _ProfileViewState();
+}
+
+class _ProfileViewState extends State<ProfileView> {
+  bool _notificationsEnabled = true;
+
+  @override
   Widget build(BuildContext context) {
-    final count = 2;
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+        backgroundColor: Colors.transparent,
         elevation: 0,
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-        title: Text(
-          context.watchTr('my_profile'),
-          style: Theme.of(context).textTheme.titleLarge,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.maybePop(context),
         ),
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 20.w),
-            child: Center(
-              child: Badge(
-                alignment: Alignment.bottomLeft,
-                label: Text(
-                  count.toString(),
-                  style: TextStyle(fontSize: 10.sp),
-                ),
-                isLabelVisible: count > 0,
-                backgroundColor: AppColors.defaultColor,
-                offset: Offset(-5.w, -10.h),
-                child: _headerIcon(AppAssets.cart, onTap: () {}),
-              ),
-            ),
+        title: Text(
+          context.watchTr('settings'),
+          style: theme.textTheme.titleLarge?.copyWith(
+            color: Colors.white,
+            fontFamily: 'Georgia',
+            fontSize: 20.sp,
           ),
-        ],
+        ),
+        centerTitle: true,
       ),
       body: Consumer<ProfileController>(
         builder: (context, profile, _) => SafeArea(
           child: SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(height: 20.h),
-                  Stack(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.all(10.w),
-                        width: 100.w,
-                        height: 100.h,
-                        clipBehavior: Clip.antiAlias,
-                        decoration: ShapeDecoration(
-                          image: DecorationImage(
-                            image: AssetImage("assets/image/img_3.png"),
-                            fit: BoxFit.cover,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                              width: 1.5.w,
-                              strokeAlign: BorderSide.strokeAlignOutside,
-                              color: AppColors.defaultColor,
-                            ),
-                            borderRadius: BorderRadius.circular(70.r),
-                          ),
-                        ),
-                      ),
-                      // Positioned(
-                      //   bottom: 15.h,
-                      //   right: 0,
-                      //   child: InkWell(
-                      //     onTap: () => context.push(AppRoutes.editProfile),
-                      //     child: Container(
-                      //       width: 40.w,
-                      //       height: 40.h,
-                      //       padding: EdgeInsets.all(5.w),
-                      //       decoration: ShapeDecoration(
-                      //         color: Colors.white,
-                      //         shape: RoundedRectangleBorder(
-                      //           borderRadius: BorderRadius.circular(50.r),
-                      //         ),
-                      //         shadows: [
-                      //           BoxShadow(
-                      //             color: Color(0x26222222),
-                      //             blurRadius: 10,
-                      //             offset: Offset(0, 4),
-                      //             spreadRadius: 0,
-                      //           ),
-                      //         ],
-                      //       ),
-                      //       child: SvgPicture.asset(
-                      //         AppAssets.edit,
-                      //         colorFilter: ColorFilter.mode(
-                      //           AppColors.defaultColor,
-                      //           BlendMode.srcIn,
-                      //         ),
-                      //         width: 20.w,
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
-                    ],
-                  ),
-                  SizedBox(height: 10.h),
-                  Text(
-                    'Kristin Watson',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headlineLarge,
-                  ),
-                  SizedBox(height: 10.h),
-                  Text(
-                    'kristinwatson@mail.com',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                  SizedBox(height: 10.h),
-                  Column(
-                    children: [
-                      _profileMenuTile(
-                        context,
-                        icon: AppAssets.orderHistory,
-                        title: context.watchTr('order_history'),
-                        onTap: () => context.push(AppRoutes.orderHistory),
-                      ),
-                      _profileMenuTile(
-                        context,
-                        icon: AppAssets.paymentMethod,
-                        title: context.watchTr('payment_method'),
-                        onTap: () => context.push(AppRoutes.paymentMethod),
-                      ),
-                      _profileMenuTile(
-                        context,
-                        icon: AppAssets.address,
-                        title: context.watchTr('my_address'),
-                        onTap: () => context.push(AppRoutes.address),
-                      ),
-                      _profileMenuTile(
-                        context,
-                        icon: AppAssets.promoCode,
-                        title: context.watchTr('my_promocodes'),
-                        onTap: () => context.push(AppRoutes.promoCode),
-                      ),
-                      _profileMenuTile(
-                        context,
-                        icon: AppAssets.trackOrder,
-                        title: context.watchTr('track_my_order'),
-                        onTap: () => context.push(AppRoutes.trackOrder),
-                      ),
-                      _profileMenuTile(
-                        context,
-                        icon: AppAssets.points,
-                        title: context.watchTr('my_points'),
-                        onTap: () => context.push(AppRoutes.points),
-                      ),
-                      _profileMenuTile(
-                        context,
-                        icon: AppAssets.settings,
-                        title: context.watchTr('settings'),
-                        onTap: () => context.push(AppRoutes.settings),
-                      ),
-                      _profileMenuTile(
-                        context,
-                        icon: AppAssets.logout,
-                        title: context.watchTr('sign_out'),
-                        isLogout: true,
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => const Logout(),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10.h),
-                ],
-              ),
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 20.h),
+                _buildSectionHeader("Account"),
+                _buildSettingsTile(
+                  icon: Icons.person_outline,
+                  title: "Personal Information",
+                  onTap: () => context.push(AppRoutes.editProfile),
+                ),
+                _buildSettingsTile(
+                  icon: Icons.payment_outlined,
+                  title: "Payment Method",
+                  onTap: () => context.push(AppRoutes.paymentMethod),
+                ),
+                _buildSettingsTile(
+                  icon: Icons.lock_outline,
+                  title: "Change Password",
+                  onTap: () {}, // Implement logic or route
+                ),
+                _buildSettingsTile(
+                  icon: Icons.workspace_premium_outlined,
+                  title: "Subscription Plan",
+                  onTap: () {},
+                ),
+                _buildSettingsTile(
+                  icon: Icons.balance_outlined,
+                  title: "Credits Balance",
+                  onTap: () => context.push(AppRoutes.points),
+                ),
+                _buildSettingsTile(
+                  icon: Icons.block_outlined,
+                  title: "Block List",
+                  onTap: () {},
+                ),
+                SizedBox(height: 24.h),
+                _buildSectionHeader("Preferences"),
+                _buildNotificationTile(),
+                SizedBox(height: 24.h),
+                _buildSectionHeader("Support"),
+                _buildSettingsTile(
+                  icon: Icons.help_outline,
+                  title: "Help & Support",
+                  onTap: () {},
+                ),
+                _buildSettingsTile(
+                  icon: Icons.logout,
+                  title: context.watchTr('sign_out'),
+                  isLogout: true,
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => const Logout(),
+                    );
+                  },
+                ),
+                SizedBox(height: 40.h),
+              ],
             ),
           ),
         ),
@@ -195,85 +110,89 @@ class ProfileView extends StatelessWidget {
     );
   }
 
-  // Reusable Menu Tile Widget
-  Widget _profileMenuTile(
-    BuildContext context, {
-    required String icon,
-    required String title,
-    required VoidCallback onTap,
-    bool isLogout = false,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 8.h),
-        child: Row(
-          children: [
-            // Icon Box
-            Container(
-              width: 50.r,
-              height: 50.r,
-              decoration: ShapeDecoration(
-                color: Theme.of(context).colorScheme.surface,
-                shape: RoundedRectangleBorder(
-                  side: BorderSide(
-                    width: 1.w,
-                    color: Theme.of(context).dividerColor,
-                  ),
-                  borderRadius: BorderRadius.circular(10.r),
-                ),
-              ),
-              child: Center(
-                child: SvgPicture.asset(
-                  icon,
-                  width: 20.r,
-                  height: 20.r,
-                  // Flavor: turn logout icon red if desired
-                  colorFilter: isLogout
-                      ? const ColorFilter.mode(
-                          Colors.redAccent,
-                          BlendMode.srcIn,
-                        )
-                      : ColorFilter.mode(
-                          Theme.of(context).iconTheme.color!,
-                          BlendMode.srcIn,
-                        ),
-                ),
-              ),
-            ),
-            SizedBox(width: 15.w),
-            // Title
-            Expanded(
-              child: Text(
-                title,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: isLogout
-                      ? Colors.redAccent
-                      : Theme.of(context).textTheme.bodyLarge?.color,
-                ),
-              ),
-            ),
-            // Arrow Icon
-            if (!isLogout)
-              Icon(
-                Icons.arrow_forward_ios,
-                size: 16.r,
-                color: Theme.of(context).iconTheme.color?.withAlpha(127),
-              ),
-          ],
+  Widget _buildSectionHeader(String title) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 12.h, left: 4.w),
+      child: Text(
+        title,
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 16.sp,
+          fontWeight: FontWeight.bold,
         ),
       ),
     );
   }
 
-  Widget _headerIcon(String asset, {required VoidCallback onTap}) {
-    return InkWell(
-      onTap: onTap,
-      child: SvgPicture.asset(
-        asset,
-        width: 24.w,
-        height: 24.h,
-        colorFilter: ColorFilter.mode(AppColors.blackColor, BlendMode.srcIn),
+  Widget _buildSettingsTile({
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+    bool isLogout = false,
+  }) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 12.h),
+      decoration: BoxDecoration(
+        color: Colors.white.withAlpha(13),
+        borderRadius: BorderRadius.circular(12.r),
+      ),
+      child: ListTile(
+        onTap: onTap,
+        leading: Icon(
+          icon,
+          color: isLogout ? Colors.redAccent : Colors.white.withAlpha(179),
+          size: 22.r,
+        ),
+        title: Text(
+          title,
+          style: TextStyle(
+            color: isLogout ? Colors.redAccent : Colors.white.withAlpha(204),
+            fontSize: 14.sp,
+          ),
+        ),
+        trailing: isLogout
+            ? null
+            : Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.white.withAlpha(128),
+                size: 16.r,
+              ),
+      ),
+    );
+  }
+
+  Widget _buildNotificationTile() {
+    return Container(
+      margin: EdgeInsets.only(bottom: 12.h),
+      padding: EdgeInsets.symmetric(vertical: 4.h),
+      decoration: BoxDecoration(
+        color: Colors.white.withAlpha(13),
+        borderRadius: BorderRadius.circular(12.r),
+      ),
+      child: ListTile(
+        leading: Icon(
+          Icons.notifications_none_outlined,
+          color: Colors.white.withAlpha(179),
+          size: 22.r,
+        ),
+        title: Text(
+          "Notifications",
+          style: TextStyle(
+            color: Colors.white.withAlpha(204),
+            fontSize: 14.sp,
+          ),
+        ),
+        trailing: Transform.scale(
+          scale: 0.8,
+          child: Switch(
+            value: _notificationsEnabled,
+            onChanged: (val) => setState(() => _notificationsEnabled = val),
+            activeColor: const Color(0xFFC19E5F),
+            activeTrackColor: const Color(0xFFC19E5F).withAlpha(102),
+            inactiveThumbColor: Colors.white.withAlpha(128),
+            inactiveTrackColor: Colors.white.withAlpha(26),
+          ),
+        ),
       ),
     );
   }

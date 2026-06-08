@@ -12,6 +12,9 @@ import '../../../core/widgets/custom_loader.dart';
 import '../../../routes/app_router.dart';
 import '../controllers/circle_controller.dart';
 import '../models/circle_post_model.dart';
+import 'friends_view.dart';
+import 'group_details_view.dart';
+import 'groups_view.dart';
 import '../widgets/circle_member_list.dart';
 import '../widgets/circle_post_card.dart';
 
@@ -103,40 +106,54 @@ class _CircleViewState extends State<CircleView>
                         ),
                         unselectedLabelStyle: theme.textTheme.titleMedium
                             ?.copyWith(fontSize: 18.sp),
-                        tabs: const [
-                          Tab(text: "Everyone"),
-                          Tab(text: "Friends"),
+                        tabs: [
+                          const Tab(text: "Everyone"),
+                          GestureDetector(
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const FriendsView(),
+                              ),
+                            ),
+                            child: const Tab(text: "Friends"),
+                          ),
                         ],
                       ),
                     ),
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 12.w,
-                        vertical: 6.h,
+                    GestureDetector(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const GroupsView()),
                       ),
-                      decoration: BoxDecoration(
-                        color: AppColors.whiteColor.withAlpha(13),
-                        borderRadius: BorderRadius.circular(20.r),
-                      ),
-                      child: Row(
-                        children: [
-                          Text(
-                            "My Groups",
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: AppColors.secondaryColorLight,
-                              fontSize: 12.sp,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 12.w,
+                          vertical: 6.h,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.whiteColor.withAlpha(13),
+                          borderRadius: BorderRadius.circular(20.r),
+                        ),
+                        child: Row(
+                          children: [
+                            Text(
+                              "My Groups",
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: AppColors.secondaryColorLight,
+                                fontSize: 12.sp,
+                              ),
                             ),
-                          ),
-                          SizedBox(width: 4.w),
-                          SvgPicture.asset(
-                            AppAssets.group,
-                            colorFilter: const ColorFilter.mode(
-                              AppColors.secondaryColorLight,
-                              BlendMode.srcIn,
+                            SizedBox(width: 4.w),
+                            SvgPicture.asset(
+                              AppAssets.group,
+                              colorFilter: const ColorFilter.mode(
+                                AppColors.secondaryColorLight,
+                                BlendMode.srcIn,
+                              ),
+                              width: 16.r,
                             ),
-                            width: 16.r,
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ],

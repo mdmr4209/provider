@@ -559,13 +559,429 @@ Success Response (200 OK):
 }
 ```
 ---
-4.4 Resource Not Found
-404 Not Found:
+
+## Groups Screen APIs
+
+### Groups Data Models
+
+#### GroupModel
+```json
+{
+  "id": "group_001",
+  "name": "No Contact Warriors",
+  "icon": "https://api.example.com/icons/group_001.png",
+  "memberCount": 1243,
+  "description": "Day 14 of No Contact. It was really hard today today, I almost texted him when I saw his favorite song playing. But I stayed strong!",
+  "isJoined": true,
+  "status": "active"
+}
+```
+
+---
+
+### 5.1 Get My Groups
+**Endpoint**: `GET /api/groups/my`
+**Headers**: `Authorization: Bearer {accessToken}`
+**Success Response** (200 OK):
+```json
+{
+  "status": "success",
+  "message": "Joined groups retrieved",
+  "data": {
+    "groups": [
+      {
+        "id": "group_001",
+        "name": "No Contact Warriors",
+        "icon": "https://api.example.com/icons/group_001.png",
+        "memberCount": 1243,
+        "description": "Day 14 of No Contact. It was really hard today today, I almost texted him when I saw his favorite song playing. But I stayed strong!",
+        "isJoined": true
+      },
+      {
+        "id": "group_002",
+        "name": "Healing Hearts",
+        "icon": "https://api.example.com/icons/group_002.png",
+        "memberCount": 856,
+        "description": "A safe space for those healing from heartbreak. We support each other through the journey.",
+        "isJoined": true
+      }
+    ]
+  }
+}
+```
+
+---
+
+### 5.2 Find/Suggest Groups
+**Endpoint**: `GET /api/groups/find`
+**Headers**: `Authorization: Bearer {accessToken}`
+**Success Response** (200 OK):
+```json
+{
+  "status": "success",
+  "message": "Suggested groups retrieved",
+  "data": {
+    "isFirstGroupFree": true,
+    "suggestions": [
+      {
+        "id": "group_003",
+        "name": "Self Love Club",
+        "icon": "https://api.example.com/icons/group_003.png",
+        "memberCount": 3201,
+        "description": "Focusing on self-growth and appreciation. You are enough.",
+        "isJoined": false
+      },
+      {
+        "id": "group_004",
+        "name": "Mindful Living",
+        "icon": "https://api.example.com/icons/group_004.png",
+        "memberCount": 1540,
+        "description": "Daily mindfulness practices and support for a peaceful mind.",
+        "isJoined": false
+      }
+    ]
+  }
+}
+```
+
+---
+
+### 5.3 Get Group Invitations
+**Endpoint**: `GET /api/groups/invitations`
+**Headers**: `Authorization: Bearer {accessToken}`
+**Success Response** (200 OK):
+```json
+{
+  "status": "success",
+  "message": "Invitations retrieved",
+  "data": {
+    "invitations": [
+      {
+        "id": "inv_001",
+        "group": {
+          "id": "group_001",
+          "name": "No Contact Warriors",
+          "icon": "https://api.example.com/icons/group_001.png",
+          "memberCount": 1243,
+          "description": "Day 14 of No Contact. It was really hard today today, I almost texted him when I saw his favorite song playing. But I stayed strong!"
+        },
+        "invitedBy": "Sarah M.",
+        "invitedAt": "2026-06-05T10:00:00Z"
+      }
+    ]
+  }
+}
+```
+
+---
+
+### 5.4 Join Group
+**Endpoint**: `POST /api/groups/join/{groupId}`
+**Headers**: `Authorization: Bearer {accessToken}`
+**Success Response** (200 OK):
+```json
+{
+  "status": "success",
+  "message": "Joined group successfully",
+  "data": {
+    "groupId": "group_123",
+    "isPremiumRequired": false
+  }
+}
+```
+**Error Response** (403 Forbidden - Premium Required):
 ```json
 {
   "status": "error",
-  "message": "User not found",
-  "code": "USER_404",
-  "timestamp": "2026-05-24T11:15:00Z"
+  "message": "Premium subscription required to join more groups",
+  "code": "PREMIUM_REQUIRED",
+  "data": {
+    "upgradeUrl": "/premium/upgrade"
+  }
 }
 ```
+
+---
+
+## Group Management APIs
+
+### 6.1 Get Group Details
+**Endpoint**: `GET /api/groups/{groupId}`
+**Headers**: `Authorization: Bearer {accessToken}`
+**Success Response** (200 OK):
+```json
+{
+  "status": "success",
+  "message": "Group details retrieved",
+  "data": {
+    "group": {
+      "id": "group_001",
+      "name": "No Contact Warriors",
+      "icon": "https://api.example.com/icons/group_001.png",
+      "memberCount": 1243,
+      "isAdmin": true,
+      "description": "Day 14 of No Contact. It was really hard today today, I almost texted him when I saw his favorite song playing. But I stayed strong!",
+      "posts": [
+         {
+          "id": "post_101",
+          "userName": "Sarah M.",
+          "userAvatar": "https://api.example.com/avatars/sarah.jpg",
+          "timeAgo": "2 min ago",
+          "content": "Day 14. Didn't reach out even though I wanted to. Proud of myself 💪",
+          "likes": 47,
+          "commentsCount": 12,
+          "isAnonymous": false
+        },
+        {
+          "id": "post_102",
+          "userName": "Annomyously",
+          "userAvatar": "https://api.example.com/avatars/anon.jpg",
+          "timeAgo": "2 min ago",
+          "content": "Day 14. Didn't reach out even though I wanted to. Proud of myself 💪",
+          "likes": 47,
+          "commentsCount": 12,
+          "isAnonymous": true
+        }
+      ]
+    }
+  }
+}
+```
+
+---
+
+### 6.2 Create Group
+**Endpoint**: `POST /api/groups`
+**Headers**: `Authorization: Bearer {accessToken}`, `Content-Type: application/json`
+**Request**:
+```json
+{
+  "name": "Healing Hearts",
+  "logoUrl": "https://api.example.com/temp/logo_123.jpg",
+  "instruction": "A safe space for those healing from heartbreak..."
+}
+```
+**Success Response** (201 Created):
+```json
+{
+  "status": "success",
+  "message": "Group created successfully",
+  "data": {
+    "id": "group_999",
+    "name": "Healing Hearts"
+  }
+}
+```
+
+---
+
+### 6.3 Group Actions (Admin/User)
+**Endpoints**:
+- `DELETE /api/groups/{groupId}` (Delete Group - Admin)
+- `POST /api/groups/{groupId}/leave` (Leave Group - User)
+- `POST /api/groups/{groupId}/report` (Report Group)
+- `PUT /api/groups/{groupId}` (Edit Group - Admin)
+
+---
+
+## Group Moderation & Social APIs
+
+### 8.1 Invite Friends
+**Endpoint**: `GET /api/groups/{groupId}/friends-to-invite`
+**Headers**: `Authorization: Bearer {accessToken}`
+**Success Response** (200 OK):
+```json
+{
+  "status": "success",
+  "data": {
+    "friends": [
+      { "id": "f_1", "name": "Miles Esther", "avatar": "..." },
+      { "id": "f_2", "name": "Sarah Jenkins", "avatar": "..." }
+    ]
+  }
+}
+```
+
+---
+
+### 8.2 Get Group Reports (Admin Only)
+**Endpoint**: `GET /api/groups/{groupId}/reports`
+**Success Response** (200 OK):
+```json
+{
+  "status": "success",
+  "data": {
+    "reports": [
+      {
+        "id": "rep_1",
+        "reporterName": "Miles Esther",
+        "reportedUserName": "Coach Pearl",
+        "category": "Harassment",
+        "content": "Amazon Alexa Shopping is seeking a talented...",
+        "status": "pending"
+      }
+    ]
+  }
+}
+```
+
+---
+
+## Social & Relationship APIs
+
+### 9.1 Get Social Lists
+**Endpoint**: `GET /api/social/lists`
+**Headers**: `Authorization: Bearer {accessToken}`
+**Success Response** (200 OK):
+```json
+{
+  "status": "success",
+  "data": {
+    "friends": [
+      { "id": "u1", "name": "Miles Esther", "avatar": "...", "isOnline": true, "lastActive": "09:30 PM", "unreadCount": 2 }
+    ],
+    "requests": [
+      { "id": "req1", "userId": "u2", "userName": "Mike Lee", "avatar": "...", "mutualFriends": 2 }
+    ],
+    "followers": [
+      { "id": "u3", "name": "Miles Esther", "avatar": "..." }
+    ],
+    "following": [
+      { "id": "u4", "name": "Miles Esther", "avatar": "...", "isOnline": true }
+    ]
+  }
+}
+```
+
+---
+
+## User Profile & Relationship Management APIs
+
+### 10.1 Get User Profile
+**Endpoint**: `GET /api/users/{userId}/profile`
+**Headers**: `Authorization: Bearer {accessToken}`
+**Success Response** (200 OK):
+```json
+{
+  "status": "success",
+  "data": {
+    "user": {
+      "id": "u123",
+      "name": "Mike Tyson",
+      "avatar": "...",
+      "bio": "Amazon Alexa Shopping is seeking a talented...",
+      "stats": {
+        "posts": 7,
+        "friends": 128,
+        "followers": 220,
+        "following": 14
+      },
+      "relationshipStatus": "none", 
+      "media": ["url1", "url2", "url3", "url4", "url5"]
+    }
+  }
+}
+```
+*Note: `relationshipStatus` can be `none`, `friend`, `request_sent`, or `request_received`.*
+
+---
+
+## Friend Discovery & Suggestions APIs
+
+### 11.1 Get Discover Suggestions
+**Endpoint**: `GET /api/social/discover`
+**Headers**: `Authorization: Bearer {accessToken}`
+**Success Response** (200 OK):
+```json
+{
+  "status": "success",
+  "data": {
+    "suggestions": [
+      {
+        "id": "u567",
+        "name": "Mike Lee",
+        "avatar": "...",
+        "mutualFriends": 2
+      }
+    ]
+  }
+}
+```
+
+---
+
+## Coaching Marketplace & Booking APIs
+
+### 12.1 Discover Coaches
+**Endpoint**: `GET /api/coaches/discover`
+**Headers**: `Authorization: Bearer {accessToken}`
+**Success Response** (200 OK):
+```json
+{
+  "status": "success",
+  "data": {
+    "heroCoach": { "id": "c1", "name": "Coach Pearl", "title": "Relationship Specialist", "rating": 5.0, "reviews": 310 },
+    "featured": [ { "id": "c2", "name": "Coach Sarah", "title": "Mindset Coach", "rating": 4.9, "reviews": 187 } ],
+    "topRated": [ { "id": "c3", "name": "Coach Sarah", "title": "Mindset Coach", "rating": 4.9, "reviews": 187 } ]
+  }
+}
+```
+
+---
+
+### 12.2 Coach Schedule & Slots
+**Endpoint**: `GET /api/coaches/{coachId}/slots?date={YYYY-MM-DD}`
+**Success Response**:
+```json
+{
+  "status": "success",
+  "data": {
+    "sessions": [ { "duration": "30 Min", "price": 75 }, { "duration": "60 Minutes", "price": 150 } ],
+    "availableSlots": [ "09:00 AM - 09:30 AM", "10:00 AM - 10:30 AM" ]
+  }
+}
+```
+
+---
+
+## Personal Profile & Identity Management APIs
+
+### 13.1 Get My Profile
+**Endpoint**: `GET /api/me/profile`
+**Headers**: `Authorization: Bearer {accessToken}`
+**Success Response** (200 OK):
+```json
+{
+  "status": "success",
+  "data": {
+    "user": {
+      "id": "me_1",
+      "name": "Rahim Rehman",
+      "avatar": "...",
+      "bio": "Healing Journey Day 14",
+      "stats": { "posts": 7, "friends": 128, "followers": 220, "following": 14 },
+      "journals": [
+        { "id": "j1", "title": "Journal", "content": "Day 14. Didn't reach out...", "date": "12 April 2026", "isPrivate": true }
+      ]
+    }
+  }
+}
+```
+
+---
+
+### 13.2 Update Profile
+**Endpoint**: `POST /api/me/update`
+**Payload**: `{ "name": "...", "bio": "...", "avatar": "..." }`
+
+---
+
+### 13.3 Security
+**Endpoint**: `POST /api/me/reset-password`
+**Payload**: `{ "oldPassword": "...", "newPassword": "..." }`
+
+---
+
+### 13.4 Story & Content
+**Endpoint**: `POST /api/me/stories`
+**Payload**: `{ "content": "My Story", "textColor": "#FF0000", "bgColor": "#FFD700", "image": "..." }`
