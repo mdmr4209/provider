@@ -34,6 +34,7 @@ class AppAssets {
   static const String bgHome = 'assets/images/bgHome.png';
   static const String bgSplash = 'assets/images/bgSplash.png';
   static const String bgJournal = 'assets/images/bgJournal.png';
+  static const String circleBg = 'assets/images/circle.png';
 
   // ── General / UI ───────────────────────────────────────────────────────────
   static const String cart = 'assets/image/cart.svg';

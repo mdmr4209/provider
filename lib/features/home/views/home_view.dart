@@ -6,6 +6,8 @@ import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_colors.dart';
+import 'package:go_router/go_router.dart';
+import '../../../routes/app_router.dart';
 import '../../../core/services/navigation_service.dart';
 import '../../../core/widgets/background_widget.dart';
 import '../../../core/widgets/custom_loader.dart';
@@ -36,9 +38,19 @@ class HomeView extends StatelessWidget {
               final wisdom = dashboard?.dailyWisdom;
               final journal = dashboard?.journal;
 
-              return CustomScrollView(
-                physics: const BouncingScrollPhysics(),
-                slivers: [
+              return Stack(
+                children: [
+                  RefreshIndicator(
+                    onRefresh: () => home.fetchDashboardData(isRefresh: true),
+                    color: Colors.transparent,
+                    backgroundColor: Colors.transparent,
+                    strokeWidth: 0,
+                    elevation: 0,
+                    child: CustomScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(
+                        parent: BouncingScrollPhysics(),
+                      ),
+                      slivers: [
                   // ── Sliver App Bar (Header) ──────────────────────────────────────────
                   SliverAppBar(
                     // backgroundColor: Colors.transparent,
@@ -79,7 +91,7 @@ class HomeView extends StatelessWidget {
                         padding: EdgeInsets.only(right: 10.w),
                         child: Center(
                           child: InkWell(
-                            onTap: () {},
+                            onTap: () => context.push(AppRoutes.notification),
                             borderRadius: BorderRadius.circular(20.r),
                             child: Padding(
                               padding: EdgeInsets.all(8.r),
@@ -224,15 +236,6 @@ class HomeView extends StatelessWidget {
                                               '00',
                                           "Mins",
                                         ),
-                                        _buildTimerSeparator(),
-                                        _buildTimerUnit(
-                                          timer?.displaySecs.toString().padLeft(
-                                                2,
-                                                '0',
-                                              ) ??
-                                              '00',
-                                          "Secs",
-                                        ),
                                       ],
                                     ),
                                   ),
@@ -366,9 +369,7 @@ class HomeView extends StatelessWidget {
                           child: Container(
                             padding: EdgeInsets.all(15.r),
                             decoration: BoxDecoration(
-                              color: AppColors.defaultColorAlpha2.withAlpha(
-                                77,
-                              ),
+                              color: AppColors.defaultColorAlpha2.withAlpha(77),
                               borderRadius: BorderRadius.circular(16.r),
                             ),
                             child: Row(
@@ -429,8 +430,18 @@ class HomeView extends StatelessWidget {
                     ),
                   ),
                 ],
-              );
-            },
+              ),
+            ),
+            if (home.isRefreshing)
+              Positioned(
+                top: 16.h,
+                left: 0,
+                right: 0,
+                child: const Center(child: CustomLoader(size: 150)),
+              ),
+          ],
+        );
+      },
           ),
         ),
       ),

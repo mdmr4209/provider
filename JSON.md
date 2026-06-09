@@ -985,3 +985,110 @@ Success Response (200 OK):
 ### 13.4 Story & Content
 **Endpoint**: `POST /api/me/stories`
 **Payload**: `{ "content": "My Story", "textColor": "#FF0000", "bgColor": "#FFD700", "image": "..." }`
+
+---
+
+## Inbox & Chat APIs
+
+### 14.1 Get Inbox Chats
+**Endpoint**: `GET /api/inbox/chats`
+**Success Response** (200 OK):
+```json
+{
+  "status": "success",
+  "data": {
+    "stories": [
+      { "name": "Your Story", "avatar": "https://i.pravatar.cc/150?u=me", "isMine": true },
+      { "name": "Mike", "avatar": "https://i.pravatar.cc/150?u=mike1" },
+      { "name": "Sarah", "avatar": "https://i.pravatar.cc/150?u=sarah" }
+    ],
+    "chats": [
+      {
+        "id": "chat_001",
+        "name": "Miles Esther",
+        "avatar": "https://i.pravatar.cc/150?u=miles",
+        "lastMessage": "How are you doing today?",
+        "time": "09:30 PM",
+        "unreadCount": 2,
+        "isOnline": true,
+        "isCoach": true
+      },
+      {
+        "id": "chat_002",
+        "name": "Thomas stieve",
+        "avatar": "https://i.pravatar.cc/150?u=thomas",
+        "lastMessage": "Let's catch up later.",
+        "time": "08:15 PM",
+        "unreadCount": 0,
+        "isOnline": false,
+        "isCoach": false
+      }
+    ]
+  }
+}
+```
+
+---
+
+### 14.2 Get Chat Messages
+**Endpoint**: `GET /api/inbox/chats/{chatId}/messages`
+**Success Response** (200 OK):
+```json
+{
+  "status": "success",
+  "data": {
+    "messages": [
+      {
+        "sender": "Miles Esther",
+        "avatar": "https://i.pravatar.cc/150?u=miles",
+        "text": "Hey, how are you?",
+        "isMe": false,
+        "time": "Wednesday"
+      },
+      {
+        "sender": "Me",
+        "avatar": "",
+        "text": "I am doing great, thanks!",
+        "isMe": true,
+        "time": "Wednesday"
+      }
+    ]
+  }
+}
+```
+
+---
+
+## Booking APIs
+
+### 15.1 Get Bookings
+**Endpoint**: `GET /api/bookings`
+**Success Response** (200 OK):
+```json
+{
+  "status": "success",
+  "data": {
+    "current": [
+      {
+        "id": "b_1",
+        "sessionName": "Session 1",
+        "coachName": "Coach Pearl",
+        "date": "Mon, Mar 27",
+        "time": "01:00 PM- 01:03PM (30Min)",
+        "amount": "20$"
+      }
+    ],
+    "history": [
+      {
+        "id": "b_2",
+        "sessionName": "Session 2",
+        "coachName": "Miles Esther",
+        "date": "Completed",
+        "time": "12 April, 1:30AM",
+        "amount": "20$"
+      }
+    ]
+  }
+}
+```
+

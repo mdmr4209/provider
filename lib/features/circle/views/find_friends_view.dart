@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/widgets/custom_input.dart';
 import '../../../core/widgets/custom_button.dart';
+import '../../../core/widgets/custom_loader.dart';
+import '../controllers/circle_controller.dart';
+import '../models/circle_post_model.dart';
 
 class FindFriendsView extends StatelessWidget {
   const FindFriendsView({super.key});
@@ -10,6 +14,14 @@ class FindFriendsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
+    // Fetch recommendations
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final controller = context.read<CircleController>();
+      if (controller.discoverSuggestions.isEmpty && !controller.isLoading) {
+        controller.fetchDiscoverSuggestions();
+      }
+    });
 
     return Scaffold(
       appBar: AppBar(
@@ -29,49 +41,108 @@ class FindFriendsView extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: EdgeInsets.all(16.w),
-            child: CustomInput(
-              height: 48,
-              hintText: "Search Friends",
-              backgroundColor: Colors.white.withAlpha(13),
-              borderRadius: 24,
-              shadow: false,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-            child: Text(
-              "Suggestions",
-              style: TextStyle(
-                color: Colors.white.withAlpha(128),
-                fontSize: 14.sp,
+      body: Consumer<CircleController>(
+        builder: (context, controller, child) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.all(16.w),
+                child: CustomInput(
+                  height: 48,
+                  hintText: "Search Friends",
+                  backgroundColor: Colors.white.withAlpha(13),
+                  borderRadius: 24,
+                  shadow: false,
+                ),
               ),
-            ),
-          ),
-          Expanded(
-            child: GridView.builder(
-              padding: EdgeInsets.all(16.w),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16.w,
-                mainAxisSpacing: 16.h,
-                childAspectRatio: 0.75,
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                child: Text(
+                  "Suggestions",
+                  style: TextStyle(
+                    color: Colors.white.withAlpha(128),
+                    fontSize: 14.sp,
+                  ),
+                ),
               ),
-              itemCount: 10,
-              itemBuilder: (context, index) => _UserDiscoveryCard(),
-            ),
-          ),
-        ],
+              Expanded(
+                child: controller.isLoading
+                    ? GridView.builder(
+                        padding: EdgeInsets.all(16.w),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 16.w,
+                          mainAxisSpacing: 16.h,
+                          childAspectRatio: 0.75,
+                        ),
+                        itemCount: 4,
+                        itemBuilder: (context, index) => ShimmerLoader(
+                          width: double.infinity,
+                          height: 180.h,
+                          borderRadius: 16.r,
+                        ),
+                      )
+                    : Stack(
+                        children: [
+                          RefreshIndicator(
+                            onRefresh: () => controller.fetchDiscoverSuggestions(isRefresh: true),
+                            color: Colors.transparent,
+                            backgroundColor: Colors.transparent,
+                            strokeWidth: 0,
+                            elevation: 0,
+                            child: controller.discoverSuggestions.isEmpty
+                                ? ListView(
+                                    physics: const AlwaysScrollableScrollPhysics(),
+                                    children: [
+                                      SizedBox(height: 100.h),
+                                      Center(
+                                        child: Text(
+                                          "No suggestions available.",
+                                          style: TextStyle(color: Colors.white.withAlpha(128)),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : GridView.builder(
+                                    physics: const AlwaysScrollableScrollPhysics(),
+                                    padding: EdgeInsets.all(16.w),
+                                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      crossAxisSpacing: 16.w,
+                                      mainAxisSpacing: 16.h,
+                                      childAspectRatio: 0.75,
+                                    ),
+                                    itemCount: controller.discoverSuggestions.length,
+                                    itemBuilder: (context, index) {
+                                      final suggestion = controller.discoverSuggestions[index];
+                                      return _UserDiscoveryCard(suggestion: suggestion);
+                                    },
+                                  ),
+                          ),
+                          if (controller.isRefreshing)
+                            Positioned(
+                              top: 16.h,
+                              left: 0,
+                              right: 0,
+                              child: const Center(child: CustomLoader(size: 150)),
+                            ),
+                        ],
+                      ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
 }
 
 class _UserDiscoveryCard extends StatelessWidget {
+  final SuggestionModel suggestion;
+
+  const _UserDiscoveryCard({required this.suggestion});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -86,12 +157,12 @@ class _UserDiscoveryCard extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 40.r,
-            backgroundImage: const NetworkImage('https://i.pravatar.cc/150?u=discovery'),
+            backgroundImage: NetworkImage(suggestion.avatar),
             backgroundColor: Colors.white.withAlpha(26),
           ),
           SizedBox(height: 12.h),
           Text(
-            "Mike Lee",
+            suggestion.name,
             style: TextStyle(
               color: Colors.white,
               fontSize: 15.sp,
@@ -100,7 +171,7 @@ class _UserDiscoveryCard extends StatelessWidget {
           ),
           SizedBox(height: 4.h),
           Text(
-            "2 mutual Friend",
+            "${suggestion.mutualFriends} mutual Friend",
             style: TextStyle(
               color: Colors.white.withAlpha(128),
               fontSize: 12.sp,
@@ -109,7 +180,7 @@ class _UserDiscoveryCard extends StatelessWidget {
           SizedBox(height: 12.h),
           CustomButton(
             onPress: () async {},
-            title: "Add Friedns", // Matching typo in design image as requested implicitly
+            title: "Add Friedns", // Keep the original "Add Friedns" label
             linearGradient: true,
             height: 32.h,
             fontSize: 12,
@@ -120,3 +191,4 @@ class _UserDiscoveryCard extends StatelessWidget {
     );
   }
 }
+

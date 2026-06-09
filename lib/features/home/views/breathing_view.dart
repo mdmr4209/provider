@@ -12,17 +12,136 @@ import '../../../core/widgets/custom_button.dart';
 import '../../../core/widgets/gradient_timer_painter.dart';
 import '../controllers/home_controller.dart';
 
-class BreathingView extends StatefulWidget {
+class BreathingView extends StatelessWidget {
   final String title;
   final String subtitle;
 
   const BreathingView({super.key, required this.title, required this.subtitle});
 
   @override
-  State<BreathingView> createState() => _BreathingViewState();
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
+    return ChangeNotifierProvider<BreathingController>(
+      create: (_) => BreathingController(context),
+      child: Consumer<BreathingController>(
+        builder: (context, controller, child) {
+          return Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Container(
+              width: double.infinity,
+              height: double.infinity,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Color(0xFF4A5D44), Color(0xFF22331F)],
+                ),
+              ),
+              child: SafeArea(
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: IconButton(
+                        onPressed: () => context.pop(),
+                        icon: const Icon(Icons.close, color: Colors.white70),
+                      ),
+                    ),
+                    const Spacer(flex: 1),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 40.w),
+                      child: Text(
+                        title,
+                        textAlign: TextAlign.center,
+                        style: textTheme.titleSmall?.copyWith(
+                          color: AppColors.whiteColor,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 12.h),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 40.w),
+                      child: Text(
+                        subtitle,
+                        textAlign: TextAlign.center,
+                        style: textTheme.bodyLarge?.copyWith(
+                          color: AppColors.whiteColor,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                    const Spacer(flex: 2),
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Container(
+                          width: 270.r,
+                          height: 270.r,
+                          decoration: const BoxDecoration(shape: BoxShape.circle),
+                        ),
+                        SizedBox(
+                          width: 250.r,
+                          height: 250.r,
+                          child: GradientTimerGauge(
+                            progress: controller.progress,
+                            size: 250,
+                          ),
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "00:${controller.secondsRemaining.toString().padLeft(2, '0')}",
+                              style: textTheme.titleSmall?.copyWith(
+                                color: AppColors.whiteColor,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            SizedBox(height: 25.h),
+                            Text(
+                              controller.phaseText,
+                              style: textTheme.displayMedium?.copyWith(
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.secondaryColorLight,
+                                fontFamily: 'Georgia',
+                              ),
+                            ),
+                            SizedBox(height: 25.h),
+                            Text(
+                              "Round ${controller.currentRound}/3",
+                              style: textTheme.bodyLarge?.copyWith(
+                                color: AppColors.whiteColor,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const Spacer(flex: 2),
+                    Text(
+                      "4 sec each · 3 rounds · guided breathing",
+                      style: textTheme.bodyLarge?.copyWith(
+                        color: AppColors.whiteColor,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    SizedBox(height: 60.h),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
 }
 
-class _BreathingViewState extends State<BreathingView> {
+class BreathingController extends ChangeNotifier {
+  final BuildContext context;
   int _secondsRemaining = 4;
   int _currentRound = 1;
   String _phaseText = "Breathe In";
@@ -30,28 +149,27 @@ class _BreathingViewState extends State<BreathingView> {
   double _progress = 1.0;
   int _ticksInPhase = 0;
 
-  @override
-  void initState() {
-    super.initState();
+  int get secondsRemaining => _secondsRemaining;
+  int get currentRound => _currentRound;
+  String get phaseText => _phaseText;
+  double get progress => _progress;
+
+  BreathingController(this.context) {
     _startTimer();
   }
 
   void _startTimer() {
     _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
-      if (!mounted) return;
-      setState(() {
-        _ticksInPhase++;
-        _progress = 1.0 - (_ticksInPhase / 40.0);
-        _secondsRemaining = 4 - (_ticksInPhase ~/ 10);
-        if (_secondsRemaining < 1) _secondsRemaining = 1;
+      _ticksInPhase++;
+      _progress = 1.0 - (_ticksInPhase / 40.0);
+      _secondsRemaining = 4 - (_ticksInPhase ~/ 10);
+      if (_secondsRemaining < 1) _secondsRemaining = 1;
 
-        if (timer.tick % 10 == 0) {}
-
-        if (_ticksInPhase >= 40) {
-          _ticksInPhase = 0;
-          _nextPhase();
-        }
-      });
+      if (_ticksInPhase >= 40) {
+        _ticksInPhase = 0;
+        _nextPhase();
+      }
+      notifyListeners();
     });
   }
 
@@ -74,8 +192,6 @@ class _BreathingViewState extends State<BreathingView> {
     }
   }
 
-  // ── Dialog Sequence ────────────────────────────────────────────────────────
-
   void _showFeelingBetterDialog() {
     showAppCustomDialog(
       context,
@@ -96,7 +212,6 @@ class _BreathingViewState extends State<BreathingView> {
       description: "",
       primaryText: "Yes Connect me with a coach",
       onPrimaryTap: () {
-        // Handle redirect to coach logic here
         context.pop();
       },
       secondaryText: "No",
@@ -112,7 +227,7 @@ class _BreathingViewState extends State<BreathingView> {
     showDialog(
       context: context,
       barrierColor: AppColors.defaultColor.withAlpha(230),
-      builder: (context) => Dialog(
+      builder: (dialogCtx) => Dialog(
         backgroundColor: Colors.transparent,
         insetPadding: EdgeInsets.symmetric(horizontal: 24.w),
         child: Container(
@@ -168,7 +283,7 @@ class _BreathingViewState extends State<BreathingView> {
               SizedBox(height: 24.h),
               CustomButton(
                 onPress: () async {
-                  Navigator.pop(context);
+                  Navigator.pop(dialogCtx);
                   _showSorrySupportDialog();
                 },
                 title: "Submit",
@@ -186,7 +301,7 @@ class _BreathingViewState extends State<BreathingView> {
     showDialog(
       context: context,
       barrierColor: AppColors.defaultColor.withAlpha(230),
-      builder: (context) => Dialog(
+      builder: (dialogCtx) => Dialog(
         backgroundColor: Colors.transparent,
         insetPadding: EdgeInsets.symmetric(horizontal: 24.w),
         child: Container(
@@ -225,11 +340,10 @@ class _BreathingViewState extends State<BreathingView> {
                 ),
               ),
               SizedBox(height: 32.h),
-              // Image 4 style: "Yes" is outline, "No" is filled
               GestureDetector(
                 onTap: () {
-                  Navigator.pop(context);
-                  context.pop(); // Action for Yes
+                  Navigator.pop(dialogCtx);
+                  context.pop();
                 },
                 child: Container(
                   width: double.infinity,
@@ -252,7 +366,7 @@ class _BreathingViewState extends State<BreathingView> {
               SizedBox(height: 12.h),
               CustomButton(
                 onPress: () async {
-                  Navigator.pop(context);
+                  Navigator.pop(dialogCtx);
                   context.pop();
                 },
                 title: "No, I will stay on this page",
@@ -266,121 +380,9 @@ class _BreathingViewState extends State<BreathingView> {
     );
   }
 
-  // ── Helper ────────────────────────────────────────────────────────────
-
   @override
   void dispose() {
     _timer?.cancel();
     super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFF4A5D44), Color(0xFF22331F)],
-          ),
-        ),
-        child: SafeArea(
-          child: Column(
-            children: [
-              Align(
-                alignment: Alignment.topLeft,
-                child: IconButton(
-                  onPressed: () => context.pop(),
-                  icon: const Icon(Icons.close, color: Colors.white70),
-                ),
-              ),
-              const Spacer(flex: 1),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 40.w),
-                child: Text(
-                  widget.title,
-                  textAlign: TextAlign.center,
-                  style: textTheme.titleSmall?.copyWith(
-                    color: AppColors.whiteColor,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ),
-              SizedBox(height: 12.h),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 40.w),
-                child: Text(
-                  widget.subtitle,
-                  textAlign: TextAlign.center,
-                  style: textTheme.bodyLarge?.copyWith(
-                    color: AppColors.whiteColor,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ),
-              const Spacer(flex: 2),
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    width: 270.r,
-                    height: 270.r,
-                    decoration: BoxDecoration(shape: BoxShape.circle),
-                  ),
-                  SizedBox(
-                    width: 250.r,
-                    height: 250.r,
-                    child: GradientTimerGauge(progress: _progress, size: 250),
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "00:${_secondsRemaining.toString().padLeft(2, '0')}",
-                        style: textTheme.titleSmall?.copyWith(
-                          color: AppColors.whiteColor,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      SizedBox(height: 25.h),
-                      Text(
-                        _phaseText,
-                        style: textTheme.displayMedium?.copyWith(
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.secondaryColorLight,
-                          fontFamily: 'Georgia',
-                        ),
-                      ),
-                      SizedBox(height: 25.h),
-                      Text(
-                        "Round $_currentRound/3",
-                        style: textTheme.bodyLarge?.copyWith(
-                          color: AppColors.whiteColor,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              const Spacer(flex: 2),
-              Text(
-                "4 sec each · 3 rounds · guided breathing",
-                style: textTheme.bodyLarge?.copyWith(
-                  color: AppColors.whiteColor,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              SizedBox(height: 60.h),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 }

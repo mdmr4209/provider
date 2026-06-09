@@ -10,6 +10,7 @@ class HomeController extends ChangeNotifier {
   DashboardModel? _dashboardModel;
   List<Map<String, dynamic>> _guideData = [];
   bool _isLoading = false;
+  bool _isRefreshing = false;
   Timer? _ticker;
 
   // Added Journal Controller
@@ -18,6 +19,7 @@ class HomeController extends ChangeNotifier {
   DashboardModel? get dashboardModel => _dashboardModel;
   List<Map<String, dynamic>> get guideData => _guideData;
   bool get isLoading => _isLoading;
+  bool get isRefreshing => _isRefreshing;
 
   HomeController() {
     fetchDashboardData().then((_) => _startTicker());
@@ -33,8 +35,12 @@ class HomeController extends ChangeNotifier {
     });
   }
 
-  Future<void> fetchDashboardData() async {
-    _isLoading = true;
+  Future<void> fetchDashboardData({bool isRefresh = false}) async {
+    if (isRefresh) {
+      _isRefreshing = true;
+    } else {
+      _isLoading = true;
+    }
     notifyListeners();
 
     await Future.delayed(const Duration(milliseconds: 1500));
@@ -66,6 +72,7 @@ class HomeController extends ChangeNotifier {
 
     _dashboardModel = DashboardModel.fromJson(rawData);
     _isLoading = false;
+    _isRefreshing = false;
     notifyListeners();
   }
 
@@ -129,6 +136,38 @@ class HomeController extends ChangeNotifier {
       // Logic for contacting someone
     },
   );
+
+  List<Map<String, dynamic>> _notifications = [];
+  List<Map<String, dynamic>> get notifications => _notifications;
+
+  Future<void> fetchNotifications({bool isRefresh = false}) async {
+    if (isRefresh) {
+      _isRefreshing = true;
+    } else {
+      _isLoading = true;
+    }
+    notifyListeners();
+
+    try {
+      await Future.delayed(const Duration(milliseconds: 600));
+      _notifications = [
+        { "type": "invitation", "message": "You got a new a pod invitation from \"Sajib\"" },
+        { "type": "invitation", "message": "A pod invitation has been accepted from \"Sajib\"" },
+        {
+          "type": "push",
+          "title": "Title Of The Push Notification",
+          "message": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+          "image": "https://image.api.playstation.com/vulcan/ap/rnd/202102/1012/L0P0B1P6f1Q5v5S0Z1o1m3B6.png"
+        }
+      ];
+    } catch (e) {
+      // ignore
+    } finally {
+      _isLoading = false;
+      _isRefreshing = false;
+      notifyListeners();
+    }
+  }
 
   void postJournal() {
     if (journalController.text.isNotEmpty) {

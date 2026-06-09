@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/widgets/custom_input.dart';
 import '../../../core/widgets/custom_button.dart';
+import '../../../core/widgets/custom_loader.dart';
+import '../controllers/coach_controller.dart';
+import '../models/coach_model.dart';
 import 'coach_profile_view.dart';
 
 class FindCoachesView extends StatelessWidget {
@@ -10,44 +14,82 @@ class FindCoachesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final controller = context.read<CoachController>();
+      if (controller.heroCoach == null && !controller.isLoading) {
+        controller.fetchCoachesDiscover();
+      }
+    });
+
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // ── Search Bar ────────────────────────────────────────────────
-              Padding(
-                padding: EdgeInsets.all(16.w),
-                child: CustomInput(
-                  height: 48,
-                  hintText: "Search Coach",
-                  backgroundColor: Colors.white.withAlpha(13),
-                  borderRadius: 24,
-                  shadow: false,
+        child: Consumer<CoachController>(
+          builder: (context, controller, child) {
+            if (controller.isLoading && controller.heroCoach == null) {
+              return const _FindCoachesShimmer();
+            }
+
+            final hero = controller.heroCoach;
+            final featured = controller.featuredCoaches;
+            final topRated = controller.topRatedCoaches;
+
+            return Stack(
+              children: [
+                RefreshIndicator(
+                  onRefresh: () => controller.fetchCoachesDiscover(isRefresh: true),
+                  color: Colors.transparent,
+                  backgroundColor: Colors.transparent,
+                  strokeWidth: 0,
+                  elevation: 0,
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // ── Search Bar ────────────────────────────────────────────────
+                        Padding(
+                          padding: EdgeInsets.all(16.w),
+                          child: CustomInput(
+                            height: 48,
+                            hintText: "Search Coach",
+                            backgroundColor: Colors.white.withAlpha(13),
+                            borderRadius: 24,
+                            shadow: false,
+                          ),
+                        ),
+                        // ── Hero Coach Section ────────────────────────────────────────
+                        if (hero != null) _buildHeroCoach(context, hero),
+                        SizedBox(height: 24.h),
+                        // ── Book Again / Featured Sections ──────────────────────────
+                        _buildSectionHeader("BOOK AGAIN"),
+                        _buildCoachList(context, topRated),
+                        SizedBox(height: 24.h),
+                        _buildSectionHeader("FEATURED COACHES"),
+                        _buildCoachList(context, featured),
+                        SizedBox(height: 24.h),
+                        _buildSectionHeader("TOP RATED"),
+                        _buildCoachList(context, topRated),
+                        SizedBox(height: 80.h), // Space for bottom nav
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-              // ── Hero Coach Section ────────────────────────────────────────
-              _buildHeroCoach(context),
-              SizedBox(height: 24.h),
-              // ── Book Again / Featured Sections ──────────────────────────
-              _buildSectionHeader("BOOK AGAIN"),
-              _buildCoachList(context),
-              SizedBox(height: 24.h),
-              _buildSectionHeader("FEATURED COACHES"),
-              _buildCoachList(context),
-              SizedBox(height: 24.h),
-              _buildSectionHeader("TOP RATED"),
-              _buildCoachList(context),
-              SizedBox(height: 80.h), // Space for bottom nav
-            ],
-          ),
+                if (controller.isRefreshing)
+                  Positioned(
+                    top: 16.h,
+                    left: 0,
+                    right: 0,
+                    child: const Center(child: CustomLoader(size: 150)),
+                  ),
+              ],
+            );
+          },
         ),
       ),
     );
   }
 
-  Widget _buildHeroCoach(BuildContext context) {
+  Widget _buildHeroCoach(BuildContext context, CoachModel coach) {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(vertical: 30.h),
@@ -56,8 +98,8 @@ class FindCoachesView extends StatelessWidget {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-             const Color(0xFFC19E5F).withAlpha(51),
-             Colors.transparent,
+            const Color(0xFFC19E5F).withAlpha(51),
+            Colors.transparent,
           ],
         ),
       ),
@@ -71,20 +113,26 @@ class FindCoachesView extends StatelessWidget {
             ),
             child: CircleAvatar(
               radius: 60.r,
-              backgroundImage: const NetworkImage('https://i.pravatar.cc/300?u=coach_pearl'),
+              backgroundImage: NetworkImage(coach.avatar),
             ),
           ),
           SizedBox(height: 16.h),
-          Text("Coach Pearl", style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.bold)),
-          Text("Relationship Specialist · Communication Coach", style: TextStyle(color: Colors.white.withAlpha(128), fontSize: 12.sp)),
+          Text(coach.name, style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.bold)),
+          Text(coach.title, style: TextStyle(color: Colors.white.withAlpha(128), fontSize: 12.sp)),
           SizedBox(height: 8.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(5, (index) => Icon(Icons.star, color: Colors.amber, size: 14.r)),
+            children: List.generate(
+              coach.rating.round(),
+              (index) => Icon(Icons.star, color: Colors.amber, size: 14.r),
+            ),
           ),
           SizedBox(height: 12.h),
           CustomButton(
-            onPress: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const CoachProfileView())),
+            onPress: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => CoachProfileView(coach: coach)),
+            ),
             title: "Book Now",
             width: 140,
             height: 36,
@@ -112,20 +160,30 @@ class FindCoachesView extends StatelessWidget {
     );
   }
 
-  Widget _buildCoachList(BuildContext context) {
+  Widget _buildCoachList(BuildContext context, List<CoachModel> coaches) {
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       padding: EdgeInsets.symmetric(horizontal: 16.w),
-      itemCount: 2,
-      itemBuilder: (context, index) => _CoachCard(onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const CoachProfileView()))),
+      itemCount: coaches.length,
+      itemBuilder: (context, index) {
+        final coach = coaches[index];
+        return _CoachCard(
+          coach: coach,
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => CoachProfileView(coach: coach)),
+          ),
+        );
+      },
     );
   }
 }
 
 class _CoachCard extends StatelessWidget {
+  final CoachModel coach;
   final VoidCallback onTap;
-  const _CoachCard({required this.onTap});
+  const _CoachCard({required this.coach, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -141,23 +199,23 @@ class _CoachCard extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 24.r,
-            backgroundImage: const NetworkImage('https://i.pravatar.cc/150?u=coach_sarah'),
+            backgroundImage: NetworkImage(coach.avatar),
           ),
           SizedBox(width: 12.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Coach Sarah", style: TextStyle(color: Colors.white, fontSize: 14.sp, fontWeight: FontWeight.bold)),
-                Text("Breakup Recovery · Mindset Coach", style: TextStyle(color: Colors.white.withAlpha(128), fontSize: 11.sp)),
+                Text(coach.name, style: TextStyle(color: Colors.white, fontSize: 14.sp, fontWeight: FontWeight.bold)),
+                Text(coach.title, style: TextStyle(color: Colors.white.withAlpha(128), fontSize: 11.sp)),
                 Row(
                   children: [
                     Icon(Icons.star, color: Colors.amber, size: 12.r),
-                    Icon(Icons.star, color: Colors.amber, size: 12.r),
-                    Icon(Icons.star, color: Colors.amber, size: 12.r),
-                    Icon(Icons.star, color: Colors.amber, size: 12.r),
                     SizedBox(width: 4.w),
-                    Text("4.9 (187)", style: TextStyle(color: Colors.white.withAlpha(128), fontSize: 10.sp)),
+                    Text(
+                      "${coach.rating} (${coach.reviews})",
+                      style: TextStyle(color: Colors.white.withAlpha(128), fontSize: 10.sp),
+                    ),
                   ],
                 ),
               ],
@@ -171,6 +229,58 @@ class _CoachCard extends StatelessWidget {
             fontSize: 12,
             linearGradient: true,
             radius: 8,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FindCoachesShimmer extends StatelessWidget {
+  const _FindCoachesShimmer();
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      physics: const NeverScrollableScrollPhysics(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.all(16.w),
+            child: ShimmerLoader(width: double.infinity, height: 48.h, borderRadius: 24.r),
+          ),
+          // Hero shimmer
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(vertical: 30.h),
+            child: Column(
+              children: [
+                ShimmerLoader(width: 120.r, height: 120.r, borderRadius: 60.r),
+                SizedBox(height: 16.h),
+                ShimmerLoader(width: 150.w, height: 18.h, borderRadius: 4.r),
+                SizedBox(height: 8.h),
+                ShimmerLoader(width: 100.w, height: 12.h, borderRadius: 4.r),
+                SizedBox(height: 12.h),
+                ShimmerLoader(width: 140.w, height: 36.h, borderRadius: 18.r),
+              ],
+            ),
+          ),
+          SizedBox(height: 24.h),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            child: ShimmerLoader(width: 100.w, height: 12.h, borderRadius: 4.r),
+          ),
+          SizedBox(height: 16.h),
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            itemCount: 2,
+            itemBuilder: (context, index) => Padding(
+              padding: EdgeInsets.only(bottom: 12.h),
+              child: ShimmerLoader(width: double.infinity, height: 72.h, borderRadius: 16.r),
+            ),
           ),
         ],
       ),

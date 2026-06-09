@@ -7,33 +7,42 @@ import '../features/auth/views/auth_view.dart';
 import '../features/auth/views/change_password_view.dart';
 import '../features/auth/views/forget_password_view.dart';
 import '../features/auth/views/go_to_home.dart';
-import '../features/auth/views/otp_verify_view.dart';
-import '../features/auth/views/sign_up_view.dart';
-import '../features/auth/views/role_selection_view.dart';
 import '../features/auth/views/name_input_view.dart';
-import '../features/auth/views/splash_screen.dart';
+import '../features/auth/views/otp_verify_view.dart';
+import '../features/auth/views/role_selection_view.dart';
 import '../features/auth/views/setup/setup_views.dart';
+import '../features/auth/views/sign_up_view.dart';
+import '../features/auth/views/splash_screen.dart';
 import '../features/circle/views/circle_view.dart';
 import '../features/circle/views/create_post_view.dart';
+import '../features/circle/views/find_friends_view.dart';
+import '../features/circle/views/friends_view.dart';
 import '../features/find_coach/views/find_coaches_view.dart';
+import '../features/home/views/breathing_view.dart';
 import '../features/home/views/home_view.dart';
 import '../features/home/views/navigation.dart';
-import '../features/home/views/breathing_view.dart';
+import '../features/home/views/notifications_view.dart';
 import '../features/home/views/write_journal_view.dart';
+import '../features/inbox/views/call_view.dart';
+import '../features/inbox/views/chat_view.dart';
+import '../features/inbox/views/inbox_view.dart';
 import '../features/onboarding/controllers/onboarding_controller.dart';
 import '../features/onboarding/views/onboarding_view.dart';
-import '../features/profile/views/add_new_address.dart';
-import '../features/profile/views/add_new_card_view.dart';
-import '../features/profile/views/add_promo_code_view.dart';
+import '../features/profile/views/block_list_view.dart';
+import '../features/inbox/views/bookings_view.dart';
 import '../features/profile/views/edit_view.dart';
+import '../features/inbox/views/give_review_view.dart';
+import '../features/profile/views/help_support_view.dart';
 import '../features/profile/views/logout.dart';
-import '../features/profile/views/my_address.dart';
 import '../features/profile/views/payment_view.dart';
 import '../features/profile/views/point_view.dart';
 import '../features/profile/views/profile_view.dart';
-import '../features/profile/views/promo_code_view.dart';
-import '../features/profile/views/settings_view.dart';
-import '../features/profile/views/track_order.dart';
+import '../features/profile/views/report_to_admin_view.dart';
+import '../features/profile/views/reset_password_view.dart';
+import '../features/profile/views/settings.dart';
+import '../features/profile/views/subscription_plan_view.dart';
+import '../features/profile/views/theme_view.dart';
+
 
 enum TransitionType {
   fadeThrough,
@@ -98,6 +107,18 @@ abstract class AppRoutes {
   static const payment = '/payment';
   static const confirm = '/confirm';
   static const profile = '/profile';
+  static const theme = '/theme';
+  static const resetPassword = '/resetPassword';
+  static const subscriptionPlan = '/subscriptionPlan';
+  static const blockList = '/blockList';
+  static const helpSupport = '/helpSupport';
+  static const friendsCircle = '/friendsCircle';
+  static const chat = '/chat';
+  static const call = '/call';
+  static const findFriends = '/findFriends';
+  static const reportToAdmin = '/reportToAdmin';
+  static const bookings = '/bookings';
+  static const notification = '/notification';
 }
 
 class AppRouter {
@@ -293,7 +314,7 @@ class AppRouter {
                   pageBuilder: (context, state) => _buildPageWithTransition(
                     context: context,
                     state: state,
-                    child: const Center(child: Text('Inbox')),
+                    child: const InboxView(),
                   ),
                 ),
               ],
@@ -317,7 +338,7 @@ class AppRouter {
           pageBuilder: (context, state) => _buildPageWithTransition(
             context: context,
             state: state,
-            child: const OnboardingView(),
+            child: OnboardingView(),
           ),
         ),
         GoRoute(
@@ -550,30 +571,12 @@ class AppRouter {
           ),
         ),
         GoRoute(
-          path: AppRoutes.address,
-          name: 'address',
+          path: AppRoutes.theme,
+          name: 'theme',
           pageBuilder: (context, state) => _buildPageWithTransition(
             context: context,
             state: state,
-            child: const MyAddress(),
-          ),
-        ),
-        GoRoute(
-          path: AppRoutes.promoCode,
-          name: 'promoCode',
-          pageBuilder: (context, state) => _buildPageWithTransition(
-            context: context,
-            state: state,
-            child: const PromoCodeView(),
-          ),
-        ),
-        GoRoute(
-          path: AppRoutes.trackOrder,
-          name: 'trackOrder',
-          pageBuilder: (context, state) => _buildPageWithTransition(
-            context: context,
-            state: state,
-            child: const TrackOrder(),
+            child: const ThemeView(),
           ),
         ),
         GoRoute(
@@ -586,24 +589,6 @@ class AppRouter {
           ),
         ),
         GoRoute(
-          path: AppRoutes.addCard,
-          name: 'addCard',
-          pageBuilder: (context, state) => _buildPageWithTransition(
-            context: context,
-            state: state,
-            child: const AddNewCardView(),
-          ),
-        ),
-        GoRoute(
-          path: AppRoutes.addAddress,
-          name: 'addAddress',
-          pageBuilder: (context, state) => _buildPageWithTransition(
-            context: context,
-            state: state,
-            child: const AddNewAddress(),
-          ),
-        ),
-        GoRoute(
           path: AppRoutes.points,
           name: 'points',
           pageBuilder: (context, state) => _buildPageWithTransition(
@@ -613,21 +598,140 @@ class AppRouter {
           ),
         ),
         GoRoute(
-          path: AppRoutes.addPromoCodeView,
-          name: 'addPromoCodeView',
-          pageBuilder: (context, state) => _buildPageWithTransition(
-            context: context,
-            state: state,
-            child: const AddPromoCodeView(),
-          ),
-        ),
-        GoRoute(
           path: AppRoutes.settings,
           name: 'settings',
           pageBuilder: (context, state) => _buildPageWithTransition(
             context: context,
             state: state,
-            child: const SettingsView(),
+            child: SettingsView(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.resetPassword,
+          name: 'resetPassword',
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: ResetPasswordView(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.subscriptionPlan,
+          name: 'subscriptionPlan',
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: SubscriptionPlanView(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.blockList,
+          name: 'blockList',
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const BlockListView(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.helpSupport,
+          name: 'helpSupport',
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const HelpSupportView(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.friendsCircle,
+          name: 'friendsCircle',
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const FriendsView(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.chat,
+          name: 'chat',
+          pageBuilder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>? ?? {};
+            return _buildPageWithTransition(
+              context: context,
+              state: state,
+              child: ChatView(
+                name: extra['name'] ?? 'Miles Esther',
+                avatar: extra['avatar'] ?? 'https://i.pravatar.cc/150?u=miles',
+                isCoach: extra['isCoach'] ?? false,
+              ),
+            );
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.call,
+          name: 'call',
+          pageBuilder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>? ?? {};
+            return _buildPageWithTransition(
+              context: context,
+              state: state,
+              child: CallView(
+                name: extra['name'] ?? 'Coach Pearl',
+                avatar: extra['avatar'] ?? 'https://i.pravatar.cc/150?u=coach',
+                rate: extra['rate'] ?? '2\$/Min',
+              ),
+            );
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.findFriends,
+          name: 'findFriends',
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const FindFriendsView(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.reportToAdmin,
+          name: 'reportToAdmin',
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: ReportToAdminView(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.review,
+          name: 'review',
+          pageBuilder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>? ?? {};
+            return _buildPageWithTransition(
+              context: context,
+              state: state,
+              child: GiveReviewView(
+                coachName: extra['name'] ?? 'Coach Pearl',
+                coachAvatar: extra['avatar'] ?? 'https://i.pravatar.cc/150?u=coach_pearl',
+              ),
+            );
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.bookings,
+          name: 'bookings',
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const BookingsView(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.notification,
+          name: 'notification',
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const NotificationsView(),
           ),
         ),
 

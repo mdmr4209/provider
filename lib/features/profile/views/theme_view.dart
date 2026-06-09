@@ -5,8 +5,8 @@ import '../../localization/controllers/localization_controller.dart';
 import '../../theme/controllers/theme_controller.dart';
 import '../../localization/localization_extension.dart';
 
-class SettingsView extends StatelessWidget {
-  const SettingsView({super.key});
+class ThemeView extends StatelessWidget {
+  const ThemeView({super.key});
 
   @override
   Widget build(BuildContext context) {

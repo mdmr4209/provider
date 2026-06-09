@@ -3,16 +3,10 @@ import 'package:flutter/material.dart';
 import '../../features/localization/localization_extension.dart';
 import '../constants/app_colors.dart';
 
-class InternetExceptionsWidget extends StatefulWidget {
+class InternetExceptionsWidget extends StatelessWidget {
   final VoidCallback onPress;
   const InternetExceptionsWidget({super.key, required this.onPress});
 
-  @override
-  State<InternetExceptionsWidget> createState() =>
-      _InternetExceptionsWidgetState();
-}
-
-class _InternetExceptionsWidgetState extends State<InternetExceptionsWidget> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -37,7 +31,7 @@ class _InternetExceptionsWidgetState extends State<InternetExceptionsWidget> {
           ),
           SizedBox(height: height * .15),
           InkWell(
-            onTap: widget.onPress,
+            onTap: onPress,
             child: Container(
               height: 44,
               width: 160,

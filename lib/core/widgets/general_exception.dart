@@ -2,15 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../constants/app_colors.dart';
 
-class GeneralExceptionWidget extends StatefulWidget {
+class GeneralExceptionWidget extends StatelessWidget {
   final VoidCallback onPress;
   const GeneralExceptionWidget({super.key, required this.onPress});
 
-  @override
-  State<GeneralExceptionWidget> createState() => _GeneralExceptionWidgetState();
-}
-
-class _GeneralExceptionWidgetState extends State<GeneralExceptionWidget> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -32,7 +27,7 @@ class _GeneralExceptionWidgetState extends State<GeneralExceptionWidget> {
           ),
           SizedBox(height: height * .15),
           InkWell(
-            onTap: widget.onPress,
+            onTap: onPress,
             child: Container(
               height: 44,
               width: 160,

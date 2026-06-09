@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/point_transaction.dart';
+import '../models/profile_details_model.dart';
 
 /// Pure ChangeNotifier — zero BuildContext, zero Navigator.
 /// Navigation is done via GoRouter using the routerKey set in main.dart.
@@ -155,6 +156,55 @@ class ProfileController extends ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
+  bool _isRefreshing = false;
+  bool get isRefreshing => _isRefreshing;
+
+  ProfileDetailsModel? _profileDetails;
+  ProfileDetailsModel? get profileDetails => _profileDetails;
+
+  Future<void> fetchProfileDetails({bool isRefresh = false}) async {
+    if (isRefresh) {
+      _isRefreshing = true;
+    } else {
+      _isLoading = true;
+    }
+    notifyListeners();
+
+    try {
+      await Future.delayed(const Duration(milliseconds: 1000));
+
+      final Map<String, dynamic> rawProfile = {
+        "user": {
+          "id": "me_1",
+          "name": "Rahim Rehman",
+          "avatar": "https://i.pravatar.cc/150?u=me_1",
+          "bio": "Healing Journey Day 14. Keep going forward!",
+          "stats": { "posts": 7, "friends": 128, "followers": 220, "following": 14 },
+          "journals": [
+            { "id": "j1", "title": "Journal Day 14", "content": "Day 14. Didn't reach out even though I wanted to. Proud of myself 💪", "date": "12 April 2026", "isPrivate": true },
+            { "id": "j2", "title": "Journal Day 10", "content": "Doing some guided breathing exercises, feeling calmer.", "date": "08 April 2026", "isPrivate": true },
+            { "id": "j3", "title": "Journal Day 5", "content": "Feeling a bit anxious but staying strong.", "date": "03 April 2026", "isPrivate": false }
+          ],
+          "media": [
+            "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=200&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1511447333015-45b65e60f6d5?w=200&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=200&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=200&auto=format&fit=crop&q=60",
+            "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=200&auto=format&fit=crop&q=60"
+          ]
+        }
+      };
+
+      _profileDetails = ProfileDetailsModel.fromJson(rawProfile);
+    } catch (e) {
+      // ignore
+    } finally {
+      _isLoading = false;
+      _isRefreshing = false;
+      notifyListeners();
+    }
+  }
+
   // Simulate fetching data
   Future<void> fetchPointHistory1() async {
     _isLoading = true;
@@ -269,14 +319,19 @@ class ProfileController extends ChangeNotifier {
     RedemptionOption(points: 3000, label: '\$100 off', canClaim: false),
   ];
 
-  Future<void> fetchPointHistory() async {
-    _isLoading = true;
+  Future<void> fetchPointHistory({bool isRefresh = false}) async {
+    if (isRefresh) {
+      _isRefreshing = true;
+    } else {
+      _isLoading = true;
+    }
     notifyListeners();
 
     // Simulate network delay
     await Future.delayed(const Duration(milliseconds: 800));
 
     _isLoading = false;
+    _isRefreshing = false;
     notifyListeners();
   }
 
@@ -416,5 +471,30 @@ class ProfileController extends ChangeNotifier {
       promoCodeCtrl.clear();
       toggleAddPromo();
     }
+  }
+
+  List<Map<String, dynamic>> _blockedUsers = [
+    {"id": "b1", "name": "Miles Esther", "avatar": "https://i.pravatar.cc/150?u=miles", "date": "12 April 2026"},
+    {"id": "b2", "name": "Thomas stieve", "avatar": "https://i.pravatar.cc/150?u=thomas", "date": "10 April 2026"},
+    {"id": "b3", "name": "Sarah Jenkins", "avatar": "https://i.pravatar.cc/150?u=sarah", "date": "08 April 2026"},
+  ];
+  List<Map<String, dynamic>> get blockedUsers => _blockedUsers;
+
+  Future<void> fetchBlockedUsers({bool isRefresh = false}) async {
+    if (isRefresh) {
+      _isRefreshing = true;
+    } else {
+      _isLoading = true;
+    }
+    notifyListeners();
+    await Future.delayed(const Duration(milliseconds: 600));
+    _isLoading = false;
+    _isRefreshing = false;
+    notifyListeners();
+  }
+
+  void unblockUser(String id) {
+    _blockedUsers.removeWhere((user) => user['id'] == id);
+    notifyListeners();
   }
 }

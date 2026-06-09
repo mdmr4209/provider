@@ -1,18 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/widgets/custom_button.dart';
+import '../../../core/widgets/custom_loader.dart';
+import '../controllers/coach_controller.dart';
+import '../models/coach_model.dart';
 
-class ScheduleMeetView extends StatefulWidget {
-  const ScheduleMeetView({super.key});
+class ScheduleMeetView extends StatelessWidget {
+  final CoachModel? coach;
 
-  @override
-  State<ScheduleMeetView> createState() => _ScheduleMeetViewState();
-}
+  const ScheduleMeetView({super.key, this.coach});
 
-class _ScheduleMeetViewState extends State<ScheduleMeetView> {
   @override
   Widget build(BuildContext context) {
+    final selectedSlotIndex = ValueNotifier<int>(0);
+    final selectedTimeSlot = ValueNotifier<String?>(null);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final controller = context.read<CoachController>();
+      final coachId = coach?.id ?? 'c1';
+      controller.fetchCoachSlots(coachId);
+    });
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -24,56 +34,201 @@ class _ScheduleMeetViewState extends State<ScheduleMeetView> {
         title: Text("Schedule Meet", style: TextStyle(color: Colors.white, fontSize: 18.sp)),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(20.r),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildLabel("Choose Date"),
-            _buildPickerContainer("Mon, Mar 27", Icons.calendar_today_outlined),
-            SizedBox(height: 24.h),
-            _buildLabel("Suggestions"),
-            Row(
+      body: Consumer<CoachController>(
+        builder: (context, controller, child) {
+          if (controller.isLoading && controller.slots.isEmpty) {
+            return const _ScheduleMeetShimmer();
+          }
+
+          if (controller.slots.isEmpty) {
+            return Stack(
               children: [
-                Expanded(child: _buildDurationCard("30 Min", "\$75")),
-                SizedBox(width: 12.w),
-                Expanded(child: _buildDurationCard("60 Minutes", "\$150")),
-              ],
-            ),
-            SizedBox(height: 12.h),
-            Row(
-              children: [
-                Expanded(child: _buildDurationCard("30 Min", "\$75", isSelected: false)),
-                SizedBox(width: 12.w),
-                Expanded(child: _buildDurationCard("60 Minutes", "\$150", isSelected: false)),
-              ],
-            ),
-            SizedBox(height: 24.h),
-            _buildLabel("Select slot"),
-            _buildPickerContainer("Choose from here", Icons.access_time),
-            SizedBox(height: 16.h),
-            _buildSelectedSlot("09:00 AM - 09:30 AM"),
-            SizedBox(height: 24.h),
-            Container(
-              padding: EdgeInsets.all(16.r),
-              decoration: BoxDecoration(color: Colors.white.withAlpha(13), borderRadius: BorderRadius.circular(12.r)),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Cancellation Policy", style: TextStyle(color: Colors.green, fontSize: 14.sp, fontWeight: FontWeight.bold)),
-                  SizedBox(height: 8.h),
-                  Text(
-                    "Amazon Alexa Shopping is seeking a talented, experienced, and self-directed UX Designer to define and drive the future of shopping at Amazon. The ideal candidate is an end-to-end UX Designer with strong visual design skills. They are passionate and have experience designing for new and ambiguous technologies. They have proven ability to motivate through vision and a desire to inspire",
-                    style: TextStyle(color: Colors.white.withAlpha(179), fontSize: 12.sp, height: 1.5),
+                RefreshIndicator(
+                  onRefresh: () => controller.fetchCoachSlots(coach?.id ?? 'c1', isRefresh: true),
+                  color: Colors.transparent,
+                  backgroundColor: Colors.transparent,
+                  strokeWidth: 0,
+                  elevation: 0,
+                  child: ListView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    children: [
+                      SizedBox(height: 100.h),
+                      Center(
+                        child: Text("No schedule slots available.", style: TextStyle(color: Colors.white.withAlpha(128))),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                if (controller.isRefreshing)
+                  Positioned(
+                    top: 16.h,
+                    left: 0,
+                    right: 0,
+                    child: const Center(child: CustomLoader(size: 150)),
+                  ),
+              ],
+            );
+          }
+
+          // If selected time slot is not in available slots and available slots are not empty, default it
+          if (selectedTimeSlot.value == null && controller.availableSlots.isNotEmpty) {
+            selectedTimeSlot.value = controller.availableSlots[0];
+          }
+
+          return Stack(
+            children: [
+              RefreshIndicator(
+                onRefresh: () => controller.fetchCoachSlots(coach?.id ?? 'c1', isRefresh: true),
+                color: Colors.transparent,
+                backgroundColor: Colors.transparent,
+                strokeWidth: 0,
+                elevation: 0,
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: EdgeInsets.all(20.r),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildLabel("Choose Date"),
+                _buildPickerContainer("Mon, Mar 27", Icons.calendar_today_outlined),
+                SizedBox(height: 24.h),
+                _buildLabel("Suggestions"),
+                ValueListenableBuilder<int>(
+                  valueListenable: selectedSlotIndex,
+                  builder: (context, currentIdx, _) {
+                    return GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 2.2,
+                        crossAxisSpacing: 12.w,
+                        mainAxisSpacing: 12.h,
+                      ),
+                      itemCount: controller.slots.length,
+                      itemBuilder: (context, index) {
+                        final slot = controller.slots[index];
+                        final isSelected = currentIdx == index;
+                        return GestureDetector(
+                          onTap: () => selectedSlotIndex.value = index,
+                          child: _buildDurationCard(
+                            slot.duration,
+                            "\$${slot.price.toStringAsFixed(0)}",
+                            isSelected: isSelected,
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+                SizedBox(height: 24.h),
+                _buildLabel("Select slot"),
+                GestureDetector(
+                  onTap: () {
+                    // Show slot selection dialog/bottomsheet
+                    if (controller.availableSlots.isNotEmpty) {
+                      _showSlotPicker(context, controller.availableSlots, selectedTimeSlot);
+                    }
+                  },
+                  child: ValueListenableBuilder<String?>(
+                    valueListenable: selectedTimeSlot,
+                    builder: (context, time, _) {
+                      return _buildPickerContainer(
+                        time ?? "Choose from here",
+                        Icons.access_time,
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(height: 16.h),
+                ValueListenableBuilder<String?>(
+                  valueListenable: selectedTimeSlot,
+                  builder: (context, time, _) {
+                    if (time == null) return const SizedBox.shrink();
+                    return _buildSelectedSlot(time, selectedTimeSlot);
+                  },
+                ),
+                SizedBox(height: 24.h),
+                Container(
+                  padding: EdgeInsets.all(16.r),
+                  decoration: BoxDecoration(color: Colors.white.withAlpha(13), borderRadius: BorderRadius.circular(12.r)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Cancellation Policy", style: TextStyle(color: Colors.green, fontSize: 14.sp, fontWeight: FontWeight.bold)),
+                      SizedBox(height: 8.h),
+                      Text(
+                        "Amazon Alexa Shopping is seeking a talented, experienced, and self-directed UX Designer to define and drive the future of shopping at Amazon. The ideal candidate is an end-to-end UX Designer with strong visual design skills. They are passionate and have experience designing for new and ambiguous technologies. They have proven ability to motivate through vision and a desire to inspire",
+                        style: TextStyle(color: Colors.white.withAlpha(179), fontSize: 12.sp, height: 1.5),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 40.h),
+              ],
             ),
-            SizedBox(height: 40.h),
-          ],
+          ),
         ),
+        if (controller.isRefreshing)
+          Positioned(
+            top: 16.h,
+            left: 0,
+            right: 0,
+            child: const Center(child: CustomLoader(size: 150)),
+          ),
+      ],
+    );
+  },
       ),
-      bottomNavigationBar: _buildSummarySection(),
+      bottomNavigationBar: Consumer<CoachController>(
+        builder: (context, controller, child) {
+          if (controller.slots.isEmpty) return const SizedBox.shrink();
+
+          return ValueListenableBuilder<int>(
+            valueListenable: selectedSlotIndex,
+            builder: (context, currentSlotIdx, _) {
+              return ValueListenableBuilder<String?>(
+                valueListenable: selectedTimeSlot,
+                builder: (context, timeSlot, _) {
+                  final activeSlotIndex = currentSlotIdx < controller.slots.length ? currentSlotIdx : 0;
+                  final slot = controller.slots[activeSlotIndex];
+                  final totalAmount = slot.price;
+
+                  return Container(
+                    padding: EdgeInsets.all(20.r),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF1B2B1B),
+                      border: Border(top: BorderSide(color: Colors.white.withAlpha(13))),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Summary", style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.bold)),
+                        SizedBox(height: 16.h),
+                        _buildSummaryRow("Duration", slot.duration),
+                        _buildSummaryRow("Date", "Mon, Mar 27"),
+                        _buildSummaryRow("Time", timeSlot ?? "Not selected"),
+                        const Divider(color: Colors.white10),
+                        _buildSummaryRow("Total", "\$${totalAmount.toStringAsFixed(0)}", isTotal: true),
+                        SizedBox(height: 20.h),
+                        CustomButton(
+                          onPress: timeSlot != null
+                              ? () async => _showPaymentTerms(context, controller, timeSlot)
+                              : null,
+                          title: "Pay Now",
+                          linearGradient: timeSlot != null,
+                          buttonColor: timeSlot != null ? AppColors.buttonColor : Colors.white10,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
+            },
+          );
+        },
+      ),
     );
   }
 
@@ -111,6 +266,7 @@ class _ScheduleMeetViewState extends State<ScheduleMeetView> {
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(title, style: TextStyle(color: Colors.white, fontSize: 14.sp, fontWeight: FontWeight.w500)),
               Text(price, style: TextStyle(color: Colors.white.withAlpha(128), fontSize: 12.sp)),
@@ -122,7 +278,7 @@ class _ScheduleMeetViewState extends State<ScheduleMeetView> {
     );
   }
 
-  Widget _buildSelectedSlot(String slot) {
+  Widget _buildSelectedSlot(String slot, ValueNotifier<String?> selectedTimeSlot) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       decoration: BoxDecoration(color: Colors.white.withAlpha(13), borderRadius: BorderRadius.circular(8.r)),
@@ -131,29 +287,10 @@ class _ScheduleMeetViewState extends State<ScheduleMeetView> {
         children: [
           Text(slot, style: TextStyle(color: Colors.white, fontSize: 13.sp)),
           SizedBox(width: 8.w),
-          Icon(Icons.cancel, color: Colors.red.withAlpha(128), size: 16.r),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSummarySection() {
-    return Container(
-      padding: EdgeInsets.all(20.r),
-      decoration: BoxDecoration(color: const Color(0xFF1B2B1B), border: Border(top: BorderSide(color: Colors.white.withAlpha(13)))),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text("Summery", style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.bold)),
-          SizedBox(height: 16.h),
-          _buildSummaryRow("Duration", "30 min"),
-          _buildSummaryRow("Date", "Wed, Mar 29"),
-          _buildSummaryRow("Time", "09:00 AM - 10:00 AM"),
-          const Divider(color: Colors.white10),
-          _buildSummaryRow("Total", "\$565", isTotal: true),
-          SizedBox(height: 20.h),
-          CustomButton(onPress: () async => _showPaymentTerms(context), title: "Pay Now", linearGradient: true),
+          GestureDetector(
+            onTap: () => selectedTimeSlot.value = null,
+            child: Icon(Icons.cancel, color: Colors.red.withAlpha(128), size: 16.r),
+          ),
         ],
       ),
     );
@@ -172,23 +309,68 @@ class _ScheduleMeetViewState extends State<ScheduleMeetView> {
     );
   }
 
-  void _showPaymentTerms(BuildContext context) {
-     Navigator.push(context, MaterialPageRoute(builder: (_) => const PaymentTermsView()));
+  void _showSlotPicker(BuildContext context, List<String> slots, ValueNotifier<String?> selectedTimeSlot) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColors.backgroundColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+      ),
+      builder: (context) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: EdgeInsets.all(16.r),
+                child: Text(
+                  "Select Time Slot",
+                  style: TextStyle(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.bold),
+                ),
+              ),
+              const Divider(color: Colors.white10),
+              Flexible(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: slots.length,
+                  itemBuilder: (context, index) {
+                    final slot = slots[index];
+                    return ListTile(
+                      title: Text(slot, style: const TextStyle(color: Colors.white)),
+                      onTap: () {
+                        selectedTimeSlot.value = slot;
+                        Navigator.pop(context);
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showPaymentTerms(BuildContext context, CoachController controller, String slot) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => PaymentTermsView(controller: controller, slot: slot),
+      ),
+    );
   }
 }
 
-class PaymentTermsView extends StatefulWidget {
-  const PaymentTermsView({super.key});
+class PaymentTermsView extends StatelessWidget {
+  final CoachController controller;
+  final String slot;
 
-  @override
-  State<PaymentTermsView> createState() => _PaymentTermsViewState();
-}
-
-class _PaymentTermsViewState extends State<PaymentTermsView> {
-  bool _agreed = false;
+  const PaymentTermsView({super.key, required this.controller, required this.slot});
 
   @override
   Widget build(BuildContext context) {
+    final agreed = ValueNotifier<bool>(false);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -209,47 +391,62 @@ class _PaymentTermsViewState extends State<PaymentTermsView> {
           ],
         ),
       ),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.all(20.r),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              padding: EdgeInsets.all(20.r),
-              decoration: BoxDecoration(color: Colors.white.withAlpha(13), borderRadius: BorderRadius.circular(12.r)),
-              child: Column(
-                children: [
-                  Text("Willing To Pay Now?", style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.bold)),
-                  SizedBox(height: 8.h),
-                  Text("Please Check Your Terms, Before Moving Forward to payment.", textAlign: TextAlign.center, style: TextStyle(color: Colors.white.withAlpha(128), fontSize: 12.sp)),
-                  SizedBox(height: 16.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+      bottomNavigationBar: ValueListenableBuilder<bool>(
+        valueListenable: agreed,
+        builder: (context, currentAgreed, _) {
+          return Container(
+            padding: EdgeInsets.all(20.r),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: EdgeInsets.all(20.r),
+                  decoration: BoxDecoration(color: Colors.white.withAlpha(13), borderRadius: BorderRadius.circular(12.r)),
+                  child: Column(
                     children: [
-                      Checkbox(
-                        value: _agreed,
-                        onChanged: (v) => setState(() => _agreed = v!),
-                        activeColor: Colors.amber,
-                        checkColor: Colors.black,
+                      Text("Willing To Pay Now?", style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.bold)),
+                      SizedBox(height: 8.h),
+                      Text("Please Check Your Terms, Before Moving Forward to payment.", textAlign: TextAlign.center, style: TextStyle(color: Colors.white.withAlpha(128), fontSize: 12.sp)),
+                      SizedBox(height: 16.h),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Checkbox(
+                            value: currentAgreed,
+                            onChanged: (v) => agreed.value = v!,
+                            activeColor: Colors.amber,
+                            checkColor: Colors.black,
+                          ),
+                          Text.rich(TextSpan(children: [
+                            TextSpan(text: "Agree to ", style: TextStyle(color: Colors.white.withAlpha(179))),
+                            const TextSpan(text: "Payment Terms", style: TextStyle(color: Colors.amber)),
+                          ])),
+                        ],
                       ),
-                      Text.rich(TextSpan(children: [
-                        TextSpan(text: "Agree to ", style: TextStyle(color: Colors.white.withAlpha(179))),
-                        const TextSpan(text: "Payment Terms", style: TextStyle(color: Colors.amber)),
-                      ])),
                     ],
                   ),
-                ],
-              ),
+                ),
+                SizedBox(height: 20.h),
+                CustomButton(
+                  onPress: currentAgreed
+                      ? () async {
+                          final success = await controller.bookSession(slot);
+                          if (success && context.mounted) {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (_) => const PaymentSuccessView()),
+                            );
+                          }
+                        }
+                      : null,
+                  title: "Continue to Pay",
+                  linearGradient: currentAgreed,
+                  buttonColor: currentAgreed ? AppColors.buttonColor : Colors.white10,
+                ),
+              ],
             ),
-            SizedBox(height: 20.h),
-            CustomButton(
-              onPress: _agreed ? () async => Navigator.push(context, MaterialPageRoute(builder: (_) => const PaymentSuccessView())) : null,
-              title: "Continue to Pay",
-              linearGradient: _agreed,
-              buttonColor: _agreed ? AppColors.buttonColor : Colors.white10,
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
@@ -267,7 +464,6 @@ class PaymentSuccessView extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Illustration (assuming placeholder for success image)
               Container(
                 height: 250.h,
                 width: double.infinity,
@@ -284,6 +480,51 @@ class PaymentSuccessView extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _ScheduleMeetShimmer extends StatelessWidget {
+  const _ScheduleMeetShimmer();
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      physics: const NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.all(20.r),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ShimmerLoader(width: 100.w, height: 16.h, borderRadius: 4.r),
+          SizedBox(height: 12.h),
+          ShimmerLoader(width: double.infinity, height: 50.h, borderRadius: 12.r),
+          SizedBox(height: 24.h),
+          ShimmerLoader(width: 100.w, height: 16.h, borderRadius: 4.r),
+          SizedBox(height: 12.h),
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 2.2,
+              crossAxisSpacing: 12.w,
+              mainAxisSpacing: 12.h,
+            ),
+            itemCount: 2,
+            itemBuilder: (context, index) => ShimmerLoader(
+              width: double.infinity,
+              height: 56.h,
+              borderRadius: 12.r,
+            ),
+          ),
+          SizedBox(height: 24.h),
+          ShimmerLoader(width: 100.w, height: 16.h, borderRadius: 4.r),
+          SizedBox(height: 12.h),
+          ShimmerLoader(width: double.infinity, height: 50.h, borderRadius: 12.r),
+          SizedBox(height: 24.h),
+          ShimmerLoader(width: double.infinity, height: 100.h, borderRadius: 12.r),
+        ],
       ),
     );
   }

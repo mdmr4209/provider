@@ -12,171 +12,161 @@ import '../../../core/widgets/background_widget.dart';
 import '../../../routes/app_router.dart';
 import '../controllers/auth_controller.dart';
 
-class SplashScreen extends StatefulWidget {
+import 'package:flutter/scheduler.dart';
+
+class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider<SplashAnimationController>(
+      create: (_) => SplashAnimationController(context),
+      child: Consumer<SplashAnimationController>(
+        builder: (context, anim, _) {
+          return BackgroundWidget(
+            child: Scaffold(
+              body: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // --- ANIMATED LOGO ---
+                    ScaleTransition(
+                      scale: anim.logoScaleAnimation,
+                      child: FadeTransition(
+                        opacity: anim.logoFadeAnimation,
+                        child: Container(
+                          decoration: const BoxDecoration(shape: BoxShape.circle),
+                          child: Image.asset(AppAssets.sb1Logo, height: 200.h),
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(height: 10.h),
+                    // --- ANIMATED TITLE ---
+                    SlideTransition(
+                      position: anim.titleSlideAnimation,
+                      child: FadeTransition(
+                        opacity: anim.titleFadeAnimation,
+                        child: Text(
+                          'STRONGER BY TWO',
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                            fontStyle: FontStyle.italic,
+                            color: AppColors.textColor,
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(height: 10.h),
+
+                    // --- ANIMATED SUBTITLE ---
+                    SlideTransition(
+                      position: anim.subtitleSlideAnimation,
+                      child: FadeTransition(
+                        opacity: anim.subtitleFadeAnimation,
+                        child: Text(
+                          '\"You are not in this alone.\"',
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                            fontStyle: FontStyle.italic,
+                            color: AppColors.textColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
 }
 
-class _SplashScreenState extends State<SplashScreen>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+class SplashAnimationController extends ChangeNotifier implements TickerProvider {
+  final BuildContext context;
+  late AnimationController controller;
 
-  // Animation variables
-  late Animation<double> _logoScaleAnimation;
-  late Animation<double> _logoFadeAnimation;
-  late Animation<Offset> _titleSlideAnimation;
-  late Animation<double> _titleFadeAnimation;
-  late Animation<Offset> _subtitleSlideAnimation;
-  late Animation<double> _subtitleFadeAnimation;
+  late Animation<double> logoScaleAnimation;
+  late Animation<double> logoFadeAnimation;
+  late Animation<Offset> titleSlideAnimation;
+  late Animation<double> titleFadeAnimation;
+  late Animation<Offset> subtitleSlideAnimation;
+  late Animation<double> subtitleFadeAnimation;
 
-  @override
-  void initState() {
-    super.initState();
-    _navigateBasedOnAuth();
-    // 1. Initialize Controller
-    _controller = AnimationController(
+  SplashAnimationController(this.context) {
+    controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 2500), // Total animation time
+      duration: const Duration(milliseconds: 2500),
     );
 
-    // 2. Define Animations (Staggered)
-
-    // Logo: Pops in with an elastic bounce (0ms - 1200ms)
-    _logoScaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    logoScaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
-        parent: _controller,
+        parent: controller,
         curve: const Interval(0.0, 0.5, curve: Curves.elasticOut),
       ),
     );
-    _logoFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    logoFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
-        parent: _controller,
+        parent: controller,
         curve: const Interval(0.0, 0.2, curve: Curves.easeIn),
       ),
     );
 
-    // Title: Slides up and fades in (800ms - 1600ms)
-    _titleSlideAnimation =
+    titleSlideAnimation =
         Tween<Offset>(begin: const Offset(0, 0.5), end: Offset.zero).animate(
-          CurvedAnimation(
-            parent: _controller,
-            curve: const Interval(0.3, 0.6, curve: Curves.easeOutCubic),
-          ),
-        );
-    _titleFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
-        parent: _controller,
+        parent: controller,
+        curve: const Interval(0.3, 0.6, curve: Curves.easeOutCubic),
+      ),
+    );
+    titleFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: controller,
         curve: const Interval(0.3, 0.5, curve: Curves.easeIn),
       ),
     );
 
-    // Subtitle: Slides up slightly later (1200ms - 2000ms)
-    _subtitleSlideAnimation =
+    subtitleSlideAnimation =
         Tween<Offset>(begin: const Offset(0, 0.5), end: Offset.zero).animate(
-          CurvedAnimation(
-            parent: _controller,
-            curve: const Interval(0.5, 0.8, curve: Curves.easeOutCubic),
-          ),
-        );
-    _subtitleFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
-        parent: _controller,
+        parent: controller,
+        curve: const Interval(0.5, 0.8, curve: Curves.easeOutCubic),
+      ),
+    );
+    subtitleFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: controller,
         curve: const Interval(0.5, 0.8, curve: Curves.easeIn),
       ),
     );
 
-    _controller.forward();
+    controller.forward();
+    _navigateBasedOnAuth();
   }
 
   Future<void> _navigateBasedOnAuth() async {
-    // Wait for 3 seconds to display splash
-    await Future.delayed(Duration(seconds: 3));
-
-    if (!mounted) return;
-
+    await Future.delayed(const Duration(seconds: 3));
     final authController = context.read<AuthController>();
-
-    // Route based on authentication state
     if (authController.isLoggedIn) {
-      // User is logged in - go to home
-      if (mounted) {
-        context.go(AppRoutes.home);
-      }
+      context.go(AppRoutes.home);
     } else {
-      // User not logged in - go to login
-      if (mounted) {
-        context.go(AppRoutes.login);
-      }
+      context.go(AppRoutes.login);
     }
   }
 
   @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+  Ticker createTicker(TickerCallback onTick) {
+    return Ticker(onTick);
   }
 
   @override
-  Widget build(BuildContext context) {
-    return BackgroundWidget(
-      child: Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // --- ANIMATED LOGO ---
-              ScaleTransition(
-                scale: _logoScaleAnimation,
-                child: FadeTransition(
-                  opacity: _logoFadeAnimation,
-                  child: Container(
-                    decoration: const BoxDecoration(shape: BoxShape.circle),
-                    child: Image.asset(AppAssets.sb1Logo, height: 200.h),
-                  ),
-                ),
-              ),
-
-              SizedBox(height: 10.h),
-              // --- ANIMATED TITLE ---
-              SlideTransition(
-                position: _titleSlideAnimation,
-                child: FadeTransition(
-                  opacity: _titleFadeAnimation,
-                  child: Text(
-                    'STRONGER BY TWO',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                      fontStyle: FontStyle.italic,
-                      color: AppColors.textColor,
-                    ),
-                  ),
-                ),
-              ),
-
-               SizedBox(height: 10.h),
-
-              // --- ANIMATED SUBTITLE ---
-              SlideTransition(
-                position: _subtitleSlideAnimation,
-                child: FadeTransition(
-                  opacity: _subtitleFadeAnimation,
-                  child: Text(
-                    '\"You are not in this alone.\"',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                      fontStyle: FontStyle.italic,
-                      color: AppColors.textColor,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 }

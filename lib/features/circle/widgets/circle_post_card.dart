@@ -10,17 +10,11 @@ import '../../../core/widgets/custom_loader.dart';
 import '../../../core/widgets/full_screen_image_viewer.dart';
 import '../models/circle_post_model.dart';
 
-class CirclePostCard extends StatefulWidget {
+class CirclePostCard extends StatelessWidget {
   final CirclePostModel post;
+  final ValueNotifier<bool> _isExpanded = ValueNotifier<bool>(false);
 
-  const CirclePostCard({super.key, required this.post});
-
-  @override
-  State<CirclePostCard> createState() => _CirclePostCardState();
-}
-
-class _CirclePostCardState extends State<CirclePostCard> {
-  bool _isExpanded = false;
+  CirclePostCard({super.key, required this.post});
 
   void _showPostMenu(
     BuildContext context,
@@ -157,258 +151,262 @@ class _CirclePostCardState extends State<CirclePostCard> {
     final theme = Theme.of(context);
     final designSystem = theme.extension<AppDesignSystem>()!;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.postCardColor.withValues(alpha: 0.95),
-        borderRadius: BorderRadius.circular(16.r),
-        boxShadow: [designSystem.softShadow],
-        border: Border.all(
-          color: Colors.white.withValues(alpha: 0.05),
-          width: 0.5,
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // --- Main Post Content Section ---
-          Padding(
-            padding: EdgeInsets.all(16.r),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Header: Avatar, Name, Time, More
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: AppColors.primaryColor.withValues(alpha: 0.3),
-                          width: 1.r,
-                        ),
-                      ),
-                      child: GestureDetector(
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) =>
-                                UserProfileView(userId: widget.post.id),
-                          ),
-                        ),
-                        child: CircleAvatar(
-                          radius: 20.r,
-                          backgroundColor: Colors.white.withValues(alpha: 0.1),
-                          backgroundImage: widget.post.userAvatar.isNotEmpty
-                              ? NetworkImage(widget.post.userAvatar)
-                              : null,
-                          child: widget.post.userAvatar.isEmpty
-                              ? Text(
-                                  widget.post.userName[0],
-                                  style: TextStyle(
-                                    fontSize: 14.sp,
-                                    color: Colors.white,
-                                  ),
-                                )
-                              : null,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 12.w),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) =>
-                                UserProfileView(userId: widget.post.id),
-                          ),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              widget.post.userName,
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15.sp,
-                              ),
-                            ),
-                            Text(
-                              widget.post.timeAgo,
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: Colors.white.withValues(alpha: 0.6),
-                                fontSize: 12.sp,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTapDown: (details) {
-                        _showPostMenu(
-                          context,
-                          details.globalPosition,
-                          widget.post.isOwnPost,
-                          designSystem,
-                        );
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.all(4.r),
-                        child: SvgPicture.asset(AppAssets.menu, width: 16.r),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 16.h),
-
-                // Content Text
-                Text(
-                  widget.post.content,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: Colors.white.withValues(alpha: 0.9),
-                    fontSize: 14.sp,
-                    height: 1.4,
-                  ),
-                ),
-
-                // Image/Video Grid
-                if (widget.post.images != null &&
-                    widget.post.images!.isNotEmpty) ...[
-                  SizedBox(height: 12.h),
-                  _buildImageGrid(widget.post.images!, theme, designSystem),
-                ],
-
-                SizedBox(height: 16.h),
-
-                // Action Buttons Footer: Like, Comment, Share
-                Row(
-                  children: [
-                    _ActionButton(
-                      icon: AppAssets.like,
-                      count: widget.post.likes,
-                      onTap: () {},
-                      theme: theme,
-                      designSystem: designSystem,
-                    ),
-                    SizedBox(width: 12.w),
-                    _ActionButton(
-                      icon: AppAssets.comment,
-                      count: widget.post.claps,
-                      onTap: () {
-                        setState(() {
-                          _isExpanded = !_isExpanded;
-                        });
-                      },
-                      theme: theme,
-                      designSystem: designSystem,
-                    ),
-                    const Spacer(),
-                    InkWell(
-                      onTap: () {},
-                      borderRadius: BorderRadius.circular(12.r),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 8.w,
-                          vertical: 4.h,
-                        ),
-                        child: Row(
-                          children: [
-                            Image.asset(AppAssets.shareMenu, width: 16.r),
-                            SizedBox(width: 6.w),
-                            Text(
-                              "Share",
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+    return ValueListenableBuilder<bool>(
+      valueListenable: _isExpanded,
+      builder: (context, isExpanded, child) {
+        return Container(
+          decoration: BoxDecoration(
+            color: AppColors.postCardColor.withValues(alpha: 0.95),
+            borderRadius: BorderRadius.circular(16.r),
+            boxShadow: [designSystem.softShadow],
+            border: Border.all(
+              color: Colors.white.withValues(alpha: 0.05),
+              width: 0.5,
             ),
           ),
-
-          // --- Expanded Comments Section ---
-          if (_isExpanded)
-            Container(
-              padding: EdgeInsets.all(16.r),
-              decoration: BoxDecoration(
-                color: AppColors.commentCardColor.withValues(alpha: 0.5),
-                borderRadius: BorderRadius.vertical(
-                  bottom: Radius.circular(16.r),
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Back arrow and Comments title
-                  InkWell(
-                    onTap: () => setState(() => _isExpanded = false),
-                    child: Row(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // --- Main Post Content Section ---
+              Padding(
+                padding: EdgeInsets.all(16.r),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Header: Avatar, Name, Time, More
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(
-                          Icons.keyboard_arrow_down,
-                          size: 18.sp,
-                          color: Colors.white.withValues(alpha: 0.6),
+                        Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: AppColors.primaryColor.withValues(alpha: 0.3),
+                              width: 1.r,
+                            ),
+                          ),
+                          child: GestureDetector(
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    UserProfileView(userId: post.id),
+                              ),
+                            ),
+                            child: CircleAvatar(
+                              radius: 20.r,
+                              backgroundColor: Colors.white.withValues(alpha: 0.1),
+                              backgroundImage: post.userAvatar.isNotEmpty
+                                  ? NetworkImage(post.userAvatar)
+                                  : null,
+                              child: post.userAvatar.isEmpty
+                                  ? Text(
+                                      post.userName[0],
+                                      style: TextStyle(
+                                        fontSize: 14.sp,
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  : null,
+                            ),
+                          ),
                         ),
-                        SizedBox(width: 4.w),
-                        Text(
-                          "Comments",
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: Colors.white.withValues(alpha: 0.6),
+                        SizedBox(width: 12.w),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    UserProfileView(userId: post.id),
+                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  post.userName,
+                                  style: theme.textTheme.titleMedium?.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15.sp,
+                                  ),
+                                ),
+                                Text(
+                                  post.timeAgo,
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    color: Colors.white.withValues(alpha: 0.6),
+                                    fontSize: 12.sp,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTapDown: (details) {
+                            _showPostMenu(
+                              context,
+                              details.globalPosition,
+                              post.isOwnPost,
+                              designSystem,
+                            );
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.all(4.r),
+                            child: SvgPicture.asset(AppAssets.menu, width: 16.r),
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  SizedBox(height: 12.h),
+                    SizedBox(height: 16.h),
 
-                  // Render Comment Items
-                  if (widget.post.comments != null)
-                    ...widget.post.comments!.map(
-                      (comment) => _buildCommentItem(comment, theme),
+                    // Content Text
+                    Text(
+                      post.content,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: Colors.white.withValues(alpha: 0.9),
+                        fontSize: 14.sp,
+                        height: 1.4,
+                      ),
                     ),
 
-                  SizedBox(height: 12.h),
+                    // Image/Video Grid
+                    if (post.images != null &&
+                        post.images!.isNotEmpty) ...[
+                      SizedBox(height: 12.h),
+                      _buildImageGrid(context, post.images!, theme, designSystem),
+                    ],
 
-                  // Comment Input row
-                  Row(
+                    SizedBox(height: 16.h),
+
+                    // Action Buttons Footer: Like, Comment, Share
+                    Row(
+                      children: [
+                        _ActionButton(
+                          icon: AppAssets.like,
+                          count: post.likes,
+                          onTap: () {},
+                          theme: theme,
+                          designSystem: designSystem,
+                        ),
+                        SizedBox(width: 12.w),
+                        _ActionButton(
+                          icon: AppAssets.comment,
+                          count: post.claps,
+                          onTap: () {
+                            _isExpanded.value = !_isExpanded.value;
+                          },
+                          theme: theme,
+                          designSystem: designSystem,
+                        ),
+                        const Spacer(),
+                        InkWell(
+                          onTap: () {},
+                          borderRadius: BorderRadius.circular(12.r),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 8.w,
+                              vertical: 4.h,
+                            ),
+                            child: Row(
+                              children: [
+                                Image.asset(AppAssets.shareMenu, width: 16.r),
+                                SizedBox(width: 6.w),
+                                Text(
+                                  "Share",
+                                  style: theme.textTheme.bodyMedium?.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+
+              // --- Expanded Comments Section ---
+              if (isExpanded)
+                Container(
+                  padding: EdgeInsets.all(16.r),
+                  decoration: BoxDecoration(
+                    color: AppColors.commentCardColor.withValues(alpha: 0.5),
+                    borderRadius: BorderRadius.vertical(
+                      bottom: Radius.circular(16.r),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                       Expanded(
-                        child: CustomInput(
-                          height: 31,
-                          hintText: "Start typing...",
-                          fontSize: 11,
-                          shadow: true,
-                          contentPadding: EdgeInsets.symmetric(horizontal: 12.w),
+                      // Back arrow and Comments title
+                      InkWell(
+                        onTap: () => _isExpanded.value = false,
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.keyboard_arrow_down,
+                              size: 18.sp,
+                              color: Colors.white.withValues(alpha: 0.6),
+                            ),
+                            SizedBox(width: 4.w),
+                            Text(
+                              "Comments",
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: Colors.white.withValues(alpha: 0.6),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      SizedBox(width: 12.w),
-                      Center(
-                        child: SvgPicture.asset(
-                          AppAssets.send,
-                          height: 32.h,
+                      SizedBox(height: 12.h),
+
+                      // Render Comment Items
+                      if (post.comments != null)
+                        ...post.comments!.map(
+                          (comment) => _buildCommentItem(comment, theme),
                         ),
+
+                      SizedBox(height: 12.h),
+
+                      // Comment Input row
+                      Row(
+                        children: [
+                          Expanded(
+                            child: CustomInput(
+                              height: 31,
+                              hintText: "Start typing...",
+                              fontSize: 11,
+                              shadow: true,
+                              contentPadding: EdgeInsets.symmetric(horizontal: 12.w),
+                            ),
+                          ),
+                          SizedBox(width: 12.w),
+                          Center(
+                            child: SvgPicture.asset(
+                              AppAssets.send,
+                              height: 32.h,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
-            ),
-        ],
-      ),
+                ),
+            ],
+          ),
+        );
+      },
     );
   }
 
   Widget _buildImageGrid(
+    BuildContext context,
     List<String> images,
     ThemeData theme,
     AppDesignSystem designSystem,

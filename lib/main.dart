@@ -52,50 +52,32 @@ Future<void> main() async {
 }
 
 // ── Root widget ────────────────────────────────────────────────────────────
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   final GlobalKey<NavigatorState> navigatorKey;
   const MyApp({super.key, required this.navigatorKey});
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
+  static GoRouter? _router;
 
-class _MyAppState extends State<MyApp> {
-  GoRouter? _router;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    if (_router != null) return;
+  GoRouter _getRouter(BuildContext context) {
+    if (_router != null) return _router!;
 
     final auth = context.read<AuthController>();
     final onboard = context.read<OnboardingController>();
 
-    AuthController.routerKey = widget.navigatorKey;
+    AuthController.routerKey = navigatorKey;
     ApiService.onUnauthorized = () {
-      widget.navigatorKey.currentContext?.go(AppRoutes.login);
+      navigatorKey.currentContext?.go(AppRoutes.login);
     };
 
-    _router = AppRouter.create(auth, onboard, widget.navigatorKey);
+    _router = AppRouter.create(auth, onboard, navigatorKey);
     // Initialize NavigationService with the router instance
     NavigationService.initRouter(_router!);
-
-    setState(() {});
+    return _router!;
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_router == null) {
-      return MaterialApp(
-        navigatorKey: SnackBarHelper.navigatorKey,
-        home: const Scaffold(
-          backgroundColor: AppColors.backgroundColor,
-          body: SizedBox.shrink(),
-        ),
-      );
-    }
-
+    final router = _getRouter(context);
     final themeController = context.watch<ThemeController>();
     final localizationController = context.watch<LocalizationController>();
 
@@ -110,7 +92,7 @@ class _MyAppState extends State<MyApp> {
         darkTheme: AppTheme.darkTheme,
         themeMode: themeController.themeMode,
         locale: localizationController.locale,
-        routerConfig: _router!,
+        routerConfig: router,
         // Wrap every route with BackgroundWidget
         builder: (context, child) {
           return BackgroundWidget(child: child!);

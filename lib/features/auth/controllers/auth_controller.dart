@@ -51,6 +51,8 @@ class AuthController extends ChangeNotifier {
   final TextEditingController signupEmailController = TextEditingController();
   final TextEditingController forgetEmailController = TextEditingController();
   final TextEditingController otpController = TextEditingController();
+  final TextEditingController setupDaysController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
 
   // ── Getters ────────────────────────────────────────────────────────────────
   bool get isOtpVerified => _isOtpVerified;
@@ -561,6 +563,8 @@ class AuthController extends ChangeNotifier {
     signupEmailController.clear();
     forgetEmailController.clear();
     otpController.clear();
+    setupDaysController.clear();
+    confirmPasswordController.clear();
     _signupEmail = '';
     _isOtpVerified = false;
     _error = null;
@@ -595,6 +599,8 @@ class AuthController extends ChangeNotifier {
     signupEmailController.dispose();
     forgetEmailController.dispose();
     otpController.dispose();
+    setupDaysController.dispose();
+    confirmPasswordController.dispose();
     super.dispose();
   }
 }

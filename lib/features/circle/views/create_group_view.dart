@@ -5,14 +5,9 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/widgets/custom_input.dart';
 import '../../../core/widgets/custom_button.dart';
 
-class CreateGroupView extends StatefulWidget {
+class CreateGroupView extends StatelessWidget {
   const CreateGroupView({super.key});
 
-  @override
-  State<CreateGroupView> createState() => _CreateGroupViewState();
-}
-
-class _CreateGroupViewState extends State<CreateGroupView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

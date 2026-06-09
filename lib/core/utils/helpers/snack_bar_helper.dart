@@ -186,7 +186,20 @@ void showInfoSnackBar({
 );
 
 // ── Overlay widget ────────────────────────────────────────────────────────────
-class _SnackBarOverlay extends StatefulWidget {
+class _SnackBarState {
+  final ValueNotifier<double> slideTarget;
+  final ValueNotifier<double> pulseTarget;
+  bool isExiting;
+  bool isDelayStarted;
+
+  _SnackBarState()
+      : slideTarget = ValueNotifier<double>(1.5),
+        pulseTarget = ValueNotifier<double>(1.25),
+        isExiting = false,
+        isDelayStarted = false;
+}
+
+class _SnackBarOverlay extends StatelessWidget {
   final String title;
   final String message;
   final _SnackBarConfig config;
@@ -200,207 +213,205 @@ class _SnackBarOverlay extends StatefulWidget {
   });
 
   @override
-  State<_SnackBarOverlay> createState() => _SnackBarOverlayState();
-}
-
-class _SnackBarOverlayState extends State<_SnackBarOverlay>
-    with TickerProviderStateMixin {
-  late final AnimationController _slideCtrl;
-  late final AnimationController _progressCtrl;
-  late final AnimationController _iconPulseCtrl;
-  late final Animation<Offset> _slideAnim;
-  late final Animation<double> _iconScaleAnim;
-  bool _isExiting = false;
-
-  @override
-  void initState() {
-    super.initState();
-
-    // Entrance/Exit Animation (Right to Left)
-    _slideCtrl = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 600),
-    );
-
-    _slideAnim = Tween<Offset>(
-      begin: const Offset(1.5, 0), // Start off-screen right
-      end: Offset.zero,
-    ).animate(CurvedAnimation(parent: _slideCtrl, curve: Curves.easeOutBack));
-
-    // Progress Bar Animation (Timer)
-    _progressCtrl = AnimationController(
-      vsync: this,
-      duration: widget.config.duration,
-    );
-
-    // Icon Pulse Animation (Size Increase/Decrease)
-    _iconPulseCtrl = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 800),
-    )..repeat(reverse: true);
-
-    _iconScaleAnim = Tween<double>(
-      begin: 1.0,
-      end: 1.25,
-    ).animate(CurvedAnimation(parent: _iconPulseCtrl, curve: Curves.easeInOut));
-
-    _slideCtrl.forward().then((_) {
-      if (mounted) {
-        _progressCtrl.forward().then((_) => _handleExit());
-      }
-    });
-  }
-
-  void _handleExit() {
-    if (_isExiting) return;
-    _isExiting = true;
-    _slideCtrl.reverse().then((_) => widget.onDismiss());
-  }
-
-  @override
-  void dispose() {
-    _slideCtrl.dispose();
-    _progressCtrl.dispose();
-    _iconPulseCtrl.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Positioned(
-      top: 60.h,
-      right: 16.w,
-      left: 16.w,
-      child: SlideTransition(
-        position: _slideAnim,
-        child: Align(
-          alignment: Alignment.topRight,
-          child: Material(
-            color: Colors.transparent,
-            child: Container(
-              constraints: BoxConstraints(maxWidth: 0.9.sw),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    widget.config.backgroundColor,
-                    widget.config.accentColor,
-                  ],
-                ),
-                borderRadius: BorderRadius.circular(16.r),
-                boxShadow: [
-                  BoxShadow(
-                    color: [
-                      widget.config.backgroundColor,
-                      widget.config.accentColor,
-                    ].first.withValues(alpha: 0.3),
-                    blurRadius: 15,
-                    offset: const Offset(0, 8),
-                  ),
-                ],
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(16.r),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(16.w, 14.h, 8.w, 14.h),
-                      child: Row(
-                        children: [
-                          // Pulse Icon Animation
-                          ScaleTransition(
-                            scale: _iconScaleAnim,
-                            child: Container(
-                              padding: EdgeInsets.all(8.w),
-                              decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.2),
-                                shape: BoxShape.circle,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.white.withValues(alpha: 0.1),
-                                    blurRadius: 10,
-                                    spreadRadius: 2,
-                                  ),
-                                ],
-                              ),
-                              child: Icon(
-                                widget.config.icon,
-                                color: widget.config.textColor,
-                                size: 24.w,
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 14.w),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  widget.title,
-                                  style: TextStyle(
-                                    color: widget.config.textColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14.sp,
-                                    letterSpacing: 0.5,
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                SizedBox(height: 4.h),
-                                Text(
-                                  widget.message,
-                                  style: TextStyle(
-                                    color: widget.config.textColor.withValues(
-                                      alpha: 0.9,
-                                    ),
-                                    fontSize: 12.sp,
-                                  ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: _handleExit,
-                            icon: Icon(
-                              Icons.close_rounded,
-                              color: widget.config.textColor.withValues(
-                                alpha: 0.8,
-                              ),
-                              size: 22.w,
-                            ),
-                            padding: EdgeInsets.zero,
-                            constraints: const BoxConstraints(),
+    return FormField<_SnackBarState>(
+      initialValue: _SnackBarState(),
+      builder: (fieldState) {
+        final state = fieldState.value!;
+
+        // Trigger the slide entrance animation post-frame
+        if (state.slideTarget.value == 1.5 && !state.isExiting && !state.isDelayStarted) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            state.slideTarget.value = 0.0;
+          });
+        }
+
+        // Start the duration delay timer to exit
+        if (!state.isDelayStarted) {
+          state.isDelayStarted = true;
+          Future.delayed(config.duration + const Duration(milliseconds: 600), () {
+            state.isExiting = true;
+            state.slideTarget.value = 1.5;
+          });
+        }
+
+        return Positioned(
+          top: 60.h,
+          right: 16.w,
+          left: 16.w,
+          child: ValueListenableBuilder<double>(
+            valueListenable: state.slideTarget,
+            builder: (context, slideVal, _) {
+              return TweenAnimationBuilder<double>(
+                tween: Tween<double>(begin: state.isExiting ? 0.0 : 1.5, end: slideVal),
+                duration: const Duration(milliseconds: 600),
+                curve: Curves.easeOutBack,
+                onEnd: () {
+                  if (state.isExiting && slideVal == 1.5) {
+                    onDismiss();
+                  }
+                },
+                builder: (context, val, child) {
+                  return Transform.translate(
+                    offset: Offset(val * MediaQuery.of(context).size.width, 0),
+                    child: child,
+                  );
+                },
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: Material(
+                    color: Colors.transparent,
+                    child: Container(
+                      constraints: BoxConstraints(maxWidth: 0.9.sw),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            config.backgroundColor,
+                            config.accentColor,
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(16.r),
+                        boxShadow: [
+                          BoxShadow(
+                            color: [
+                              config.backgroundColor,
+                              config.accentColor,
+                            ].first.withValues(alpha: 0.3),
+                            blurRadius: 15,
+                            offset: const Offset(0, 8),
                           ),
                         ],
                       ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16.r),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(16.w, 14.h, 8.w, 14.h),
+                              child: Row(
+                                children: [
+                                  // Pulse Icon Animation
+                                  ValueListenableBuilder<double>(
+                                    valueListenable: state.pulseTarget,
+                                    builder: (context, pulseVal, child) {
+                                      return TweenAnimationBuilder<double>(
+                                        tween: Tween<double>(begin: pulseVal == 1.25 ? 1.0 : 1.25, end: pulseVal),
+                                        duration: const Duration(milliseconds: 800),
+                                        onEnd: () {
+                                          state.pulseTarget.value = pulseVal == 1.25 ? 1.0 : 1.25;
+                                        },
+                                        builder: (context, scale, child) {
+                                          return Transform.scale(
+                                            scale: scale,
+                                            child: child,
+                                          );
+                                        },
+                                        child: child,
+                                      );
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.all(8.w),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white.withValues(alpha: 0.2),
+                                        shape: BoxShape.circle,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.white.withValues(alpha: 0.1),
+                                            blurRadius: 10,
+                                            spreadRadius: 2,
+                                          ),
+                                        ],
+                                      ),
+                                      child: Icon(
+                                        config.icon,
+                                        color: config.textColor,
+                                        size: 24.w,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 14.w),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          title,
+                                          style: TextStyle(
+                                            color: config.textColor,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14.sp,
+                                            letterSpacing: 0.5,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        SizedBox(height: 4.h),
+                                        Text(
+                                          message,
+                                          style: TextStyle(
+                                            color: config.textColor.withValues(
+                                              alpha: 0.9,
+                                            ),
+                                            fontSize: 12.sp,
+                                          ),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed: () {
+                                      if (!state.isExiting) {
+                                        state.isExiting = true;
+                                        state.slideTarget.value = 1.5;
+                                      }
+                                    },
+                                    icon: Icon(
+                                      Icons.close_rounded,
+                                      color: config.textColor.withValues(
+                                        alpha: 0.8,
+                                      ),
+                                      size: 22.w,
+                                    ),
+                                    padding: EdgeInsets.zero,
+                                    constraints: const BoxConstraints(),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            // Futuristic Progress Bar
+                            if (!state.isExiting)
+                              TweenAnimationBuilder<double>(
+                                tween: Tween<double>(begin: 1.0, end: 0.0),
+                                duration: config.duration,
+                                builder: (context, progressVal, _) {
+                                  return LinearProgressIndicator(
+                                    value: progressVal, // Shrinks as time passes
+                                    minHeight: 5.h,
+                                    backgroundColor: Colors.black.withValues(alpha: 0.1),
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      config.textColor.withValues(alpha: 0.5),
+                                    ),
+                                  );
+                                },
+                              )
+                            else
+                              SizedBox(height: 5.h),
+                          ],
+                        ),
+                      ),
                     ),
-                    // Futuristic Progress Bar
-                    AnimatedBuilder(
-                      animation: _progressCtrl,
-                      builder: (context, child) {
-                        return LinearProgressIndicator(
-                          value:
-                              1.0 -
-                              _progressCtrl.value, // Shrinks as time passes
-                          minHeight: 5.h,
-                          backgroundColor: Colors.black.withValues(alpha: 0.1),
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            widget.config.textColor.withValues(alpha: 0.5),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

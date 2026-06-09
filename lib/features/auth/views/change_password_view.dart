@@ -10,21 +10,8 @@ import '../../../routes/app_router.dart';
 import '../../localization/localization_extension.dart';
 import '../controllers/auth_controller.dart';
 
-class ChangePasswordView extends StatefulWidget {
+class ChangePasswordView extends StatelessWidget {
   const ChangePasswordView({super.key});
-
-  @override
-  State<ChangePasswordView> createState() => _ChangePasswordViewState();
-}
-
-class _ChangePasswordViewState extends State<ChangePasswordView> {
-  final TextEditingController _confirmController = TextEditingController();
-
-  @override
-  void dispose() {
-    _confirmController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +89,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                                 onChanged: (_) {},
                                 leadingIconHeight: 18,
                                 leadingIconWidth: 14,
-                                controller: _confirmController,
+                                controller: auth.confirmPasswordController,
                               ),
                               SizedBox(height: 20.h),
                               CustomButton(

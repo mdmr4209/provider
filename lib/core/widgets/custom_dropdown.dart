@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 
 import '../constants/app_colors.dart';
 
-class CustomDropdown extends StatefulWidget {
+class CustomDropdown extends StatelessWidget {
   // controller must be ValueNotifier<String> (single) or ValueNotifier<List<String>> (multi)
   final ValueNotifier<dynamic> controller;
   final List<String> items;
@@ -203,42 +203,35 @@ class CustomDropdown extends StatefulWidget {
   });
 
   @override
-  State<CustomDropdown> createState() => _CustomDropdownState();
-}
-
-class _CustomDropdownState extends State<CustomDropdown> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _initValues());
-  }
-
-  void _initValues() {
-    if (!widget.multiSelect && widget.initialSingleValue != null) {
-      if (widget.controller.value == null ||
-          widget.controller.value.toString().isEmpty) {
-        widget.controller.value = widget.initialSingleValue;
-      }
-    }
-    if (widget.multiSelect && widget.initialMultiValues != null) {
-      if (widget.controller.value == null ||
-          (widget.controller.value as List).isEmpty) {
-        widget.controller.value = List<String>.from(widget.initialMultiValues!);
-      }
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
+    if (!multiSelect && initialSingleValue != null) {
+      if (controller.value == null || controller.value.toString().isEmpty) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (controller.value == null || controller.value.toString().isEmpty) {
+            controller.value = initialSingleValue;
+          }
+        });
+      }
+    }
+    if (multiSelect && initialMultiValues != null) {
+      if (controller.value == null || (controller.value as List).isEmpty) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (controller.value == null || (controller.value as List).isEmpty) {
+            controller.value = List<String>.from(initialMultiValues!);
+          }
+        });
+      }
+    }
+
     return Opacity(
-      opacity: widget.enabled ? 1.0 : 0.6,
+      opacity: enabled ? 1.0 : 0.6,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (widget.showTitle && widget.title.isNotEmpty) _buildTitle(),
+          if (showTitle && title.isNotEmpty) _buildTitle(),
           ValueListenableBuilder(
-            valueListenable: widget.controller,
+            valueListenable: controller,
             builder: (context, value, child) {
               return _buildContainer(context, value);
             },
@@ -251,18 +244,18 @@ class _CustomDropdownState extends State<CustomDropdown> {
   Widget _buildTitle() {
     return Padding(
       padding:
-          widget.titlePadding ??
-          EdgeInsets.only(bottom: widget.titlePaddingBottom.h),
+          titlePadding ??
+          EdgeInsets.only(bottom: titlePaddingBottom.h),
       child: Text(
-        widget.title,
+        title,
         style:
-            widget.titleStyle ??
+            titleStyle ??
             TextStyle(
-              color: widget.titleColor,
-              fontSize: widget.titleFontSize.sp,
-              fontWeight: widget.titleFontWeight,
-              fontFamily: widget.titleFontFamily,
-              letterSpacing: widget.titleLetterSpacing,
+              color: titleColor,
+              fontSize: titleFontSize.sp,
+              fontWeight: titleFontWeight,
+              fontFamily: titleFontFamily,
+              letterSpacing: titleLetterSpacing,
             ),
       ),
     );
@@ -270,40 +263,40 @@ class _CustomDropdownState extends State<CustomDropdown> {
 
   Widget _buildContainer(BuildContext context, dynamic currentValue) {
     return Container(
-      width: widget.width.w,
-      height: widget.height?.h ?? 50.h,
+      width: width.w,
+      height: height?.h ?? 50.h,
       padding: EdgeInsets.symmetric(
-        horizontal: widget.containerPaddingHorizontal.w,
-        vertical: widget.containerPaddingVertical.h,
+        horizontal: containerPaddingHorizontal.w,
+        vertical: containerPaddingVertical.h,
       ),
       decoration: BoxDecoration(
-        color: widget.backgroundColor,
-        gradient: widget.gradient,
-        borderRadius: BorderRadius.circular(widget.borderRadius.r),
+        color: backgroundColor,
+        gradient: gradient,
+        borderRadius: BorderRadius.circular(borderRadius.r),
         border: Border.all(
-          color: widget.borderColor,
-          width: widget.borderWidth.w,
+          color: borderColor,
+          width: borderWidth.w,
         ),
-        boxShadow: widget.shadow
+        boxShadow: shadow
             ? [
                 BoxShadow(
                   color:
-                      widget.shadowColor ??
+                      shadowColor ??
                       AppColors.boxShadowColor,
-                  blurRadius: widget.shadowBlur,
-                  offset: widget.shadowOffset,
+                  blurRadius: shadowBlur,
+                  offset: shadowOffset,
                 ),
               ]
             : null,
       ),
-      child: widget.multiSelect
+      child: multiSelect
           ? _buildMultiSelectTrigger(context, currentValue)
           : _buildSingleSelect(currentValue),
     );
   }
 
   Widget _buildSingleSelect(dynamic currentValue) {
-    final effectiveLeading = _getLeading(widget.selectedTextColor);
+    final effectiveLeading = _getLeading(selectedTextColor);
 
     return DropdownButtonHideUnderline(
       child: DropdownButton<String>(
@@ -311,45 +304,45 @@ class _CustomDropdownState extends State<CustomDropdown> {
         value: (currentValue == null || currentValue.toString().isEmpty)
             ? null
             : currentValue.toString(),
-        icon: _getTrailing(widget.selectedTextColor),
-        dropdownColor: widget.menuBackgroundColor,
-        elevation: widget.menuElevation.toInt(),
-        menuMaxHeight: widget.menuMaxHeight?.h,
-        borderRadius: BorderRadius.circular(widget.borderRadius.r),
+        icon: _getTrailing(selectedTextColor),
+        dropdownColor: menuBackgroundColor,
+        elevation: menuElevation.toInt(),
+        menuMaxHeight: menuMaxHeight?.h,
+        borderRadius: BorderRadius.circular(borderRadius.r),
         style:
-            widget.selectedTextStyle ??
+            selectedTextStyle ??
             TextStyle(
-              fontSize: widget.selectedTextFontSize.sp,
-              color: widget.selectedTextColor,
-              fontWeight: widget.selectedTextFontWeight,
-              fontFamily: widget.selectedTextFontFamily,
+              fontSize: selectedTextFontSize.sp,
+              color: selectedTextColor,
+              fontWeight: selectedTextFontWeight,
+              fontFamily: selectedTextFontFamily,
             ),
         hint: Row(
           children: [
             if (effectiveLeading != null)
-              Padding(padding: widget.leadingPadding, child: effectiveLeading),
+              Padding(padding: leadingPadding, child: effectiveLeading),
             Expanded(
               child: Text(
-                widget.hintText,
+                hintText,
                 style:
-                    widget.hintStyle ??
+                    hintStyle ??
                     TextStyle(
-                      fontSize: widget.hintFontSize.sp,
-                      color: widget.hintColor,
-                      fontWeight: widget.hintFontWeight,
-                      fontFamily: widget.hintFontFamily,
+                      fontSize: hintFontSize.sp,
+                      color: hintColor,
+                      fontWeight: hintFontWeight,
+                      fontFamily: hintFontFamily,
                     ),
               ),
             ),
           ],
         ),
         selectedItemBuilder: (context) {
-          return widget.items.map((String item) {
+          return items.map((String item) {
             return Row(
               children: [
                 if (effectiveLeading != null)
                   Padding(
-                    padding: widget.leadingPadding,
+                    padding: leadingPadding,
                     child: effectiveLeading,
                   ),
                 Expanded(
@@ -358,12 +351,12 @@ class _CustomDropdownState extends State<CustomDropdown> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style:
-                        widget.selectedTextStyle ??
+                        selectedTextStyle ??
                         TextStyle(
-                          fontSize: widget.selectedTextFontSize.sp,
-                          color: widget.selectedTextColor,
-                          fontWeight: widget.selectedTextFontWeight,
-                          fontFamily: widget.selectedTextFontFamily,
+                          fontSize: selectedTextFontSize.sp,
+                          color: selectedTextColor,
+                          fontWeight: selectedTextFontWeight,
+                          fontFamily: selectedTextFontFamily,
                         ),
                   ),
                 ),
@@ -371,24 +364,24 @@ class _CustomDropdownState extends State<CustomDropdown> {
             );
           }).toList();
         },
-        onChanged: widget.enabled
+        onChanged: enabled
             ? (value) {
-                widget.controller.value = value;
-                if (widget.onChanged != null) widget.onChanged!(value);
+                controller.value = value;
+                if (onChanged != null) onChanged!(value);
               }
             : null,
-        items: widget.items.map((item) {
+        items: items.map((item) {
           return DropdownMenuItem<String>(
             value: item,
             child: Text(
               item,
               style:
-                  widget.menuItemStyle ??
+                  menuItemStyle ??
                   TextStyle(
-                    fontSize: widget.menuItemFontSize.sp,
-                    color: widget.menuItemColor,
-                    fontWeight: widget.menuItemFontWeight,
-                    fontFamily: widget.menuItemFontFamily,
+                    fontSize: menuItemFontSize.sp,
+                    color: menuItemColor,
+                    fontWeight: menuItemFontWeight,
+                    fontFamily: menuItemFontFamily,
                   ),
             ),
           );
@@ -399,40 +392,40 @@ class _CustomDropdownState extends State<CustomDropdown> {
 
   Widget _buildMultiSelectTrigger(BuildContext context, dynamic currentValue) {
     final List<String> selected = List<String>.from(currentValue ?? []);
-    final effectiveLeading = _getLeading(widget.selectedTextColor);
+    final effectiveLeading = _getLeading(selectedTextColor);
 
     return InkWell(
-      onTap: widget.enabled ? () => _showMultiSelectDialog(context) : null,
+      onTap: enabled ? () => _showMultiSelectDialog(context) : null,
       child: Row(
         children: [
           if (effectiveLeading != null)
-            Padding(padding: widget.leadingPadding, child: effectiveLeading),
+            Padding(padding: leadingPadding, child: effectiveLeading),
           Expanded(
             child: Text(
-              selected.isEmpty ? widget.hintText : selected.join(', '),
+              selected.isEmpty ? hintText : selected.join(', '),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: selected.isEmpty
-                  ? (widget.hintStyle ??
+                  ? (hintStyle ??
                         TextStyle(
-                          fontSize: widget.hintFontSize.sp,
-                          color: widget.hintColor,
-                          fontWeight: widget.hintFontWeight,
-                          fontFamily: widget.hintFontFamily,
+                          fontSize: hintFontSize.sp,
+                          color: hintColor,
+                          fontWeight: hintFontWeight,
+                          fontFamily: hintFontFamily,
                         ))
-                  : (widget.selectedTextStyle ??
+                  : (selectedTextStyle ??
                         TextStyle(
-                          fontSize: widget.selectedTextFontSize.sp,
-                          color: widget.selectedTextColor,
-                          fontWeight: widget.selectedTextFontWeight,
-                          fontFamily: widget.selectedTextFontFamily,
+                          fontSize: selectedTextFontSize.sp,
+                          color: selectedTextColor,
+                          fontWeight: selectedTextFontWeight,
+                          fontFamily: selectedTextFontFamily,
                         )),
             ),
           ),
           Padding(
-            padding: widget.trailingPadding,
+            padding: trailingPadding,
             child: _getTrailing(
-              selected.isEmpty ? widget.hintColor : widget.selectedTextColor,
+              selected.isEmpty ? hintColor : selectedTextColor,
             ),
           ),
         ],
@@ -442,26 +435,26 @@ class _CustomDropdownState extends State<CustomDropdown> {
 
   Future<void> _showMultiSelectDialog(BuildContext context) async {
     final List<String> current = List<String>.from(
-      widget.controller.value ?? [],
+      controller.value ?? [],
     );
     final temp = ValueNotifier<List<String>>(List.from(current));
 
     await showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        backgroundColor: widget.dialogBackgroundColor ?? widget.backgroundColor,
+        backgroundColor: dialogBackgroundColor ?? backgroundColor,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(widget.dialogRadius.r),
+          borderRadius: BorderRadius.circular(dialogRadius.r),
         ),
         title: Text(
-          widget.dialogTitle,
+          dialogTitle,
           style:
-              widget.dialogTitleStyle ??
+              dialogTitleStyle ??
               TextStyle(
-                color: widget.dialogTitleColor,
-                fontSize: widget.dialogTitleFontSize.sp,
-                fontWeight: widget.dialogTitleFontWeight,
-                fontFamily: widget.dialogTitleFontFamily,
+                color: dialogTitleColor,
+                fontSize: dialogTitleFontSize.sp,
+                fontWeight: dialogTitleFontWeight,
+                fontFamily: dialogTitleFontFamily,
               ),
         ),
         content: ValueListenableBuilder<List<String>>(
@@ -470,24 +463,24 @@ class _CustomDropdownState extends State<CustomDropdown> {
             width: double.maxFinite,
             child: ListView.builder(
               shrinkWrap: true,
-              itemCount: widget.items.length,
+              itemCount: items.length,
               itemBuilder: (context, index) {
-                final item = widget.items[index];
+                final item = items[index];
                 final isSelected = selected.contains(item);
                 return CheckboxListTile(
                   value: isSelected,
-                  activeColor: widget.checkboxActiveColor,
+                  activeColor: checkboxActiveColor,
                   checkColor: AppColors.whiteColor,
                   controlAffinity: ListTileControlAffinity.leading,
                   title: Text(
                     item,
                     style:
-                        widget.dialogItemStyle ??
+                        dialogItemStyle ??
                         TextStyle(
-                          fontSize: widget.dialogItemFontSize.sp,
-                          color: widget.dialogItemColor,
-                          fontWeight: widget.dialogItemFontWeight,
-                          fontFamily: widget.dialogItemFontFamily,
+                          fontSize: dialogItemFontSize.sp,
+                          color: dialogItemColor,
+                          fontWeight: dialogItemFontWeight,
+                          fontFamily: dialogItemFontFamily,
                         ),
                   ),
                   onChanged: (checked) {
@@ -514,15 +507,15 @@ class _CustomDropdownState extends State<CustomDropdown> {
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: widget.checkboxActiveColor,
+              backgroundColor: checkboxActiveColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8.r),
               ),
             ),
             onPressed: () {
-              widget.controller.value = List<String>.from(temp.value);
-              if (widget.onChanged != null)
-                widget.onChanged!(widget.controller.value);
+              controller.value = List<String>.from(temp.value);
+              if (onChanged != null)
+                onChanged!(controller.value);
               Navigator.pop(context);
             },
             child: Text(
@@ -536,27 +529,27 @@ class _CustomDropdownState extends State<CustomDropdown> {
   }
 
   Widget? _getLeading(Color color) {
-    return widget.leadingWidget ??
-        (widget.leadingIcon.isNotEmpty
+    return leadingWidget ??
+        (leadingIcon.isNotEmpty
             ? _buildAsset(
-                widget.leadingIcon,
-                widget.leadingIconWidth,
-                widget.leadingIconHeight,
-                widget.useLeadingColor,
-                widget.leadingColor ?? color,
+                leadingIcon,
+                leadingIconWidth,
+                leadingIconHeight,
+                useLeadingColor,
+                leadingColor ?? color,
               )
             : null);
   }
 
   Widget _getTrailing(Color color) {
-    return widget.trailingWidget ??
-        (widget.trailingIcon.isNotEmpty
+    return trailingWidget ??
+        (trailingIcon.isNotEmpty
             ? _buildAsset(
-                widget.trailingIcon,
-                widget.trailingIconWidth,
-                widget.trailingIconHeight,
-                widget.useTrailingColor,
-                widget.trailingColor ?? color,
+                trailingIcon,
+                trailingIconWidth,
+                trailingIconHeight,
+                useTrailingColor,
+                trailingColor ?? color,
               )
             : Icon(
                 Icons.keyboard_arrow_down_rounded,

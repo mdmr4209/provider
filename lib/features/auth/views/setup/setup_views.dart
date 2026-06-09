@@ -106,62 +106,61 @@ const String _dummyLegalText = """
 // ── Setup Views ──────────────────────────────────────────────────────────────
 
 // Step 3: post-name question
-class Setup1View extends StatefulWidget {
+class Setup1View extends StatelessWidget {
   const Setup1View({super.key});
-  @override
-  State<Setup1View> createState() => _Setup1ViewState();
-}
-
-class _Setup1ViewState extends State<Setup1View> {
-  String? _selectedOption;
-  final List<String> _options = [
-    "I need help staying in No Contact 📵",
-    "I want to get my soulmate back ❤️",
-    "I want to move on ✨",
-    "*My situation is... complicated. 🌀",
-  ];
 
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthController>();
     final name = auth.nameController.text.trim();
+    final selectedOption = ValueNotifier<String?>(null);
+    final List<String> options = [
+      "I need help staying in No Contact 📵",
+      "I want to get my soulmate back ❤️",
+      "I want to move on ✨",
+      "*My situation is... complicated. 🌀",
+    ];
+
     return SetupBaseView(
       currentStep: 3,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 20.h),
-            Text(
-              "We’re here to support you ${name.isNotEmpty ? name : "friend"}. What are you struggling with most?",
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontFamily: 'Georgia',
-                color: AppColors.whiteColor,
-              ),
-            ),
-            SizedBox(height: 8.h),
-            Text(
-              "We're here for you, no matter what.",
-              style: Theme.of(
-                context,
-              ).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
-            ),
-            SizedBox(height: 32.h),
-            ..._options.map(
-              (o) => _buildOptionButton(
-                option: o,
-                selectedOption: _selectedOption,
-                onSelect: (v) => setState(() => _selectedOption = v),
-              ),
-            ),
-            const Spacer(),
-            _buildContinueButton(
-              isEnabled: _selectedOption != null,
-              onPress: () => context.push(AppRoutes.setup2),
-            ),
-            SizedBox(height: 40.h),
-          ],
+        child: ValueListenableBuilder<String?>(
+          valueListenable: selectedOption,
+          builder: (context, currentSelected, _) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 20.h),
+                Text(
+                  "We’re here to support you ${name.isNotEmpty ? name : "friend"}. What are you struggling with most?",
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontFamily: 'Georgia',
+                    color: AppColors.whiteColor,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                Text(
+                  "We're here for you, no matter what.",
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
+                ),
+                SizedBox(height: 32.h),
+                ...options.map(
+                  (o) => _buildOptionButton(
+                    option: o,
+                    selectedOption: currentSelected,
+                    onSelect: (v) => selectedOption.value = v,
+                  ),
+                ),
+                const Spacer(),
+                _buildContinueButton(
+                  isEnabled: currentSelected != null,
+                  onPress: () => context.push(AppRoutes.setup2),
+                ),
+                SizedBox(height: 40.h),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -169,61 +168,60 @@ class _Setup1ViewState extends State<Setup1View> {
 }
 
 // Step 4: Duration together
-class Setup2View extends StatefulWidget {
+class Setup2View extends StatelessWidget {
   const Setup2View({super.key});
-  @override
-  State<Setup2View> createState() => _Setup2ViewState();
-}
-
-class _Setup2ViewState extends State<Setup2View> {
-  String? _selectedOption;
-  final List<String> _options = [
-    "Under 3 Months 🌱",
-    "3 to 12 Months ☀️",
-    "1 to 3 Years ✨",
-    "3 to 10 Years 🌳",
-    "10+ Years ♾️",
-  ];
 
   @override
   Widget build(BuildContext context) {
+    final selectedOption = ValueNotifier<String?>(null);
+    final List<String> options = [
+      "Under 3 Months 🌱",
+      "3 to 12 Months ☀️",
+      "1 to 3 Years ✨",
+      "3 to 10 Years 🌳",
+      "10+ Years ♾️",
+    ];
+
     return SetupBaseView(
       currentStep: 4,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 20.h),
-            Text(
-              "How long were you together?",
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontFamily: 'Georgia',
-                color: AppColors.whiteColor,
-              ),
-            ),
-            SizedBox(height: 8.h),
-            Text(
-              "Every bond is significant, no matter how long or short you were together.",
-              style: Theme.of(
-                context,
-              ).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
-            ),
-            SizedBox(height: 32.h),
-            ..._options.map(
-              (o) => _buildOptionButton(
-                option: o,
-                selectedOption: _selectedOption,
-                onSelect: (v) => setState(() => _selectedOption = v),
-              ),
-            ),
-            const Spacer(),
-            _buildContinueButton(
-              isEnabled: _selectedOption != null,
-              onPress: () => context.push(AppRoutes.setup3),
-            ),
-            SizedBox(height: 40.h),
-          ],
+        child: ValueListenableBuilder<String?>(
+          valueListenable: selectedOption,
+          builder: (context, currentSelected, _) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 20.h),
+                Text(
+                  "How long were you together?",
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontFamily: 'Georgia',
+                    color: AppColors.whiteColor,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                Text(
+                  "Every bond is significant, no matter how long or short you were together.",
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
+                ),
+                SizedBox(height: 32.h),
+                ...options.map(
+                  (o) => _buildOptionButton(
+                    option: o,
+                    selectedOption: currentSelected,
+                    onSelect: (v) => selectedOption.value = v,
+                  ),
+                ),
+                const Spacer(),
+                _buildContinueButton(
+                  isEnabled: currentSelected != null,
+                  onPress: () => context.push(AppRoutes.setup3),
+                ),
+                SizedBox(height: 40.h),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -231,62 +229,61 @@ class _Setup2ViewState extends State<Setup2View> {
 }
 
 // Step 5: Time since split
-class Setup3View extends StatefulWidget {
+class Setup3View extends StatelessWidget {
   const Setup3View({super.key});
-  @override
-  State<Setup3View> createState() => _Setup3ViewState();
-}
-
-class _Setup3ViewState extends State<Setup3View> {
-  String? _selectedOption;
-  final List<String> _options = [
-    "0–30 Days 🌊",
-    "1–3 Months ⛅️",
-    "4–6 Months 🍃",
-    "7–12 Months 🍂",
-    "1–2 Years ️🕯️",
-    "2+ Years 🕰️️",
-  ];
 
   @override
   Widget build(BuildContext context) {
+    final selectedOption = ValueNotifier<String?>(null);
+    final List<String> options = [
+      "0–30 Days 🌊",
+      "1–3 Months ⛅️",
+      "4–6 Months 🍃",
+      "7–12 Months 🍂",
+      "1–2 Years ️🕯️",
+      "2+ Years 🕰️️",
+    ];
+
     return SetupBaseView(
       currentStep: 5,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 20.h),
-            Text(
-              "How long since the split?",
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontFamily: 'Georgia',
-                color: AppColors.whiteColor,
-              ),
-            ),
-            SizedBox(height: 8.h),
-            Text(
-              "Whether it’s been a day or over a year, your feelings are valid 🩹",
-              style: Theme.of(
-                context,
-              ).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
-            ),
-            SizedBox(height: 32.h),
-            ..._options.map(
-              (o) => _buildOptionButton(
-                option: o,
-                selectedOption: _selectedOption,
-                onSelect: (v) => setState(() => _selectedOption = v),
-              ),
-            ),
-            const Spacer(),
-            _buildContinueButton(
-              isEnabled: _selectedOption != null,
-              onPress: () => context.push(AppRoutes.setup4),
-            ),
-            SizedBox(height: 40.h),
-          ],
+        child: ValueListenableBuilder<String?>(
+          valueListenable: selectedOption,
+          builder: (context, currentSelected, _) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 20.h),
+                Text(
+                  "How long since the split?",
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontFamily: 'Georgia',
+                    color: AppColors.whiteColor,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                Text(
+                  "Whether it’s been a day or over a year, your feelings are valid 🩹",
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
+                ),
+                SizedBox(height: 32.h),
+                ...options.map(
+                  (o) => _buildOptionButton(
+                    option: o,
+                    selectedOption: currentSelected,
+                    onSelect: (v) => selectedOption.value = v,
+                  ),
+                ),
+                const Spacer(),
+                _buildContinueButton(
+                  isEnabled: currentSelected != null,
+                  onPress: () => context.push(AppRoutes.setup4),
+                ),
+                SizedBox(height: 40.h),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -294,61 +291,60 @@ class _Setup3ViewState extends State<Setup3View> {
 }
 
 // Step 6: Image 1 - Rollercoaster
-class Setup4View extends StatefulWidget {
+class Setup4View extends StatelessWidget {
   const Setup4View({super.key});
-  @override
-  State<Setup4View> createState() => _Setup4ViewState();
-}
-
-class _Setup4ViewState extends State<Setup4View> {
-  String? _selectedOption;
-  final List<String> _options = [
-    "Total Silence 🔇",
-    "Occasional 'Breadcrumbs' 🍞",
-    "Active Contact 💥",
-    "Necessary Contact (for kids, bills etc) 🩰",
-    "I'm Blocked 🚫",
-  ];
 
   @override
   Widget build(BuildContext context) {
+    final selectedOption = ValueNotifier<String?>(null);
+    final List<String> options = [
+      "Total Silence 🔇",
+      "Occasional 'Breadcrumbs' 🍞",
+      "Active Contact 💥",
+      "Necessary Contact (for kids, bills etc) 🩰",
+      "I'm Blocked 🚫",
+    ];
+
     return SetupBaseView(
       currentStep: 6,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 20.h),
-            Text(
-              "What’s weighing on you the most at this moment?",
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontFamily: 'Georgia',
-                color: AppColors.whiteColor,
-              ),
-            ),
-            SizedBox(height: 8.h),
-            Text(
-              "Breakups are a rollercoaster 🎢, we know....",
-              style: Theme.of(
-                context,
-              ).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
-            ),
-            SizedBox(height: 32.h),
-            ..._options.map(
-              (o) => _buildOptionButton(
-                option: o,
-                selectedOption: _selectedOption,
-                onSelect: (v) => setState(() => _selectedOption = v),
-              ),
-            ),
-            const Spacer(),
-            _buildContinueButton(
-              isEnabled: _selectedOption != null,
-              onPress: () => context.push(AppRoutes.setup5),
-            ),
-            SizedBox(height: 40.h),
-          ],
+        child: ValueListenableBuilder<String?>(
+          valueListenable: selectedOption,
+          builder: (context, currentSelected, _) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 20.h),
+                Text(
+                  "What’s weighing on you the most at this moment?",
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontFamily: 'Georgia',
+                    color: AppColors.whiteColor,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                Text(
+                  "Breakups are a rollercoaster 🎢, we know....",
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
+                ),
+                SizedBox(height: 32.h),
+                ...options.map(
+                  (o) => _buildOptionButton(
+                    option: o,
+                    selectedOption: currentSelected,
+                    onSelect: (v) => selectedOption.value = v,
+                  ),
+                ),
+                const Spacer(),
+                _buildContinueButton(
+                  isEnabled: currentSelected != null,
+                  onPress: () => context.push(AppRoutes.setup5),
+                ),
+                SizedBox(height: 40.h),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -356,60 +352,59 @@ class _Setup4ViewState extends State<Setup4View> {
 }
 
 // Step 7: Image 2 - Understand
-class Setup5View extends StatefulWidget {
+class Setup5View extends StatelessWidget {
   const Setup5View({super.key});
-  @override
-  State<Setup5View> createState() => _Setup5ViewState();
-}
-
-class _Setup5ViewState extends State<Setup5View> {
-  String? _selectedOption;
-  final List<String> _options = [
-    "The urge to reach out 📱",
-    "Intense overthinking 🌀",
-    "Checking their socials 🕵️",
-    "Feeling lost/Not knowing how to move on 🧭",
-  ];
 
   @override
   Widget build(BuildContext context) {
+    final selectedOption = ValueNotifier<String?>(null);
+    final List<String> options = [
+      "The urge to reach out 📱",
+      "Intense overthinking 🌀",
+      "Checking their socials 🕵️",
+      "Feeling lost/Not knowing how to move on 🧭",
+    ];
+
     return SetupBaseView(
       currentStep: 7,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 20.h),
-            Text(
-              "What’s weighing on you most?",
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontFamily: 'Georgia',
-                color: AppColors.whiteColor,
-              ),
-            ),
-            SizedBox(height: 8.h),
-            Text(
-              "Let's understand what you're going through.",
-              style: Theme.of(
-                context,
-              ).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
-            ),
-            SizedBox(height: 32.h),
-            ..._options.map(
-              (o) => _buildOptionButton(
-                option: o,
-                selectedOption: _selectedOption,
-                onSelect: (v) => setState(() => _selectedOption = v),
-              ),
-            ),
-            const Spacer(),
-            _buildContinueButton(
-              isEnabled: _selectedOption != null,
-              onPress: () => context.push(AppRoutes.setup6),
-            ),
-            SizedBox(height: 40.h),
-          ],
+        child: ValueListenableBuilder<String?>(
+          valueListenable: selectedOption,
+          builder: (context, currentSelected, _) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 20.h),
+                Text(
+                  "What’s weighing on you most?",
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontFamily: 'Georgia',
+                    color: AppColors.whiteColor,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                Text(
+                  "Let's understand what you're going through.",
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
+                ),
+                SizedBox(height: 32.h),
+                ...options.map(
+                  (o) => _buildOptionButton(
+                    option: o,
+                    selectedOption: currentSelected,
+                    onSelect: (v) => selectedOption.value = v,
+                  ),
+                ),
+                const Spacer(),
+                _buildContinueButton(
+                  isEnabled: currentSelected != null,
+                  onPress: () => context.push(AppRoutes.setup6),
+                ),
+                SizedBox(height: 40.h),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -417,60 +412,59 @@ class _Setup5ViewState extends State<Setup5View> {
 }
 
 // Step 8: Image 3 - How feeling
-class Setup6View extends StatefulWidget {
+class Setup6View extends StatelessWidget {
   const Setup6View({super.key});
-  @override
-  State<Setup6View> createState() => _Setup6ViewState();
-}
-
-class _Setup6ViewState extends State<Setup6View> {
-  String? _selectedOption;
-  final List<String> _options = [
-    "I'm in crisis mode 🚨",
-    "I'm fragile but holding 🩹",
-    "I'm ready to level up 🚀",
-    "I'm just... stuck ⛓️",
-  ];
 
   @override
   Widget build(BuildContext context) {
+    final selectedOption = ValueNotifier<String?>(null);
+    final List<String> options = [
+      "I'm in crisis mode 🚨",
+      "I'm fragile but holding 🩹",
+      "I'm ready to level up 🚀",
+      "I'm just... stuck ⛓️",
+    ];
+
     return SetupBaseView(
       currentStep: 8,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 20.h),
-            Text(
-              "How are you feeling right now?",
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontFamily: 'Georgia',
-                color: AppColors.whiteColor,
-              ),
-            ),
-            SizedBox(height: 8.h),
-            Text(
-              "Take a breath and check in.",
-              style: Theme.of(
-                context,
-              ).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
-            ),
-            SizedBox(height: 32.h),
-            ..._options.map(
-              (o) => _buildOptionButton(
-                option: o,
-                selectedOption: _selectedOption,
-                onSelect: (v) => setState(() => _selectedOption = v),
-              ),
-            ),
-            const Spacer(),
-            _buildContinueButton(
-              isEnabled: _selectedOption != null,
-              onPress: () => context.push(AppRoutes.setup7),
-            ),
-            SizedBox(height: 40.h),
-          ],
+        child: ValueListenableBuilder<String?>(
+          valueListenable: selectedOption,
+          builder: (context, currentSelected, _) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 20.h),
+                Text(
+                  "How are you feeling right now?",
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontFamily: 'Georgia',
+                    color: AppColors.whiteColor,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                Text(
+                  "Take a breath and check in.",
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
+                ),
+                SizedBox(height: 32.h),
+                ...options.map(
+                  (o) => _buildOptionButton(
+                    option: o,
+                    selectedOption: currentSelected,
+                    onSelect: (v) => selectedOption.value = v,
+                  ),
+                ),
+                const Spacer(),
+                _buildContinueButton(
+                  isEnabled: currentSelected != null,
+                  onPress: () => context.push(AppRoutes.setup7),
+                ),
+                SizedBox(height: 40.h),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -478,18 +472,8 @@ class _Setup6ViewState extends State<Setup6View> {
 }
 
 // Step 9: Image 4 - Started NC
-class Setup7View extends StatefulWidget {
+class Setup7View extends StatelessWidget {
   const Setup7View({super.key});
-  @override
-  State<Setup7View> createState() => _Setup7ViewState();
-}
-
-class _Setup7ViewState extends State<Setup7View> {
-  String? _selectedOption;
-  final List<String> _options = [
-    "I'm starting fresh today. 🆕",
-    "I've already started! 💪",
-  ];
 
   void _showPopup(BuildContext context) {
     showAppCustomDialog(
@@ -504,46 +488,55 @@ class _Setup7ViewState extends State<Setup7View> {
 
   @override
   Widget build(BuildContext context) {
+    final selectedOption = ValueNotifier<String?>(null);
+    final List<String> options = [
+      "I'm starting fresh today. 🆕",
+      "I've already started! 💪",
+    ];
+
     return SetupBaseView(
       currentStep: 9,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 20.h),
-            Text(
-              "Have you started no contact?",
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontFamily: 'Georgia',
-                color: AppColors.whiteColor,
-              ),
-            ),
-            SizedBox(height: 8.h),
-            Text(
-              "OK, so it’s time to lock in your progress 🔒",
-              style: Theme.of(
-                context,
-              ).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
-            ),
-            SizedBox(height: 32.h),
-            ..._options.map(
-              (o) => _buildOptionButton(
-                option: o,
-                selectedOption: _selectedOption,
-                onSelect: (v) {
-                  setState(() => _selectedOption = v);
-                  _showPopup(context);
-                },
-              ),
-            ),
-            const Spacer(),
-            _buildContinueButton(
-              isEnabled: _selectedOption != null,
-              onPress: () => context.push(AppRoutes.setup8),
-            ),
-            SizedBox(height: 40.h),
-          ],
+        child: ValueListenableBuilder<String?>(
+          valueListenable: selectedOption,
+          builder: (context, currentSelected, _) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 20.h),
+                Text(
+                  "Have you started no contact?",
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontFamily: 'Georgia',
+                    color: AppColors.whiteColor,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                Text(
+                  "OK, so it’s time to lock in your progress 🔒",
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
+                ),
+                SizedBox(height: 32.h),
+                ...options.map(
+                  (o) => _buildOptionButton(
+                    option: o,
+                    selectedOption: currentSelected,
+                    onSelect: (v) {
+                      selectedOption.value = v;
+                      _showPopup(context);
+                    },
+                  ),
+                ),
+                const Spacer(),
+                _buildContinueButton(
+                  isEnabled: currentSelected != null,
+                  onPress: () => context.push(AppRoutes.setup8),
+                ),
+                SizedBox(height: 40.h),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -551,23 +544,13 @@ class _Setup7ViewState extends State<Setup7View> {
 }
 
 // Step 10: Image 5 - How many days
-class Setup8View extends StatefulWidget {
+class Setup8View extends StatelessWidget {
   const Setup8View({super.key});
-  @override
-  State<Setup8View> createState() => _Setup8ViewState();
-}
-
-class _Setup8ViewState extends State<Setup8View> {
-  final TextEditingController _controller = TextEditingController();
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
+    final controller = context.read<AuthController>().setupDaysController;
+
     return SetupBaseView(
       currentStep: 10,
       child: Padding(
@@ -586,21 +569,23 @@ class _Setup8ViewState extends State<Setup8View> {
             SizedBox(height: 8.h),
             Text(
               "That’s amazing! You should be proud of yourself 🙂",
-              style: Theme.of(
-                context,
-              ).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
             ),
             SizedBox(height: 40.h),
             InputTextWidget(
               hintText: "Enter Here",
-              controller: _controller,
+              controller: controller,
               keyboardType: TextInputType.number,
-              onChanged: (_) => setState(() {}),
             ),
             const Spacer(),
-            _buildContinueButton(
-              isEnabled: _controller.text.isNotEmpty,
-              onPress: () => context.push(AppRoutes.setup9),
+            ValueListenableBuilder<TextEditingValue>(
+              valueListenable: controller,
+              builder: (context, val, _) {
+                return _buildContinueButton(
+                  isEnabled: val.text.isNotEmpty,
+                  onPress: () => context.push(AppRoutes.setup9),
+                );
+              },
             ),
             SizedBox(height: 40.h),
           ],
@@ -611,55 +596,54 @@ class _Setup8ViewState extends State<Setup8View> {
 }
 
 // Step 11: Image 6 - Identify
-class Setup9View extends StatefulWidget {
+class Setup9View extends StatelessWidget {
   const Setup9View({super.key});
-  @override
-  State<Setup9View> createState() => _Setup9ViewState();
-}
-
-class _Setup9ViewState extends State<Setup9View> {
-  String? _selectedOption;
-  final List<String> _options = ["I'm a Woman", "I'm a Man", "Other"];
 
   @override
   Widget build(BuildContext context) {
+    final selectedOption = ValueNotifier<String?>(null);
+    final List<String> options = ["I'm a Woman", "I'm a Man", "Other"];
+
     return SetupBaseView(
       currentStep: 11,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 20.h),
-            Text(
-              "How do you identify?",
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontFamily: 'Georgia',
-                color: AppColors.whiteColor,
-              ),
-            ),
-            SizedBox(height: 8.h),
-            Text(
-              "This helps us match you with support",
-              style: Theme.of(
-                context,
-              ).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
-            ),
-            SizedBox(height: 32.h),
-            ..._options.map(
-              (o) => _buildOptionButton(
-                option: o,
-                selectedOption: _selectedOption,
-                onSelect: (v) => setState(() => _selectedOption = v),
-              ),
-            ),
-            const Spacer(),
-            _buildContinueButton(
-              isEnabled: _selectedOption != null,
-              onPress: () => context.push(AppRoutes.setup10),
-            ),
-            SizedBox(height: 40.h),
-          ],
+        child: ValueListenableBuilder<String?>(
+          valueListenable: selectedOption,
+          builder: (context, currentSelected, _) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 20.h),
+                Text(
+                  "How do you identify?",
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontFamily: 'Georgia',
+                    color: AppColors.whiteColor,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                Text(
+                  "This helps us match you with support",
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
+                ),
+                SizedBox(height: 32.h),
+                ...options.map(
+                  (o) => _buildOptionButton(
+                    option: o,
+                    selectedOption: currentSelected,
+                    onSelect: (v) => selectedOption.value = v,
+                  ),
+                ),
+                const Spacer(),
+                _buildContinueButton(
+                  isEnabled: currentSelected != null,
+                  onPress: () => context.push(AppRoutes.setup10),
+                ),
+                SizedBox(height: 40.h),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -667,55 +651,54 @@ class _Setup9ViewState extends State<Setup9View> {
 }
 
 // Step 12: Image 7 - How old
-class Setup10View extends StatefulWidget {
+class Setup10View extends StatelessWidget {
   const Setup10View({super.key});
-  @override
-  State<Setup10View> createState() => _Setup10ViewState();
-}
-
-class _Setup10ViewState extends State<Setup10View> {
-  String? _selectedOption;
-  final List<String> _options = ["Under 18", "18-24", "25-34", "34-44", "45+"];
 
   @override
   Widget build(BuildContext context) {
+    final selectedOption = ValueNotifier<String?>(null);
+    final List<String> options = ["Under 18", "18-24", "25-34", "34-44", "45+"];
+
     return SetupBaseView(
       currentStep: 12,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 20.h),
-            Text(
-              "How old are you?",
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontFamily: 'Georgia',
-                color: AppColors.whiteColor,
-              ),
-            ),
-            SizedBox(height: 8.h),
-            Text(
-              "Almost there!",
-              style: Theme.of(
-                context,
-              ).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
-            ),
-            SizedBox(height: 32.h),
-            ..._options.map(
-              (o) => _buildOptionButton(
-                option: o,
-                selectedOption: _selectedOption,
-                onSelect: (v) => setState(() => _selectedOption = v),
-              ),
-            ),
-            const Spacer(),
-            _buildContinueButton(
-              isEnabled: _selectedOption != null,
-              onPress: () => context.push(AppRoutes.setup11),
-            ),
-            SizedBox(height: 40.h),
-          ],
+        child: ValueListenableBuilder<String?>(
+          valueListenable: selectedOption,
+          builder: (context, currentSelected, _) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 20.h),
+                Text(
+                  "How old are you?",
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontFamily: 'Georgia',
+                    color: AppColors.whiteColor,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                Text(
+                  "Almost there!",
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
+                ),
+                SizedBox(height: 32.h),
+                ...options.map(
+                  (o) => _buildOptionButton(
+                    option: o,
+                    selectedOption: currentSelected,
+                    onSelect: (v) => selectedOption.value = v,
+                  ),
+                ),
+                const Spacer(),
+                _buildContinueButton(
+                  isEnabled: currentSelected != null,
+                  onPress: () => context.push(AppRoutes.setup11),
+                ),
+                SizedBox(height: 40.h),
+              ],
+            );
+          },
         ),
       ),
     );

@@ -3,7 +3,10 @@ import 'package:provider/provider.dart';
 
 import '../features/auth/controllers/auth_controller.dart';
 import '../features/circle/controllers/circle_controller.dart';
+import '../features/circle/controllers/group_controller.dart';
+import '../features/find_coach/controllers/coach_controller.dart';
 import '../features/home/controllers/home_controller.dart';
+import '../features/inbox/controllers/inbox_controller.dart';
 import '../features/localization/controllers/localization_controller.dart';
 import '../features/onboarding/controllers/onboarding_controller.dart';
 import '../features/profile/controllers/profile_controller.dart';
@@ -19,6 +22,9 @@ Widget appProviders({required Widget child}) {
       ChangeNotifierProvider(create: (_) => ThemeController()),
       ChangeNotifierProvider(create: (_) => LocalizationController()),
       ChangeNotifierProvider(create: (_) => CircleController()),
+      ChangeNotifierProvider(create: (_) => GroupController()),
+      ChangeNotifierProvider(create: (_) => CoachController()),
+      ChangeNotifierProvider(create: (_) => InboxController()),
     ],
     child: child,
   );

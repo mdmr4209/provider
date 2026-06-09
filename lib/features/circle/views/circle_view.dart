@@ -12,171 +12,151 @@ import '../../../core/widgets/custom_loader.dart';
 import '../../../routes/app_router.dart';
 import '../controllers/circle_controller.dart';
 import '../models/circle_post_model.dart';
-import 'friends_view.dart';
-import 'group_details_view.dart';
 import 'groups_view.dart';
 import '../widgets/circle_member_list.dart';
 import '../widgets/circle_post_card.dart';
 
-class CircleView extends StatefulWidget {
+class CircleView extends StatelessWidget {
   const CircleView({super.key});
-
-  @override
-  State<CircleView> createState() => _CircleViewState();
-}
-
-class _CircleViewState extends State<CircleView>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<CircleController>().fetchCircleData();
-    });
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return GestureDetector(
-      onTap: FocusScope.of(context).unfocus,
-      child: Scaffold(
-        body: SafeArea(
-          child: Column(
-            children: [
-              SizedBox(height: 10.h),
-              const CircleMemberList(),
+    // Fetch data if not already loading or loaded
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final controller = context.read<CircleController>();
+      if (controller.posts.isEmpty && !controller.isLoading) {
+        controller.fetchCircleData();
+      }
+    });
 
-              // Search/Post Input Bar
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w),
-                child: GestureDetector(
-                  onTap: () => context.push(AppRoutes.createPost),
-                  child: AbsorbPointer(
-                    child: CustomInput(
-                      height: 50,
-                      hintText: "Word Your Thoughts",
-                      fontSize: 14,
-                      hintColor: AppColors.greyColor,
-                      hintStyle: Theme.of(context).textTheme.bodyLarge
-                          ?.copyWith(
-                            color: AppColors.whiteColor.withAlpha(153),
-                            fontSize: 14.sp,
-                          ),
-                      shadow: true,
-                      leadingIcon: AppAssets.feather,
-                      leadingPadding: EdgeInsets.only(left: 16.w, right: 8.w),
+    return DefaultTabController(
+      length: 2,
+      child: GestureDetector(
+        onTap: FocusScope.of(context).unfocus,
+        child: Scaffold(
+          body: SafeArea(
+            child: Column(
+              children: [
+                SizedBox(height: 10.h),
+                const CircleMemberList(),
+
+                // Search/Post Input Bar
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  child: GestureDetector(
+                    onTap: () => context.push(AppRoutes.createPost),
+                    child: AbsorbPointer(
+                      child: CustomInput(
+                        height: 50,
+                        hintText: "Word Your Thoughts",
+                        fontSize: 14,
+                        hintColor: AppColors.greyColor,
+                        hintStyle: Theme.of(context).textTheme.bodyLarge
+                            ?.copyWith(
+                              color: AppColors.whiteColor.withAlpha(153),
+                              fontSize: 14.sp,
+                            ),
+                        shadow: true,
+                        leadingIcon: AppAssets.feather,
+                        leadingPadding: EdgeInsets.only(left: 16.w, right: 8.w),
+                      ),
                     ),
                   ),
                 ),
-              ),
 
-              SizedBox(height: 11.h),
+                SizedBox(height: 11.h),
 
-              // Tabs and Groups Action
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TabBar(
-                        controller: _tabController,
-                        isScrollable: true,
-                        indicatorColor: AppColors.secondaryColorLight,
-                        labelColor: AppColors.secondaryColorLight,
-                        unselectedLabelColor: AppColors.whiteColor.withAlpha(
-                          153,
-                        ),
-                        dividerColor: Colors.transparent,
-                        tabAlignment: TabAlignment.start,
-                        labelPadding: EdgeInsets.only(right: 24.w),
-                        labelStyle: theme.textTheme.titleMedium?.copyWith(
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        unselectedLabelStyle: theme.textTheme.titleMedium
-                            ?.copyWith(fontSize: 18.sp),
-                        tabs: [
-                          const Tab(text: "Everyone"),
-                          GestureDetector(
-                            onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => const FriendsView(),
-                              ),
-                            ),
-                            child: const Tab(text: "Friends"),
+                // Tabs and Groups Action
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TabBar(
+                          isScrollable: true,
+                          indicatorColor: AppColors.secondaryColorLight,
+                          labelColor: AppColors.secondaryColorLight,
+                          unselectedLabelColor: AppColors.whiteColor.withAlpha(
+                            153,
                           ),
-                        ],
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => const GroupsView()),
-                      ),
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 12.w,
-                          vertical: 6.h,
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColors.whiteColor.withAlpha(13),
-                          borderRadius: BorderRadius.circular(20.r),
-                        ),
-                        child: Row(
-                          children: [
-                            Text(
-                              "My Groups",
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: AppColors.secondaryColorLight,
-                                fontSize: 12.sp,
-                              ),
-                            ),
-                            SizedBox(width: 4.w),
-                            SvgPicture.asset(
-                              AppAssets.group,
-                              colorFilter: const ColorFilter.mode(
-                                AppColors.secondaryColorLight,
-                                BlendMode.srcIn,
-                              ),
-                              width: 16.r,
+                          dividerColor: Colors.transparent,
+                          tabAlignment: TabAlignment.start,
+                          labelPadding: EdgeInsets.only(right: 24.w),
+                          labelStyle: theme.textTheme.titleMedium?.copyWith(
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          unselectedLabelStyle: theme.textTheme.titleMedium
+                              ?.copyWith(fontSize: 18.sp),
+                          tabs: [
+                            const Tab(text: "Everyone"),
+                            GestureDetector(
+                              onTap: () =>
+                                  context.push(AppRoutes.friendsCircle),
+                              child: const Tab(text: "Friends"),
                             ),
                           ],
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-
-              Expanded(
-                child: TabBarView(
-                  controller: _tabController,
-                  children: [
-                    const _PostsList(),
-                    Center(
-                      child: Text(
-                        "Friends Posts Coming Soon",
-                        style: theme.textTheme.bodyLarge?.copyWith(
-                          color: AppColors.whiteColor.withAlpha(179),
+                      GestureDetector(
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const GroupsView()),
+                        ),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 12.w,
+                            vertical: 6.h,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.whiteColor.withAlpha(13),
+                            borderRadius: BorderRadius.circular(20.r),
+                          ),
+                          child: Row(
+                            children: [
+                              Text(
+                                "My Groups",
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: AppColors.secondaryColorLight,
+                                  fontSize: 12.sp,
+                                ),
+                              ),
+                              SizedBox(width: 4.w),
+                              SvgPicture.asset(
+                                AppAssets.group,
+                                colorFilter: const ColorFilter.mode(
+                                  AppColors.secondaryColorLight,
+                                  BlendMode.srcIn,
+                                ),
+                                width: 16.r,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+
+                Expanded(
+                  child: TabBarView(
+                    children: [
+                      const _PostsList(),
+                      Center(
+                        child: Text(
+                          "Friends Posts Coming Soon",
+                          style: theme.textTheme.bodyLarge?.copyWith(
+                            color: AppColors.whiteColor.withAlpha(179),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -189,8 +169,6 @@ class _PostsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Consumer<CircleController>(
       builder: (context, controller, child) {
         if (controller.isLoading) {

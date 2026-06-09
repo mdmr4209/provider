@@ -3,7 +3,18 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-class CustomTextField extends StatefulWidget {
+class _InputState {
+  bool isObscured;
+  bool isFocused;
+  String? errorText;
+
+  _InputState({
+    required this.isObscured,
+    required this.isFocused,
+  });
+}
+
+class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
   final String? hintText;
   final String? labelText;
@@ -173,83 +184,52 @@ class CustomTextField extends StatefulWidget {
   });
 
   @override
-  State<CustomTextField> createState() => _CustomTextFieldState();
-}
-
-class _CustomTextFieldState extends State<CustomTextField> {
-  late bool _isObscured;
-  late FocusNode _focusNode;
-  bool _isFocused = false;
-  String? _errorText;
-
-  @override
-  void initState() {
-    super.initState();
-    _isObscured = widget.isPassword;
-    _focusNode = widget.focusNode ?? FocusNode();
-    _focusNode.addListener(_onFocusChange);
-  }
-
-  void _onFocusChange() {
-    if (mounted) {
-      setState(() {
-        _isFocused = _focusNode.hasFocus;
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    if (widget.focusNode == null) {
-      _focusNode.dispose();
-    } else {
-      _focusNode.removeListener(_onFocusChange);
-    }
-    super.dispose();
-  }
-
-  void _toggleObscure() {
-    if (mounted) {
-      setState(() => _isObscured = !_isObscured);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (widget.showTitle && widget.title != null) _buildTitle(theme),
-        _buildInputField(theme),
-        if (_errorText != null) _buildErrorText(theme),
-      ],
+
+    return FormField<_InputState>(
+      initialValue: _InputState(
+        isObscured: isPassword,
+        isFocused: false,
+      ),
+      builder: (FormFieldState<_InputState> fieldState) {
+        final state = fieldState.value!;
+        final hasError = state.errorText != null;
+
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (showTitle && title != null) _buildTitle(theme),
+            _buildInputField(theme, fieldState, state),
+            if (hasError) _buildErrorText(theme, state.errorText!),
+          ],
+        );
+      },
     );
   }
 
   Widget _buildTitle(ThemeData theme) {
     return Padding(
-      padding: EdgeInsets.only(bottom: widget.titlePaddingBottom.h),
+      padding: EdgeInsets.only(bottom: titlePaddingBottom.h),
       child: Text(
-        widget.title!,
-        style: widget.titleStyle ??
+        title!,
+        style: titleStyle ??
             theme.textTheme.labelLarge?.copyWith(
-              color: widget.titleColor ?? theme.textTheme.labelLarge?.color,
-              fontSize: (widget.titleFontSize ?? 14).sp,
-              fontWeight: widget.titleFontWeight ?? FontWeight.w600,
-              fontFamily: widget.titleFontFamily,
+              color: titleColor ?? theme.textTheme.labelLarge?.color,
+              fontSize: (titleFontSize ?? 14).sp,
+              fontWeight: titleFontWeight ?? FontWeight.w600,
+              fontFamily: titleFontFamily,
             ),
       ),
     );
   }
 
-  Widget _buildErrorText(ThemeData theme) {
+  Widget _buildErrorText(ThemeData theme, String error) {
     return Padding(
       padding: EdgeInsets.only(top: 6.h, left: 4.w),
       child: Text(
-        _errorText!,
+        error,
         style: theme.textTheme.bodySmall?.copyWith(
           color: theme.colorScheme.error,
           fontSize: 12.sp,
@@ -259,153 +239,166 @@ class _CustomTextFieldState extends State<CustomTextField> {
     );
   }
 
-  Widget _buildInputField(ThemeData theme) {
-    final hasError = _errorText != null;
-    final isEnabled = widget.enabled;
+  Widget _buildInputField(ThemeData theme, FormFieldState<_InputState> fieldState, _InputState state) {
+    final hasError = state.errorText != null;
+    final isEnabled = enabled;
     
     final inputTheme = theme.inputDecorationTheme;
     final colorScheme = theme.colorScheme;
 
-    final bg = widget.backgroundColor ?? 
+    final bg = backgroundColor ?? 
                (isEnabled ? (inputTheme.fillColor ?? theme.cardColor) 
                           : (theme.disabledColor.withValues(alpha: 0.05)));
     
     final borderCol = hasError 
-        ? (widget.errorBorderColor ?? colorScheme.error)
+        ? (errorBorderColor ?? colorScheme.error)
         : (!isEnabled 
-            ? (widget.disabledBorderColor ?? theme.disabledColor.withValues(alpha: 0.2))
-            : (_isFocused 
-                ? (widget.focusedBorderColor ?? colorScheme.primary) 
-                : (widget.borderColor ?? theme.dividerColor)));
+            ? (disabledBorderColor ?? theme.disabledColor.withValues(alpha: 0.2))
+            : (state.isFocused 
+                ? (focusedBorderColor ?? colorScheme.primary) 
+                : (borderColor ?? theme.dividerColor)));
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
-      width: widget.width.w,
-      height: widget.height?.h,
+      width: width.w,
+      height: height?.h,
       decoration: BoxDecoration(
         color: bg,
-        gradient: widget.gradient,
-        borderRadius: BorderRadius.circular(widget.borderRadius.r),
+        gradient: gradient,
+        borderRadius: BorderRadius.circular(borderRadius.r),
         border: Border.all(
           color: borderCol,
-          width: (hasError || _isFocused) ? (widget.borderWidth + 0.5).w : widget.borderWidth.w,
+          width: (hasError || state.isFocused) ? (borderWidth + 0.5).w : borderWidth.w,
         ),
-        boxShadow: widget.shadow
+        boxShadow: shadow
             ? [
                 BoxShadow(
-                  color: widget.shadowColor ?? theme.shadowColor.withValues(alpha: 0.08),
+                  color: shadowColor ?? theme.shadowColor.withValues(alpha: 0.08),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
               ]
             : null,
       ),
-      child: TextFormField(
-        controller: widget.controller,
-        focusNode: _focusNode,
-        obscureText: _isObscured,
-        readOnly: widget.readOnly,
-        enabled: isEnabled,
-        autofocus: widget.autofocus,
-        maxLines: widget.isPassword ? 1 : widget.maxLines,
-        minLines: widget.minLines,
-        maxLength: widget.maxLength,
-        keyboardType: widget.keyboardType,
-        textInputAction: widget.textInputAction,
-        textAlign: widget.textAlign,
-        textCapitalization: widget.textCapitalization,
-        inputFormatters: widget.inputFormatters,
-        onSaved: widget.onSaved,
-        onFieldSubmitted: widget.onFieldSubmitted,
-        onEditingComplete: widget.onEditingComplete,
-        autovalidateMode: widget.autovalidateMode,
-        onChanged: (val) {
-          if (hasError) {
-            setState(() => _errorText = null);
-          }
-          widget.onChanged?.call(val);
+      child: Focus(
+        onFocusChange: (hasFocus) {
+          state.isFocused = hasFocus;
+          fieldState.didChange(state);
         },
-        onTap: widget.onTap,
-        validator: (val) {
-          if (widget.validator != null) {
-            final result = widget.validator!(val);
-            if (mounted) {
-              setState(() => _errorText = result);
+        child: TextFormField(
+          controller: controller,
+          focusNode: focusNode,
+          obscureText: state.isObscured,
+          readOnly: readOnly,
+          enabled: isEnabled,
+          autofocus: autofocus,
+          maxLines: isPassword ? 1 : maxLines,
+          minLines: minLines,
+          maxLength: maxLength,
+          keyboardType: keyboardType,
+          textInputAction: textInputAction,
+          textAlign: textAlign,
+          textCapitalization: textCapitalization,
+          inputFormatters: inputFormatters,
+          onSaved: onSaved,
+          onFieldSubmitted: onFieldSubmitted,
+          onEditingComplete: onEditingComplete,
+          autovalidateMode: autovalidateMode,
+          onChanged: (val) {
+            if (hasError) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                state.errorText = null;
+                fieldState.didChange(state);
+              });
             }
-            return null; // Handle error UI externally
-          }
-          return null;
-        },
-        style: widget.textStyle ??
-            theme.textTheme.bodyMedium?.copyWith(
-              color: isEnabled 
-                  ? (widget.textColor ?? theme.textTheme.bodyMedium?.color)
-                  : theme.disabledColor,
-              fontSize: (widget.fontSize ?? 14).sp,
-              fontWeight: widget.fontWeight ?? FontWeight.w400,
-              fontFamily: widget.fontFamily,
-            ),
-        decoration: InputDecoration(
-          hintText: widget.hintText,
-          labelText: widget.labelText,
-          hintStyle: widget.hintStyle ??
-              inputTheme.hintStyle ??
+            onChanged?.call(val);
+          },
+          onTap: onTap,
+          validator: (val) {
+            if (validator != null) {
+              final result = validator!(val);
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                state.errorText = result;
+                fieldState.didChange(state);
+              });
+              return null; // Handle error UI externally
+            }
+            return null;
+          },
+          style: textStyle ??
               theme.textTheme.bodyMedium?.copyWith(
-                color: widget.hintColor ?? theme.hintColor.withValues(alpha: 0.5),
-                fontSize: (widget.hintFontSize ?? 14).sp,
-                fontWeight: widget.hintFontWeight ?? FontWeight.w400,
-                fontFamily: widget.hintFontFamily,
+                color: isEnabled 
+                    ? (textColor ?? theme.textTheme.bodyMedium?.color)
+                    : theme.disabledColor,
+                fontSize: (fontSize ?? 14).sp,
+                fontWeight: fontWeight ?? FontWeight.w400,
+                fontFamily: fontFamily,
               ),
-          labelStyle: widget.hintStyle ?? inputTheme.labelStyle,
-          isDense: true,
-          contentPadding: widget.contentPadding ?? EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
-          border: InputBorder.none,
-          enabledBorder: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          errorBorder: InputBorder.none,
-          disabledBorder: InputBorder.none,
-          prefixIcon: _buildPrefix(theme, hasError),
-          suffixIcon: _buildSuffix(theme, hasError),
-          counterText: '',
+          decoration: InputDecoration(
+            hintText: hintText,
+            labelText: labelText,
+            hintStyle: hintStyle ??
+                inputTheme.hintStyle ??
+                theme.textTheme.bodyMedium?.copyWith(
+                  color: hintColor ?? theme.hintColor.withValues(alpha: 0.5),
+                  fontSize: (hintFontSize ?? 14).sp,
+                  fontWeight: hintFontWeight ?? FontWeight.w400,
+                  fontFamily: hintFontFamily,
+                ),
+            labelStyle: hintStyle ?? inputTheme.labelStyle,
+            isDense: true,
+            contentPadding: contentPadding ?? EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+            border: InputBorder.none,
+            enabledBorder: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            errorBorder: InputBorder.none,
+            disabledBorder: InputBorder.none,
+            prefixIcon: _buildPrefix(theme, hasError),
+            suffixIcon: _buildSuffix(theme, hasError, fieldState, state),
+            counterText: '',
+          ),
         ),
       ),
     );
   }
 
   Widget? _buildPrefix(ThemeData theme, bool hasError) {
-    if (widget.prefix == null) return null;
-    final color = hasError ? theme.colorScheme.error : (widget.prefixColor ?? theme.hintColor);
+    if (prefix == null) return null;
+    final color = hasError ? theme.colorScheme.error : (prefixColor ?? theme.hintColor);
     
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
-          padding: widget.prefixPadding,
-          child: _resolveAssetOrWidget(widget.prefix, widget.prefixSize, widget.usePrefixColor, color),
+          padding: prefixPadding,
+          child: _resolveAssetOrWidget(prefix, prefixSize, usePrefixColor, color),
         ),
       ],
     );
   }
 
-  Widget? _buildSuffix(ThemeData theme, bool hasError) {
+  Widget? _buildSuffix(ThemeData theme, bool hasError, FormFieldState<_InputState> fieldState, _InputState state) {
     final List<Widget> children = [];
-    final color = hasError ? theme.colorScheme.error : (widget.suffixColor ?? theme.hintColor);
+    final color = hasError ? theme.colorScheme.error : (suffixColor ?? theme.hintColor);
 
-    if (widget.isPassword && widget.showObscureToggle) {
+    if (isPassword && showObscureToggle) {
       children.add(
         GestureDetector(
-          onTap: _toggleObscure, 
-          child: _buildObscureIcon(theme, hasError)
+          onTap: () {
+            state.isObscured = !state.isObscured;
+            fieldState.didChange(state);
+          }, 
+          child: _buildObscureIcon(theme, hasError, state)
         ),
       );
     }
 
-    if (widget.suffix != null) {
+    if (suffix != null) {
       children.add(
         Padding(
-          padding: widget.suffixPadding,
-          child: _resolveAssetOrWidget(widget.suffix, widget.suffixSize, widget.useSuffixColor, color),
+          padding: suffixPadding,
+          child: _resolveAssetOrWidget(suffix, suffixSize, useSuffixColor, color),
         ),
       );
     }
@@ -419,14 +412,14 @@ class _CustomTextFieldState extends State<CustomTextField> {
     );
   }
 
-  Widget _buildObscureIcon(ThemeData theme, bool hasError) {
+  Widget _buildObscureIcon(ThemeData theme, bool hasError, _InputState state) {
     final color = hasError ? theme.colorScheme.error : theme.hintColor;
-    final icon = _isObscured ? (widget.hiddenIcon ?? Icons.visibility_off_outlined) 
-                             : (widget.visibleIcon ?? Icons.visibility_outlined);
+    final icon = state.isObscured ? (hiddenIcon ?? Icons.visibility_off_outlined) 
+                             : (visibleIcon ?? Icons.visibility_outlined);
     
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 8.w),
-      child: _resolveAssetOrWidget(icon, widget.obscureIconSize, true, color),
+      child: _resolveAssetOrWidget(icon, obscureIconSize, true, color),
     );
   }
 
