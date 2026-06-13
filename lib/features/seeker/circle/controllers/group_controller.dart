@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../models/group_model.dart';
 import '../../../../core/utils/helpers/snack_bar_helper.dart';
 
@@ -33,72 +35,14 @@ class GroupController extends ChangeNotifier {
 
     try {
       await Future.delayed(const Duration(milliseconds: 1000));
+      final String jsonString = await rootBundle.loadString('assets/json/group.json');
+      final Map<String, dynamic> rawData = jsonDecode(jsonString);
 
-      // Mock dynamic JSON response based on 5.1, 5.2, 5.3
-      final Map<String, dynamic> rawMyGroups = {
-        "groups": [
-          {
-            "id": "group_001",
-            "name": "No Contact Warriors",
-            "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group1",
-            "memberCount": 1243,
-            "description": "Day 14 of No Contact. It was really hard today today, I almost texted him when I saw his favorite song playing. But I stayed strong!",
-            "isJoined": true
-          },
-          {
-            "id": "group_002",
-            "name": "Healing Hearts",
-            "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group2",
-            "memberCount": 856,
-            "description": "A safe space for those healing from heartbreak. We support each other through the journey.",
-            "isJoined": true
-          }
-        ]
-      };
-
-      final Map<String, dynamic> rawSuggestions = {
-        "suggestions": [
-          {
-            "id": "group_003",
-            "name": "Self Love Club",
-            "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group3",
-            "memberCount": 3201,
-            "description": "Focusing on self-growth and appreciation. You are enough.",
-            "isJoined": false
-          },
-          {
-            "id": "group_004",
-            "name": "Mindful Living",
-            "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group4",
-            "memberCount": 1540,
-            "description": "Daily mindfulness practices and support for a peaceful mind.",
-            "isJoined": false
-          }
-        ]
-      };
-
-      final Map<String, dynamic> rawInvitations = {
-        "invitations": [
-          {
-            "id": "inv_001",
-            "group": {
-              "id": "group_001",
-              "name": "No Contact Warriors",
-              "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group1",
-              "memberCount": 1243,
-              "description": "Day 14 of No Contact. It was really hard today today, I almost texted him when I saw his favorite song playing. But I stayed strong!"
-            },
-            "invitedBy": "Sarah M.",
-            "invitedAt": "2026-06-05T10:00:00Z"
-          }
-        ]
-      };
-
-      _myGroups = (rawMyGroups['groups'] as List).map((x) => GroupModel.fromJson(x)).toList();
-      _suggestedGroups = (rawSuggestions['suggestions'] as List).map((x) => GroupModel.fromJson(x)).toList();
-      _invitations = (rawInvitations['invitations'] as List).map((x) => GroupInvitationModel.fromJson(x)).toList();
+      _myGroups = (rawData['groups'] as List).map((x) => GroupModel.fromJson(x)).toList();
+      _suggestedGroups = (rawData['suggestions'] as List).map((x) => GroupModel.fromJson(x)).toList();
+      _invitations = (rawData['invitations'] as List).map((x) => GroupInvitationModel.fromJson(x)).toList();
     } catch (e) {
-      showErrorSnackBar(message: "Failed to load groups: $e");
+      debugPrint("Error loading group data: $e");
     } finally {
       _isLoading = false;
       _isRefreshing = false;

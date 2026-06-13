@@ -1,11 +1,50 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import '../models/coach_home_model.dart';
+import '../../../../core/utils/helpers/snack_bar_helper.dart';
 
 class CoachHomeController extends ChangeNotifier {
   bool _isActive = true;
   bool _isLoading = false;
+  bool _isRefreshing = false;
+
+  CoachStatsModel? _stats;
+  List<CoachSessionModel> _sessions = [];
+  List<CoachMessageModel> _messages = [];
 
   bool get isActive => _isActive;
   bool get isLoading => _isLoading;
+  bool get isRefreshing => _isRefreshing;
+  
+  CoachStatsModel? get stats => _stats;
+  List<CoachSessionModel> get sessions => _sessions;
+  List<CoachMessageModel> get messages => _messages;
+
+  Future<void> fetchHomeData({bool isRefresh = false}) async {
+    if (isRefresh) {
+      _isRefreshing = true;
+    } else {
+      _isLoading = true;
+    }
+    notifyListeners();
+
+    try {
+      await Future.delayed(const Duration(milliseconds: 1000));
+      final String jsonString = await rootBundle.loadString('assets/json/coach_home.json');
+      final Map<String, dynamic> data = jsonDecode(jsonString);
+
+      _stats = CoachStatsModel.fromJson(data['stats']);
+      _sessions = (data['upcomingSessions'] as List).map((x) => CoachSessionModel.fromJson(x)).toList();
+      _messages = (data['newMessages'] as List).map((x) => CoachMessageModel.fromJson(x)).toList();
+    } catch (e) {
+      showErrorSnackBar(message: "Failed to load dashboard: $e");
+    } finally {
+      _isLoading = false;
+      _isRefreshing = false;
+      notifyListeners();
+    }
+  }
 
   void toggleActive(BuildContext context) {
     if (_isActive) {

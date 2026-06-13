@@ -1,6 +1,15 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import '../../../../core/utils/helpers/snack_bar_helper.dart';
 
 class CoachProfileController extends ChangeNotifier {
+  bool _isLoading = false;
+  bool _isRefreshing = false;
+
+  bool get isLoading => _isLoading;
+  bool get isRefreshing => _isRefreshing;
+
   // Step 1: Basic Info
   final TextEditingController nameController = TextEditingController();
   final TextEditingController locationController = TextEditingController();
@@ -22,7 +31,7 @@ class CoachProfileController extends ChangeNotifier {
   final TextEditingController cancellationPolicyController = TextEditingController();
   final TextEditingController cancellationPriorController = TextEditingController();
   
-  final List<CoachServiceOption> services = [
+  List<CoachServiceOption> services = [
     CoachServiceOption(duration: '', price: '', isActive: true),
   ];
 
@@ -31,10 +40,45 @@ class CoachProfileController extends ChangeNotifier {
   String? selectedStartTime;
   String? selectedEndTime;
 
-  final List<CoachAvailability> currentAvailability = [
-    CoachAvailability(day: "Monday", timeRange: "09:00 AM - 12:00 PM"),
-    CoachAvailability(day: "Wednesday", timeRange: "02:00 PM - 05:00 PM"),
-  ];
+  List<CoachAvailability> currentAvailability = [];
+
+  // --- NEW: Follow Up Set up ---
+  final TextEditingController followUpTextController = TextEditingController();
+  String selectedFollowUpInterval = "30 Days";
+
+  // --- NEW: Total Earnings & Withdrawal ---
+  double balance = 0.0;
+  final TextEditingController withdrawalAmountController = TextEditingController();
+  final TextEditingController cardHolderNameController = TextEditingController();
+  final TextEditingController cardNumberController = TextEditingController();
+  final TextEditingController expiryDateController = TextEditingController();
+  final TextEditingController cvcController = TextEditingController();
+
+  Future<void> fetchProfileData({bool isRefresh = false}) async {
+    if (isRefresh) {
+      _isRefreshing = true;
+    } else {
+      _isLoading = true;
+    }
+    notifyListeners();
+
+    try {
+      await Future.delayed(const Duration(milliseconds: 1000));
+      final String jsonString = await rootBundle.loadString('assets/json/coach_profile.json');
+      final Map<String, dynamic> data = jsonDecode(jsonString);
+
+      balance = data['balance'] ?? 0.0;
+      
+      currentAvailability = (data['availability'] as List).map((x) => CoachAvailability.fromJson(x)).toList();
+      services = (data['services'] as List).map((x) => CoachServiceOption.fromJson(x)).toList();
+    } catch (e) {
+      showErrorSnackBar(message: "Failed to load profile data: $e");
+    } finally {
+      _isLoading = false;
+      _isRefreshing = false;
+      notifyListeners();
+    }
+  }
 
   void setAvailabilityDay(String day) {
     selectedDay = day;
@@ -70,22 +114,10 @@ class CoachProfileController extends ChangeNotifier {
     notifyListeners();
   }
 
-  // --- NEW: Follow Up Set up ---
-  final TextEditingController followUpTextController = TextEditingController();
-  String selectedFollowUpInterval = "30 Days";
-
   void setFollowUpInterval(String interval) {
     selectedFollowUpInterval = interval;
     notifyListeners();
   }
-
-  // --- NEW: Total Earnings & Withdrawal ---
-  final double balance = 20.0;
-  final TextEditingController withdrawalAmountController = TextEditingController();
-  final TextEditingController cardHolderNameController = TextEditingController();
-  final TextEditingController cardNumberController = TextEditingController();
-  final TextEditingController expiryDateController = TextEditingController();
-  final TextEditingController cvcController = TextEditingController();
 
   void addServiceOption() {
     services.add(CoachServiceOption(duration: '', price: '', isActive: true));
@@ -147,6 +179,14 @@ class CoachServiceOption {
     required this.price,
     required this.isActive,
   });
+
+  factory CoachServiceOption.fromJson(Map<String, dynamic> json) {
+    return CoachServiceOption(
+      duration: json['duration'] ?? '',
+      price: json['price'] ?? '',
+      isActive: json['isActive'] ?? true,
+    );
+  }
 }
 
 class CoachAvailability {
@@ -154,4 +194,11 @@ class CoachAvailability {
   String timeRange;
 
   CoachAvailability({required this.day, required this.timeRange});
+
+  factory CoachAvailability.fromJson(Map<String, dynamic> json) {
+    return CoachAvailability(
+      day: json['day'] ?? '',
+      timeRange: json['timeRange'] ?? '',
+    );
+  }
 }

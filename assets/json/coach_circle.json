@@ -1,0 +1,28 @@
+{
+  "circles": [
+    {
+      "id": "group_001",
+      "name": "No Contact Warriors",
+      "icon": "https://api.example.com/icons/group_001.png",
+      "memberCount": 1243,
+      "description": "Day 14 of No Contact. It was really hard today today, I almost texted him when I saw his favorite song playing. But I stayed strong!",
+      "isJoined": true
+    },
+    {
+      "id": "group_002",
+      "name": "Healing Together",
+      "icon": "https://api.example.com/icons/group_002.png",
+      "memberCount": 845,
+      "description": "A supportive community for sharing our healing journey. We grow stronger together.",
+      "isJoined": false
+    },
+    {
+      "id": "group_003",
+      "name": "Mindful Living",
+      "icon": "https://api.example.com/icons/group_003.png",
+      "memberCount": 2100,
+      "description": "Daily practices for living in the present moment.",
+      "isJoined": false
+    }
+  ]
+}

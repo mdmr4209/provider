@@ -1,5 +1,7 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../../../core/services/navigation_service.dart';
 import '../../../../core/widgets/showBreathingDialog.dart';
@@ -43,37 +45,19 @@ class HomeController extends ChangeNotifier {
     }
     notifyListeners();
 
-    await Future.delayed(const Duration(milliseconds: 1500));
-
-    final Map<String, dynamic> rawData = {
-      "status": "success",
-      "data": {
-        "user": {"name": "Jhonathan", "status": "YOU ARE\nSTRONG ✨"},
-        "timer": {
-          "days": 32,
-          "hours": 0,
-          "mins": 11,
-          "secs": 45,
-          "progress": 0.8,
-          "startDate": "2026-04-22T08:30:00Z",
-        },
-        "dailyWisdom": {
-          "quote":
-          "Progress isn't a straight line. Every small step back is just preparation for a giant leap forward.",
-          "author": "Coach Pearl 🍃",
-        },
-        "journal": {
-          "prompt": "Tap to write about your day...",
-          "actionText": "Write →",
-        },
-        "notifications": {"unreadCount": 2},
-      },
-    };
-
-    _dashboardModel = DashboardModel.fromJson(rawData);
-    _isLoading = false;
-    _isRefreshing = false;
-    notifyListeners();
+    try {
+      await Future.delayed(const Duration(milliseconds: 1500));
+      final String jsonString = await rootBundle.loadString('assets/json/home.json');
+      final Map<String, dynamic> rawData = jsonDecode(jsonString);
+      
+      _dashboardModel = DashboardModel.fromJson(rawData);
+    } catch (e) {
+      debugPrint("Error loading home dashboard data: $e");
+    } finally {
+      _isLoading = false;
+      _isRefreshing = false;
+      notifyListeners();
+    }
   }
 
   Future<void> fetchGuideData() async {

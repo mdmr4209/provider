@@ -1092,3 +1092,139 @@ Success Response (200 OK):
 }
 ```
 
+---
+
+## Coach Module APIs
+
+### 16.1 Get Coach Home Dashboard
+**Endpoint**: `GET /api/coach/home`
+**Success Response** (200 OK):
+```json
+{
+  "status": "success",
+  "data": {
+    "isActive": true,
+    "stats": {
+      "callBackRequests": "08",
+      "newMessages": "12",
+      "missedCalls": "03",
+      "netEarnings": "$2,847.50",
+      "earningsPeriod": "This month"
+    },
+    "sessions": [
+      {
+        "id": "ses_001",
+        "title": "Session 1",
+        "date": "Mon, Mar 27",
+        "time": "01:00 PM - 01:30 PM (30Min)",
+        "clientName": "Miles Esther",
+        "clientAvatar": "https://api.example.com/avatars/miles.jpg",
+        "rate": "$20"
+      }
+    ],
+    "messages": [
+      {
+        "senderName": "Miles Esther",
+        "senderAvatar": "https://api.example.com/avatars/miles.jpg",
+        "status": "Online",
+        "time": "09:30 PM",
+        "unreadCount": "2"
+      }
+    ]
+  }
+}
+```
+
+---
+
+### 16.2 Get Coach Inbox
+**Endpoint**: `GET /api/coach/inbox`
+**Success Response** (200 OK):
+```json
+{
+  "status": "success",
+  "data": {
+    "credits": "05",
+    "stories": [
+      { "id": "s_1", "name": "Your Story", "avatar": "https://api.example.com/avatars/me.jpg", "isMine": true }
+    ],
+    "messages": [
+      { "id": "m_1", "name": "Miles Esther", "avatar": "https://api.example.com/avatars/miles.jpg", "time": "09:30 PM", "unreadCount": 2, "isOnline": true }
+    ],
+    "missedCalls": [
+      { "id": "mc_1", "name": "Miles Esther", "avatar": "https://api.example.com/avatars/miles.jpg", "timeRequested": "12 April, 1:30AM" }
+    ],
+    "callbacks": [
+      { "id": "cb_1", "name": "Sarah Jenkins", "avatar": "https://api.example.com/avatars/sarah.jpg", "timeRequested": "Today at 3:00 PM" }
+    ],
+    "clients": [
+      { "id": "cl_1", "name": "Client 1", "avatar": "https://api.example.com/avatars/client1.jpg", "status": "Active Session", "time": "12 April", "unreadCount": "0" }
+    ]
+  }
+}
+```
+
+---
+
+### 16.3 Get Coach Circles
+**Endpoint**: `GET /api/coach/circles`
+**Success Response** (200 OK):
+```json
+{
+  "status": "success",
+  "data": {
+    "circles": [
+      {
+        "id": "c_1",
+        "name": "No Contact Warriors",
+        "icon": "https://api.example.com/icons/group_001.png",
+        "memberCount": 1243,
+        "description": "Day 14 of No Contact...",
+        "isJoined": true
+      }
+    ]
+  }
+}
+```
+
+---
+
+### 16.4 Get Coach Bid Board
+**Endpoint**: `GET /api/coach/bidboard`
+**Success Response** (200 OK):
+```json
+{
+  "status": "success",
+  "data": {
+    "topBiddersInfo": {
+      "title": "Top Bidders List",
+      "description": "Day 14 of No Contact..."
+    },
+    "slots": [
+      { "id": "slot_1", "rank": "1", "title": "Slot 1", "startingBid": "Starting Bid : $25", "topBid": "$400", "hexColor": "0xFFC19E5F" }
+    ],
+    "hasWon": false
+  }
+}
+```
+
+---
+
+### 16.5 Get Coach Profile Info
+**Endpoint**: `GET /api/coach/profile`
+**Success Response** (200 OK):
+```json
+{
+  "status": "success",
+  "data": {
+    "balance": 150.0,
+    "availability": [
+      { "day": "Monday", "timeRange": "09:00 AM - 12:00 PM" }
+    ],
+    "services": [
+      { "duration": "30 mins", "price": "$50", "isActive": true }
+    ]
+  }
+}
+```
+

@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../../core/utils/helpers/snack_bar_helper.dart';
 import '../models/circle_post_model.dart';
@@ -122,14 +124,24 @@ class CircleController extends ChangeNotifier {
     }
     notifyListeners();
 
-    await Future.delayed(const Duration(milliseconds: 1500));
-    // Simulating API call with dummy data
-    _posts = CirclePostModel.dummyPosts;
-    _members = SuggestionModel.dummySuggestions;
+    try {
+      await Future.delayed(const Duration(milliseconds: 1500));
+      final String jsonString = await rootBundle.loadString('assets/json/circle.json');
+      final Map<String, dynamic> rawData = jsonDecode(jsonString);
+      final data = rawData['data'] as Map<String, dynamic>;
 
-    _isLoading = false;
-    _isRefreshing = false;
-    notifyListeners();
+      _posts = (data['posts'] as List).map((x) => CirclePostModel.fromJson(x)).toList();
+      _members = (data['members'] as List).map((x) => SuggestionModel.fromJson(x)).toList();
+    } catch (e) {
+      debugPrint("Error loading circle data: $e");
+      // Fallback if asset missing
+      _posts = CirclePostModel.dummyPosts;
+      _members = SuggestionModel.dummySuggestions;
+    } finally {
+      _isLoading = false;
+      _isRefreshing = false;
+      notifyListeners();
+    }
   }
 
   Future<void> fetchSocialLists({bool isRefresh = false}) async {

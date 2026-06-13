@@ -1,7 +1,13 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../../../core/utils/helpers/snack_bar_helper.dart';
+import '../models/coach_bid_model.dart';
 
 class CoachBidController extends ChangeNotifier {
+  bool _isLoading = false;
+  bool _isRefreshing = false;
+
   String? _selectedSlot;
   final TextEditingController amountController = TextEditingController();
   final TextEditingController ticketQuantityController = TextEditingController();
@@ -10,10 +16,42 @@ class CoachBidController extends ChangeNotifier {
   final int _totalCoaches = 128;
   bool _hasWon = false;
 
+  List<CoachBidSlotModel> _slots = [];
+  Map<String, dynamic>? _topBiddersInfo;
+
+  bool get isLoading => _isLoading;
+  bool get isRefreshing => _isRefreshing;
   String? get selectedSlot => _selectedSlot;
   int get myTickets => _myTickets;
   int get totalCoaches => _totalCoaches;
   bool get hasWon => _hasWon;
+  
+  List<CoachBidSlotModel> get slots => _slots;
+  Map<String, dynamic>? get topBiddersInfo => _topBiddersInfo;
+
+  Future<void> fetchBidData({bool isRefresh = false}) async {
+    if (isRefresh) {
+      _isRefreshing = true;
+    } else {
+      _isLoading = true;
+    }
+    notifyListeners();
+
+    try {
+      await Future.delayed(const Duration(milliseconds: 1000));
+      final String jsonString = await rootBundle.loadString('assets/json/coach_bid.json');
+      final Map<String, dynamic> data = jsonDecode(jsonString);
+
+      _topBiddersInfo = data['topBidders'];
+      _slots = (data['slots'] as List).map((x) => CoachBidSlotModel.fromJson(x)).toList();
+    } catch (e) {
+      showErrorSnackBar(message: "Failed to load bid data: $e");
+    } finally {
+      _isLoading = false;
+      _isRefreshing = false;
+      notifyListeners();
+    }
+  }
 
   void setSlot(String? value) {
     _selectedSlot = value;

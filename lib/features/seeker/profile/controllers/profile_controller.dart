@@ -1,5 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-
+import 'package:flutter/services.dart';
 import '../models/point_transaction.dart';
 import '../models/profile_details_model.dart';
 
@@ -172,32 +173,12 @@ class ProfileController extends ChangeNotifier {
 
     try {
       await Future.delayed(const Duration(milliseconds: 1000));
-
-      final Map<String, dynamic> rawProfile = {
-        "user": {
-          "id": "me_1",
-          "name": "Rahim Rehman",
-          "avatar": "https://i.pravatar.cc/150?u=me_1",
-          "bio": "Healing Journey Day 14. Keep going forward!",
-          "stats": { "posts": 7, "friends": 128, "followers": 220, "following": 14 },
-          "journals": [
-            { "id": "j1", "title": "Journal Day 14", "content": "Day 14. Didn't reach out even though I wanted to. Proud of myself 💪", "date": "12 April 2026", "isPrivate": true },
-            { "id": "j2", "title": "Journal Day 10", "content": "Doing some guided breathing exercises, feeling calmer.", "date": "08 April 2026", "isPrivate": true },
-            { "id": "j3", "title": "Journal Day 5", "content": "Feeling a bit anxious but staying strong.", "date": "03 April 2026", "isPrivate": false }
-          ],
-          "media": [
-            "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=200&auto=format&fit=crop&q=60",
-            "https://images.unsplash.com/photo-1511447333015-45b65e60f6d5?w=200&auto=format&fit=crop&q=60",
-            "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=200&auto=format&fit=crop&q=60",
-            "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=200&auto=format&fit=crop&q=60",
-            "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=200&auto=format&fit=crop&q=60"
-          ]
-        }
-      };
+      final String jsonString = await rootBundle.loadString('assets/json/profile.json');
+      final Map<String, dynamic> rawProfile = jsonDecode(jsonString);
 
       _profileDetails = ProfileDetailsModel.fromJson(rawProfile);
     } catch (e) {
-      // ignore
+      debugPrint("Error loading profile: $e");
     } finally {
       _isLoading = false;
       _isRefreshing = false;

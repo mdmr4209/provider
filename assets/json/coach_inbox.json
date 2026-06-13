@@ -1,0 +1,56 @@
+{
+  "credits": 15,
+  "stories": [
+    { "name": "Your Story", "avatar": "https://i.pravatar.cc/150?u=me", "isMine": true },
+    { "name": "Mike", "avatar": "https://i.pravatar.cc/150?u=mike1" },
+    { "name": "Sarah", "avatar": "https://i.pravatar.cc/150?u=sarah" },
+    { "name": "Paul", "avatar": "https://i.pravatar.cc/150?u=paul" }
+  ],
+  "messages": [
+    {
+      "id": "chat_001",
+      "name": "Miles Esther",
+      "avatar": "https://i.pravatar.cc/150?u=miles",
+      "lastMessage": "How are you doing today?",
+      "time": "09:30 PM",
+      "unreadCount": 2,
+      "isOnline": true,
+      "isCoach": false
+    }
+  ],
+  "clients": [
+    {
+      "id": "client_1",
+      "name": "Client 1",
+      "avatar": "https://i.pravatar.cc/150?u=client1",
+      "status": "Active Session",
+      "time": "12 April",
+      "unreadCount": "0"
+    },
+    {
+      "id": "client_2",
+      "name": "Client 2",
+      "avatar": "https://i.pravatar.cc/150?u=client2",
+      "status": "Inactive",
+      "time": "10 April",
+      "unreadCount": "0"
+    }
+  ],
+  "missedCalls": [
+    {
+      "id": "missed_1",
+      "name": "Miles Esther",
+      "avatar": "https://i.pravatar.cc/150?u=miles",
+      "timeRequested": "12 April, 1:30AM"
+    }
+  ],
+  "callBacks": [
+    {
+      "id": "cb_1",
+      "name": "Miles Esther",
+      "avatar": "https://i.pravatar.cc/150?u=miles",
+      "timeRequested": "Today at 3:00 PM",
+      "rate": "Free"
+    }
+  ]
+}

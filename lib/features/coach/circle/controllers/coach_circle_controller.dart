@@ -1,18 +1,64 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../../../core/utils/helpers/snack_bar_helper.dart';
+import '../../../seeker/circle/models/group_model.dart'; // Reuse GroupModel
 
 class CoachCircleController extends ChangeNotifier {
+  bool _isLoading = false;
+  bool _isRefreshing = false;
   bool _isPremium = false;
-  final List<String> _joinedGroups = ['1']; // Mock: user joined one group
 
+  List<GroupModel> _circles = [];
+
+  bool get isLoading => _isLoading;
+  bool get isRefreshing => _isRefreshing;
   bool get isPremium => _isPremium;
+  List<GroupModel> get circles => _circles;
+
+  Future<void> fetchCircles({bool isRefresh = false}) async {
+    if (isRefresh) {
+      _isRefreshing = true;
+    } else {
+      _isLoading = true;
+    }
+    notifyListeners();
+
+    try {
+      await Future.delayed(const Duration(milliseconds: 1000));
+      final String jsonString = await rootBundle.loadString('assets/json/coach_circle.json');
+      final Map<String, dynamic> data = jsonDecode(jsonString);
+
+      _circles = (data['circles'] as List).map((x) => GroupModel.fromJson(x)).toList();
+    } catch (e) {
+      showErrorSnackBar(message: "Failed to load coach circles: $e");
+    } finally {
+      _isLoading = false;
+      _isRefreshing = false;
+      notifyListeners();
+    }
+  }
 
   void joinGroup(BuildContext context, String groupId) {
-    if (!_isPremium && _joinedGroups.length >= 1) {
+    // Check if joined circles count > 0 (mock limit for non-premium)
+    int joinedCount = _circles.where((c) => c.isJoined).length;
+
+    if (!_isPremium && joinedCount >= 1) {
       _showUpgradeSheet(context);
     } else {
-      if (!_joinedGroups.contains(groupId)) {
-        _joinedGroups.add(groupId);
+      final index = _circles.indexWhere((c) => c.id == groupId || c.name == groupId);
+      if (index != -1 && !_circles[index].isJoined) {
+        // Mock update
+        final current = _circles[index];
+        _circles[index] = GroupModel(
+          id: current.id,
+          name: current.name,
+          icon: current.icon,
+          memberCount: current.memberCount + 1,
+          description: current.description,
+          isJoined: true,
+          status: current.status,
+        );
         showSuccessSnackBar(message: "Joined group successfully!");
         notifyListeners();
       }

@@ -1,0 +1,52 @@
+{
+  "groups": [
+    {
+      "id": "group_001",
+      "name": "No Contact Warriors",
+      "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group1",
+      "memberCount": 1243,
+      "description": "Day 14 of No Contact. It was really hard today today, I almost texted him when I saw his favorite song playing. But I stayed strong!",
+      "isJoined": true
+    },
+    {
+      "id": "group_002",
+      "name": "Healing Hearts",
+      "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group2",
+      "memberCount": 856,
+      "description": "A safe space for those healing from heartbreak. We support each other through the journey.",
+      "isJoined": true
+    }
+  ],
+  "suggestions": [
+    {
+      "id": "group_003",
+      "name": "Self Love Club",
+      "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group3",
+      "memberCount": 3201,
+      "description": "Focusing on self-growth and appreciation. You are enough.",
+      "isJoined": false
+    },
+    {
+      "id": "group_004",
+      "name": "Mindful Living",
+      "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group4",
+      "memberCount": 1540,
+      "description": "Daily mindfulness practices and support for a peaceful mind.",
+      "isJoined": false
+    }
+  ],
+  "invitations": [
+    {
+      "id": "inv_001",
+      "group": {
+        "id": "group_001",
+        "name": "No Contact Warriors",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group1",
+        "memberCount": 1243,
+        "description": "Day 14 of No Contact. It was really hard today today, I almost texted him when I saw his favorite song playing. But I stayed strong!"
+      },
+      "invitedBy": "Sarah M.",
+      "invitedAt": "2026-06-05T10:00:00Z"
+    }
+  ]
+}

@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../models/inbox_model.dart';
 import '../models/booking_model.dart';
 import '../../../../core/utils/helpers/snack_bar_helper.dart';
@@ -32,39 +34,8 @@ class InboxController extends ChangeNotifier {
 
     try {
       await Future.delayed(const Duration(milliseconds: 1000));
-
-      // Mock dynamic JSON responses from 14.1 Get Inbox Chats
-      final Map<String, dynamic> rawInbox = {
-        "stories": [
-          { "name": "Your Story", "avatar": "https://i.pravatar.cc/150?u=me", "isMine": true },
-          { "name": "Mike", "avatar": "https://i.pravatar.cc/150?u=mike1" },
-          { "name": "Sarah", "avatar": "https://i.pravatar.cc/150?u=sarah" },
-          { "name": "Mike", "avatar": "https://i.pravatar.cc/150?u=mike2" },
-          { "name": "Paul", "avatar": "https://i.pravatar.cc/150?u=paul" }
-        ],
-        "chats": [
-          {
-            "id": "chat_001",
-            "name": "Miles Esther",
-            "avatar": "https://i.pravatar.cc/150?u=miles",
-            "lastMessage": "How are you doing today?",
-            "time": "09:30 PM",
-            "unreadCount": 2,
-            "isOnline": true,
-            "isCoach": true
-          },
-          {
-            "id": "chat_002",
-            "name": "Thomas stieve",
-            "avatar": "https://i.pravatar.cc/150?u=thomas",
-            "lastMessage": "Let's catch up later.",
-            "time": "08:15 PM",
-            "unreadCount": 0,
-            "isOnline": false,
-            "isCoach": false
-          }
-        ]
-      };
+      final String jsonString = await rootBundle.loadString('assets/json/inbox.json');
+      final Map<String, dynamic> rawInbox = jsonDecode(jsonString);
 
       _stories = (rawInbox['stories'] as List).map((x) => StoryModel.fromJson(x)).toList();
       _chats = (rawInbox['chats'] as List).map((x) => ChatSummaryModel.fromJson(x)).toList();

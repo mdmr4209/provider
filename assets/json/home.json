@@ -1,0 +1,28 @@
+{
+  "status": "success",
+  "data": {
+    "user": {
+      "name": "Jhonathan",
+      "status": "YOU ARE\nSTRONG ✨"
+    },
+    "timer": {
+      "days": 32,
+      "hours": 0,
+      "mins": 11,
+      "secs": 45,
+      "progress": 0.8,
+      "startDate": "2026-04-22T08:30:00Z"
+    },
+    "dailyWisdom": {
+      "quote": "Progress isn't a straight line. Every small step back is just preparation for a giant leap forward.",
+      "author": "Coach Pearl 🍃"
+    },
+    "journal": {
+      "prompt": "Tap to write about your day...",
+      "actionText": "Write →"
+    },
+    "notifications": {
+      "unreadCount": 2
+    }
+  }
+}

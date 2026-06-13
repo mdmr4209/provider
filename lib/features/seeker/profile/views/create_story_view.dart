@@ -67,29 +67,35 @@ class StoryCreatorController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void onImageScaleStart() {
-    _baseImageScale = imageScale;
-    _baseImageRotation = imageRotation;
-  }
+  bool isTextActive = true;
 
-  void onImageScaleUpdate(ScaleUpdateDetails details) {
-    imageScale = (_baseImageScale * details.scale).clamp(0.5, 4.0);
-    imageRotation = _baseImageRotation + details.rotation;
-    imageX += details.focalPointDelta.dx;
-    imageY += details.focalPointDelta.dy;
+  void toggleTextActive(bool active) {
+    isTextActive = active;
     notifyListeners();
   }
 
-  void onTextScaleStart() {
-    _baseTextScale = textScale;
-    _baseTextRotation = textRotation;
+  void onScaleStart(ScaleStartDetails details) {
+    if (isTextActive) {
+      _baseTextScale = textScale;
+      _baseTextRotation = textRotation;
+    } else {
+      _baseImageScale = imageScale;
+      _baseImageRotation = imageRotation;
+    }
   }
 
-  void onTextScaleUpdate(ScaleUpdateDetails details, double maxW, double maxH) {
-    textScale = (_baseTextScale * details.scale).clamp(0.5, 4.0);
-    textRotation = _baseTextRotation + details.rotation;
-    textX = (textX + details.focalPointDelta.dx).clamp(-150.w, maxW);
-    textY = (textY + details.focalPointDelta.dy).clamp(-150.h, maxH);
+  void onScaleUpdate(ScaleUpdateDetails details, double maxW, double maxH) {
+    if (isTextActive) {
+      textScale = (_baseTextScale * details.scale).clamp(0.5, 4.0);
+      textRotation = _baseTextRotation + details.rotation;
+      textX = (textX + details.focalPointDelta.dx).clamp(-150.w, maxW);
+      textY = (textY + details.focalPointDelta.dy).clamp(-150.h, maxH);
+    } else {
+      imageScale = (_baseImageScale * details.scale).clamp(0.5, 4.0);
+      imageRotation = _baseImageRotation + details.rotation;
+      imageX += details.focalPointDelta.dx;
+      imageY += details.focalPointDelta.dy;
+    }
     notifyListeners();
   }
 
@@ -266,70 +272,79 @@ class CreateStoryView extends StatelessWidget {
                   final maxW = constraints.maxWidth;
                   final maxH = constraints.maxHeight;
 
-                  return Stack(
-                    children: [
-                      // ── Draggable/Scaleable/Rotatable Background Canvas ────────────
-                      Positioned.fill(
-                        child: ClipRect(
-                          child: GestureDetector(
-                            onScaleStart: (_) => controller.onImageScaleStart(),
-                            onScaleUpdate: (details) => controller.onImageScaleUpdate(details),
-                            child: Transform(
-                              transform: Matrix4.identity()
-                                ..translate(controller.imageX, controller.imageY)
-                                ..rotateZ(controller.imageRotation)
-                                ..scale(controller.imageScale),
-                              alignment: Alignment.center,
-                              child: controller.pickedImage != null
-                                  ? Image.file(
-                                      controller.pickedImage!,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Container(
-                                      decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                          colors: [controller.canvasColor, controller.canvasColor.withAlpha(150)],
-                                          begin: Alignment.topCenter,
-                                          end: Alignment.bottomCenter,
+                  return GestureDetector(
+                    onTap: () => controller.toggleTextActive(false),
+                    onScaleStart: (details) => controller.onScaleStart(details),
+                    onScaleUpdate: (details) => controller.onScaleUpdate(details, maxW, maxH),
+                    child: Stack(
+                      children: [
+                        // ── Draggable/Scaleable/Rotatable Background Canvas ────────────
+                        Positioned.fill(
+                          child: ClipRect(
+                            child: Transform.translate(
+                              offset: Offset(controller.imageX, controller.imageY),
+                              child: Transform.rotate(
+                                angle: controller.imageRotation,
+                                child: Transform.scale(
+                                  scale: controller.imageScale,
+                                  alignment: Alignment.center,
+                                  child: controller.pickedImage != null
+                                      ? Image.file(
+                                          controller.pickedImage!,
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Container(
+                                          decoration: BoxDecoration(
+                                            gradient: LinearGradient(
+                                              colors: [controller.canvasColor, controller.canvasColor.withAlpha(150)],
+                                              begin: Alignment.topCenter,
+                                              end: Alignment.bottomCenter,
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ),
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      // ── Draggable/Scaleable/Rotatable Text Overlay ─────────────────
-                      Positioned(
-                        left: controller.textX,
-                        top: controller.textY,
-                        child: GestureDetector(
-                          onScaleStart: (_) => controller.onTextScaleStart(),
-                          onScaleUpdate: (details) => controller.onTextScaleUpdate(details, maxW, maxH),
-                          onDoubleTap: () => controller.showTextInputDialog(context),
-                          child: Transform(
-                            transform: Matrix4.identity()
-                              ..rotateZ(controller.textRotation)
-                              ..scale(controller.textScale),
-                            alignment: Alignment.center,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-                              decoration: BoxDecoration(
-                                color: Colors.black.withAlpha(102),
-                                borderRadius: BorderRadius.circular(8.r),
-                              ),
-                              child: Text(
-                                controller.text,
-                                style: TextStyle(
-                                  color: controller.textColor,
-                                  fontSize: controller.fontSize.sp,
-                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
+
+                        // ── Draggable/Scaleable/Rotatable Text Overlay ─────────────────
+                        Positioned(
+                          left: controller.textX,
+                          top: controller.textY,
+                          child: GestureDetector(
+                            onTap: () => controller.toggleTextActive(true),
+                            onDoubleTap: () => controller.showTextInputDialog(context),
+                            child: Transform.translate(
+                              offset: Offset(0, 0), // Text doesn't use translate since it's wrapped in Positioned
+                              child: Transform.rotate(
+                                angle: controller.textRotation,
+                                child: Transform.scale(
+                                  scale: controller.textScale,
+                                  alignment: Alignment.center,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                                    decoration: BoxDecoration(
+                                      color: Colors.black.withAlpha(102),
+                                      borderRadius: BorderRadius.circular(8.r),
+                                      border: controller.isTextActive 
+                                          ? Border.all(color: AppColors.secondaryColorLight, width: 2.r)
+                                          : null,
+                                    ),
+                                    child: Text(
+                                      controller.text,
+                                      style: TextStyle(
+                                        color: controller.textColor,
+                                        fontSize: controller.fontSize.sp,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
 
                       // ── Header / Close Button ───────────────────────────────────────
                       Positioned(
@@ -445,6 +460,23 @@ class CreateStoryView extends StatelessWidget {
                                 ],
                               ),
                               SizedBox(height: 8.h),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: [Colors.white, Colors.black, Colors.red, Colors.orange, Colors.yellow, Colors.green, Colors.blue, Colors.purple, Colors.pink]
+                                      .map((c) => GestureDetector(
+                                            onTap: () => controller.updateColor(c),
+                                            child: Container(
+                                              margin: EdgeInsets.only(right: 8.w),
+                                              width: 24.r,
+                                              height: 24.r,
+                                              decoration: BoxDecoration(color: c, shape: BoxShape.circle, border: Border.all(color: Colors.white38)),
+                                            ),
+                                          ))
+                                      .toList(),
+                                ),
+                              ),
+                              SizedBox(height: 12.h),
                               SpectrumColorPicker(
                                 selectedColor: controller.textColor,
                                 onColorSelected: (color) => controller.updateColor(color),
@@ -465,6 +497,23 @@ class CreateStoryView extends StatelessWidget {
                                   ],
                                 ),
                                 SizedBox(height: 8.h),
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    children: controller.canvasColors
+                                        .map((c) => GestureDetector(
+                                              onTap: () => controller.updateCanvasColor(c),
+                                              child: Container(
+                                                margin: EdgeInsets.only(right: 8.w),
+                                                width: 24.r,
+                                                height: 24.r,
+                                                decoration: BoxDecoration(color: c, shape: BoxShape.circle, border: Border.all(color: Colors.white38)),
+                                              ),
+                                            ))
+                                        .toList(),
+                                  ),
+                                ),
+                                SizedBox(height: 12.h),
                                 SpectrumColorPicker(
                                   selectedColor: controller.canvasColor,
                                   onColorSelected: (color) => controller.updateCanvasColor(color),
@@ -488,7 +537,8 @@ class CreateStoryView extends StatelessWidget {
                         ),
                       ),
                     ],
-                  );
+                  ),
+                );
                 },
               );
             },

@@ -406,89 +406,108 @@ class ChatView extends StatelessWidget {
             body: Column(
               children: [
                 Expanded(
-                  child: inboxController.isLoading && chat.messages.isEmpty
-                      ? const _ChatShimmer()
-                      : ListView.builder(
-                          controller: chat.scrollController,
-                          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-                          itemCount: chat.messages.length,
-                          itemBuilder: (context, index) {
-                            final message = chat.messages[index];
-                            final isMe = message.isMe;
-                            final showAvatar = !isMe && (index == chat.messages.length - 1 || chat.messages[index + 1].isMe == true || chat.messages[index + 1].sender != name);
-                            final bool showDivider = index == 0 || chat.messages[index - 1].time != message.time;
+                  child: Stack(
+                    children: [
+                      RefreshIndicator(
+                        onRefresh: () => inboxController.fetchChatMessages(chatId, isRefresh: true),
+                        color: Colors.transparent,
+                        backgroundColor: Colors.transparent,
+                        strokeWidth: 0,
+                        elevation: 0,
+                        child: inboxController.isLoading && chat.messages.isEmpty
+                            ? const _ChatShimmer()
+                            : ListView.builder(
+                                controller: chat.scrollController,
+                                physics: const AlwaysScrollableScrollPhysics(),
+                                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                                itemCount: chat.messages.length,
+                                itemBuilder: (context, index) {
+                                  final message = chat.messages[index];
+                                  final isMe = message.isMe;
+                                  final showAvatar = !isMe && (index == chat.messages.length - 1 || chat.messages[index + 1].isMe == true || chat.messages[index + 1].sender != name);
+                                  final bool showDivider = index == 0 || chat.messages[index - 1].time != message.time;
 
-                            return Column(
-                              children: [
-                                if (showDivider) ...[
-                                  SizedBox(height: 16.h),
-                                  Row(
+                                  return Column(
                                     children: [
-                                      Expanded(child: Divider(color: Colors.white.withAlpha(26), thickness: 1)),
-                                      Padding(
-                                        padding: EdgeInsets.symmetric(horizontal: 16.w),
-                                        child: Text(
-                                          message.time,
-                                          style: TextStyle(
-                                            color: Colors.white.withAlpha(102),
-                                            fontSize: 12.sp,
-                                          ),
+                                      if (showDivider) ...[
+                                        SizedBox(height: 16.h),
+                                        Row(
+                                          children: [
+                                            Expanded(child: Divider(color: Colors.white.withAlpha(26), thickness: 1)),
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(horizontal: 16.w),
+                                              child: Text(
+                                                message.time,
+                                                style: TextStyle(
+                                                  color: Colors.white.withAlpha(102),
+                                                  fontSize: 12.sp,
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(child: Divider(color: Colors.white.withAlpha(26), thickness: 1)),
+                                          ],
                                         ),
-                                      ),
-                                      Expanded(child: Divider(color: Colors.white.withAlpha(26), thickness: 1)),
-                                    ],
-                                  ),
-                                  SizedBox(height: 16.h),
-                                ],
-                                Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 4.h),
-                                  child: Row(
-                                    mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      if (!isMe) ...[
-                                        if (showAvatar)
-                                          CircleAvatar(
-                                            radius: 15.r,
-                                            backgroundImage: NetworkImage(message.avatar.isNotEmpty ? message.avatar : avatar),
-                                            backgroundColor: Colors.white.withAlpha(26),
-                                          )
-                                        else
-                                          SizedBox(width: 30.r),
-                                        SizedBox(width: 8.w),
+                                        SizedBox(height: 16.h),
                                       ],
-                                      Flexible(
-                                        child: Container(
-                                          padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
-                                          decoration: BoxDecoration(
-                                            color: isMe 
-                                                ? const Color(0xFF1E331A)
-                                                : Colors.white.withAlpha(26),
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(16.r),
-                                              topRight: Radius.circular(16.r),
-                                              bottomLeft: isMe ? Radius.circular(16.r) : Radius.circular(4.r),
-                                              bottomRight: isMe ? Radius.circular(4.r) : Radius.circular(16.r),
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(vertical: 4.h),
+                                        child: Row(
+                                          mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.end,
+                                          children: [
+                                            if (!isMe) ...[
+                                              if (showAvatar)
+                                                CircleAvatar(
+                                                  radius: 15.r,
+                                                  backgroundImage: NetworkImage(message.avatar.isNotEmpty ? message.avatar : avatar),
+                                                  backgroundColor: Colors.white.withAlpha(26),
+                                                )
+                                              else
+                                                SizedBox(width: 30.r),
+                                              SizedBox(width: 8.w),
+                                            ],
+                                            Flexible(
+                                              child: Container(
+                                                padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
+                                                decoration: BoxDecoration(
+                                                  color: isMe 
+                                                      ? const Color(0xFF1E331A)
+                                                      : Colors.white.withAlpha(26),
+                                                  borderRadius: BorderRadius.only(
+                                                    topLeft: Radius.circular(16.r),
+                                                    topRight: Radius.circular(16.r),
+                                                    bottomLeft: isMe ? Radius.circular(16.r) : Radius.circular(4.r),
+                                                    bottomRight: isMe ? Radius.circular(4.r) : Radius.circular(16.r),
+                                                  ),
+                                                ),
+                                                child: Text(
+                                                  message.text,
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 13.5.sp,
+                                                    height: 1.4,
+                                                  ),
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                          child: Text(
-                                            message.text,
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 13.5.sp,
-                                              height: 1.4,
-                                            ),
-                                          ),
+                                            if (isMe) SizedBox(width: 30.w),
+                                          ],
                                         ),
                                       ),
-                                      if (isMe) SizedBox(width: 30.w),
                                     ],
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
+                                  );
+                                },
+                              ),
+                      ),
+                      if (inboxController.isRefreshing)
+                        Positioned(
+                          top: 16.h,
+                          left: 0,
+                          right: 0,
+                          child: const Center(child: CustomLoader(size: 150)),
                         ),
+                    ],
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 20.h),
@@ -618,6 +637,7 @@ class _ChatShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      physics: const AlwaysScrollableScrollPhysics(),
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       itemCount: 6,
       itemBuilder: (context, index) {

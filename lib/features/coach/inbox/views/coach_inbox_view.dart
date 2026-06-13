@@ -8,6 +8,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_input.dart';
 import '../../../../core/widgets/background_widget.dart';
+import '../../../../core/widgets/custom_loader.dart';
 import '../controllers/coach_inbox_controller.dart';
 import '../../../../routes/app_router.dart';
 
@@ -26,6 +27,9 @@ class _CoachInboxViewState extends State<CoachInboxView> with SingleTickerProvid
   void initState() {
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<CoachInboxController>().fetchInboxData();
+    });
   }
 
   @override
@@ -67,65 +71,82 @@ class _CoachInboxViewState extends State<CoachInboxView> with SingleTickerProvid
               ),
 
               Expanded(
-                child: SingleChildScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // ── Stories Section ──────────────────────────────────────────
-                      Padding(
-                        padding: EdgeInsets.only(left: 16.w, top: 10.h, bottom: 8.h),
-                        child: const Text("Stories", style: TextStyle(color: Colors.white54, fontSize: 14)),
-                      ),
-                      _buildStoriesRow(),
+                child: controller.isLoading
+                    ? const Center(child: ShimmerLoader())
+                    : Stack(
+                        children: [
+                          RefreshIndicator(
+                            onRefresh: () => controller.fetchInboxData(isRefresh: true),
+                            color: Colors.transparent,
+                            backgroundColor: Colors.transparent,
+                            strokeWidth: 0,
+                            elevation: 0,
+                            child: SingleChildScrollView(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // ── Stories Section ──────────────────────────────────────────
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 16.w, top: 10.h, bottom: 8.h),
+                                    child: const Text("Stories", style: TextStyle(color: Colors.white54, fontSize: 14)),
+                                  ),
+                                  _buildStoriesRow(controller),
 
-                      SizedBox(height: 20.h),
+                                  SizedBox(height: 20.h),
 
-                      // ── Search Bar ──────────────────────────────────────────────
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.w),
-                        child: CustomInput(
-                          height: 48,
-                          hintText: "Search name",
-                          backgroundColor: Colors.white.withAlpha(13),
-                          borderRadius: 24,
-                          shadow: false,
-                          leadingIcon: AppAssets.search,
-                        ),
-                      ),
+                                  // ── Search Bar ──────────────────────────────────────────────
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                                    child: CustomInput(
+                                      height: 48,
+                                      hintText: "Search name",
+                                      backgroundColor: Colors.white.withAlpha(13),
+                                      borderRadius: 24,
+                                      shadow: false,
+                                      leadingIcon: AppAssets.search,
+                                    ),
+                                  ),
 
-                      SizedBox(height: 20.h),
+                                  SizedBox(height: 20.h),
 
-                      // ── Tabs ───────────────────────────────────────────────────
-                      TabBar(
-                        controller: _tabController,
-                        isScrollable: true,
-                        indicatorColor: Colors.transparent,
-                        dividerColor: Colors.transparent,
-                        tabAlignment: TabAlignment.start,
-                        padding: EdgeInsets.symmetric(horizontal: 16.w),
-                        labelPadding: EdgeInsets.only(right: 12.w),
-                        onTap: (index) => setState(() {}),
-                        tabs: [
-                          _buildTab("Messages", 0),
-                          _buildTab("Missed call", 1),
-                          _buildTab("Call Back", 2),
-                          _buildTab("Clients", 3),
+                                  // ── Tabs ───────────────────────────────────────────────────
+                                  TabBar(
+                                    controller: _tabController,
+                                    isScrollable: true,
+                                    indicatorColor: Colors.transparent,
+                                    dividerColor: Colors.transparent,
+                                    tabAlignment: TabAlignment.start,
+                                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                                    labelPadding: EdgeInsets.only(right: 12.w),
+                                    onTap: (index) => setState(() {}),
+                                    tabs: [
+                                      _buildTab("Messages", 0),
+                                      _buildTab("Missed call", 1),
+                                      _buildTab("Call Back", 2),
+                                      _buildTab("Clients", 3),
+                                    ],
+                                  ),
+
+                                  SizedBox(height: 16.h),
+
+                                  // ── Content Area ────────────────────────────────────────────
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                                    child: _buildTabContent(controller),
+                                  ),
+                                  
+                                  SizedBox(height: 20.h),
+                                ],
+                              ),
+                            ),
+                          ),
+                          if (controller.isRefreshing)
+                            Positioned.fill(
+                              child: const Center(child: CustomLoader()),
+                            ),
                         ],
                       ),
-
-                      SizedBox(height: 16.h),
-
-                      // ── Content Area ────────────────────────────────────────────
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.w),
-                        child: _buildTabContent(),
-                      ),
-                      
-                      SizedBox(height: 20.h),
-                    ],
-                  ),
-                ),
               ),
             ],
           ),
@@ -191,22 +212,23 @@ class _CoachInboxViewState extends State<CoachInboxView> with SingleTickerProvid
     );
   }
 
-  Widget _buildStoriesRow() {
+  Widget _buildStoriesRow(CoachInboxController controller) {
     return SizedBox(
       height: 100.h,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: EdgeInsets.symmetric(horizontal: 16.w),
-        itemCount: 6,
+        itemCount: controller.stories.length,
         itemBuilder: (context, index) {
-          if (index == 0) return _buildAddStory();
-          return _buildStoryItem("User $index");
+          final story = controller.stories[index];
+          if (story.isMine) return _buildAddStory(story.name);
+          return _buildStoryItem(story.name, story.avatar);
         },
       ),
     );
   }
 
-  Widget _buildAddStory() {
+  Widget _buildAddStory(String name) {
     return Container(
       width: 70.w,
       margin: EdgeInsets.only(right: 12.w),
@@ -231,13 +253,13 @@ class _CoachInboxViewState extends State<CoachInboxView> with SingleTickerProvid
             ],
           ),
           SizedBox(height: 4.h),
-          const Text("Your Story", style: TextStyle(color: Colors.white, fontSize: 10)),
+          Text(name, style: const TextStyle(color: Colors.white, fontSize: 10)),
         ],
       ),
     );
   }
 
-  Widget _buildStoryItem(String name) {
+  Widget _buildStoryItem(String name, String avatar) {
     return Container(
       width: 70.w,
       margin: EdgeInsets.only(right: 12.w),
@@ -251,7 +273,7 @@ class _CoachInboxViewState extends State<CoachInboxView> with SingleTickerProvid
             ),
             child: CircleAvatar(
               radius: 26.r,
-              backgroundImage: const NetworkImage('https://i.pravatar.cc/150?u=miles'),
+              backgroundImage: NetworkImage(avatar),
             ),
           ),
           SizedBox(height: 4.h),
@@ -280,46 +302,52 @@ class _CoachInboxViewState extends State<CoachInboxView> with SingleTickerProvid
     );
   }
 
-  Widget _buildTabContent() {
+  Widget _buildTabContent(CoachInboxController controller) {
     switch (_tabController.index) {
-      case 0: return _buildMessagesList();
-      case 1: return _buildMissedCallsList();
-      case 2: return _buildCallBackList();
-      case 3: return _buildClientsList();
+      case 0: return _buildMessagesList(controller);
+      case 1: return _buildMissedCallsList(controller);
+      case 2: return _buildCallBackList(controller);
+      case 3: return _buildClientsList(controller);
       default: return const SizedBox();
     }
   }
 
-  Widget _buildMessagesList() {
+  Widget _buildMessagesList(CoachInboxController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text("Chats List", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
         SizedBox(height: 16.h),
-        ...List.generate(5, (index) => _buildChatTile("Miles Esther", "Online", "09:30 PM", "2")),
+        if (controller.messages.isEmpty)
+          const Padding(padding: EdgeInsets.only(top: 20), child: Text("No messages", style: TextStyle(color: Colors.white54)))
+        else
+          ...controller.messages.map((msg) => _buildChatTile(msg.name, msg.isOnline ? "Online" : "Offline", msg.time, msg.unreadCount.toString(), msg.avatar)),
       ],
     );
   }
 
-  Widget _buildClientsList() {
+  Widget _buildClientsList(CoachInboxController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text("My Clients", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
         SizedBox(height: 16.h),
-        ...List.generate(4, (index) => _buildChatTile("Client ${index + 1}", "Active Session", "12 April", "0")),
+        if (controller.clients.isEmpty)
+          const Padding(padding: EdgeInsets.only(top: 20), child: Text("No clients", style: TextStyle(color: Colors.white54)))
+        else
+          ...controller.clients.map((c) => _buildChatTile(c.name, c.status, c.time, c.unreadCount, c.avatar)),
       ],
     );
   }
 
-  Widget _buildChatTile(String name, String status, String time, String count) {
+  Widget _buildChatTile(String name, String status, String time, String count, String avatar) {
     return GestureDetector(
       onTap: () {
         context.push(
           AppRoutes.chat,
           extra: {
             'name': name,
-            'avatar': 'https://i.pravatar.cc/150?u=$name',
+            'avatar': avatar,
             'isCoach': false, // Coach is talking to a client/friend
           },
         );
@@ -335,7 +363,7 @@ class _CoachInboxViewState extends State<CoachInboxView> with SingleTickerProvid
           children: [
             CircleAvatar(
               radius: 24.r,
-              backgroundImage: NetworkImage('https://i.pravatar.cc/150?u=$name'),
+              backgroundImage: NetworkImage(avatar),
             ),
             SizedBox(width: 12.w),
             Expanded(
@@ -366,18 +394,21 @@ class _CoachInboxViewState extends State<CoachInboxView> with SingleTickerProvid
     );
   }
 
-  Widget _buildMissedCallsList() {
+  Widget _buildMissedCallsList(CoachInboxController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text("Missed Calls", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
         SizedBox(height: 16.h),
-        ...List.generate(5, (index) => _buildMissedCallTile("Miles Esther", "12 April, 1:30AM")),
+        if (controller.missedCalls.isEmpty)
+          const Padding(padding: EdgeInsets.only(top: 20), child: Text("No missed calls", style: TextStyle(color: Colors.white54)))
+        else
+          ...controller.missedCalls.map((m) => _buildMissedCallTile(m.name, m.timeRequested, m.avatar)),
       ],
     );
   }
 
-  Widget _buildMissedCallTile(String name, String time) {
+  Widget _buildMissedCallTile(String name, String time, String avatar) {
     return Container(
       margin: EdgeInsets.only(bottom: 12.h),
       padding: EdgeInsets.all(12.r),
@@ -389,7 +420,7 @@ class _CoachInboxViewState extends State<CoachInboxView> with SingleTickerProvid
         children: [
           CircleAvatar(
             radius: 24.r,
-            backgroundImage: const NetworkImage('https://i.pravatar.cc/150?u=miles'),
+            backgroundImage: NetworkImage(avatar),
           ),
           SizedBox(width: 12.w),
           Expanded(
@@ -417,18 +448,21 @@ class _CoachInboxViewState extends State<CoachInboxView> with SingleTickerProvid
     );
   }
 
-  Widget _buildCallBackList() {
+  Widget _buildCallBackList(CoachInboxController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text("Call Back Request List", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
         SizedBox(height: 16.h),
-        ...List.generate(3, (index) => _buildCallBackTile("Miles Esther", "Requested: Today at 3:00 PM")),
+        if (controller.callbacks.isEmpty)
+          const Padding(padding: EdgeInsets.only(top: 20), child: Text("No call back requests", style: TextStyle(color: Colors.white54)))
+        else
+          ...controller.callbacks.map((c) => _buildCallBackTile(c.name, c.timeRequested, c.avatar)),
       ],
     );
   }
 
-  Widget _buildCallBackTile(String name, String time) {
+  Widget _buildCallBackTile(String name, String time, String avatar) {
     return Container(
       margin: EdgeInsets.only(bottom: 12.h),
       padding: EdgeInsets.all(16.r),
@@ -442,7 +476,7 @@ class _CoachInboxViewState extends State<CoachInboxView> with SingleTickerProvid
             children: [
               CircleAvatar(
                 radius: 24.r,
-                backgroundImage: const NetworkImage('https://i.pravatar.cc/150?u=miles'),
+                backgroundImage: NetworkImage(avatar),
               ),
               SizedBox(width: 12.w),
               Expanded(
@@ -479,7 +513,7 @@ class _CoachInboxViewState extends State<CoachInboxView> with SingleTickerProvid
                       AppRoutes.call,
                       extra: {
                         'name': name,
-                        'avatar': 'https://i.pravatar.cc/150?u=$name',
+                        'avatar': avatar,
                         'rate': 'Free', // or specific rate
                       },
                     );

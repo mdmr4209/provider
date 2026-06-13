@@ -1,0 +1,48 @@
+{
+  "topBidders": {
+    "title": "Top Bidders List",
+    "description": "Day 14 of No Contact. It was really hard today today, I almost texted him when I saw his favorite song playing. But I stayed strong!"
+  },
+  "slots": [
+    {
+      "id": "slot_1",
+      "rank": "1",
+      "title": "Slot 1",
+      "startingBid": "Starting Bid : $25",
+      "topBid": "$400",
+      "hexColor": "0xFFC19E5F"
+    },
+    {
+      "id": "slot_2",
+      "rank": "2",
+      "title": "Slot 2",
+      "startingBid": "Starting Bid : $25",
+      "topBid": "$400",
+      "hexColor": "0x8AFFFFFF"
+    },
+    {
+      "id": "slot_3",
+      "rank": "3",
+      "title": "Slot 3",
+      "startingBid": "Starting Bid : $25",
+      "topBid": "$400",
+      "hexColor": "0xFFE57373"
+    },
+    {
+      "id": "slot_4",
+      "rank": "4",
+      "title": "Slot 4",
+      "startingBid": "Starting Bid : $25",
+      "topBid": "$400",
+      "hexColor": "0xFFFB8C00"
+    },
+    {
+      "id": "slot_5",
+      "rank": "5",
+      "title": "Slot 5",
+      "startingBid": "Depend on Raffle",
+      "topBid": "$400",
+      "hexColor": "0xFFC19E5F"
+    }
+  ]
+}

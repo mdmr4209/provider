@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../models/coach_model.dart';
 import '../../../../core/utils/helpers/snack_bar_helper.dart';
 
@@ -33,62 +35,14 @@ class CoachController extends ChangeNotifier {
 
     try {
       await Future.delayed(const Duration(milliseconds: 1000));
-
-      // Mock dynamic JSON based on 12.1 Discover Coaches
-      final Map<String, dynamic> rawDiscover = {
-        "heroCoach": {
-          "id": "c1",
-          "name": "Coach Pearl",
-          "title": "Relationship Specialist",
-          "rating": 5.0,
-          "reviews": 310,
-          "avatar": "https://i.pravatar.cc/300?u=coach_pearl",
-          "experience": "5 Year Experience",
-          "bio": "Amazon Alexa Shopping is seeking a talented, experienced, and self-directed UX Designer to define and drive the future of shopping at Amazon."
-        },
-        "featured": [
-          {
-            "id": "c2",
-            "name": "Coach Sarah",
-            "title": "Mindset Coach",
-            "rating": 4.9,
-            "reviews": 187,
-            "avatar": "https://i.pravatar.cc/150?u=coach_sarah"
-          },
-          {
-            "id": "c4",
-            "name": "Coach Michael",
-            "title": "Cognitive Therapist",
-            "rating": 4.8,
-            "reviews": 125,
-            "avatar": "https://i.pravatar.cc/150?u=coach_mike"
-          }
-        ],
-        "topRated": [
-          {
-            "id": "c3",
-            "name": "Coach Emma",
-            "title": "Life Coach & Counselor",
-            "rating": 4.9,
-            "reviews": 240,
-            "avatar": "https://i.pravatar.cc/150?u=coach_emma"
-          },
-          {
-            "id": "c2",
-            "name": "Coach Sarah",
-            "title": "Mindset Coach",
-            "rating": 4.9,
-            "reviews": 187,
-            "avatar": "https://i.pravatar.cc/150?u=coach_sarah"
-          }
-        ]
-      };
+      final String jsonString = await rootBundle.loadString('assets/json/coach.json');
+      final Map<String, dynamic> rawDiscover = jsonDecode(jsonString);
 
       _heroCoach = CoachModel.fromJson(rawDiscover['heroCoach']);
       _featuredCoaches = (rawDiscover['featured'] as List).map((x) => CoachModel.fromJson(x)).toList();
       _topRatedCoaches = (rawDiscover['topRated'] as List).map((x) => CoachModel.fromJson(x)).toList();
     } catch (e) {
-      showErrorSnackBar(message: "Failed to fetch coaches list: $e");
+      debugPrint("Error loading coaches: $e");
     } finally {
       _isLoading = false;
       _isRefreshing = false;

@@ -1,0 +1,47 @@
+{
+  "stats": {
+    "callBackRequests": "08",
+    "newMessages": "08",
+    "missedCalls": "08",
+    "netEarnings": "$2,847.50",
+    "earningsPeriod": "This month"
+  },
+  "upcomingSessions": [
+    {
+      "id": "session_1",
+      "title": "Session 1",
+      "date": "Mon, Mar 27",
+      "time": "01:00 PM - 01:30 PM (30Min)",
+      "clientName": "Miles Esther",
+      "clientAvatar": "https://i.pravatar.cc/150?u=miles",
+      "rate": "20$"
+    },
+    {
+      "id": "session_2",
+      "title": "Session 2",
+      "date": "Mon, Mar 27",
+      "time": "02:00 PM - 02:30 PM (30Min)",
+      "clientName": "Sarah Jen",
+      "clientAvatar": "https://i.pravatar.cc/150?u=sarah",
+      "rate": "20$"
+    }
+  ],
+  "newMessages": [
+    {
+      "id": "msg_1",
+      "senderName": "Miles Esther",
+      "senderAvatar": "https://i.pravatar.cc/150?u=miles",
+      "status": "Online",
+      "time": "09:30 PM",
+      "unreadCount": "2"
+    },
+    {
+      "id": "msg_2",
+      "senderName": "John Doe",
+      "senderAvatar": "https://i.pravatar.cc/150?u=john",
+      "status": "Online",
+      "time": "09:15 PM",
+      "unreadCount": "1"
+    }
+  ]
+}

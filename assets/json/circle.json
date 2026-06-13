@@ -1,0 +1,104 @@
+{
+  "status": "success",
+  "data": {
+    "posts": [
+      {
+        "id": "post_000",
+        "userName": "Sarah M. (You)",
+        "userAvatar": "https://xsgames.co/randomusers/assets/avatars/female/1.jpg",
+        "timeAgo": "Just now",
+        "content": "Feeling great today! Just reached my 30-day milestone. Persistence is key! 🌟",
+        "isOwnPost": true,
+        "likes": 5,
+        "claps": 2,
+        "commentsCount": 0
+      },
+      {
+        "id": "post_001",
+        "userName": "Sarah M.",
+        "userAvatar": "https://xsgames.co/randomusers/assets/avatars/female/1.jpg",
+        "timeAgo": "2 min ago",
+        "content": "Day 14. Didn't reach out even though I wanted to. Proud of myself 💪",
+        "likes": 47,
+        "claps": 12,
+        "commentsCount": 1,
+        "images": [
+          "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&auto=format&fit=crop&q=60",
+          "https://images.unsplash.com/photo-1511447333015-45b65e60f6d5?w=800&auto=format&fit=crop&q=60"
+        ],
+        "isLiked": false,
+        "isClapped": true,
+        "comments": [
+          {
+            "id": "comment_001",
+            "userName": "Mike Tyson",
+            "userAvatar": "https://xsgames.co/randomusers/assets/avatars/male/2.jpg",
+            "content": "Keep going! You got this."
+          }
+        ]
+      },
+      {
+        "id": "post_002",
+        "userName": "Alex R.",
+        "userAvatar": "https://xsgames.co/randomusers/assets/avatars/male/3.jpg",
+        "timeAgo": "15 min ago",
+        "content": "Just finished a great workout. Feeling refreshed! 🧘‍♂️",
+        "images": [
+          "https://picsum.photos/id/10/600/400"
+        ],
+        "likes": 23,
+        "claps": 5,
+        "commentsCount": 0,
+        "isLiked": true,
+        "isClapped": false
+      },
+      {
+        "id": "post_003",
+        "userName": "Maya J.",
+        "userAvatar": "https://xsgames.co/randomusers/assets/avatars/female/4.jpg",
+        "timeAgo": "1 hour ago",
+        "content": "Nature is so healing. 🌿✨",
+        "images": [
+          "https://picsum.photos/id/11/600/400"
+        ],
+        "likes": 15,
+        "claps": 2,
+        "commentsCount": 0,
+        "isLiked": false,
+        "isClapped": false
+      }
+    ],
+    "members": [
+      {
+        "id": "sug_0",
+        "name": "You",
+        "avatar": "https://xsgames.co/randomusers/assets/avatars/male/5.jpg",
+        "mutualFriends": 0
+      },
+      {
+        "id": "sug_1",
+        "name": "Sarah",
+        "avatar": "https://xsgames.co/randomusers/assets/avatars/female/6.jpg",
+        "mutualFriends": 2
+      },
+      {
+        "id": "sug_2",
+        "name": "Alex",
+        "avatar": "https://xsgames.co/randomusers/assets/avatars/male/7.jpg",
+        "mutualFriends": 1
+      },
+      {
+        "id": "sug_3",
+        "name": "Jordan",
+        "avatar": "https://xsgames.co/randomusers/assets/avatars/male/8.jpg",
+        "mutualFriends": 3
+      },
+      {
+        "id": "sug_4",
+        "name": "Maya",
+        "avatar": "https://xsgames.co/randomusers/assets/avatars/female/9.jpg",
+        "mutualFriends": 2
+      }
+    ]
+  }
+}

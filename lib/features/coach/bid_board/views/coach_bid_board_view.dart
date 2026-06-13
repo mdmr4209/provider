@@ -7,11 +7,25 @@ import '../../../../core/constants/app_assets.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/background_widget.dart';
 import '../../../../core/widgets/custom_button.dart';
+import '../../../../core/widgets/custom_loader.dart';
 import '../controllers/coach_bid_controller.dart';
 import 'raffle_draw_view.dart';
 
-class CoachBidBoardView extends StatelessWidget {
+class CoachBidBoardView extends StatefulWidget {
   const CoachBidBoardView({super.key});
+
+  @override
+  State<CoachBidBoardView> createState() => _CoachBidBoardViewState();
+}
+
+class _CoachBidBoardViewState extends State<CoachBidBoardView> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<CoachBidController>().fetchBidData();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,46 +46,79 @@ class CoachBidBoardView extends StatelessWidget {
           title: const Text("Bid Board", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
           centerTitle: true,
         ),
-        body: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 20.h),
-              // ── Top Bidders List Banner ──────────────────────────────────
-              _buildTopBiddersBanner(),
+        body: controller.isLoading
+            ? const Center(child: ShimmerLoader())
+            : Stack(
+                children: [
+                  RefreshIndicator(
+                    onRefresh: () => controller.fetchBidData(isRefresh: true),
+                    color: Colors.transparent,
+                    backgroundColor: Colors.transparent,
+                    strokeWidth: 0,
+                    elevation: 0,
+                    child: SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 20.h),
+                          // ── Top Bidders List Banner ──────────────────────────────────
+                          if (controller.topBiddersInfo != null)
+                            _buildTopBiddersBanner(
+                              controller.topBiddersInfo!['title'] ?? 'Top Bidders List',
+                              controller.topBiddersInfo!['description'] ?? '',
+                            ),
 
-              SizedBox(height: 32.h),
+                          SizedBox(height: 32.h),
 
-              const Text("List of bidders", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
-              SizedBox(height: 16.h),
+                          const Text("List of bidders", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
+                          SizedBox(height: 16.h),
 
-              // ── Slots List ───────────────────────────────────────────────
-              _buildSlotItem("1", "Slot 1", "Starting Bid : \$25", "\$400", const Color(0xFFC19E5F)),
-              _buildSlotItem("2", "Slot 2", "Starting Bid : \$25", "\$400", Colors.white54),
-              _buildSlotItem("3", "Slot 3", "Starting Bid : \$25", "\$400", const Color(0xFFE57373)),
-              _buildSlotItem("4", "Slot 4", "Starting Bid : \$25", "\$400", const Color(0xFFFB8C00)),
-              _buildSlotItem("5", "Slot 5", "Depend on Raffle", "\$400", const Color(0xFFC19E5F)),
+                          // ── Slots List ───────────────────────────────────────────────
+                          if (controller.slots.isEmpty)
+                            const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 20.0),
+                              child: Center(child: Text("No slots available", style: TextStyle(color: Colors.white54))),
+                            )
+                          else
+                            ...controller.slots.map((slot) => _buildSlotItem(
+                                  slot.rank,
+                                  slot.title,
+                                  slot.startingBid,
+                                  slot.topBid,
+                                  Color(int.parse(slot.hexColor)),
+                                )),
 
-              SizedBox(height: 32.h),
+                          SizedBox(height: 32.h),
 
-              // ── Bid Form ─────────────────────────────────────────────────
-              _buildBidForm(context, controller),
+                          // ── Bid Form ─────────────────────────────────────────────────
+                          _buildBidForm(context, controller),
 
-              SizedBox(height: 32.h),
+                          SizedBox(height: 32.h),
 
-              // ── Bottom Banner (Raffle or Winner) ──────────────────────────
-              controller.hasWon ? _buildWinnerBanner(context) : _buildRaffleBanner(context),
+                          // ── Bottom Banner (Raffle or Winner) ──────────────────────────
+                          controller.hasWon ? _buildWinnerBanner(context) : _buildRaffleBanner(context),
 
-              SizedBox(height: 100.h),
-            ],
-          ),
-        ),
+                          SizedBox(height: 100.h),
+                        ],
+                      ),
+                    ),
+                  ),
+                  if (controller.isRefreshing)
+                     Positioned.fill(
+                      child: Container(
+                        color: Colors.black26,
+                        child: Center(child: CustomLoader()),
+                      ),
+                    ),
+                ],
+              ),
       ),
     );
   }
 
-  Widget _buildTopBiddersBanner() {
+  Widget _buildTopBiddersBanner(String title, String description) {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(20.r),
@@ -82,15 +129,15 @@ class CoachBidBoardView extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Expanded(
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Top Bidders List", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
-                SizedBox(height: 8),
+                Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
+                const SizedBox(height: 8),
                 Text(
-                  "Day 14 of No Contact. It was really hard today today, I almost texted him when I saw his favorite song playing. But I stayed strong!",
-                  style: TextStyle(color: Colors.white54, fontSize: 11, height: 1.4),
+                  description,
+                  style: const TextStyle(color: Colors.white54, fontSize: 11, height: 1.4),
                 ),
               ],
             ),
