@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../features/localization/localization_extension.dart';
+import '../../features/shared/localization/localization_extension.dart';
 import '../constants/app_colors.dart';
 
 class InternetExceptionsWidget extends StatelessWidget {

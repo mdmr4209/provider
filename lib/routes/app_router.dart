@@ -2,47 +2,57 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../core/theme/design_system.dart';
-import '../features/auth/controllers/auth_controller.dart';
-import '../features/auth/views/auth_view.dart';
-import '../features/auth/views/change_password_view.dart';
-import '../features/auth/views/forget_password_view.dart';
-import '../features/auth/views/go_to_home.dart';
-import '../features/auth/views/name_input_view.dart';
-import '../features/auth/views/otp_verify_view.dart';
-import '../features/auth/views/role_selection_view.dart';
-import '../features/auth/views/setup/setup_views.dart';
-import '../features/auth/views/sign_up_view.dart';
-import '../features/auth/views/splash_screen.dart';
-import '../features/circle/views/circle_view.dart';
-import '../features/circle/views/create_post_view.dart';
-import '../features/circle/views/find_friends_view.dart';
-import '../features/circle/views/friends_view.dart';
-import '../features/find_coach/views/find_coaches_view.dart';
-import '../features/home/views/breathing_view.dart';
-import '../features/home/views/home_view.dart';
-import '../features/home/views/navigation.dart';
-import '../features/home/views/notifications_view.dart';
-import '../features/home/views/write_journal_view.dart';
-import '../features/inbox/views/call_view.dart';
-import '../features/inbox/views/chat_view.dart';
-import '../features/inbox/views/inbox_view.dart';
-import '../features/onboarding/controllers/onboarding_controller.dart';
-import '../features/onboarding/views/onboarding_view.dart';
-import '../features/profile/views/block_list_view.dart';
-import '../features/inbox/views/bookings_view.dart';
-import '../features/profile/views/edit_view.dart';
-import '../features/inbox/views/give_review_view.dart';
-import '../features/profile/views/help_support_view.dart';
-import '../features/profile/views/logout.dart';
-import '../features/profile/views/payment_view.dart';
-import '../features/profile/views/point_view.dart';
-import '../features/profile/views/profile_view.dart';
-import '../features/profile/views/report_to_admin_view.dart';
-import '../features/profile/views/reset_password_view.dart';
-import '../features/profile/views/settings.dart';
-import '../features/profile/views/subscription_plan_view.dart';
-import '../features/profile/views/theme_view.dart';
-
+import '../features/shared/auth/controllers/auth_controller.dart';
+import '../features/shared/auth/views/auth_view.dart';
+import '../features/shared/auth/views/change_password_view.dart';
+import '../features/shared/auth/views/forget_password_view.dart';
+import '../features/shared/auth/views/go_to_home.dart';
+import '../features/shared/auth/views/name_input_view.dart';
+import '../features/shared/auth/views/otp_verify_view.dart';
+import '../features/shared/auth/views/role_selection_view.dart';
+import '../features/shared/auth/views/setup/seeker/seeker_setup_views.dart';
+import '../features/shared/auth/views/setup/coach/coach_setup_views.dart';
+import '../features/shared/auth/views/sign_up_view.dart';
+import '../features/shared/auth/views/splash_screen.dart';
+import '../features/seeker/circle/views/circle_view.dart';
+import '../features/seeker/circle/views/create_post_view.dart';
+import '../features/seeker/circle/views/find_friends_view.dart';
+import '../features/seeker/circle/views/friends_view.dart';
+import '../features/seeker/find_coach/views/find_coaches_view.dart';
+import '../features/seeker/home/views/breathing_view.dart';
+import '../features/seeker/home/views/home_view.dart';
+import '../features/shared/widgets/navbar.dart';
+import '../features/seeker/home/views/notifications_view.dart';
+import '../features/seeker/home/views/write_journal_view.dart';
+import '../features/seeker/inbox/views/call_view.dart';
+import '../features/seeker/inbox/views/chat_view.dart';
+import '../features/seeker/inbox/views/inbox_view.dart';
+import '../features/shared/onboarding/controllers/onboarding_controller.dart';
+import '../features/shared/onboarding/views/onboarding_view.dart';
+import '../features/seeker/profile/views/block_list_view.dart';
+import '../features/seeker/inbox/views/bookings_view.dart';
+import '../features/seeker/profile/views/edit_view.dart';
+import '../features/seeker/inbox/views/give_review_view.dart';
+import '../features/seeker/profile/views/help_support_view.dart';
+import '../features/seeker/profile/views/logout.dart';
+import '../features/seeker/profile/views/payment_view.dart';
+import '../features/seeker/profile/views/point_view.dart';
+import '../features/coach/inbox/views/coach_find_friends_view.dart';
+import '../features/seeker/profile/views/profile_view.dart';
+import '../features/seeker/profile/views/report_to_admin_view.dart';
+import '../features/seeker/profile/views/reset_password_view.dart';
+import '../features/seeker/profile/views/settings.dart';
+import '../features/seeker/profile/views/subscription_plan_view.dart';
+import '../features/seeker/profile/views/theme_view.dart';
+import '../features/coach/profile/views/coach_settings_view.dart';
+import 'package:provider/provider.dart';
+import '../features/coach/home/views/coach_home_view.dart';
+import '../features/coach/home/views/earnings_view.dart';
+import '../features/coach/home/views/session_list_view.dart';
+import '../features/coach/circle/views/coach_circle_view.dart';
+import '../features/coach/bid_board/views/coach_bid_board_view.dart';
+import '../features/coach/inbox/views/coach_inbox_view.dart';
+import '../features/coach/profile/views/coach_profile_view.dart';
 
 enum TransitionType {
   fadeThrough,
@@ -86,6 +96,17 @@ abstract class AppRoutes {
   static const setup12 = '/setup12';
   static const setup13 = '/setup13';
   static const setupComplete = '/setup-complete';
+  static const coachWelcome = '/coach-welcome';
+  static const coachBasics = '/coach-basics';
+  static const coachMatch = '/coach-match';
+  static const coachStyle = '/coach-style';
+  static const coachPitchBio = '/coach-pitch-bio';
+  static const coachAvailability = '/coach-availability';
+  static const coachRatesServices = '/coach-rates-services';
+  static const coachSetupComplete = '/coach-setup-complete';
+  static const coachEarnings = '/coach-earnings';
+  static const coachSessions = '/coach-sessions';
+  static const findFriends = '/find-friends';
   static const logout = '/logout';
   static const paymentMethod = '/paymentMethod';
   static const address = '/address';
@@ -115,7 +136,7 @@ abstract class AppRoutes {
   static const friendsCircle = '/friendsCircle';
   static const chat = '/chat';
   static const call = '/call';
-  static const findFriends = '/findFriends';
+  static const coachFindFriends = '/coachFindFriends';
   static const reportToAdmin = '/reportToAdmin';
   static const bookings = '/bookings';
   static const notification = '/notification';
@@ -230,10 +251,12 @@ class AppRouter {
         final String loc = state.matchedLocation;
 
         if (loc == AppRoutes.splash) return null;
-        if (!hasOnboarded && loc != AppRoutes.onboarding)
+        if (!hasOnboarded && loc != AppRoutes.onboarding) {
           return AppRoutes.onboarding;
-        if (hasOnboarded && loc == AppRoutes.onboarding)
+        }
+        if (hasOnboarded && loc == AppRoutes.onboarding) {
           return isLoggedIn ? AppRoutes.home : AppRoutes.login;
+        }
 
         final bool isPublicOnlyScreen =
             loc == AppRoutes.login ||
@@ -247,12 +270,37 @@ class AppRouter {
             loc == AppRoutes.profile ||
             loc == AppRoutes.breathing ||
             loc == AppRoutes.writeJournal ||
-            loc.startsWith('/setup');
+            loc.startsWith('/setup') ||
+            loc.startsWith('/coach-');
         if (!isLoggedIn && isAuthScreen) return AppRoutes.login;
 
         return null;
       },
       routes: [
+        GoRoute(
+          path: AppRoutes.coachEarnings,
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const EarningsView(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.coachSessions,
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const SessionListView(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.coachFindFriends,
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const CoachFindFriendsView(),
+          ),
+        ),
         GoRoute(
           path: AppRoutes.splash,
           pageBuilder: (context, state) => _buildPageWithTransition(
@@ -275,11 +323,14 @@ class AppRouter {
               routes: [
                 GoRoute(
                   path: AppRoutes.home,
-                  pageBuilder: (context, state) => _buildPageWithTransition(
-                    context: context,
-                    state: state,
-                    child: const HomeView(),
-                  ),
+                  pageBuilder: (context, state) {
+                    final isCoach = context.read<AuthController>().selectedRole == 'Coach';
+                    return _buildPageWithTransition(
+                      context: context,
+                      state: state,
+                      child: isCoach ? const CoachHomeView() : const HomeView(),
+                    );
+                  },
                 ),
               ],
             ),
@@ -287,11 +338,14 @@ class AppRouter {
               routes: [
                 GoRoute(
                   path: AppRoutes.circle,
-                  pageBuilder: (context, state) => _buildPageWithTransition(
-                    context: context,
-                    state: state,
-                    child: const CircleView(),
-                  ),
+                  pageBuilder: (context, state) {
+                    final isCoach = context.read<AuthController>().selectedRole == 'Coach';
+                    return _buildPageWithTransition(
+                      context: context,
+                      state: state,
+                      child: isCoach ? const CoachCircleView() : const CircleView(),
+                    );
+                  },
                 ),
               ],
             ),
@@ -299,11 +353,14 @@ class AppRouter {
               routes: [
                 GoRoute(
                   path: AppRoutes.coaches,
-                  pageBuilder: (context, state) => _buildPageWithTransition(
-                    context: context,
-                    state: state,
-                    child: const FindCoachesView(),
-                  ),
+                  pageBuilder: (context, state) {
+                    final isCoach = context.read<AuthController>().selectedRole == 'Coach';
+                    return _buildPageWithTransition(
+                      context: context,
+                      state: state,
+                      child: isCoach ? const CoachBidBoardView() : const FindCoachesView(),
+                    );
+                  },
                 ),
               ],
             ),
@@ -311,11 +368,14 @@ class AppRouter {
               routes: [
                 GoRoute(
                   path: AppRoutes.inbox,
-                  pageBuilder: (context, state) => _buildPageWithTransition(
-                    context: context,
-                    state: state,
-                    child: const InboxView(),
-                  ),
+                  pageBuilder: (context, state) {
+                    final isCoach = context.read<AuthController>().selectedRole == 'Coach';
+                    return _buildPageWithTransition(
+                      context: context,
+                      state: state,
+                      child: isCoach ? const CoachInboxView() : const InboxView(),
+                    );
+                  },
                 ),
               ],
             ),
@@ -323,11 +383,14 @@ class AppRouter {
               routes: [
                 GoRoute(
                   path: AppRoutes.profile,
-                  pageBuilder: (context, state) => _buildPageWithTransition(
-                    context: context,
-                    state: state,
-                    child: const ProfileView(),
-                  ),
+                  pageBuilder: (context, state) {
+                    final isCoach = context.read<AuthController>().selectedRole == 'Coach';
+                    return _buildPageWithTransition(
+                      context: context,
+                      state: state,
+                      child: isCoach ? const CoachSettingsView() : const ProfileView(),
+                    );
+                  },
                 ),
               ],
             ),
@@ -511,6 +574,78 @@ class AppRouter {
             context: context,
             state: state,
             child: const SetupCompleteView(),
+            type: TransitionType.slideHorizontal,
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.coachWelcome,
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const CoachWelcomeView(),
+            type: TransitionType.slideHorizontal,
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.coachBasics,
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const CoachBasicsView(),
+            type: TransitionType.slideHorizontal,
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.coachMatch,
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const CoachMatchView(),
+            type: TransitionType.slideHorizontal,
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.coachStyle,
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const CoachStyleView(),
+            type: TransitionType.slideHorizontal,
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.coachPitchBio,
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const CoachPitchBioView(),
+            type: TransitionType.slideHorizontal,
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.coachAvailability,
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const CoachAvailabilityView(),
+            type: TransitionType.slideHorizontal,
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.coachRatesServices,
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const CoachRatesServicesView(),
+            type: TransitionType.slideHorizontal,
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.coachSetupComplete,
+          pageBuilder: (context, state) => _buildPageWithTransition(
+            context: context,
+            state: state,
+            child: const CoachSetupCompleteView(),
             type: TransitionType.slideHorizontal,
           ),
         ),

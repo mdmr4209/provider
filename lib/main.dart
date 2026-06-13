@@ -7,10 +7,10 @@ import 'package:provider/provider.dart';
 
 import 'bindings/provider_binding.dart';
 import 'core/theme/app_theme.dart';
-import 'features/auth/controllers/auth_controller.dart';
-import 'features/localization/controllers/localization_controller.dart';
-import 'features/onboarding/controllers/onboarding_controller.dart';
-import 'features/theme/controllers/theme_controller.dart';
+import 'features/shared/auth/controllers/auth_controller.dart';
+import 'features/shared/localization/controllers/localization_controller.dart';
+import 'features/shared/onboarding/controllers/onboarding_controller.dart';
+import 'features/shared/theme/controllers/theme_controller.dart';
 import 'core/services/notifications/firebase_options.dart';
 import 'core/constants/app_colors.dart';
 import 'core/services/api_service.dart';

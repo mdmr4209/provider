@@ -13,6 +13,8 @@ class AppAssets {
   static const String coach = 'assets/icons/coach.svg';
   static const String inbox = 'assets/icons/inbox.svg';
   static const String profile = 'assets/icons/profile.svg';
+  static const String board = 'assets/icons/board.svg';
+  static const String settings = 'assets/icons/settings.svg';
 
   // ── Home Dashboard Icons (SVG) ─────────────────────────────────────────────
   static const String notify = 'assets/icons/notification.svg';
@@ -41,7 +43,6 @@ class AppAssets {
   static const String wishlist = 'assets/image/wishlist.svg';
   static const String selected = 'assets/image/selected.svg';
   static const String filter = 'assets/image/filter.svg';
-  static const String settings = 'assets/image/promoCode.svg';
   static const String banner = 'assets/image/img_2.png';
   static const String addReview = 'assets/image/addReview.png';
   static const String points = 'assets/image/points.svg';
