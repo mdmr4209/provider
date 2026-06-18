@@ -3,9 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_assets.dart';
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/background_widget.dart';
 import '../../../../core/widgets/custom_button.dart';
+import '../../../../core/widgets/custom_loader.dart';
 import '../controllers/coach_profile_controller.dart';
 
 class WithdrawalRequestView extends StatelessWidget {
@@ -13,7 +13,6 @@ class WithdrawalRequestView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final controller = context.watch<CoachProfileController>();
 
     return BackgroundWidget(
@@ -30,8 +29,14 @@ class WithdrawalRequestView extends StatelessWidget {
           title: const Text("Request Withdrawal", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
           centerTitle: true,
         ),
-        body: SingleChildScrollView(
-          padding: EdgeInsets.all(24.r),
+        body: FutureBuilder(
+          future: Future.delayed(const Duration(milliseconds: 1500)),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return _buildSkeletonLoader();
+            }
+            return SingleChildScrollView(
+              padding: EdgeInsets.all(24.r),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -77,6 +82,8 @@ class WithdrawalRequestView extends StatelessWidget {
               SizedBox(height: 100.h),
             ],
           ),
+            );
+          },
         ),
         bottomNavigationBar: Padding(
           padding: EdgeInsets.fromLTRB(24.w, 0, 24.w, 40.h),
@@ -116,6 +123,55 @@ class WithdrawalRequestView extends StatelessWidget {
           hintStyle: const TextStyle(color: Colors.white24, fontSize: 14),
           border: InputBorder.none,
         ),
+      ),
+    );
+  }
+
+  Widget _buildSkeletonLoader() {
+    return SingleChildScrollView(
+      physics: const NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.all(24.r),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ShimmerLoader(width: 120.w, height: 16.h),
+          SizedBox(height: 12.h),
+          ShimmerLoader(width: double.infinity, height: 50.h, borderRadius: 12.r),
+          SizedBox(height: 24.h),
+          ShimmerLoader(width: 100.w, height: 16.h),
+          SizedBox(height: 12.h),
+          ShimmerLoader(width: double.infinity, height: 50.h, borderRadius: 12.r),
+          SizedBox(height: 24.h),
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ShimmerLoader(width: 60.w, height: 16.h),
+                    SizedBox(height: 12.h),
+                    ShimmerLoader(width: double.infinity, height: 50.h, borderRadius: 12.r),
+                  ],
+                ),
+              ),
+              SizedBox(width: 16.w),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ShimmerLoader(width: 40.w, height: 16.h),
+                    SizedBox(height: 12.h),
+                    ShimmerLoader(width: double.infinity, height: 50.h, borderRadius: 12.r),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 24.h),
+          ShimmerLoader(width: 120.w, height: 16.h),
+          SizedBox(height: 12.h),
+          ShimmerLoader(width: double.infinity, height: 50.h, borderRadius: 12.r),
+        ],
       ),
     );
   }

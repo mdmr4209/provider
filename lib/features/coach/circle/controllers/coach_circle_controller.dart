@@ -8,15 +8,18 @@ class CoachCircleController extends ChangeNotifier {
   bool _isLoading = false;
   bool _isRefreshing = false;
   bool _isPremium = false;
+  bool _hasFetched = false;
 
   List<GroupModel> _circles = [];
 
   bool get isLoading => _isLoading;
   bool get isRefreshing => _isRefreshing;
   bool get isPremium => _isPremium;
+  bool get hasFetched => _hasFetched;
   List<GroupModel> get circles => _circles;
 
   Future<void> fetchCircles({bool isRefresh = false}) async {
+    _hasFetched = true;
     if (isRefresh) {
       _isRefreshing = true;
     } else {

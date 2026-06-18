@@ -6,14 +6,19 @@ import '../../../../core/utils/helpers/snack_bar_helper.dart';
 class CoachProfileController extends ChangeNotifier {
   bool _isLoading = false;
   bool _isRefreshing = false;
+  bool _hasFetched = false;
 
   bool get isLoading => _isLoading;
   bool get isRefreshing => _isRefreshing;
+  bool get hasFetched => _hasFetched;
 
   // Step 1: Basic Info
   final TextEditingController nameController = TextEditingController();
   final TextEditingController locationController = TextEditingController();
   String? profilePhotoUrl;
+
+  int wizardCurrentPage = 0;
+  final PageController wizardPageController = PageController();
 
   // Step 2: Experience & Specialties
   String? yearsOfExperience;
@@ -32,8 +37,109 @@ class CoachProfileController extends ChangeNotifier {
   final TextEditingController cancellationPriorController = TextEditingController();
   
   List<CoachServiceOption> services = [
-    CoachServiceOption(duration: '', price: '', isActive: true),
+    CoachServiceOption(title: 'Option 1', duration: 'Enter here', price: 'Enter here', isActive: true),
   ];
+
+  // --- NEW: Setup Flow Specifics ---
+  String selectedExperience = "Select Experience";
+  List<String> uploadedFiles = [];
+  bool isUploading = false;
+
+  void setSelectedExperience(String experience) {
+    selectedExperience = experience;
+    notifyListeners();
+  }
+
+  Future<void> simulateUpload(Function onDone) async {
+    isUploading = true;
+    notifyListeners();
+    await Future.delayed(const Duration(milliseconds: 1200));
+    isUploading = false;
+    uploadedFiles.add("RYT 200 Yoga Certification");
+    notifyListeners();
+    onDone();
+  }
+
+  void removeUploadedFile(String file) {
+    uploadedFiles.remove(file);
+    notifyListeners();
+  }
+
+  // --- NEW: Setup Availability specifics ---
+  bool isOnDays = true;
+  void toggleIsOnDays(bool val) {
+    isOnDays = val;
+    notifyListeners();
+  }
+
+  String setupSelectedDay = "Enter here";
+  String onStartTime = "Enter here";
+  String onEndTime = "Enter here";
+  List<Map<String, String>> onDaysList = [
+    {"day": "Monday", "time": "09:00 AM - 12:00 PM"},
+    {"day": "Monday", "time": "09:00 AM - 12:00 PM"},
+    {"day": "Tuesday", "time": "09:00 AM - 12:00 PM"},
+    {"day": "Tuesday", "time": "09:00 AM - 12:00 PM"},
+    {"day": "Tuesday", "time": "09:00 AM - 12:00 PM"},
+  ];
+
+  String selectedFromDate = "Select one";
+  String selectedToDate = "Select one";
+  String offStartTime = "Enter here";
+  String offEndTime = "Enter here";
+  List<Map<String, String>> offDaysList = [
+    {"start": "31/08/2026; 12:00PM", "end": "31/08/2026; 12:00PM"},
+    {"start": "31/08/2026; 12:00PM", "end": "31/08/2026; 12:00PM"},
+    {"start": "31/08/2026; 12:00PM", "end": "31/08/2026; 12:00PM"},
+    {"start": "31/08/2026; 12:00PM", "end": "31/08/2026; 12:00PM"},
+  ];
+
+  void updateAvailabilityField({
+    String? day, String? onStart, String? onEnd,
+    String? fromDate, String? toDate, String? offStart, String? offEnd
+  }) {
+    if (day != null) setupSelectedDay = day;
+    if (onStart != null) onStartTime = onStart;
+    if (onEnd != null) onEndTime = onEnd;
+    if (fromDate != null) selectedFromDate = fromDate;
+    if (toDate != null) selectedToDate = toDate;
+    if (offStart != null) offStartTime = offStart;
+    if (offEnd != null) offEndTime = offEnd;
+    notifyListeners();
+  }
+
+  void saveSetupOnDay() {
+    onDaysList.add({
+      "day": setupSelectedDay,
+      "time": "$onStartTime - $onEndTime"
+    });
+    setupSelectedDay = "Enter here";
+    onStartTime = "Enter here";
+    onEndTime = "Enter here";
+    notifyListeners();
+  }
+
+  void saveSetupOffDay() {
+    offDaysList.add({
+      "start": "$selectedFromDate; $offStartTime",
+      "end": "$selectedToDate; $offEndTime"
+    });
+    selectedFromDate = "Select one";
+    selectedToDate = "Select one";
+    offStartTime = "Enter here";
+    offEndTime = "Enter here";
+    notifyListeners();
+  }
+  
+  void removeSetupOnDay(Map<String, String> item) {
+    onDaysList.remove(item);
+    notifyListeners();
+  }
+
+  void removeSetupOffDay(Map<String, String> item) {
+    offDaysList.remove(item);
+    notifyListeners();
+  }
 
   // --- NEW: Manage Availability ---
   String? selectedDay;
@@ -55,6 +161,7 @@ class CoachProfileController extends ChangeNotifier {
   final TextEditingController cvcController = TextEditingController();
 
   Future<void> fetchProfileData({bool isRefresh = false}) async {
+    _hasFetched = true;
     if (isRefresh) {
       _isRefreshing = true;
     } else {
@@ -120,7 +227,7 @@ class CoachProfileController extends ChangeNotifier {
   }
 
   void addServiceOption() {
-    services.add(CoachServiceOption(duration: '', price: '', isActive: true));
+    services.add(CoachServiceOption(title: 'Option ${services.length + 1}', duration: 'Enter here', price: 'Enter here', isActive: true));
     notifyListeners();
   }
 
@@ -129,6 +236,18 @@ class CoachProfileController extends ChangeNotifier {
       services.removeAt(index);
       notifyListeners();
     }
+  }
+
+  void updateServiceOption(CoachServiceOption option, {String? duration, String? price, bool? isActive}) {
+    if (duration != null) option.duration = duration;
+    if (price != null) option.price = price;
+    if (isActive != null) option.isActive = isActive;
+    notifyListeners();
+  }
+
+  void removeServiceOptionByObject(CoachServiceOption option) {
+    services.remove(option);
+    notifyListeners();
   }
 
   void toggleSpecialty(String specialty) {
@@ -154,8 +273,14 @@ class CoachProfileController extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setWizardCurrentPage(int page) {
+    wizardCurrentPage = page;
+    notifyListeners();
+  }
+
   @override
   void dispose() {
+    wizardPageController.dispose();
     nameController.dispose();
     locationController.dispose();
     certificationController.dispose();
@@ -170,11 +295,13 @@ class CoachProfileController extends ChangeNotifier {
 }
 
 class CoachServiceOption {
+  String title;
   String duration;
   String price;
   bool isActive;
 
   CoachServiceOption({
+    this.title = '',
     required this.duration,
     required this.price,
     required this.isActive,
@@ -182,6 +309,7 @@ class CoachServiceOption {
 
   factory CoachServiceOption.fromJson(Map<String, dynamic> json) {
     return CoachServiceOption(
+      title: json['title'] ?? '',
       duration: json['duration'] ?? '',
       price: json['price'] ?? '',
       isActive: json['isActive'] ?? true,

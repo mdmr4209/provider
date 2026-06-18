@@ -230,8 +230,8 @@ class OtpVerifyController extends ChangeNotifier {
   @override
   void dispose() {
     _timer?.cancel();
-    pinFocusNode.dispose();
-    otpController.dispose();
+    try { pinFocusNode.dispose(); } catch (_) {}
+    try { otpController.dispose(); } catch (_) {}
     super.dispose();
   }
 }

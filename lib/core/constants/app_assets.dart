@@ -32,6 +32,7 @@ class AppAssets {
 
   // ── Backgrounds ────────────────────────────────────────────────────────────
   static const String background = 'assets/image/bg.png';
+  static const String bgMain = 'assets/images/bg_main.png';
   static const String background1 = 'assets/images/bg1.png';
   static const String bgHome = 'assets/images/bgHome.png';
   static const String bgSplash = 'assets/images/bgSplash.png';
@@ -82,6 +83,7 @@ class AppAssets {
   static const String unlock = 'assets/icons/unlock.svg';
   static const String video = 'assets/icons/video.svg';
   static const String view = 'assets/icons/view.svg';
+  static const String addBid = 'assets/icons/addBid.svg';
   // static const String  = 'assets/icons/.svg';
 
 }

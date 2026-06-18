@@ -3,9 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_assets.dart';
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/background_widget.dart';
 import '../../../../core/widgets/custom_button.dart';
+import '../../../../core/widgets/custom_loader.dart';
 import '../controllers/coach_profile_controller.dart';
 import 'withdrawal_request_view.dart';
 
@@ -14,7 +14,6 @@ class TotalEarningsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final controller = context.watch<CoachProfileController>();
 
     return BackgroundWidget(
@@ -31,8 +30,14 @@ class TotalEarningsView extends StatelessWidget {
           title: const Text("Total Earnings", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
           centerTitle: true,
         ),
-        body: Padding(
-          padding: EdgeInsets.all(24.r),
+        body: FutureBuilder(
+          future: Future.delayed(const Duration(milliseconds: 1500)),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return _buildSkeletonLoader();
+            }
+            return Padding(
+              padding: EdgeInsets.all(24.r),
           child: Column(
             children: [
               SizedBox(height: 20.h),
@@ -81,7 +86,23 @@ class TotalEarningsView extends StatelessWidget {
               ),
             ],
           ),
+            );
+          },
         ),
+      ),
+    );
+  }
+
+  Widget _buildSkeletonLoader() {
+    return Padding(
+      padding: EdgeInsets.all(24.r),
+      child: Column(
+        children: [
+          SizedBox(height: 20.h),
+          ShimmerLoader(width: double.infinity, height: 110.h, borderRadius: 16.r),
+          SizedBox(height: 40.h),
+          ShimmerLoader(width: double.infinity, height: 50.h, borderRadius: 25.r),
+        ],
       ),
     );
   }

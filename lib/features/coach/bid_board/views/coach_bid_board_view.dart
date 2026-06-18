@@ -1,131 +1,146 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_assets.dart';
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/background_widget.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_loader.dart';
 import '../controllers/coach_bid_controller.dart';
 import 'raffle_draw_view.dart';
 
-class CoachBidBoardView extends StatefulWidget {
+class CoachBidBoardView extends StatelessWidget {
   const CoachBidBoardView({super.key});
 
   @override
-  State<CoachBidBoardView> createState() => _CoachBidBoardViewState();
-}
-
-class _CoachBidBoardViewState extends State<CoachBidBoardView> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<CoachBidController>().fetchBidData();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final controller = context.watch<CoachBidController>();
 
-    return BackgroundWidget(
-      imagePath: AppAssets.bgHome,
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () => Navigator.pop(context),
-          ),
-          title: const Text("Bid Board", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-          centerTitle: true,
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final ctrl = context.read<CoachBidController>();
+      if (!ctrl.hasFetched && !ctrl.isLoading && !ctrl.isRefreshing) {
+        ctrl.fetchBidData();
+      }
+    });
+
+    return Scaffold(
+      backgroundColor: Color(0xFF2D3D2A),
+      appBar: AppBar(
+        backgroundColor: Color(0xFF22331F),
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        title: const Text(
+          "Bid Board",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        body: controller.isLoading
-            ? const Center(child: ShimmerLoader())
-            : Stack(
-                children: [
-                  RefreshIndicator(
-                    onRefresh: () => controller.fetchBidData(isRefresh: true),
-                    color: Colors.transparent,
-                    backgroundColor: Colors.transparent,
-                    strokeWidth: 0,
-                    elevation: 0,
-                    child: SingleChildScrollView(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      padding: EdgeInsets.symmetric(horizontal: 20.w),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 20.h),
-                          // ── Top Bidders List Banner ──────────────────────────────────
-                          if (controller.topBiddersInfo != null)
-                            _buildTopBiddersBanner(
-                              controller.topBiddersInfo!['title'] ?? 'Top Bidders List',
-                              controller.topBiddersInfo!['description'] ?? '',
+        centerTitle: true,
+      ),
+      body: controller.isLoading
+          ? _buildSkeletonLoader(context)
+          : Stack(
+              children: [
+                RefreshIndicator(
+                  onRefresh: () => controller.fetchBidData(isRefresh: true),
+                  color: Colors.transparent,
+                  backgroundColor: Colors.transparent,
+                  strokeWidth: 0,
+                  elevation: 0,
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: EdgeInsets.symmetric(horizontal: 20.w),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 20.h),
+                        // ── Top Bidders List Banner ──────────────────────────────────
+                        if (controller.topBiddersInfo != null)
+                          _buildTopBiddersBanner(
+                            controller.topBiddersInfo!['title'] ??
+                                'Top Bidders List',
+                            controller.topBiddersInfo!['description'] ?? '',
+                          ),
+
+                        SizedBox(height: 32.h),
+
+                        const Text(
+                          "List of bidders",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        SizedBox(height: 16.h),
+
+                        // ── Slots List ───────────────────────────────────────────────
+                        if (controller.slots.isEmpty)
+                          const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 20.0),
+                            child: Center(
+                              child: Text(
+                                "No slots available",
+                                style: TextStyle(color: Colors.white54),
+                              ),
                             ),
+                          )
+                        else
+                          ...controller.slots.map(
+                            (slot) => _buildSlotItem(
+                              slot.rank,
+                              slot.title,
+                              slot.startingBid,
+                              slot.topBid,
+                              Color(int.parse(slot.hexColor)),
+                            ),
+                          ),
 
-                          SizedBox(height: 32.h),
+                        SizedBox(height: 32.h),
 
-                          const Text("List of bidders", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
-                          SizedBox(height: 16.h),
+                        // ── Bid Form ─────────────────────────────────────────────────
+                        _buildBidForm(context, controller),
 
-                          // ── Slots List ───────────────────────────────────────────────
-                          if (controller.slots.isEmpty)
-                            const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 20.0),
-                              child: Center(child: Text("No slots available", style: TextStyle(color: Colors.white54))),
-                            )
-                          else
-                            ...controller.slots.map((slot) => _buildSlotItem(
-                                  slot.rank,
-                                  slot.title,
-                                  slot.startingBid,
-                                  slot.topBid,
-                                  Color(int.parse(slot.hexColor)),
-                                )),
+                        SizedBox(height: 32.h),
 
-                          SizedBox(height: 32.h),
+                        // ── Bottom Banner (Raffle or Winner) ──────────────────────────
+                        controller.hasWon
+                            ? _buildWinnerBanner(context)
+                            : _buildRaffleBanner(context),
 
-                          // ── Bid Form ─────────────────────────────────────────────────
-                          _buildBidForm(context, controller),
-
-                          SizedBox(height: 32.h),
-
-                          // ── Bottom Banner (Raffle or Winner) ──────────────────────────
-                          controller.hasWon ? _buildWinnerBanner(context) : _buildRaffleBanner(context),
-
-                          SizedBox(height: 100.h),
-                        ],
-                      ),
+                        SizedBox(height: 100.h),
+                      ],
                     ),
                   ),
-                  if (controller.isRefreshing)
-                     Positioned.fill(
-                      child: Container(
-                        color: Colors.black26,
-                        child: Center(child: CustomLoader()),
-                      ),
-                    ),
-                ],
-              ),
-      ),
+                ),
+                if (controller.isRefreshing)
+                  Positioned(
+                    top: 16.h,
+                    left: 0,
+                    right: 0,
+                    child: const Center(child: CustomLoader(size: 100)),
+                  ),
+              ],
+            ),
     );
   }
 
   Widget _buildTopBiddersBanner(String title, String description) {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(20.r),
-      decoration: BoxDecoration(
-        color: const Color(0xFF2D3D2D),
-        borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: Colors.white10),
+      padding:  EdgeInsets.only(
+        top: 16.h,
+        left: 12.w,
+        right: 11.w,
+        bottom: 16.h,
+      ),
+      clipBehavior: Clip.antiAlias,
+      decoration: ShapeDecoration(
+        gradient: LinearGradient(
+          begin: Alignment(0.14, 1.55),
+          end: Alignment(0.88, -0.49),
+          colors: [const Color(0xFF304C2B), const Color(0xFF0D1E0D)],
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.r),
+        ),
       ),
       child: Row(
         children: [
@@ -133,29 +148,50 @@ class _CoachBidBoardViewState extends State<CoachBidBoardView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
                 const SizedBox(height: 8),
                 Text(
                   description,
-                  style: const TextStyle(color: Colors.white54, fontSize: 11, height: 1.4),
+                  style: const TextStyle(
+                    color: Colors.white54,
+                    fontSize: 11,
+                    height: 1.4,
+                  ),
                 ),
               ],
             ),
           ),
           SizedBox(width: 16.w),
-          const Icon(Icons.emoji_events_outlined, color: Color(0xFFC19E5F), size: 60),
+          const Icon(
+            Icons.emoji_events_outlined,
+            color: Color(0xFFC19E5F),
+            size: 60,
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildSlotItem(String rank, String title, String starting, String top, Color rankColor) {
+  Widget _buildSlotItem(
+    String rank,
+    String title,
+    String starting,
+    String top,
+    Color rankColor,
+  ) {
     return Container(
       margin: EdgeInsets.only(bottom: 8.h),
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       decoration: BoxDecoration(
-        color: const Color(0xFF2D3D2D),
-        borderRadius: BorderRadius.circular(12.r),
+        color: const Color(0xFF22331F),
+        borderRadius: BorderRadius.circular(4.r),
       ),
       child: Row(
         children: [
@@ -165,16 +201,35 @@ class _CoachBidBoardViewState extends State<CoachBidBoardView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
-                Text(starting, style: const TextStyle(color: Colors.white38, fontSize: 11)),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Text(
+                  starting,
+                  style: const TextStyle(color: Colors.white38, fontSize: 11),
+                ),
               ],
             ),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(top, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
-              const Text("Top Bid", style: TextStyle(color: Colors.white38, fontSize: 10)),
+              Text(
+                top,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+              const Text(
+                "Top Bid",
+                style: TextStyle(color: Colors.white38, fontSize: 10),
+              ),
             ],
           ),
         ],
@@ -191,7 +246,14 @@ class _CoachBidBoardViewState extends State<CoachBidBoardView> {
         border: Border.all(color: color, width: 1),
       ),
       child: Center(
-        child: Text(rank, style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 12)),
+        child: Text(
+          rank,
+          style: TextStyle(
+            color: color,
+            fontWeight: FontWeight.bold,
+            fontSize: 12,
+          ),
+        ),
       ),
     );
   }
@@ -200,26 +262,40 @@ class _CoachBidBoardViewState extends State<CoachBidBoardView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("Select Slot", style: TextStyle(color: Colors.white70, fontSize: 13)),
+        const Text(
+          "Select Slot",
+          style: TextStyle(color: Colors.white70, fontSize: 13),
+        ),
         SizedBox(height: 8.h),
         Container(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
           decoration: BoxDecoration(
-            color: const Color(0xFF2D3D2D),
+            color: const Color(0xFF22331F),
             borderRadius: BorderRadius.circular(8.r),
             border: Border.all(color: Colors.white10),
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
               value: controller.selectedSlot,
-              hint: const Text("Select one", style: TextStyle(color: Colors.white38, fontSize: 14)),
+              hint: const Text(
+                "Select one",
+                style: TextStyle(color: Colors.white38, fontSize: 14),
+              ),
               isExpanded: true,
               dropdownColor: const Color(0xFF1B2B1B),
-              icon: const Icon(Icons.keyboard_arrow_down, color: Colors.white54),
-              items: ["Slot 1", "Slot 2", "Slot 3", "Slot 4", "Slot 5"].map((String value) {
+              icon: const Icon(
+                Icons.keyboard_arrow_down,
+                color: Colors.white54,
+              ),
+              items: ["Slot 1", "Slot 2", "Slot 3", "Slot 4", "Slot 5"].map((
+                String value,
+              ) {
                 return DropdownMenuItem<String>(
                   value: value,
-                  child: Text(value, style: const TextStyle(color: Colors.white)),
+                  child: Text(
+                    value,
+                    style: const TextStyle(color: Colors.white),
+                  ),
                 );
               }).toList(),
               onChanged: (v) => controller.setSlot(v),
@@ -227,7 +303,10 @@ class _CoachBidBoardViewState extends State<CoachBidBoardView> {
           ),
         ),
         SizedBox(height: 16.h),
-        const Text("Amount", style: TextStyle(color: Colors.white70, fontSize: 13)),
+        const Text(
+          "Amount",
+          style: TextStyle(color: Colors.white70, fontSize: 13),
+        ),
         SizedBox(height: 8.h),
         Container(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -259,26 +338,44 @@ class _CoachBidBoardViewState extends State<CoachBidBoardView> {
 
   Widget _buildRaffleBanner(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const RaffleDrawView())),
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const RaffleDrawView()),
+      ),
       child: Container(
         padding: EdgeInsets.all(20.r),
         decoration: BoxDecoration(
-          color: const Color(0xFF2D3D2D),
+          color: const Color(0xFF22331F),
           borderRadius: BorderRadius.circular(16.r),
         ),
         child: Column(
           children: [
             Row(
               children: [
-                const Icon(Icons.emoji_events_outlined, color: Color(0xFFC19E5F), size: 32),
+                const Icon(
+                  Icons.emoji_events_outlined,
+                  color: Color(0xFFC19E5F),
+                  size: 32,
+                ),
                 SizedBox(width: 12.w),
-                const Text("Daily Raffle", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
+                const Text(
+                  "Daily Raffle",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
               ],
             ),
             SizedBox(height: 8.h),
             const Text(
               "Day 14 of No Contact. It was really hard today today, I almost texted him when I saw his favorite song playing. But I stayed strong!",
-              style: TextStyle(color: Colors.white54, fontSize: 11, height: 1.4),
+              style: TextStyle(
+                color: Colors.white54,
+                fontSize: 11,
+                height: 1.4,
+              ),
             ),
           ],
         ),
@@ -288,29 +385,121 @@ class _CoachBidBoardViewState extends State<CoachBidBoardView> {
 
   Widget _buildWinnerBanner(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const RaffleDrawView())),
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const RaffleDrawView()),
+      ),
       child: Container(
-        padding: EdgeInsets.all(20.r),
-        decoration: BoxDecoration(
-          color: const Color(0xFF2D3D2D),
-          borderRadius: BorderRadius.circular(16.r),
+        padding:  EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+        decoration: ShapeDecoration(
+          gradient: LinearGradient(
+            begin: Alignment(-0.00, 0.94),
+            end: Alignment(1.42, -0.62),
+            colors: [const Color(0xFF102710), const Color(0xFF2F432B)],
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.r),
+          ),
         ),
         child: Row(
           children: [
-            const Icon(Icons.emoji_events_outlined, color: Color(0xFFC19E5F), size: 40),
+            const Icon(
+              Icons.emoji_events_outlined,
+              color: Color(0xFFC19E5F),
+              size: 40,
+            ),
             SizedBox(width: 16.w),
             const Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Congratulations's", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
-                  Text("You Win the Spot 5", style: TextStyle(color: Colors.white70, fontSize: 14)),
+                  Text(
+                    "Congratulations's",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                  Text(
+                    "You Win the Spot 5",
+                    style: TextStyle(color: Colors.white70, fontSize: 14),
+                  ),
                 ],
               ),
             ),
-            const Text("View →", style: TextStyle(color: Color(0xFFC19E5F), fontSize: 12)),
+            const Text(
+              "View →",
+              style: TextStyle(color: Color(0xFFC19E5F), fontSize: 12),
+            ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildSkeletonLoader(BuildContext context) {
+    return SingleChildScrollView(
+      physics: const NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: 20.h),
+          // Banner
+          ShimmerLoader(
+            width: double.infinity,
+            height: 100.h,
+            borderRadius: 16.r,
+          ),
+          SizedBox(height: 32.h),
+          // List of bidders title
+          ShimmerLoader(width: 120.w, height: 16.h),
+          SizedBox(height: 16.h),
+          // Slots List
+          ...List.generate(
+            5,
+            (index) => Padding(
+              padding: EdgeInsets.only(bottom: 8.h),
+              child: ShimmerLoader(
+                width: double.infinity,
+                height: 60.h,
+                borderRadius: 12.r,
+              ),
+            ),
+          ),
+          SizedBox(height: 32.h),
+          // Bid Form
+          ShimmerLoader(width: 80.w, height: 14.h),
+          SizedBox(height: 8.h),
+          ShimmerLoader(
+            width: double.infinity,
+            height: 48.h,
+            borderRadius: 8.r,
+          ),
+          SizedBox(height: 16.h),
+          ShimmerLoader(width: 60.w, height: 14.h),
+          SizedBox(height: 8.h),
+          ShimmerLoader(
+            width: double.infinity,
+            height: 48.h,
+            borderRadius: 8.r,
+          ),
+          SizedBox(height: 24.h),
+          ShimmerLoader(
+            width: double.infinity,
+            height: 48.h,
+            borderRadius: 24.r,
+          ),
+          SizedBox(height: 32.h),
+          // Bottom Banner
+          ShimmerLoader(
+            width: double.infinity,
+            height: 80.h,
+            borderRadius: 16.r,
+          ),
+          SizedBox(height: 100.h),
+        ],
       ),
     );
   }

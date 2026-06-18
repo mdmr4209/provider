@@ -8,6 +8,7 @@ import '../../../seeker/inbox/models/inbox_model.dart'; // Reuse StoryModel and 
 class CoachInboxController extends ChangeNotifier {
   bool _isLoading = false;
   bool _isRefreshing = false;
+  bool _hasFetched = false;
   int _credits = 15;
 
   List<StoryModel> _stories = [];
@@ -16,8 +17,12 @@ class CoachInboxController extends ChangeNotifier {
   List<CoachMissedCallModel> _missedCalls = [];
   List<CoachCallbackModel> _callbacks = [];
 
+  int _selectedTabIndex = 0;
+  int _selectedContext = 0;
+
   bool get isLoading => _isLoading;
   bool get isRefreshing => _isRefreshing;
+  bool get hasFetched => _hasFetched;
   int get credits => _credits;
 
   List<StoryModel> get stories => _stories;
@@ -26,7 +31,21 @@ class CoachInboxController extends ChangeNotifier {
   List<CoachMissedCallModel> get missedCalls => _missedCalls;
   List<CoachCallbackModel> get callbacks => _callbacks;
 
+  int get selectedTabIndex => _selectedTabIndex;
+  int get selectedContext => _selectedContext;
+
+  void setSelectedTab(int index) {
+    _selectedTabIndex = index;
+    notifyListeners();
+  }
+
+  void setSelectedContext(int index) {
+    _selectedContext = index;
+    notifyListeners();
+  }
+
   Future<void> fetchInboxData({bool isRefresh = false}) async {
+    _hasFetched = true;
     if (isRefresh) {
       _isRefreshing = true;
     } else {

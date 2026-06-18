@@ -94,7 +94,7 @@ class WriteJournalView extends StatelessWidget {
                     onPress: () async {
                       homeController.postJournal();
                     },
-                    title: "Post Now",
+                    title: "Save Now",
                     linearGradient: true,
                     height: 56,
                     fontSize: 18,

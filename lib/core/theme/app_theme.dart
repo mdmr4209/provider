@@ -68,6 +68,7 @@ class AppTheme {
       headlineLarge: TextStyle(color: AppColors.textColor, fontSize: 24.sp, fontWeight: FontWeight.w600),
       titleLarge: TextStyle(color: AppColors.textColor, fontSize: 22.sp, fontWeight: FontWeight.w500),
       titleMedium: TextStyle(color: AppColors.textColor, fontSize: 18.sp, fontWeight: FontWeight.w500),
+      titleSmall: TextStyle(color: AppColors.textColor, fontSize: 16.sp, fontWeight: FontWeight.w500),
       bodyLarge: TextStyle(color: AppColors.textColor, fontSize: 14.sp),
       bodyMedium: TextStyle(color: AppColors.textColor, fontSize: 12.sp),
     ),
@@ -103,7 +104,7 @@ class AppTheme {
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: Colors.transparent,
+      fillColor: AppColors.backgroundColor,
       contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.r), borderSide:  BorderSide(color: Colors.transparent)),
       enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12.r), borderSide:  BorderSide(color: Colors.transparent)),

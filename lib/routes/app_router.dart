@@ -674,7 +674,7 @@ class AppRouter {
           pageBuilder: (context, state) => _buildPageWithTransition(
             context: context,
             state: state,
-            child: const ChangePasswordView(),
+            child: ChangePasswordView(origin: state.extra as String?),
           ),
         ),
         GoRoute(

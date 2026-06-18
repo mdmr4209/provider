@@ -3,9 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_assets.dart';
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/background_widget.dart';
 import '../../../../core/widgets/custom_button.dart';
+import '../../../../core/widgets/custom_loader.dart';
 import '../controllers/coach_profile_controller.dart';
 
 class ManageAvailabilityView extends StatelessWidget {
@@ -31,8 +31,14 @@ class ManageAvailabilityView extends StatelessWidget {
                   TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
           centerTitle: true,
         ),
-        body: SingleChildScrollView(
-          padding: EdgeInsets.all(20.r),
+        body: FutureBuilder(
+          future: Future.delayed(const Duration(milliseconds: 1500)),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return _buildSkeletonLoader();
+            }
+            return SingleChildScrollView(
+              padding: EdgeInsets.all(20.r),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -126,6 +132,8 @@ class ManageAvailabilityView extends StatelessWidget {
               SizedBox(height: 100.h),
             ],
           ),
+            );
+          },
         ),
       ),
     );
@@ -350,6 +358,26 @@ class ManageAvailabilityView extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildSkeletonLoader() {
+    return SingleChildScrollView(
+      physics: const NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.all(20.r),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ShimmerLoader(width: double.infinity, height: 280.h, borderRadius: 16.r),
+          SizedBox(height: 32.h),
+          ShimmerLoader(width: 150.w, height: 16.h),
+          SizedBox(height: 16.h),
+          ...List.generate(3, (_) => Padding(
+            padding: EdgeInsets.only(bottom: 12.h),
+            child: ShimmerLoader(width: double.infinity, height: 72.h, borderRadius: 12.r),
+          )),
+        ],
       ),
     );
   }

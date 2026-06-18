@@ -6,7 +6,7 @@ import 'package:newproject/core/constants/app_assets.dart';
 import 'package:newproject/core/constants/app_colors.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../core/exceptions/app_exceptions.dart';
+
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_loader.dart';
 import '../../../../core/widgets/error_widget.dart';

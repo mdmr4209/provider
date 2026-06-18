@@ -1,52 +1,411 @@
 {
-  "groups": [
-    {
-      "id": "group_001",
-      "name": "No Contact Warriors",
-      "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group1",
-      "memberCount": 1243,
-      "description": "Day 14 of No Contact. It was really hard today today, I almost texted him when I saw his favorite song playing. But I stayed strong!",
-      "isJoined": true
-    },
-    {
-      "id": "group_002",
-      "name": "Healing Hearts",
-      "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group2",
-      "memberCount": 856,
-      "description": "A safe space for those healing from heartbreak. We support each other through the journey.",
-      "isJoined": true
-    }
-  ],
-  "suggestions": [
-    {
-      "id": "group_003",
-      "name": "Self Love Club",
-      "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group3",
-      "memberCount": 3201,
-      "description": "Focusing on self-growth and appreciation. You are enough.",
-      "isJoined": false
-    },
-    {
-      "id": "group_004",
-      "name": "Mindful Living",
-      "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group4",
-      "memberCount": 1540,
-      "description": "Daily mindfulness practices and support for a peaceful mind.",
-      "isJoined": false
-    }
-  ],
-  "invitations": [
-    {
-      "id": "inv_001",
-      "group": {
-        "id": "group_001",
+  "groups": {
+    "count": 102,
+    "next": "https://example.com/api/groups?page=2",
+    "previous": null,
+    "results": [
+      {
+        "id": "group_001_0",
         "name": "No Contact Warriors",
         "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group1",
         "memberCount": 1243,
-        "description": "Day 14 of No Contact. It was really hard today today, I almost texted him when I saw his favorite song playing. But I stayed strong!"
+        "description": "Day 14 of No Contact.",
+        "isJoined": true
       },
-      "invitedBy": "Sarah M.",
-      "invitedAt": "2026-06-05T10:00:00Z"
-    }
-  ]
+      {
+        "id": "group_002_1",
+        "name": "Healing Hearts",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group2",
+        "memberCount": 856,
+        "description": "A safe space for those healing.",
+        "isJoined": true
+      },
+      {
+        "id": "group_001_2",
+        "name": "No Contact Warriors",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group1",
+        "memberCount": 1243,
+        "description": "Day 14 of No Contact.",
+        "isJoined": true
+      },
+      {
+        "id": "group_002_3",
+        "name": "Healing Hearts",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group2",
+        "memberCount": 856,
+        "description": "A safe space for those healing.",
+        "isJoined": true
+      },
+      {
+        "id": "group_001_4",
+        "name": "No Contact Warriors",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group1",
+        "memberCount": 1243,
+        "description": "Day 14 of No Contact.",
+        "isJoined": true
+      },
+      {
+        "id": "group_002_5",
+        "name": "Healing Hearts",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group2",
+        "memberCount": 856,
+        "description": "A safe space for those healing.",
+        "isJoined": true
+      },
+      {
+        "id": "group_001_6",
+        "name": "No Contact Warriors",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group1",
+        "memberCount": 1243,
+        "description": "Day 14 of No Contact.",
+        "isJoined": true
+      },
+      {
+        "id": "group_002_7",
+        "name": "Healing Hearts",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group2",
+        "memberCount": 856,
+        "description": "A safe space for those healing.",
+        "isJoined": true
+      },
+      {
+        "id": "group_001_8",
+        "name": "No Contact Warriors",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group1",
+        "memberCount": 1243,
+        "description": "Day 14 of No Contact.",
+        "isJoined": true
+      },
+      {
+        "id": "group_002_9",
+        "name": "Healing Hearts",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group2",
+        "memberCount": 856,
+        "description": "A safe space for those healing.",
+        "isJoined": true
+      },
+      {
+        "id": "group_001_10",
+        "name": "No Contact Warriors",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group1",
+        "memberCount": 1243,
+        "description": "Day 14 of No Contact.",
+        "isJoined": true
+      }
+    ]
+  },
+  "suggestions": {
+    "count": 102,
+    "next": "https://example.com/api/suggestions?page=2",
+    "previous": null,
+    "results": [
+      {
+        "id": "group_003_0",
+        "name": "Self Love Club",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group3",
+        "memberCount": 3201,
+        "description": "Focusing on self-growth.",
+        "isJoined": false
+      },
+      {
+        "id": "group_004_1",
+        "name": "Mindful Living",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group4",
+        "memberCount": 1540,
+        "description": "Daily mindfulness practices.",
+        "isJoined": false
+      },
+      {
+        "id": "group_003_2",
+        "name": "Self Love Club",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group3",
+        "memberCount": 3201,
+        "description": "Focusing on self-growth.",
+        "isJoined": false
+      },
+      {
+        "id": "group_004_3",
+        "name": "Mindful Living",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group4",
+        "memberCount": 1540,
+        "description": "Daily mindfulness practices.",
+        "isJoined": false
+      },
+      {
+        "id": "group_003_4",
+        "name": "Self Love Club",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group3",
+        "memberCount": 3201,
+        "description": "Focusing on self-growth.",
+        "isJoined": false
+      },
+      {
+        "id": "group_004_5",
+        "name": "Mindful Living",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group4",
+        "memberCount": 1540,
+        "description": "Daily mindfulness practices.",
+        "isJoined": false
+      },
+      {
+        "id": "group_003_6",
+        "name": "Self Love Club",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group3",
+        "memberCount": 3201,
+        "description": "Focusing on self-growth.",
+        "isJoined": false
+      },
+      {
+        "id": "group_004_7",
+        "name": "Mindful Living",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group4",
+        "memberCount": 1540,
+        "description": "Daily mindfulness practices.",
+        "isJoined": false
+      },
+      {
+        "id": "group_003_8",
+        "name": "Self Love Club",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group3",
+        "memberCount": 3201,
+        "description": "Focusing on self-growth.",
+        "isJoined": false
+      },
+      {
+        "id": "group_004_9",
+        "name": "Mindful Living",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group4",
+        "memberCount": 1540,
+        "description": "Daily mindfulness practices.",
+        "isJoined": false
+      },
+      {
+        "id": "group_003_10",
+        "name": "Self Love Club",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group3",
+        "memberCount": 3201,
+        "description": "Focusing on self-growth.",
+        "isJoined": false
+      },
+      {
+        "id": "group_004_11",
+        "name": "Mindful Living",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group4",
+        "memberCount": 1540,
+        "description": "Daily mindfulness practices.",
+        "isJoined": false
+      },
+      {
+        "id": "group_003_12",
+        "name": "Self Love Club",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group3",
+        "memberCount": 3201,
+        "description": "Focusing on self-growth.",
+        "isJoined": false
+      },
+      {
+        "id": "group_004_13",
+        "name": "Mindful Living",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group4",
+        "memberCount": 1540,
+        "description": "Daily mindfulness practices.",
+        "isJoined": false
+      },
+      {
+        "id": "group_003_14",
+        "name": "Self Love Club",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group3",
+        "memberCount": 3201,
+        "description": "Focusing on self-growth.",
+        "isJoined": false
+      },
+      {
+        "id": "group_004_15",
+        "name": "Mindful Living",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group4",
+        "memberCount": 1540,
+        "description": "Daily mindfulness practices.",
+        "isJoined": false
+      },
+      {
+        "id": "group_003_16",
+        "name": "Self Love Club",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group3",
+        "memberCount": 3201,
+        "description": "Focusing on self-growth.",
+        "isJoined": false
+      },
+      {
+        "id": "group_004_17",
+        "name": "Mindful Living",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group4",
+        "memberCount": 1540,
+        "description": "Daily mindfulness practices.",
+        "isJoined": false
+      },
+      {
+        "id": "group_003_18",
+        "name": "Self Love Club",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group3",
+        "memberCount": 3201,
+        "description": "Focusing on self-growth.",
+        "isJoined": false
+      },
+      {
+        "id": "group_004_19",
+        "name": "Mindful Living",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group4",
+        "memberCount": 1540,
+        "description": "Daily mindfulness practices.",
+        "isJoined": false
+      },
+      {
+        "id": "group_003_20",
+        "name": "Self Love Club",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group3",
+        "memberCount": 3201,
+        "description": "Focusing on self-growth.",
+        "isJoined": false
+      },
+      {
+        "id": "group_004_21",
+        "name": "Mindful Living",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group4",
+        "memberCount": 1540,
+        "description": "Daily mindfulness practices.",
+        "isJoined": false
+      },
+      {
+        "id": "group_003_22",
+        "name": "Self Love Club",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group3",
+        "memberCount": 3201,
+        "description": "Focusing on self-growth.",
+        "isJoined": false
+      },
+      {
+        "id": "group_004_23",
+        "name": "Mindful Living",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group4",
+        "memberCount": 1540,
+        "description": "Daily mindfulness practices.",
+        "isJoined": false
+      },
+      {
+        "id": "group_003_24",
+        "name": "Self Love Club",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group3",
+        "memberCount": 3201,
+        "description": "Focusing on self-growth.",
+        "isJoined": false
+      },
+      {
+        "id": "group_004_25",
+        "name": "Mindful Living",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group4",
+        "memberCount": 1540,
+        "description": "Daily mindfulness practices.",
+        "isJoined": false
+      },
+      {
+        "id": "group_003_26",
+        "name": "Self Love Club",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group3",
+        "memberCount": 3201,
+        "description": "Focusing on self-growth.",
+        "isJoined": false
+      },
+      {
+        "id": "group_004_27",
+        "name": "Mindful Living",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group4",
+        "memberCount": 1540,
+        "description": "Daily mindfulness practices.",
+        "isJoined": false
+      },
+      {
+        "id": "group_003_28",
+        "name": "Self Love Club",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group3",
+        "memberCount": 3201,
+        "description": "Focusing on self-growth.",
+        "isJoined": false
+      },
+      {
+        "id": "group_004_29",
+        "name": "Mindful Living",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group4",
+        "memberCount": 1540,
+        "description": "Daily mindfulness practices.",
+        "isJoined": false
+      },
+      {
+        "id": "group_003_30",
+        "name": "Self Love Club",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group3",
+        "memberCount": 3201,
+        "description": "Focusing on self-growth.",
+        "isJoined": false
+      },
+      {
+        "id": "group_004_31",
+        "name": "Mindful Living",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group4",
+        "memberCount": 1540,
+        "description": "Daily mindfulness practices.",
+        "isJoined": false
+      },
+      {
+        "id": "group_003_32",
+        "name": "Self Love Club",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group3",
+        "memberCount": 3201,
+        "description": "Focusing on self-growth.",
+        "isJoined": false
+      },
+      {
+        "id": "group_004_33",
+        "name": "Mindful Living",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group4",
+        "memberCount": 1540,
+        "description": "Daily mindfulness practices.",
+        "isJoined": false
+      },
+      {
+        "id": "group_003_34",
+        "name": "Self Love Club",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group3",
+        "memberCount": 3201,
+        "description": "Focusing on self-growth.",
+        "isJoined": false
+      },
+      {
+        "id": "group_004_35",
+        "name": "Mindful Living",
+        "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group4",
+        "memberCount": 1540,
+        "description": "Daily mindfulness practices.",
+        "isJoined": false
+      }
+    ]
+  },
+  "invitations": {
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "results": [
+      {
+        "id": "inv_001",
+        "group": {
+          "id": "group_001",
+          "name": "No Contact Warriors",
+          "icon": "https://api.dicebear.com/7.x/avataaars/svg?seed=group1",
+          "memberCount": 1243,
+          "description": "Day 14 of No Contact."
+        },
+        "invitedBy": "Sarah M.",
+        "invitedAt": "2026-06-05T10:00:00Z"
+      }
+    ]
+  }
 }

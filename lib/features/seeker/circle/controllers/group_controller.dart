@@ -15,6 +15,15 @@ class GroupController extends ChangeNotifier {
   bool _isLoading = false;
   bool _isRefreshing = false;
 
+  // Pagination state
+  int _groupsPage = 1;
+  bool _groupsHasMore = true;
+  bool _isFetchingMoreGroups = false;
+
+  int _suggestionsPage = 1;
+  bool _suggestionsHasMore = true;
+  bool _isFetchingMoreSuggestions = false;
+
   List<GroupModel> get myGroups => _myGroups;
   List<GroupModel> get suggestedGroups => _suggestedGroups;
   List<GroupInvitationModel> get invitations => _invitations;
@@ -24,12 +33,31 @@ class GroupController extends ChangeNotifier {
 
   bool get isLoading => _isLoading;
   bool get isRefreshing => _isRefreshing;
+  bool get isFetchingMoreGroups => _isFetchingMoreGroups;
+  bool get isFetchingMoreSuggestions => _isFetchingMoreSuggestions;
 
-  Future<void> fetchGroupsData({bool isRefresh = false}) async {
+  bool get groupsHasMore => _groupsHasMore;
+  bool get suggestionsHasMore => _suggestionsHasMore;
+
+  Future<void> fetchGroupsData({bool isRefresh = false, bool isFetchMore = false, String tab = 'myGroups'}) async {
     if (isRefresh) {
       _isRefreshing = true;
+      _groupsPage = 1;
+      _groupsHasMore = true;
+      _suggestionsPage = 1;
+      _suggestionsHasMore = true;
+    } else if (isFetchMore) {
+      if (tab == 'myGroups' && !_groupsHasMore) return;
+      if (tab == 'findGroups' && !_suggestionsHasMore) return;
+
+      if (tab == 'myGroups') _isFetchingMoreGroups = true;
+      if (tab == 'findGroups') _isFetchingMoreSuggestions = true;
     } else {
       _isLoading = true;
+      _groupsPage = 1;
+      _groupsHasMore = true;
+      _suggestionsPage = 1;
+      _suggestionsHasMore = true;
     }
     notifyListeners();
 
@@ -38,14 +66,62 @@ class GroupController extends ChangeNotifier {
       final String jsonString = await rootBundle.loadString('assets/json/group.json');
       final Map<String, dynamic> rawData = jsonDecode(jsonString);
 
-      _myGroups = (rawData['groups'] as List).map((x) => GroupModel.fromJson(x)).toList();
-      _suggestedGroups = (rawData['suggestions'] as List).map((x) => GroupModel.fromJson(x)).toList();
-      _invitations = (rawData['invitations'] as List).map((x) => GroupInvitationModel.fromJson(x)).toList();
+      // Process My Groups
+      if (tab == 'myGroups' || !isFetchMore) {
+        final allGroups = (rawData['groups']['results'] as List).map((x) => GroupModel.fromJson(x)).toList();
+        final startIndex = (_groupsPage - 1) * 10;
+        final endIndex = startIndex + 10;
+        final slice = allGroups.sublist(
+          startIndex > allGroups.length ? allGroups.length : startIndex,
+          endIndex > allGroups.length ? allGroups.length : endIndex,
+        );
+
+        if (isRefresh || (!isFetchMore && !isRefresh)) {
+          _myGroups = slice;
+        } else if (isFetchMore) {
+          _myGroups.addAll(slice);
+        }
+
+        if (slice.length < 10 || endIndex >= allGroups.length) {
+          _groupsHasMore = false;
+        }
+        if (isFetchMore && tab == 'myGroups') _groupsPage++;
+      }
+
+      // Process Suggested Groups
+      if (tab == 'findGroups' || !isFetchMore) {
+        final allSuggestions = (rawData['suggestions']['results'] as List).map((x) => GroupModel.fromJson(x)).toList();
+        final startIndex = (_suggestionsPage - 1) * 10;
+        final endIndex = startIndex + 10;
+        final slice = allSuggestions.sublist(
+          startIndex > allSuggestions.length ? allSuggestions.length : startIndex,
+          endIndex > allSuggestions.length ? allSuggestions.length : endIndex,
+        );
+
+        if (isRefresh || (!isFetchMore && !isRefresh)) {
+          _suggestedGroups = slice;
+        } else if (isFetchMore) {
+          _suggestedGroups.addAll(slice);
+        }
+
+        if (slice.length < 10 || endIndex >= allSuggestions.length) {
+          _suggestionsHasMore = false;
+        }
+        if (isFetchMore && tab == 'findGroups') _suggestionsPage++;
+      }
+
+      // Process Invitations (no pagination implemented for simplicity, just reading the new structure)
+      if (!isFetchMore) {
+        _invitations = (rawData['invitations']['results'] as List).map((x) => GroupInvitationModel.fromJson(x)).toList();
+      }
+
     } catch (e) {
       debugPrint("Error loading group data: $e");
     } finally {
       _isLoading = false;
       _isRefreshing = false;
+      _isFetchingMoreGroups = false;
+      _isFetchingMoreSuggestions = false;
       notifyListeners();
     }
   }

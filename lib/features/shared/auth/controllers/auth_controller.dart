@@ -1,10 +1,7 @@
 import 'dart:async';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../../core/exceptions/app_exceptions.dart';
 import '../../../../core/exceptions/exception_handler.dart';
@@ -20,8 +17,11 @@ class AuthController extends ChangeNotifier {
     checkLoginStatus();
   }
 
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+
+  // Social sign-in instances removed — will be configured later
+  // final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  // final GoogleSignIn _googleSignIn = GoogleSignIn();
+
 
   bool _isOtpVerified = false;
   bool _isLoading = false;
@@ -189,40 +189,14 @@ class AuthController extends ChangeNotifier {
     }
   }
 
-  // ── Social sign-in ─────────────────────────────────────────────────────────
+  // ── Social sign-in (disabled — will configure later) ──────────────────────
+  // TODO: Re-enable when Firebase Auth & Facebook Auth are configured
   Future<void> signInWithFacebook() async {
-    try {
-      _setLoading(true);
-      final result = await FacebookAuth.instance.login();
-      if (result.status == LoginStatus.success && result.accessToken != null) {
-        final credential = FacebookAuthProvider.credential(result.accessToken!.tokenString);
-        await FirebaseAuth.instance.signInWithCredential(credential);
-      }
-    } catch (e) {
-      _error = ExceptionHandler.handleException(e);
-      notifyListeners();
-    } finally {
-      _setLoading(false);
-    }
+    showWarningSnackBar(message: 'Facebook login will be configured later');
   }
 
   Future<void> signInWithGoogle() async {
-    try {
-      _setLoading(true);
-      final googleUser = await _googleSignIn.signIn();
-      if (googleUser == null) return;
-      final googleAuth = await googleUser.authentication;
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-      await _firebaseAuth.signInWithCredential(credential);
-    } catch (e) {
-      _error = ExceptionHandler.handleException(e);
-      notifyListeners();
-    } finally {
-      _setLoading(false);
-    }
+    showWarningSnackBar(message: 'Google login will be configured later');
   }
 
   // ── Core auth methods ────────────────────────────────────
@@ -266,7 +240,9 @@ class AuthController extends ChangeNotifier {
             _isLoggedIn = true;
             _isSignedIn = true;
           } else {
-            _go(AppRoutes.otpVerify, extra: 'Login');
+            Future.microtask(() {
+              _go(AppRoutes.otpVerify, extra: 'Login');
+            });
           }
         }
         
@@ -303,8 +279,8 @@ class AuthController extends ChangeNotifier {
       if (isSuccess) {
         _signupEmail = email;
         notifyListeners();
-        showSuccessSnackBar(message: response?.data?['message'] ?? 'OTP sent to your email');
-        _go(AppRoutes.otpVerify, extra: 'Signup');
+        showSuccessSnackBar(message: response!.data?['message'] ?? 'OTP sent to your email');
+        Future.microtask(() => _go(AppRoutes.otpVerify, extra: 'Signup'));
       } else if (response != null) {
         _error = ExceptionHandler.handleResponse(response);
         notifyListeners();
@@ -342,7 +318,7 @@ class AuthController extends ChangeNotifier {
         _signupEmail = email;
         notifyListeners();
         showSuccessSnackBar(message: response.data?['message'] ?? 'OTP sent to your email');
-        _go(AppRoutes.otpVerify, extra: 'Forget');
+        Future.microtask(() => _go(AppRoutes.otpVerify, extra: 'Forget'));
       } else if (response != null) {
         _error = ExceptionHandler.handleResponse(response);
         notifyListeners();
@@ -372,8 +348,12 @@ class AuthController extends ChangeNotifier {
           notifyListeners();
           if (origin == 'Signup') {
              await setPassword(origin: origin);
+          } else if (origin == 'Login') {
+             _isLoggedIn = true;
+             notifyListeners();
+             Future.microtask(() => _go(AppRoutes.goToHome, extra: origin));
           } else {
-             _go(AppRoutes.changePass, extra: origin ?? 'Forget');
+             Future.microtask(() => _go(AppRoutes.changePass, extra: origin ?? 'Forget'));
           }
         } else {
           _error = BadRequestException(message: 'Invalid OTP (use any 4 digits)');
@@ -394,8 +374,12 @@ class AuthController extends ChangeNotifier {
         
         if (origin == 'Signup') {
            await setPassword(origin: origin);
+        } else if (origin == 'Login') {
+           _isLoggedIn = true;
+           notifyListeners();
+           Future.microtask(() => _go(AppRoutes.goToHome, extra: origin));
         } else {
-           _go(AppRoutes.changePass, extra: origin ?? 'Forget');
+           Future.microtask(() => _go(AppRoutes.changePass, extra: origin ?? 'Forget'));
         }
       } else if (response != null) {
         _error = ExceptionHandler.handleResponse(response);
@@ -466,11 +450,13 @@ class AuthController extends ChangeNotifier {
         _isLoggedIn = true;
         notifyListeners();
         showSuccessSnackBar(message: 'Dummy: Password set successfully');
-        if (origin == 'Signup') {
-           _go(AppRoutes.roleSelection);
-        } else {
-           _go(AppRoutes.goToHome, extra: origin);
-        }
+        Future.microtask(() {
+          if (origin == 'Signup') {
+             _go(AppRoutes.roleSelection);
+          } else {
+             _go(AppRoutes.goToHome, extra: origin);
+          }
+        });
         return;
       }
 
@@ -498,11 +484,13 @@ class AuthController extends ChangeNotifier {
         showSuccessSnackBar(message: message);
         await registerFcmToken();
 
-        if (origin == 'Signup') {
-           _go(AppRoutes.roleSelection);
-        } else {
-           _go(AppRoutes.goToHome, extra: origin);
-        }
+        Future.microtask(() {
+          if (origin == 'Signup') {
+             _go(AppRoutes.roleSelection);
+          } else {
+             _go(AppRoutes.goToHome, extra: origin);
+          }
+        });
       } else if (response != null) {
         _error = ExceptionHandler.handleResponse(response);
         notifyListeners();

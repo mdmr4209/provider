@@ -383,6 +383,7 @@ class InputTextWidget extends StatelessWidget {
             prefixIcon: _buildLeading(theme, hasError),
             suffixIcon: _buildTrailing(theme, hasError, fieldState, state),
             counterText: '',
+              fillColor: backgroundColor
           ),
         ),
       ),

@@ -1,33 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/background_widget.dart';
 import '../../../../core/constants/app_assets.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_loader.dart';
 import '../controllers/coach_profile_controller.dart';
 
-class CoachProfileView extends StatefulWidget {
+class CoachProfileView extends StatelessWidget {
   const CoachProfileView({super.key});
-
-  @override
-  State<CoachProfileView> createState() => _CoachProfileViewState();
-}
-
-class _CoachProfileViewState extends State<CoachProfileView> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<CoachProfileController>().fetchProfileData();
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final controller = context.watch<CoachProfileController>();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final ctrl = context.read<CoachProfileController>();
+      if (!ctrl.hasFetched && !ctrl.isLoading && !ctrl.isRefreshing) {
+        ctrl.fetchProfileData();
+      }
+    });
 
     return BackgroundWidget(
       imagePath: AppAssets.bgHome,
@@ -46,7 +39,7 @@ class _CoachProfileViewState extends State<CoachProfileView> {
           ],
         ),
         body: controller.isLoading
-            ? const Center(child: ShimmerLoader())
+            ? _buildSkeletonLoader(context)
             : Stack(
                 children: [
                   RefreshIndicator(
@@ -144,11 +137,11 @@ class _CoachProfileViewState extends State<CoachProfileView> {
                     ),
                   ),
                   if (controller.isRefreshing)
-                    Positioned.fill(
-                      child: Container(
-                        color: Colors.black26,
-                        child: const Center(child: CustomLoader()),
-                      ),
+                    Positioned(
+                      top: 16.h,
+                      left: 0,
+                      right: 0,
+                      child: const Center(child: CustomLoader(size: 100)),
                     ),
                 ],
               ),
@@ -183,6 +176,62 @@ class _CoachProfileViewState extends State<CoachProfileView> {
           Text(content, style: const TextStyle(color: Colors.white70, fontSize: 14, height: 1.5)),
         ],
       ),
+    );
+  }
+
+  Widget _buildSkeletonLoader(BuildContext context) {
+    return SingleChildScrollView(
+      physics: const NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
+      child: Column(
+        children: [
+          SizedBox(height: 20.h),
+          // Avatar & Name
+          Center(
+            child: Column(
+              children: [
+                ShimmerLoader(width: 100.r, height: 100.r, borderRadius: 50.r),
+                SizedBox(height: 16.h),
+                ShimmerLoader(width: 150.w, height: 24.h),
+                SizedBox(height: 8.h),
+                ShimmerLoader(width: 180.w, height: 16.h),
+              ],
+            ),
+          ),
+          SizedBox(height: 32.h),
+          // Stats Row
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildStatSkeleton(),
+              _buildStatSkeleton(),
+              _buildStatSkeleton(),
+            ],
+          ),
+          SizedBox(height: 32.h),
+          // Details Sections
+          ShimmerLoader(width: double.infinity, height: 120.h, borderRadius: 16.r),
+          SizedBox(height: 24.h),
+          ShimmerLoader(width: double.infinity, height: 160.h, borderRadius: 16.r),
+          SizedBox(height: 32.h),
+          // Buttons
+          ShimmerLoader(width: double.infinity, height: 50.h, borderRadius: 25.r),
+          SizedBox(height: 12.h),
+          ShimmerLoader(width: double.infinity, height: 50.h, borderRadius: 25.r),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatSkeleton() {
+    return Column(
+      children: [
+        ShimmerLoader(width: 24.r, height: 24.r, borderRadius: 12.r),
+        SizedBox(height: 8.h),
+        ShimmerLoader(width: 40.w, height: 18.h),
+        SizedBox(height: 4.h),
+        ShimmerLoader(width: 60.w, height: 12.h),
+      ],
     );
   }
 }

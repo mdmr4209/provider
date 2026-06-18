@@ -168,29 +168,45 @@ class GroupsView extends StatelessWidget {
                     ),
                   ],
                 )
-              : ListView.builder(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  itemCount: controller.myGroups.length,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    final group = controller.myGroups[index];
-                    return GestureDetector(
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => GroupDetailsView(groupId: group.id),
-                        ),
-                      ),
-                      child: _GroupCard(
-                        type: GroupCardType.myGroup,
-                        name: group.name,
-                        icon: group.icon,
-                        membersCount: group.memberCount,
-                        description: group.description,
-                        onActionPress: () => controller.leaveGroup(group.id),
-                      ),
-                    );
+              : NotificationListener<ScrollNotification>(
+                  onNotification: (ScrollNotification scrollInfo) {
+                    if (!controller.isFetchingMoreGroups && 
+                        controller.groupsHasMore &&
+                        scrollInfo.metrics.pixels >= scrollInfo.metrics.maxScrollExtent - 50) {
+                      controller.fetchGroupsData(isFetchMore: true, tab: 'myGroups');
+                    }
+                    return false;
                   },
+                  child: ListView.builder(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    itemCount: controller.myGroups.length + (controller.isFetchingMoreGroups ? 1 : 0),
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      if (index == controller.myGroups.length) {
+                        return const Padding(
+                          padding: EdgeInsets.all(16.0),
+                          child: Center(child: CustomLoader(size: 40)),
+                        );
+                      }
+                      final group = controller.myGroups[index];
+                      return GestureDetector(
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => GroupDetailsView(groupId: group.id),
+                          ),
+                        ),
+                        child: _GroupCard(
+                          type: GroupCardType.myGroup,
+                          name: group.name,
+                          icon: group.icon,
+                          membersCount: group.memberCount,
+                          description: group.description,
+                          onActionPress: () => controller.leaveGroup(group.id),
+                        ),
+                      );
+                    },
+                  ),
                 ),
         ),
         if (controller.isRefreshing)
@@ -230,21 +246,37 @@ class GroupsView extends StatelessWidget {
                           ),
                         ],
                       )
-                    : ListView.builder(
-                        padding: EdgeInsets.symmetric(horizontal: 16.w),
-                        itemCount: controller.suggestedGroups.length,
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          final group = controller.suggestedGroups[index];
-                          return _GroupCard(
-                            type: GroupCardType.findGroup,
-                            name: group.name,
-                            icon: group.icon,
-                            membersCount: group.memberCount,
-                            description: group.description,
-                            onActionPress: () => controller.joinGroup(group.id),
-                          );
+                    : NotificationListener<ScrollNotification>(
+                        onNotification: (ScrollNotification scrollInfo) {
+                          if (!controller.isFetchingMoreSuggestions && 
+                              controller.suggestionsHasMore &&
+                              scrollInfo.metrics.pixels >= scrollInfo.metrics.maxScrollExtent - 50) {
+                            controller.fetchGroupsData(isFetchMore: true, tab: 'findGroups');
+                          }
+                          return false;
                         },
+                        child: ListView.builder(
+                          padding: EdgeInsets.symmetric(horizontal: 16.w),
+                          itemCount: controller.suggestedGroups.length + (controller.isFetchingMoreSuggestions ? 1 : 0),
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            if (index == controller.suggestedGroups.length) {
+                              return const Padding(
+                                padding: EdgeInsets.all(16.0),
+                                child: Center(child: CustomLoader(size: 40)),
+                              );
+                            }
+                            final group = controller.suggestedGroups[index];
+                            return _GroupCard(
+                              type: GroupCardType.findGroup,
+                              name: group.name,
+                              icon: group.icon,
+                              membersCount: group.memberCount,
+                              description: group.description,
+                              onActionPress: () => controller.joinGroup(group.id),
+                            );
+                          },
+                        ),
                       ),
               ),
               if (controller.isRefreshing)

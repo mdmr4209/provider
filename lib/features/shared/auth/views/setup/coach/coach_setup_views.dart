@@ -11,6 +11,7 @@ import '../../../../../../core/widgets/input_text_widget.dart';
 import '../../../../../../core/widgets/background_widget.dart';
 import '../../../../../../core/services/api_service.dart';
 import '../../../../../../routes/app_router.dart';
+import '../../../../../coach/profile/controllers/coach_profile_controller.dart';
 import '../../../controllers/auth_controller.dart';
 import 'coach_setup_base_view.dart';
 
@@ -21,13 +22,7 @@ Widget _buildContinueButton({
 }) {
   return CustomButton(
     title: "Continue →",
-    linearGradient: isEnabled,
-    buttonColor: isEnabled ? AppColors.buttonColor3 : AppColors.buttonColor4,
-    textColor: isEnabled ? AppColors.textColor3 : AppColors.whiteColor,
-    borderColor: isEnabled ? Colors.transparent : AppColors.buttonBorderColor4,
-    borderShadowColor: isEnabled
-        ? Colors.transparent
-        : AppColors.buttonShadowColor4,
+    linearGradient: isEnabled ? true : false,
     onPress: isEnabled ? () async => onPress() : null,
   );
 }
@@ -55,29 +50,29 @@ class CoachWelcomeView extends StatelessWidget {
                   "Welcome 👋",
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                        fontFamily: 'Georgia',
-                        color: AppColors.whiteColor,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    fontFamily: 'Georgia',
+                    color: AppColors.whiteColor,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 SizedBox(height: 24.h),
                 Text(
                   "We’re excited to have you join as a coach.",
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontFamily: 'Georgia',
-                        color: AppColors.whiteColor,
-                        fontWeight: FontWeight.w500,
-                      ),
+                    fontFamily: 'Georgia',
+                    color: AppColors.whiteColor,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 SizedBox(height: 12.h),
                 Text(
                   "Let’s set up your profile so clients can find and connect with you.",
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: AppColors.textColor,
-                        fontFamily: 'Segoe UI',
-                      ),
+                    color: AppColors.textColor,
+                    fontFamily: 'Segoe UI',
+                  ),
                 ),
                 const Spacer(),
                 CustomButton(
@@ -100,26 +95,12 @@ class CoachWelcomeView extends StatelessWidget {
 // ─────────────────────────────────────────────────────────────────────────────
 // 2. CoachBasicsView (Step 2/10)
 // ─────────────────────────────────────────────────────────────────────────────
-class CoachBasicsView extends StatefulWidget {
+class CoachBasicsView extends StatelessWidget {
   const CoachBasicsView({super.key});
 
   @override
-  State<CoachBasicsView> createState() => _CoachBasicsViewState();
-}
-
-class _CoachBasicsViewState extends State<CoachBasicsView> {
-  final nameController = TextEditingController();
-  final locationController = TextEditingController();
-
-  @override
-  void dispose() {
-    nameController.dispose();
-    locationController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final profileController = context.read<CoachProfileController>();
     return CoachSetupBaseView(
       currentStep: 2,
       totalSteps: 10,
@@ -132,49 +113,56 @@ class _CoachBasicsViewState extends State<CoachBasicsView> {
             Text(
               "Let’s Start With The Basics",
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontFamily: 'Georgia',
-                    color: AppColors.whiteColor,
-                    fontWeight: FontWeight.bold,
-                  ),
+                fontFamily: 'Georgia',
+                color: AppColors.whiteColor,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             SizedBox(height: 32.h),
             Text(
               "Name/ Professional Alias",
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: AppColors.textColor,
-                    fontWeight: FontWeight.w600,
-                  ),
+                color: AppColors.textColor,
+                fontWeight: FontWeight.w600,
+              ),
             ),
             SizedBox(height: 8.h),
-            InputTextWidget(
-              hintText: "How you want to be addressed?",
-              controller: nameController,
-              onChanged: (_) => setState(() {}),
+            ListenableBuilder(
+              listenable: profileController.nameController,
+              builder: (context, _) {
+                return InputTextWidget(
+                  hintText: "How you want to be addressed?",
+                  controller: profileController.nameController,
+                  onChanged: (_) {}, // Let controller handle it
+                );
+              },
             ),
             SizedBox(height: 24.h),
             Text(
               "Location (Optional)",
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: AppColors.textColor,
-                    fontWeight: FontWeight.w600,
-                  ),
+                color: AppColors.textColor,
+                fontWeight: FontWeight.w600,
+              ),
             ),
             SizedBox(height: 8.h),
             InputTextWidget(
               hintText: "City level — useful for time zones",
-              controller: locationController,
-              onChanged: (_) => setState(() {}),
+              controller: profileController.locationController,
             ),
             const Spacer(),
             ListenableBuilder(
-              listenable: nameController,
+              listenable: profileController.nameController,
               builder: (context, _) {
-                final isNameEntered = nameController.text.trim().isNotEmpty;
+                final isNameEntered = profileController.nameController.text
+                    .trim()
+                    .isNotEmpty;
                 return _buildContinueButton(
                   isEnabled: isNameEntered,
                   onPress: () {
                     // Update main AuthController name as well
-                    context.read<AuthController>().nameController.text = nameController.text.trim();
+                    context.read<AuthController>().nameController.text =
+                        profileController.nameController.text.trim();
                     context.push(AppRoutes.coachMatch);
                   },
                 );
@@ -191,15 +179,10 @@ class _CoachBasicsViewState extends State<CoachBasicsView> {
 // ─────────────────────────────────────────────────────────────────────────────
 // 3. CoachMatchView (Step 3/10)
 // ─────────────────────────────────────────────────────────────────────────────
-class CoachMatchView extends StatefulWidget {
+class CoachMatchView extends StatelessWidget {
   const CoachMatchView({super.key});
 
-  @override
-  State<CoachMatchView> createState() => _CoachMatchViewState();
-}
-
-class _CoachMatchViewState extends State<CoachMatchView> {
-  final List<String> specialties = [
+  static const List<String> specialties = [
     "Relationship Coaching",
     "Life Coaching",
     "Career Coaching",
@@ -207,15 +190,13 @@ class _CoachMatchViewState extends State<CoachMatchView> {
     "Divorce Support",
     "Anxiety & Stress Management",
     "Personal Growth",
-    "Communication Skills"
+    "Communication Skills",
   ];
 
-  final Set<String> selectedSpecialties = {};
-  String selectedExperience = "Select Experience";
-  final List<String> uploadedFiles = [];
-  bool isUploading = false;
-
-  void _showExperiencePicker() {
+  void _showExperiencePicker(
+    BuildContext context,
+    CoachProfileController controller,
+  ) {
     showModalBottomSheet(
       context: context,
       backgroundColor: AppColors.popupBackgroundColor,
@@ -251,17 +232,19 @@ class _CoachMatchViewState extends State<CoachMatchView> {
                   title: Text(
                     opt,
                     style: TextStyle(
-                      color: opt == selectedExperience ? AppColors.iconColor : AppColors.textColor,
-                      fontWeight: opt == selectedExperience ? FontWeight.bold : FontWeight.normal,
+                      color: opt == controller.selectedExperience
+                          ? AppColors.iconColor
+                          : AppColors.textColor,
+                      fontWeight: opt == controller.selectedExperience
+                          ? FontWeight.bold
+                          : FontWeight.normal,
                     ),
                   ),
-                  trailing: opt == selectedExperience
+                  trailing: opt == controller.selectedExperience
                       ? Icon(Icons.check, color: AppColors.iconColor)
                       : null,
                   onTap: () {
-                    setState(() {
-                      selectedExperience = opt;
-                    });
+                    controller.setSelectedExperience(opt);
                     Navigator.pop(context);
                   },
                 ),
@@ -271,19 +254,6 @@ class _CoachMatchViewState extends State<CoachMatchView> {
         );
       },
     );
-  }
-
-  Future<void> _simulateUpload() async {
-    setState(() {
-      isUploading = true;
-    });
-    await Future.delayed(const Duration(milliseconds: 1200));
-    if (mounted) {
-      setState(() {
-        isUploading = false;
-        uploadedFiles.add("RYT 200 Yoga Certification");
-      });
-    }
   }
 
   Widget _buildCheckbox({
@@ -302,7 +272,9 @@ class _CoachMatchViewState extends State<CoachMatchView> {
               height: 20.r,
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: isSelected ? AppColors.iconColor : AppColors.inputBorderColor,
+                  color: isSelected
+                      ? AppColors.iconColor
+                      : AppColors.inputBorderColor,
                   width: 2.w,
                 ),
                 borderRadius: BorderRadius.circular(4.r),
@@ -359,10 +331,7 @@ class _CoachMatchViewState extends State<CoachMatchView> {
           Expanded(
             child: Text(
               fileName,
-              style: TextStyle(
-                color: AppColors.textColor,
-                fontSize: 14.sp,
-              ),
+              style: TextStyle(color: AppColors.textColor, fontSize: 14.sp),
             ),
           ),
           GestureDetector(
@@ -380,9 +349,12 @@ class _CoachMatchViewState extends State<CoachMatchView> {
 
   @override
   Widget build(BuildContext context) {
-    final bool isContinueEnabled = selectedSpecialties.isNotEmpty &&
-        selectedExperience != "Select Experience" &&
-        uploadedFiles.isNotEmpty;
+    final controller = context.watch<CoachProfileController>();
+
+    final bool isContinueEnabled =
+        controller.selectedSpecialties.isNotEmpty &&
+        controller.selectedExperience != "Select Experience" &&
+        controller.uploadedFiles.isNotEmpty;
 
     return CoachSetupBaseView(
       currentStep: 3,
@@ -397,10 +369,10 @@ class _CoachMatchViewState extends State<CoachMatchView> {
               Text(
                 "Help Us Match You With The Right Client",
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontFamily: 'Georgia',
-                      color: AppColors.whiteColor,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  fontFamily: 'Georgia',
+                  color: AppColors.whiteColor,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               SizedBox(height: 24.h),
               Text(
@@ -415,15 +387,9 @@ class _CoachMatchViewState extends State<CoachMatchView> {
               ...specialties.map(
                 (spec) => _buildCheckbox(
                   label: spec,
-                  isSelected: selectedSpecialties.contains(spec),
+                  isSelected: controller.selectedSpecialties.contains(spec),
                   onTap: () {
-                    setState(() {
-                      if (selectedSpecialties.contains(spec)) {
-                        selectedSpecialties.remove(spec);
-                      } else {
-                        selectedSpecialties.add(spec);
-                      }
-                    });
+                    controller.toggleSpecialty(spec);
                   },
                 ),
               ),
@@ -438,7 +404,7 @@ class _CoachMatchViewState extends State<CoachMatchView> {
               ),
               SizedBox(height: 8.h),
               GestureDetector(
-                onTap: _showExperiencePicker,
+                onTap: () => _showExperiencePicker(context, controller),
                 child: Container(
                   height: 56.h,
                   width: double.infinity,
@@ -452,18 +418,17 @@ class _CoachMatchViewState extends State<CoachMatchView> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        selectedExperience,
+                        controller.selectedExperience,
                         style: TextStyle(
-                          color: selectedExperience == "Select Experience"
+                          color:
+                              controller.selectedExperience ==
+                                  "Select Experience"
                               ? AppColors.hintTextColor
                               : AppColors.textColor,
                           fontSize: 16.sp,
                         ),
                       ),
-                      Icon(
-                        Icons.chevron_right,
-                        color: AppColors.textColor,
-                      ),
+                      Icon(Icons.chevron_right, color: AppColors.textColor),
                     ],
                   ),
                 ),
@@ -478,9 +443,9 @@ class _CoachMatchViewState extends State<CoachMatchView> {
                 ),
               ),
               SizedBox(height: 8.h),
-              if (uploadedFiles.isEmpty && !isUploading)
+              if (controller.uploadedFiles.isEmpty && !controller.isUploading)
                 GestureDetector(
-                  onTap: _simulateUpload,
+                  onTap: () => controller.simulateUpload(() {}),
                   child: Container(
                     height: 56.h,
                     decoration: BoxDecoration(
@@ -492,18 +457,29 @@ class _CoachMatchViewState extends State<CoachMatchView> {
                     child: Row(
                       children: [
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 12.w,
+                            vertical: 6.h,
+                          ),
                           decoration: BoxDecoration(
                             color: AppColors.buttonColor3,
                             borderRadius: BorderRadius.circular(8.r),
                           ),
                           child: Row(
                             children: [
-                              Icon(Icons.upload_file, color: Colors.white, size: 18.r),
-                              SizedBox(width: 6.w),
+                              Icon(
+                                Icons.upload,
+                                color: AppColors.backgroundColor,
+                                size: 16.r,
+                              ),
+                              SizedBox(width: 4.w),
                               Text(
                                 "Upload",
-                                style: TextStyle(color: Colors.white, fontSize: 14.sp),
+                                style: TextStyle(
+                                  color: AppColors.backgroundColor,
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ],
                           ),
@@ -511,13 +487,16 @@ class _CoachMatchViewState extends State<CoachMatchView> {
                         SizedBox(width: 12.w),
                         Text(
                           "Click to upload files",
-                          style: TextStyle(color: AppColors.hintTextColor, fontSize: 14.sp),
+                          style: TextStyle(
+                            color: AppColors.hintTextColor,
+                            fontSize: 14.sp,
+                          ),
                         ),
                       ],
                     ),
                   ),
                 )
-              else if (isUploading)
+              else if (controller.isUploading)
                 Container(
                   height: 56.h,
                   alignment: Alignment.center,
@@ -535,11 +514,9 @@ class _CoachMatchViewState extends State<CoachMatchView> {
                   ),
                 )
               else
-                ...uploadedFiles.map(
+                ...controller.uploadedFiles.map(
                   (file) => _buildUploadedFile(file, () {
-                    setState(() {
-                      uploadedFiles.remove(file);
-                    });
+                    controller.removeUploadedFile(file);
                   }),
                 ),
               SizedBox(height: 40.h),
@@ -559,23 +536,16 @@ class _CoachMatchViewState extends State<CoachMatchView> {
 // ─────────────────────────────────────────────────────────────────────────────
 // 4. CoachStyleView (Step 4/10)
 // ─────────────────────────────────────────────────────────────────────────────
-class CoachStyleView extends StatefulWidget {
+class CoachStyleView extends StatelessWidget {
   const CoachStyleView({super.key});
 
-  @override
-  State<CoachStyleView> createState() => _CoachStyleViewState();
-}
-
-class _CoachStyleViewState extends State<CoachStyleView> {
-  final List<String> styles = [
+  static const List<String> styles = [
     "Direct and Honest",
     "Empathetic and soft",
     "Data-Driven",
     "Spiritual",
-    "Action-Oriented"
+    "Action-Oriented",
   ];
-
-  final Set<String> selectedStyles = {};
 
   Widget _buildCheckbox({
     required String label,
@@ -593,7 +563,9 @@ class _CoachStyleViewState extends State<CoachStyleView> {
               height: 20.r,
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: isSelected ? AppColors.iconColor : AppColors.inputBorderColor,
+                  color: isSelected
+                      ? AppColors.iconColor
+                      : AppColors.inputBorderColor,
                   width: 2.w,
                 ),
                 borderRadius: BorderRadius.circular(4.r),
@@ -625,6 +597,7 @@ class _CoachStyleViewState extends State<CoachStyleView> {
 
   @override
   Widget build(BuildContext context) {
+    final controller = context.watch<CoachProfileController>();
     return CoachSetupBaseView(
       currentStep: 4,
       totalSteps: 10,
@@ -637,10 +610,10 @@ class _CoachStyleViewState extends State<CoachStyleView> {
             Text(
               "Tell Us About Your Coaching Style",
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontFamily: 'Georgia',
-                    color: AppColors.whiteColor,
-                    fontWeight: FontWeight.bold,
-                  ),
+                fontFamily: 'Georgia',
+                color: AppColors.whiteColor,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             SizedBox(height: 24.h),
             Text(
@@ -655,21 +628,15 @@ class _CoachStyleViewState extends State<CoachStyleView> {
             ...styles.map(
               (style) => _buildCheckbox(
                 label: style,
-                isSelected: selectedStyles.contains(style),
+                isSelected: controller.selectedCoachingStyles.contains(style),
                 onTap: () {
-                  setState(() {
-                    if (selectedStyles.contains(style)) {
-                      selectedStyles.remove(style);
-                    } else {
-                      selectedStyles.add(style);
-                    }
-                  });
+                  controller.toggleCoachingStyle(style);
                 },
               ),
             ),
             const Spacer(),
             _buildContinueButton(
-              isEnabled: selectedStyles.isNotEmpty,
+              isEnabled: controller.selectedCoachingStyles.isNotEmpty,
               onPress: () => context.push(AppRoutes.coachPitchBio),
             ),
             SizedBox(height: 40.h),
@@ -683,26 +650,12 @@ class _CoachStyleViewState extends State<CoachStyleView> {
 // ─────────────────────────────────────────────────────────────────────────────
 // 4.1. CoachPitchBioView (Step 5/10)
 // ─────────────────────────────────────────────────────────────────────────────
-class CoachPitchBioView extends StatefulWidget {
+class CoachPitchBioView extends StatelessWidget {
   const CoachPitchBioView({super.key});
 
   @override
-  State<CoachPitchBioView> createState() => _CoachPitchBioViewState();
-}
-
-class _CoachPitchBioViewState extends State<CoachPitchBioView> {
-  final pitchController = TextEditingController();
-  final bioController = TextEditingController();
-
-  @override
-  void dispose() {
-    pitchController.dispose();
-    bioController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final controller = context.watch<CoachProfileController>();
     return CoachSetupBaseView(
       currentStep: 5,
       totalSteps: 10,
@@ -715,10 +668,10 @@ class _CoachPitchBioViewState extends State<CoachPitchBioView> {
             Text(
               "This is What Clients Will See Before Reaching Out",
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontFamily: 'Georgia',
-                    color: AppColors.whiteColor,
-                    fontWeight: FontWeight.bold,
-                  ),
+                fontFamily: 'Georgia',
+                color: AppColors.whiteColor,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             SizedBox(height: 32.h),
             Text(
@@ -730,11 +683,14 @@ class _CoachPitchBioViewState extends State<CoachPitchBioView> {
               ),
             ),
             SizedBox(height: 8.h),
-            InputTextWidget(
-              hintText: "In one sentence, how do you help people?",
-              controller: pitchController,
-              keyboardType: TextInputType.multiline,
-              onChanged: (_) => setState(() {}),
+            ListenableBuilder(
+              listenable: controller.pitchController,
+              builder: (context, _) => InputTextWidget(
+                hintText: "In one sentence, how do you help people?",
+                controller: controller.pitchController,
+                keyboardType: TextInputType.multiline,
+                onChanged: (_) {},
+              ),
             ),
             SizedBox(height: 24.h),
             Text(
@@ -746,16 +702,27 @@ class _CoachPitchBioViewState extends State<CoachPitchBioView> {
               ),
             ),
             SizedBox(height: 8.h),
-            InputTextWidget(
-              hintText: "A deeper dive into your philosophy",
-              controller: bioController,
-              keyboardType: TextInputType.multiline,
-              onChanged: (_) => setState(() {}),
+            ListenableBuilder(
+              listenable: controller.bioController,
+              builder: (context, _) => InputTextWidget(
+                hintText: "A deeper dive into your philosophy",
+                controller: controller.bioController,
+                keyboardType: TextInputType.multiline,
+                onChanged: (_) {},
+              ),
             ),
             const Spacer(),
-            _buildContinueButton(
-              isEnabled: pitchController.text.trim().isNotEmpty && bioController.text.trim().isNotEmpty,
-              onPress: () => context.push(AppRoutes.coachAvailability),
+            ListenableBuilder(
+              listenable: Listenable.merge([
+                controller.pitchController,
+                controller.bioController,
+              ]),
+              builder: (context, _) => _buildContinueButton(
+                isEnabled:
+                    controller.pitchController.text.trim().isNotEmpty &&
+                    controller.bioController.text.trim().isNotEmpty,
+                onPress: () => context.push(AppRoutes.coachAvailability),
+              ),
             ),
             SizedBox(height: 40.h),
           ],
@@ -768,104 +735,117 @@ class _CoachPitchBioViewState extends State<CoachPitchBioView> {
 // ─────────────────────────────────────────────────────────────────────────────
 // 4.2. CoachAvailabilityView (Step 6/10)
 // ─────────────────────────────────────────────────────────────────────────────
-class CoachAvailabilityView extends StatefulWidget {
+class CoachAvailabilityView extends StatelessWidget {
   const CoachAvailabilityView({super.key});
 
-  @override
-  State<CoachAvailabilityView> createState() => _CoachAvailabilityViewState();
-}
-
-class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
-  bool isOnDays = true;
-
-  // On Days State
-  String selectedDay = "Enter here";
-  String onStartTime = "Enter here";
-  String onEndTime = "Enter here";
-  final List<Map<String, String>> onDaysList = [
-    {"day": "Monday", "time": "09:00 AM - 12:00 PM"},
-    {"day": "Monday", "time": "09:00 AM - 12:00 PM"},
-    {"day": "Tuesday", "time": "09:00 AM - 12:00 PM"},
-    {"day": "Tuesday", "time": "09:00 AM - 12:00 PM"},
-    {"day": "Tuesday", "time": "09:00 AM - 12:00 PM"},
-  ];
-
-  // Off Days State
-  String selectedFromDate = "Select one";
-  String selectedToDate = "Select one";
-  String offStartTime = "Enter here";
-  String offEndTime = "Enter here";
-  final List<Map<String, String>> offDaysList = [
-    {"start": "31/08/2026; 12:00PM", "end": "31/08/2026; 12:00PM"},
-    {"start": "31/08/2026; 12:00PM", "end": "31/08/2026; 12:00PM"},
-    {"start": "31/08/2026; 12:00PM", "end": "31/08/2026; 12:00PM"},
-    {"start": "31/08/2026; 12:00PM", "end": "31/08/2026; 12:00PM"},
-  ];
-
-  void _showDayPicker() {
+  void _showDayPicker(BuildContext context, CoachProfileController controller) {
     showModalBottomSheet(
       context: context,
       backgroundColor: AppColors.popupBackgroundColor,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20.r))),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+      ),
       builder: (context) {
-        final List<String> days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+        final List<String> days = [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday",
+        ];
         return SafeArea(
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: days.map((d) => ListTile(
-              title: Text(d, style: const TextStyle(color: AppColors.textColor)),
-              onTap: () {
-                setState(() => selectedDay = d);
-                Navigator.pop(context);
-              },
-            )).toList(),
+            children: days
+                .map(
+                  (d) => ListTile(
+                    title: Text(
+                      d,
+                      style: const TextStyle(color: AppColors.textColor),
+                    ),
+                    onTap: () {
+                      controller.updateAvailabilityField(day: d);
+                      Navigator.pop(context);
+                    },
+                  ),
+                )
+                .toList(),
           ),
         );
       },
     );
   }
 
-  void _showTimePicker(bool isStart, bool isOnTab) {
+  void _showTimePicker(
+    BuildContext context,
+    CoachProfileController controller,
+    bool isStart,
+    bool isOnTab,
+  ) {
     showModalBottomSheet(
       context: context,
       backgroundColor: AppColors.popupBackgroundColor,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20.r))),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+      ),
       builder: (context) {
         final List<String> times = [
-          "09:00 AM", "10:00 AM", "11:00 AM", "12:00 PM",
-          "01:00 PM", "02:00 PM", "03:00 PM", "04:00 PM",
-          "05:00 PM", "06:00 PM"
+          "09:00 AM",
+          "10:00 AM",
+          "11:00 AM",
+          "12:00 PM",
+          "01:00 PM",
+          "02:00 PM",
+          "03:00 PM",
+          "04:00 PM",
+          "05:00 PM",
+          "06:00 PM",
         ];
         return SafeArea(
           child: ListView(
             shrinkWrap: true,
-            children: times.map((t) => ListTile(
-              title: Text(t, style: const TextStyle(color: AppColors.textColor)),
-              onTap: () {
-                setState(() {
-                  if (isOnTab) {
-                    if (isStart) onStartTime = t; else onEndTime = t;
-                  } else {
-                    if (isStart) offStartTime = t; else offEndTime = t;
-                  }
-                });
-                Navigator.pop(context);
-              },
-            )).toList(),
+            children: times
+                .map(
+                  (t) => ListTile(
+                    title: Text(
+                      t,
+                      style: const TextStyle(color: AppColors.textColor),
+                    ),
+                    onTap: () {
+                      if (isOnTab) {
+                        if (isStart)
+                          controller.updateAvailabilityField(onStart: t);
+                        else
+                          controller.updateAvailabilityField(onEnd: t);
+                      } else {
+                        if (isStart)
+                          controller.updateAvailabilityField(offStart: t);
+                        else
+                          controller.updateAvailabilityField(offEnd: t);
+                      }
+                      Navigator.pop(context);
+                    },
+                  ),
+                )
+                .toList(),
           ),
         );
       },
     );
   }
 
-  void _showDatePicker(bool isFrom) {
-    setState(() {
-      if (isFrom) selectedFromDate = "31/08/2026"; else selectedToDate = "31/08/2026";
-    });
+  void _showDatePicker(CoachProfileController controller, bool isFrom) {
+    if (isFrom)
+      controller.updateAvailabilityField(fromDate: "31/08/2026");
+    else
+      controller.updateAvailabilityField(toDate: "31/08/2026");
   }
 
   @override
   Widget build(BuildContext context) {
+    final controller = context.watch<CoachProfileController>();
     return CoachSetupBaseView(
       currentStep: 6,
       totalSteps: 10,
@@ -880,21 +860,27 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
               children: [
                 Expanded(
                   child: GestureDetector(
-                    onTap: () => setState(() => isOnDays = true),
+                    onTap: () => controller.toggleIsOnDays(true),
                     child: Column(
                       children: [
                         Text(
                           "On Days",
                           style: TextStyle(
-                            color: isOnDays ? AppColors.iconColor : AppColors.textColor.withAlpha(150),
+                            color: controller.isOnDays
+                                ? AppColors.iconColor
+                                : AppColors.textColor.withAlpha(150),
                             fontSize: 16.sp,
-                            fontWeight: isOnDays ? FontWeight.bold : FontWeight.normal,
+                            fontWeight: controller.isOnDays
+                                ? FontWeight.bold
+                                : FontWeight.normal,
                           ),
                         ),
                         SizedBox(height: 8.h),
                         Container(
                           height: 2.h,
-                          color: isOnDays ? AppColors.iconColor : Colors.transparent,
+                          color: controller.isOnDays
+                              ? AppColors.iconColor
+                              : Colors.transparent,
                         ),
                       ],
                     ),
@@ -902,21 +888,27 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                 ),
                 Expanded(
                   child: GestureDetector(
-                    onTap: () => setState(() => isOnDays = false),
+                    onTap: () => controller.toggleIsOnDays(false),
                     child: Column(
                       children: [
                         Text(
                           "Off Days",
                           style: TextStyle(
-                            color: !isOnDays ? AppColors.iconColor : AppColors.textColor.withAlpha(150),
+                            color: !controller.isOnDays
+                                ? AppColors.iconColor
+                                : AppColors.textColor.withAlpha(150),
                             fontSize: 16.sp,
-                            fontWeight: !isOnDays ? FontWeight.bold : FontWeight.normal,
+                            fontWeight: !controller.isOnDays
+                                ? FontWeight.bold
+                                : FontWeight.normal,
                           ),
                         ),
                         SizedBox(height: 8.h),
                         Container(
                           height: 2.h,
-                          color: !isOnDays ? AppColors.iconColor : Colors.transparent,
+                          color: !controller.isOnDays
+                              ? AppColors.iconColor
+                              : Colors.transparent,
                         ),
                       ],
                     ),
@@ -927,7 +919,9 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
             SizedBox(height: 24.h),
             Expanded(
               child: SingleChildScrollView(
-                child: isOnDays ? _buildOnDaysTab() : _buildOffDaysTab(),
+                child: controller.isOnDays
+                    ? _buildOnDaysTab(context, controller)
+                    : _buildOffDaysTab(context, controller),
               ),
             ),
             _buildContinueButton(
@@ -941,8 +935,14 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
     );
   }
 
-  Widget _buildOnDaysTab() {
-    final bool canSave = selectedDay != "Enter here" && onStartTime != "Enter here" && onEndTime != "Enter here";
+  Widget _buildOnDaysTab(
+    BuildContext context,
+    CoachProfileController controller,
+  ) {
+    final bool canSave =
+        controller.setupSelectedDay != "Enter here" &&
+        controller.onStartTime != "Enter here" &&
+        controller.onEndTime != "Enter here";
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -952,15 +952,20 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
           decoration: BoxDecoration(
             color: AppColors.buttonColor4.withAlpha(50),
             borderRadius: BorderRadius.circular(16.r),
-            border: Border.all(color: AppColors.buttonBorderColor4.withAlpha(50)),
+            border: Border.all(
+              color: AppColors.buttonBorderColor4.withAlpha(50),
+            ),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Days of Week", style: TextStyle(color: AppColors.textColor, fontSize: 14.sp)),
+              Text(
+                "Days of Week",
+                style: TextStyle(color: AppColors.textColor, fontSize: 14.sp),
+              ),
               SizedBox(height: 8.h),
               GestureDetector(
-                onTap: _showDayPicker,
+                onTap: () => _showDayPicker(context, controller),
                 child: Container(
                   height: 48.h,
                   padding: EdgeInsets.symmetric(horizontal: 12.w),
@@ -972,8 +977,18 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(selectedDay, style: TextStyle(color: AppColors.textColor, fontSize: 14.sp)),
-                      Icon(Icons.chevron_right, color: AppColors.textColor, size: 20.r),
+                      Text(
+                        controller.setupSelectedDay,
+                        style: TextStyle(
+                          color: AppColors.textColor,
+                          fontSize: 14.sp,
+                        ),
+                      ),
+                      Icon(
+                        Icons.chevron_right,
+                        color: AppColors.textColor,
+                        size: 20.r,
+                      ),
                     ],
                   ),
                 ),
@@ -985,23 +1000,42 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Start Time", style: TextStyle(color: AppColors.textColor, fontSize: 14.sp)),
+                        Text(
+                          "Start Time",
+                          style: TextStyle(
+                            color: AppColors.textColor,
+                            fontSize: 14.sp,
+                          ),
+                        ),
                         SizedBox(height: 8.h),
                         GestureDetector(
-                          onTap: () => _showTimePicker(true, true),
+                          onTap: () =>
+                              _showTimePicker(context, controller, true, true),
                           child: Container(
                             height: 48.h,
                             padding: EdgeInsets.symmetric(horizontal: 12.w),
                             decoration: BoxDecoration(
                               color: AppColors.buttonColor4,
                               borderRadius: BorderRadius.circular(12.r),
-                              border: Border.all(color: AppColors.buttonBorderColor4),
+                              border: Border.all(
+                                color: AppColors.buttonBorderColor4,
+                              ),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Icon(Icons.access_time, color: AppColors.textColor, size: 18.r),
-                                Text(onStartTime, style: TextStyle(color: AppColors.textColor, fontSize: 14.sp)),
+                                Icon(
+                                  Icons.access_time,
+                                  color: AppColors.textColor,
+                                  size: 18.r,
+                                ),
+                                Text(
+                                  controller.onStartTime,
+                                  style: TextStyle(
+                                    color: AppColors.textColor,
+                                    fontSize: 14.sp,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -1014,23 +1048,42 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("End Time", style: TextStyle(color: AppColors.textColor, fontSize: 14.sp)),
+                        Text(
+                          "End Time",
+                          style: TextStyle(
+                            color: AppColors.textColor,
+                            fontSize: 14.sp,
+                          ),
+                        ),
                         SizedBox(height: 8.h),
                         GestureDetector(
-                          onTap: () => _showTimePicker(false, true),
+                          onTap: () =>
+                              _showTimePicker(context, controller, false, true),
                           child: Container(
                             height: 48.h,
                             padding: EdgeInsets.symmetric(horizontal: 12.w),
                             decoration: BoxDecoration(
                               color: AppColors.buttonColor4,
                               borderRadius: BorderRadius.circular(12.r),
-                              border: Border.all(color: AppColors.buttonBorderColor4),
+                              border: Border.all(
+                                color: AppColors.buttonBorderColor4,
+                              ),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Icon(Icons.access_time, color: AppColors.textColor, size: 18.r),
-                                Text(onEndTime, style: TextStyle(color: AppColors.textColor, fontSize: 14.sp)),
+                                Icon(
+                                  Icons.access_time,
+                                  color: AppColors.textColor,
+                                  size: 18.r,
+                                ),
+                                Text(
+                                  controller.onEndTime,
+                                  style: TextStyle(
+                                    color: AppColors.textColor,
+                                    fontSize: 14.sp,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -1043,58 +1096,91 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
               SizedBox(height: 24.h),
               CustomButton(
                 title: "Save Availability",
-                buttonColor: canSave ? AppColors.iconColor : AppColors.buttonColor4,
-                textColor: canSave ? Colors.white : AppColors.whiteColor.withAlpha(100),
-                onPress: canSave ? () async {
-                  setState(() {
-                    onDaysList.add({
-                      "day": selectedDay,
-                      "time": "$onStartTime - $onEndTime"
-                    });
-                    selectedDay = "Enter here";
-                    onStartTime = "Enter here";
-                    onEndTime = "Enter here";
-                  });
-                } : null,
+                buttonColor: canSave
+                    ? AppColors.iconColor
+                    : AppColors.buttonColor4,
+                textColor: canSave
+                    ? Colors.white
+                    : AppColors.whiteColor.withAlpha(100),
+                onPress: canSave
+                    ? () async {
+                        controller.saveSetupOnDay();
+                      }
+                    : null,
               ),
             ],
           ),
         ),
         SizedBox(height: 24.h),
-        Text("Current Availability", style: TextStyle(color: AppColors.textColor, fontSize: 16.sp, fontWeight: FontWeight.bold)),
+        Text(
+          "Current Availability",
+          style: TextStyle(
+            color: AppColors.textColor,
+            fontSize: 16.sp,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         SizedBox(height: 12.h),
-        ...onDaysList.map((item) => Container(
-          margin: EdgeInsets.only(bottom: 12.h),
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-          decoration: BoxDecoration(
-            color: AppColors.buttonColor4.withAlpha(30),
-            borderRadius: BorderRadius.circular(12.r),
-            border: Border.all(color: AppColors.buttonBorderColor4.withAlpha(30)),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(item["day"]!, style: TextStyle(color: Colors.white, fontSize: 14.sp, fontWeight: FontWeight.bold)),
-                  SizedBox(height: 4.h),
-                  Text(item["time"]!, style: TextStyle(color: AppColors.textColor, fontSize: 14.sp)),
-                ],
+        ...controller.onDaysList.map(
+          (item) => Container(
+            margin: EdgeInsets.only(bottom: 12.h),
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+            decoration: BoxDecoration(
+              color: AppColors.buttonColor4.withAlpha(30),
+              borderRadius: BorderRadius.circular(12.r),
+              border: Border.all(
+                color: AppColors.buttonBorderColor4.withAlpha(30),
               ),
-              GestureDetector(
-                onTap: () => setState(() => onDaysList.remove(item)),
-                child: Icon(Icons.cancel, color: Colors.redAccent.withAlpha(200), size: 22.r),
-              ),
-            ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item["day"]!,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 4.h),
+                    Text(
+                      item["time"]!,
+                      style: TextStyle(
+                        color: AppColors.textColor,
+                        fontSize: 14.sp,
+                      ),
+                    ),
+                  ],
+                ),
+                GestureDetector(
+                  onTap: () => controller.removeSetupOnDay(item),
+                  child: Icon(
+                    Icons.cancel,
+                    color: Colors.redAccent.withAlpha(200),
+                    size: 22.r,
+                  ),
+                ),
+              ],
+            ),
           ),
-        )),
+        ),
       ],
     );
   }
 
-  Widget _buildOffDaysTab() {
-    final bool canSave = selectedFromDate != "Select one" && selectedToDate != "Select one" && offStartTime != "Enter here" && offEndTime != "Enter here";
+  Widget _buildOffDaysTab(
+    BuildContext context,
+    CoachProfileController controller,
+  ) {
+    final bool canSave =
+        controller.selectedFromDate != "Select one" &&
+        controller.selectedToDate != "Select one" &&
+        controller.offStartTime != "Enter here" &&
+        controller.offEndTime != "Enter here";
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1104,7 +1190,9 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
           decoration: BoxDecoration(
             color: AppColors.buttonColor4.withAlpha(50),
             borderRadius: BorderRadius.circular(16.r),
-            border: Border.all(color: AppColors.buttonBorderColor4.withAlpha(50)),
+            border: Border.all(
+              color: AppColors.buttonBorderColor4.withAlpha(50),
+            ),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1115,23 +1203,41 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("From", style: TextStyle(color: AppColors.textColor, fontSize: 14.sp)),
+                        Text(
+                          "From",
+                          style: TextStyle(
+                            color: AppColors.textColor,
+                            fontSize: 14.sp,
+                          ),
+                        ),
                         SizedBox(height: 8.h),
                         GestureDetector(
-                          onTap: () => _showDatePicker(true),
+                          onTap: () => _showDatePicker(controller, true),
                           child: Container(
                             height: 48.h,
                             padding: EdgeInsets.symmetric(horizontal: 12.w),
                             decoration: BoxDecoration(
                               color: AppColors.buttonColor4,
                               borderRadius: BorderRadius.circular(12.r),
-                              border: Border.all(color: AppColors.buttonBorderColor4),
+                              border: Border.all(
+                                color: AppColors.buttonBorderColor4,
+                              ),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Icon(Icons.calendar_today, color: AppColors.textColor, size: 18.r),
-                                Text(selectedFromDate, style: TextStyle(color: AppColors.textColor, fontSize: 12.sp)),
+                                Icon(
+                                  Icons.calendar_today,
+                                  color: AppColors.textColor,
+                                  size: 18.r,
+                                ),
+                                Text(
+                                  controller.selectedFromDate,
+                                  style: TextStyle(
+                                    color: AppColors.textColor,
+                                    fontSize: 12.sp,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -1144,23 +1250,42 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Start Time", style: TextStyle(color: AppColors.textColor, fontSize: 14.sp)),
+                        Text(
+                          "Start Time",
+                          style: TextStyle(
+                            color: AppColors.textColor,
+                            fontSize: 14.sp,
+                          ),
+                        ),
                         SizedBox(height: 8.h),
                         GestureDetector(
-                          onTap: () => _showTimePicker(true, false),
+                          onTap: () =>
+                              _showTimePicker(context, controller, true, false),
                           child: Container(
                             height: 48.h,
                             padding: EdgeInsets.symmetric(horizontal: 12.w),
                             decoration: BoxDecoration(
                               color: AppColors.buttonColor4,
                               borderRadius: BorderRadius.circular(12.r),
-                              border: Border.all(color: AppColors.buttonBorderColor4),
+                              border: Border.all(
+                                color: AppColors.buttonBorderColor4,
+                              ),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Icon(Icons.access_time, color: AppColors.textColor, size: 18.r),
-                                Text(offStartTime, style: TextStyle(color: AppColors.textColor, fontSize: 12.sp)),
+                                Icon(
+                                  Icons.access_time,
+                                  color: AppColors.textColor,
+                                  size: 18.r,
+                                ),
+                                Text(
+                                  controller.offStartTime,
+                                  style: TextStyle(
+                                    color: AppColors.textColor,
+                                    fontSize: 12.sp,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -1177,23 +1302,41 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("To", style: TextStyle(color: AppColors.textColor, fontSize: 14.sp)),
+                        Text(
+                          "To",
+                          style: TextStyle(
+                            color: AppColors.textColor,
+                            fontSize: 14.sp,
+                          ),
+                        ),
                         SizedBox(height: 8.h),
                         GestureDetector(
-                          onTap: () => _showDatePicker(false),
+                          onTap: () => _showDatePicker(controller, false),
                           child: Container(
                             height: 48.h,
                             padding: EdgeInsets.symmetric(horizontal: 12.w),
                             decoration: BoxDecoration(
                               color: AppColors.buttonColor4,
                               borderRadius: BorderRadius.circular(12.r),
-                              border: Border.all(color: AppColors.buttonBorderColor4),
+                              border: Border.all(
+                                color: AppColors.buttonBorderColor4,
+                              ),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Icon(Icons.calendar_today, color: AppColors.textColor, size: 18.r),
-                                Text(selectedToDate, style: TextStyle(color: AppColors.textColor, fontSize: 12.sp)),
+                                Icon(
+                                  Icons.calendar_today,
+                                  color: AppColors.textColor,
+                                  size: 18.r,
+                                ),
+                                Text(
+                                  controller.selectedToDate,
+                                  style: TextStyle(
+                                    color: AppColors.textColor,
+                                    fontSize: 12.sp,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -1206,23 +1349,46 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("End Time", style: TextStyle(color: AppColors.textColor, fontSize: 14.sp)),
+                        Text(
+                          "End Time",
+                          style: TextStyle(
+                            color: AppColors.textColor,
+                            fontSize: 14.sp,
+                          ),
+                        ),
                         SizedBox(height: 8.h),
                         GestureDetector(
-                          onTap: () => _showTimePicker(false, false),
+                          onTap: () => _showTimePicker(
+                            context,
+                            controller,
+                            false,
+                            false,
+                          ),
                           child: Container(
                             height: 48.h,
                             padding: EdgeInsets.symmetric(horizontal: 12.w),
                             decoration: BoxDecoration(
                               color: AppColors.buttonColor4,
                               borderRadius: BorderRadius.circular(12.r),
-                              border: Border.all(color: AppColors.buttonBorderColor4),
+                              border: Border.all(
+                                color: AppColors.buttonBorderColor4,
+                              ),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Icon(Icons.access_time, color: AppColors.textColor, size: 18.r),
-                                Text(offEndTime, style: TextStyle(color: AppColors.textColor, fontSize: 12.sp)),
+                                Icon(
+                                  Icons.access_time,
+                                  color: AppColors.textColor,
+                                  size: 18.r,
+                                ),
+                                Text(
+                                  controller.offEndTime,
+                                  style: TextStyle(
+                                    color: AppColors.textColor,
+                                    fontSize: 12.sp,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -1235,63 +1401,101 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
               SizedBox(height: 24.h),
               CustomButton(
                 title: "Save Availability",
-                buttonColor: canSave ? AppColors.iconColor : AppColors.buttonColor4,
-                textColor: canSave ? Colors.white : AppColors.whiteColor.withAlpha(100),
-                onPress: canSave ? () async {
-                  setState(() {
-                    offDaysList.add({
-                      "start": "$selectedFromDate; $offStartTime",
-                      "end": "$selectedToDate; $offEndTime"
-                    });
-                    selectedFromDate = "Select one";
-                    selectedToDate = "Select one";
-                    offStartTime = "Enter here";
-                    offEndTime = "Enter here";
-                  });
-                } : null,
+                buttonColor: canSave
+                    ? AppColors.iconColor
+                    : AppColors.buttonColor4,
+                textColor: canSave
+                    ? Colors.white
+                    : AppColors.whiteColor.withAlpha(100),
+                onPress: canSave
+                    ? () async {
+                        controller.saveSetupOffDay();
+                      }
+                    : null,
               ),
             ],
           ),
         ),
         SizedBox(height: 24.h),
-        Text("Current Unavailability", style: TextStyle(color: AppColors.textColor, fontSize: 16.sp, fontWeight: FontWeight.bold)),
+        Text(
+          "Current Unavailability",
+          style: TextStyle(
+            color: AppColors.textColor,
+            fontSize: 16.sp,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         SizedBox(height: 12.h),
-        ...offDaysList.map((item) => Container(
-          margin: EdgeInsets.only(bottom: 12.h),
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-          decoration: BoxDecoration(
-            color: AppColors.buttonColor4.withAlpha(30),
-            borderRadius: BorderRadius.circular(12.r),
-            border: Border.all(color: AppColors.buttonBorderColor4.withAlpha(30)),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text("Starts  ", style: TextStyle(color: AppColors.textColor, fontSize: 12.sp)),
-                      Text(item["start"]!, style: TextStyle(color: Colors.white, fontSize: 13.sp, fontWeight: FontWeight.bold)),
-                    ],
-                  ),
-                  SizedBox(height: 4.h),
-                  Row(
-                    children: [
-                      Text("Ends    ", style: TextStyle(color: AppColors.textColor, fontSize: 12.sp)),
-                      Text(item["end"]!, style: TextStyle(color: Colors.white, fontSize: 13.sp, fontWeight: FontWeight.bold)),
-                    ],
-                  ),
-                ],
+        ...controller.offDaysList.map(
+          (item) => Container(
+            margin: EdgeInsets.only(bottom: 12.h),
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+            decoration: BoxDecoration(
+              color: AppColors.buttonColor4.withAlpha(30),
+              borderRadius: BorderRadius.circular(12.r),
+              border: Border.all(
+                color: AppColors.buttonBorderColor4.withAlpha(30),
               ),
-              GestureDetector(
-                onTap: () => setState(() => offDaysList.remove(item)),
-                child: Icon(Icons.cancel, color: Colors.redAccent.withAlpha(200), size: 22.r),
-              ),
-            ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          "Starts  ",
+                          style: TextStyle(
+                            color: AppColors.textColor,
+                            fontSize: 12.sp,
+                          ),
+                        ),
+                        Text(
+                          item["start"]!,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 4.h),
+                    Row(
+                      children: [
+                        Text(
+                          "Ends    ",
+                          style: TextStyle(
+                            color: AppColors.textColor,
+                            fontSize: 12.sp,
+                          ),
+                        ),
+                        Text(
+                          item["end"]!,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                GestureDetector(
+                  onTap: () => controller.removeSetupOffDay(item),
+                  child: Icon(
+                    Icons.cancel,
+                    color: Colors.redAccent.withAlpha(200),
+                    size: 22.r,
+                  ),
+                ),
+              ],
+            ),
           ),
-        )),
+        ),
       ],
     );
   }
@@ -1300,36 +1504,12 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
 // ─────────────────────────────────────────────────────────────────────────────
 // 4.3. CoachRatesServicesView (Step 7/10)
 // ─────────────────────────────────────────────────────────────────────────────
-class CoachRatesServicesView extends StatefulWidget {
+class CoachRatesServicesView extends StatelessWidget {
   const CoachRatesServicesView({super.key});
 
   @override
-  State<CoachRatesServicesView> createState() => _CoachRatesServicesViewState();
-}
-
-class _CoachRatesServicesViewState extends State<CoachRatesServicesView> {
-  final perMinuteController = TextEditingController(text: "150\$");
-  final perTextController = TextEditingController(text: "150\$");
-  final cancellationPolicyController = TextEditingController(text: "Write cancellation policy");
-  final cancelPriorController = TextEditingController(text: "48h");
-
-  final List<Map<String, dynamic>> services = [
-    {"title": "Option 1", "duration": "Enter here", "price": "Enter here", "active": true},
-    {"title": "Option 2", "duration": "Enter here", "price": "Enter here", "active": true},
-    {"title": "Option 3", "duration": "Enter here", "price": "Enter here", "active": true},
-  ];
-
-  @override
-  void dispose() {
-    perMinuteController.dispose();
-    perTextController.dispose();
-    cancellationPolicyController.dispose();
-    cancelPriorController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final controller = context.watch<CoachProfileController>();
     return CoachSetupBaseView(
       currentStep: 7,
       totalSteps: 10,
@@ -1343,45 +1523,89 @@ class _CoachRatesServicesViewState extends State<CoachRatesServicesView> {
               Text(
                 "This is What Clients Will See Before Reaching Out",
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontFamily: 'Georgia',
-                      color: AppColors.whiteColor,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  fontFamily: 'Georgia',
+                  color: AppColors.whiteColor,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               SizedBox(height: 24.h),
-              Text("Per Minute Rate", style: TextStyle(color: AppColors.textColor, fontSize: 14.sp, fontWeight: FontWeight.w600)),
+              Text(
+                "Per Minute Rate",
+                style: TextStyle(
+                  color: AppColors.textColor,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
               SizedBox(height: 8.h),
-              InputTextWidget(hintText: "Rate per minute", controller: perMinuteController),
+              InputTextWidget(
+                hintText: "Rate per minute",
+                controller: controller.perMinuteRateController,
+              ),
               SizedBox(height: 16.h),
-              Text("Per Text Rate", style: TextStyle(color: AppColors.textColor, fontSize: 14.sp, fontWeight: FontWeight.w600)),
+              Text(
+                "Per Text Rate",
+                style: TextStyle(
+                  color: AppColors.textColor,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
               SizedBox(height: 8.h),
-              InputTextWidget(hintText: "Rate per text message", controller: perTextController),
+              InputTextWidget(
+                hintText: "Rate per text message",
+                controller: controller.perTextRateController,
+              ),
               SizedBox(height: 16.h),
-              Text("Cancellation Policy", style: TextStyle(color: AppColors.textColor, fontSize: 14.sp, fontWeight: FontWeight.w600)),
+              Text(
+                "Cancellation Policy",
+                style: TextStyle(
+                  color: AppColors.textColor,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
               SizedBox(height: 8.h),
-              InputTextWidget(hintText: "Write cancellation policy", controller: cancellationPolicyController, keyboardType: TextInputType.multiline),
+              InputTextWidget(
+                hintText: "Write cancellation policy",
+                controller: controller.cancellationPolicyController,
+                keyboardType: TextInputType.multiline,
+              ),
               SizedBox(height: 16.h),
-              Text("Accept Cancellation Prior", style: TextStyle(color: AppColors.textColor, fontSize: 14.sp, fontWeight: FontWeight.w600)),
+              Text(
+                "Accept Cancellation Prior",
+                style: TextStyle(
+                  color: AppColors.textColor,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
               SizedBox(height: 8.h),
-              InputTextWidget(hintText: "Prior window (e.g. 48h)", controller: cancelPriorController),
+              InputTextWidget(
+                hintText: "Prior window (e.g. 48h)",
+                controller: controller.cancellationPriorController,
+              ),
               SizedBox(height: 24.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Service List", style: TextStyle(color: AppColors.textColor, fontSize: 18.sp, fontWeight: FontWeight.bold)),
+                  Text(
+                    "Service List",
+                    style: TextStyle(
+                      color: AppColors.textColor,
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   GestureDetector(
                     onTap: () {
-                      setState(() {
-                        services.add({
-                          "title": "Option ${services.length + 1}",
-                          "duration": "Enter here",
-                          "price": "Enter here",
-                          "active": true
-                        });
-                      });
+                      controller.addServiceOption();
                     },
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10.w,
+                        vertical: 6.h,
+                      ),
                       decoration: BoxDecoration(
                         color: AppColors.buttonColor4,
                         borderRadius: BorderRadius.circular(8.r),
@@ -1389,9 +1613,19 @@ class _CoachRatesServicesViewState extends State<CoachRatesServicesView> {
                       ),
                       child: Row(
                         children: [
-                          Icon(Icons.add, color: AppColors.textColor, size: 16.r),
+                          Icon(
+                            Icons.add,
+                            color: AppColors.textColor,
+                            size: 16.r,
+                          ),
                           SizedBox(width: 4.w),
-                          Text("Add Option", style: TextStyle(color: AppColors.textColor, fontSize: 12.sp)),
+                          Text(
+                            "Add Option",
+                            style: TextStyle(
+                              color: AppColors.textColor,
+                              fontSize: 12.sp,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -1399,7 +1633,14 @@ class _CoachRatesServicesViewState extends State<CoachRatesServicesView> {
                 ],
               ),
               SizedBox(height: 16.h),
-              ...services.map((opt) => _buildServiceOptionCard(opt)),
+              ...controller.services.asMap().entries.map(
+                (entry) => _buildServiceOptionCard(
+                  context,
+                  controller,
+                  entry.key,
+                  entry.value,
+                ),
+              ),
               SizedBox(height: 32.h),
               CustomButton(
                 title: "Confirm and Save",
@@ -1416,10 +1657,12 @@ class _CoachRatesServicesViewState extends State<CoachRatesServicesView> {
     );
   }
 
-  Widget _buildServiceOptionCard(Map<String, dynamic> opt) {
-    final durCtrl = TextEditingController(text: opt["duration"] == "Enter here" ? "" : opt["duration"]);
-    final prCtrl = TextEditingController(text: opt["price"] == "Enter here" ? "" : opt["price"]);
-
+  Widget _buildServiceOptionCard(
+    BuildContext context,
+    CoachProfileController controller,
+    int index,
+    CoachServiceOption opt,
+  ) {
     return Container(
       margin: EdgeInsets.only(bottom: 16.h),
       padding: EdgeInsets.all(16.r),
@@ -1434,47 +1677,86 @@ class _CoachRatesServicesViewState extends State<CoachRatesServicesView> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(opt["title"]!, style: TextStyle(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.bold)),
+              Text(
+                opt.title,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               Row(
                 children: [
-                  Text("Active", style: TextStyle(color: AppColors.textColor, fontSize: 12.sp)),
+                  Text(
+                    "Active",
+                    style: TextStyle(
+                      color: AppColors.textColor,
+                      fontSize: 12.sp,
+                    ),
+                  ),
                   SizedBox(width: 8.w),
                   SizedBox(
                     height: 20.h,
                     child: Switch(
-                      value: opt["active"] as bool,
+                      value: opt.isActive,
                       activeColor: AppColors.iconColor,
                       onChanged: (val) {
-                        setState(() {
-                          opt["active"] = val;
-                        });
+                        // Fixed by agent
+                        controller.updateServiceOption(opt, isActive: val);
                       },
                     ),
                   ),
                   SizedBox(width: 12.w),
                   GestureDetector(
-                    onTap: () => setState(() => services.remove(opt)),
-                    child: Icon(Icons.delete, color: Colors.redAccent.withAlpha(200), size: 20.r),
+                    onTap: () => controller.removeServiceOption(index),
+                    child: Icon(
+                      Icons.delete,
+                      color: Colors.redAccent.withAlpha(200),
+                      size: 20.r,
+                    ),
                   ),
                 ],
               ),
             ],
           ),
           SizedBox(height: 16.h),
-          Text("Duration", style: TextStyle(color: AppColors.textColor, fontSize: 14.sp)),
+          Text(
+            "Duration",
+            style: TextStyle(color: AppColors.textColor, fontSize: 14.sp),
+          ),
           SizedBox(height: 6.h),
           InputTextWidget(
             hintText: "Enter here",
-            controller: durCtrl,
-            onChanged: (val) => opt["duration"] = val,
+            controller:
+                TextEditingController(
+                    text: opt.duration == "Enter here" ? "" : opt.duration,
+                  )
+                  ..selection = TextSelection.collapsed(
+                    offset: (opt.duration == "Enter here" ? "" : opt.duration)
+                        .length,
+                  ),
+            onChanged: (val) {
+              controller.updateServiceOption(opt, duration: val);
+            },
           ),
           SizedBox(height: 12.h),
-          Text("Price", style: TextStyle(color: AppColors.textColor, fontSize: 14.sp)),
+          Text(
+            "Price",
+            style: TextStyle(color: AppColors.textColor, fontSize: 14.sp),
+          ),
           SizedBox(height: 6.h),
           InputTextWidget(
             hintText: "Enter here",
-            controller: prCtrl,
-            onChanged: (val) => opt["price"] = val,
+            controller:
+                TextEditingController(
+                    text: opt.price == "Enter here" ? "" : opt.price,
+                  )
+                  ..selection = TextSelection.collapsed(
+                    offset: (opt.price == "Enter here" ? "" : opt.price).length,
+                  ),
+            onChanged: (val) {
+              controller.updateServiceOption(opt, price: val);
+            },
           ),
         ],
       ),

@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_assets.dart';
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_input.dart';
 import '../../../../core/widgets/background_widget.dart';
@@ -12,40 +11,27 @@ import '../../../../core/widgets/custom_loader.dart';
 import '../controllers/coach_inbox_controller.dart';
 import '../../../../routes/app_router.dart';
 
-class CoachInboxView extends StatefulWidget {
+class CoachInboxView extends StatelessWidget {
   const CoachInboxView({super.key});
-
-  @override
-  State<CoachInboxView> createState() => _CoachInboxViewState();
-}
-
-class _CoachInboxViewState extends State<CoachInboxView> with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-  int _selectedContext = 0; // 0: Clients, 1: Friends
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 4, vsync: this);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<CoachInboxController>().fetchInboxData();
-    });
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final controller = context.watch<CoachInboxController>();
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final ctrl = context.read<CoachInboxController>();
+      if (!ctrl.hasFetched && !ctrl.isLoading && !ctrl.isRefreshing) {
+        ctrl.fetchInboxData();
+      }
+    });
+
     return BackgroundWidget(
-      imagePath: AppAssets.bgHome,
-      child: Scaffold(
+      imagePath: AppAssets.bgMain,
+      child: DefaultTabController(
+        length: 4,
+        initialIndex: controller.selectedTabIndex,
+        child: Scaffold(
         backgroundColor: Colors.transparent,
         body: SafeArea(
           child: Column(
@@ -63,7 +49,7 @@ class _CoachInboxViewState extends State<CoachInboxView> with SingleTickerProvid
                       ),
                     ),
                     const Spacer(),
-                    _buildContextToggle(),
+                    _buildContextToggle(controller),
                     const Spacer(),
                     _buildCreditsBadge(controller.credits),
                   ],
@@ -72,7 +58,7 @@ class _CoachInboxViewState extends State<CoachInboxView> with SingleTickerProvid
 
               Expanded(
                 child: controller.isLoading
-                    ? const Center(child: ShimmerLoader())
+                    ? _buildSkeletonLoader(context)
                     : Stack(
                         children: [
                           RefreshIndicator(
@@ -112,19 +98,18 @@ class _CoachInboxViewState extends State<CoachInboxView> with SingleTickerProvid
 
                                   // ── Tabs ───────────────────────────────────────────────────
                                   TabBar(
-                                    controller: _tabController,
                                     isScrollable: true,
                                     indicatorColor: Colors.transparent,
                                     dividerColor: Colors.transparent,
                                     tabAlignment: TabAlignment.start,
                                     padding: EdgeInsets.symmetric(horizontal: 16.w),
                                     labelPadding: EdgeInsets.only(right: 12.w),
-                                    onTap: (index) => setState(() {}),
+                                    onTap: (index) => controller.setSelectedTab(index),
                                     tabs: [
-                                      _buildTab("Messages", 0),
-                                      _buildTab("Missed call", 1),
-                                      _buildTab("Call Back", 2),
-                                      _buildTab("Clients", 3),
+                                      _buildTab("Messages", 0, controller),
+                                      _buildTab("Missed call", 1, controller),
+                                      _buildTab("Call Back", 2, controller),
+                                      _buildTab("Clients", 3, controller),
                                     ],
                                   ),
 
@@ -133,7 +118,7 @@ class _CoachInboxViewState extends State<CoachInboxView> with SingleTickerProvid
                                   // ── Content Area ────────────────────────────────────────────
                                   Padding(
                                     padding: EdgeInsets.symmetric(horizontal: 16.w),
-                                    child: _buildTabContent(controller),
+                                    child: _buildTabContent(context, controller),
                                   ),
                                   
                                   SizedBox(height: 20.h),
@@ -142,8 +127,11 @@ class _CoachInboxViewState extends State<CoachInboxView> with SingleTickerProvid
                             ),
                           ),
                           if (controller.isRefreshing)
-                            Positioned.fill(
-                              child: const Center(child: CustomLoader()),
+                            Positioned(
+                              top: 16.h,
+                              left: 0,
+                              right: 0,
+                              child: const Center(child: CustomLoader(size: 100)),
                             ),
                         ],
                       ),
@@ -152,34 +140,34 @@ class _CoachInboxViewState extends State<CoachInboxView> with SingleTickerProvid
           ),
         ),
       ),
+      ),
     );
   }
 
-  Widget _buildContextToggle() {
+  Widget _buildContextToggle(CoachInboxController controller) {
     return Container(
-      padding: EdgeInsets.all(4.r),
       decoration: BoxDecoration(
-        color: Colors.white.withAlpha(26),
+        color: const Color(0xFF182617),
         borderRadius: BorderRadius.circular(20.r),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _buildToggleItem("Clients", 0),
-          _buildToggleItem("Friends", 1),
+          _buildToggleItem("Clients", 0, controller),
+          _buildToggleItem("Friends", 1, controller),
         ],
       ),
     );
   }
 
-  Widget _buildToggleItem(String label, int index) {
-    final isSelected = _selectedContext == index;
+  Widget _buildToggleItem(String label, int index, CoachInboxController controller) {
+    final isSelected = controller.selectedContext == index;
     return GestureDetector(
-      onTap: () => setState(() => _selectedContext = index),
+      onTap: () => controller.setSelectedContext(index),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 6.h),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF334B2F) : Colors.transparent,
+          color: isSelected ? const Color(0xFF3E5E39) :const Color(0xFF182617),
           borderRadius: BorderRadius.circular(20.r),
         ),
         child: Text(
@@ -283,14 +271,19 @@ class _CoachInboxViewState extends State<CoachInboxView> with SingleTickerProvid
     );
   }
 
-  Widget _buildTab(String label, int index) {
-    final isSelected = _tabController.index == index;
+  Widget _buildTab(String label, int index, CoachInboxController controller) {
+    final isSelected = controller.selectedTabIndex == index;
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-      decoration: BoxDecoration(
-        color: isSelected ? const Color(0xFF334B2F) : Colors.transparent,
-        border: Border.all(color: isSelected ? Colors.transparent : Colors.white10),
-        borderRadius: BorderRadius.circular(20.r),
+      padding:  EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+      decoration: ShapeDecoration(
+        color: isSelected ? const Color(0xFF355530) : Colors.transparent,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+            width: 1.r,
+            color: !isSelected ? Colors.transparent : const Color(0xFF4F9445),
+          ),
+          borderRadius: BorderRadius.circular(12.r),
+        ),
       ),
       child: Text(
         label,
@@ -302,17 +295,17 @@ class _CoachInboxViewState extends State<CoachInboxView> with SingleTickerProvid
     );
   }
 
-  Widget _buildTabContent(CoachInboxController controller) {
-    switch (_tabController.index) {
-      case 0: return _buildMessagesList(controller);
+  Widget _buildTabContent(BuildContext context, CoachInboxController controller) {
+    switch (controller.selectedTabIndex) {
+      case 0: return _buildMessagesList(context, controller);
       case 1: return _buildMissedCallsList(controller);
-      case 2: return _buildCallBackList(controller);
-      case 3: return _buildClientsList(controller);
+      case 2: return _buildCallBackList(context, controller);
+      case 3: return _buildClientsList(context, controller);
       default: return const SizedBox();
     }
   }
 
-  Widget _buildMessagesList(CoachInboxController controller) {
+  Widget _buildMessagesList(BuildContext context, CoachInboxController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -321,12 +314,12 @@ class _CoachInboxViewState extends State<CoachInboxView> with SingleTickerProvid
         if (controller.messages.isEmpty)
           const Padding(padding: EdgeInsets.only(top: 20), child: Text("No messages", style: TextStyle(color: Colors.white54)))
         else
-          ...controller.messages.map((msg) => _buildChatTile(msg.name, msg.isOnline ? "Online" : "Offline", msg.time, msg.unreadCount.toString(), msg.avatar)),
+          ...controller.messages.map((msg) => _buildChatTile(context, msg.name, msg.isOnline ? "Online" : "Offline", msg.time, msg.unreadCount.toString(), msg.avatar)),
       ],
     );
   }
 
-  Widget _buildClientsList(CoachInboxController controller) {
+  Widget _buildClientsList(BuildContext context, CoachInboxController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -335,12 +328,12 @@ class _CoachInboxViewState extends State<CoachInboxView> with SingleTickerProvid
         if (controller.clients.isEmpty)
           const Padding(padding: EdgeInsets.only(top: 20), child: Text("No clients", style: TextStyle(color: Colors.white54)))
         else
-          ...controller.clients.map((c) => _buildChatTile(c.name, c.status, c.time, c.unreadCount, c.avatar)),
+          ...controller.clients.map((c) => _buildChatTile(context, c.name, c.status, c.time, c.unreadCount, c.avatar)),
       ],
     );
   }
 
-  Widget _buildChatTile(String name, String status, String time, String count, String avatar) {
+  Widget _buildChatTile(BuildContext context, String name, String status, String time, String count, String avatar) {
     return GestureDetector(
       onTap: () {
         context.push(
@@ -356,8 +349,8 @@ class _CoachInboxViewState extends State<CoachInboxView> with SingleTickerProvid
         margin: EdgeInsets.only(bottom: 12.h),
         padding: EdgeInsets.all(12.r),
         decoration: BoxDecoration(
-          color: const Color(0xFF2D3D2D),
-          borderRadius: BorderRadius.circular(12.r),
+          color: const Color(0xFF22331F),
+          borderRadius: BorderRadius.circular(4.r),
         ),
         child: Row(
           children: [
@@ -448,7 +441,7 @@ class _CoachInboxViewState extends State<CoachInboxView> with SingleTickerProvid
     );
   }
 
-  Widget _buildCallBackList(CoachInboxController controller) {
+  Widget _buildCallBackList(BuildContext context, CoachInboxController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -457,12 +450,12 @@ class _CoachInboxViewState extends State<CoachInboxView> with SingleTickerProvid
         if (controller.callbacks.isEmpty)
           const Padding(padding: EdgeInsets.only(top: 20), child: Text("No call back requests", style: TextStyle(color: Colors.white54)))
         else
-          ...controller.callbacks.map((c) => _buildCallBackTile(c.name, c.timeRequested, c.avatar)),
+          ...controller.callbacks.map((c) => _buildCallBackTile(context, c.name, c.timeRequested, c.avatar)),
       ],
     );
   }
 
-  Widget _buildCallBackTile(String name, String time, String avatar) {
+  Widget _buildCallBackTile(BuildContext context, String name, String time, String avatar) {
     return Container(
       margin: EdgeInsets.only(bottom: 12.h),
       padding: EdgeInsets.all(16.r),
@@ -527,6 +520,95 @@ class _CoachInboxViewState extends State<CoachInboxView> with SingleTickerProvid
                 ),
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSkeletonLoader(BuildContext context) {
+    return SingleChildScrollView(
+      physics: const NeverScrollableScrollPhysics(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(left: 16.w, top: 10.h, bottom: 8.h),
+            child: ShimmerLoader(width: 80.w, height: 14.h),
+          ),
+          SizedBox(
+            height: 100.h,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              itemCount: 5,
+              itemBuilder: (context, index) {
+                return Container(
+                  width: 70.w,
+                  margin: EdgeInsets.only(right: 12.w),
+                  child: Column(
+                    children: [
+                      ShimmerLoader(width: 52.r, height: 52.r, borderRadius: 26.r),
+                      SizedBox(height: 8.h),
+                      ShimmerLoader(width: 50.w, height: 10.h),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+          SizedBox(height: 20.h),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            child: ShimmerLoader(width: double.infinity, height: 48.h, borderRadius: 24.r),
+          ),
+          SizedBox(height: 20.h),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            child: Row(
+              children: List.generate(4, (index) => Padding(
+                padding: EdgeInsets.only(right: 12.w),
+                child: ShimmerLoader(width: 80.w, height: 30.h, borderRadius: 15.r),
+              )),
+            ),
+          ),
+          SizedBox(height: 16.h),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ShimmerLoader(width: 120.w, height: 20.h),
+                SizedBox(height: 16.h),
+                ...List.generate(5, (_) => Padding(
+                  padding: EdgeInsets.only(bottom: 12.h),
+                  child: Row(
+                    children: [
+                      ShimmerLoader(width: 48.r, height: 48.r, borderRadius: 24.r),
+                      SizedBox(width: 12.w),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ShimmerLoader(width: 120.w, height: 16.h),
+                            SizedBox(height: 4.h),
+                            ShimmerLoader(width: 80.w, height: 12.h),
+                          ],
+                        ),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          ShimmerLoader(width: 40.w, height: 10.h),
+                          SizedBox(height: 4.h),
+                          ShimmerLoader(width: 20.r, height: 20.r, borderRadius: 10.r),
+                        ],
+                      ),
+                    ],
+                  ),
+                )),
+              ],
+            ),
           ),
         ],
       ),

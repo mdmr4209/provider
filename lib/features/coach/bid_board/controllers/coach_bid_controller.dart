@@ -7,6 +7,7 @@ import '../models/coach_bid_model.dart';
 class CoachBidController extends ChangeNotifier {
   bool _isLoading = false;
   bool _isRefreshing = false;
+  bool _hasFetched = false;
 
   String? _selectedSlot;
   final TextEditingController amountController = TextEditingController();
@@ -21,6 +22,7 @@ class CoachBidController extends ChangeNotifier {
 
   bool get isLoading => _isLoading;
   bool get isRefreshing => _isRefreshing;
+  bool get hasFetched => _hasFetched;
   String? get selectedSlot => _selectedSlot;
   int get myTickets => _myTickets;
   int get totalCoaches => _totalCoaches;
@@ -30,6 +32,7 @@ class CoachBidController extends ChangeNotifier {
   Map<String, dynamic>? get topBiddersInfo => _topBiddersInfo;
 
   Future<void> fetchBidData({bool isRefresh = false}) async {
+    _hasFetched = true;
     if (isRefresh) {
       _isRefreshing = true;
     } else {

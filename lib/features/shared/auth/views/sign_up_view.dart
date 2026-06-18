@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_assets.dart';
 import '../../../../core/constants/app_colors.dart';
-import '../../../../core/exceptions/app_exceptions.dart';
+
 import '../../../../core/utils/validators/input_validators.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_loader.dart';
@@ -245,7 +245,7 @@ class SignUpView extends StatelessWidget {
                                         ),
                                         SizedBox(width: 8.w),
                                         Text(
-                                          "Agree to Legal Terms",
+                                          "I Agree To The Terms & Conditions",
                                           style: Theme.of(
                                             context,
                                           ).textTheme.bodyMedium,

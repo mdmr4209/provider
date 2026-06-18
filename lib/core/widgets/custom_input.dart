@@ -356,6 +356,7 @@ class CustomInput extends StatelessWidget {
               suffixIcon: _buildTrailing(theme, hasError, fieldState, state),
               errorStyle: const TextStyle(height: 0, fontSize: 0),
               counterText: '',
+              fillColor: backgroundColor
             ),
           ),
         ),

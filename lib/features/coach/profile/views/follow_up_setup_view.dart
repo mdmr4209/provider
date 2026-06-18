@@ -3,9 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_assets.dart';
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/background_widget.dart';
 import '../../../../core/widgets/custom_button.dart';
+import '../../../../core/widgets/custom_loader.dart';
 import '../controllers/coach_profile_controller.dart';
 
 class FollowUpSetupView extends StatelessWidget {
@@ -13,7 +13,6 @@ class FollowUpSetupView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final controller = context.watch<CoachProfileController>();
 
     final intervals = ["7 Days", "60 Days", "30 Days", "90 Days", "6 Months", "12 Months", "14 Months"];
@@ -32,8 +31,14 @@ class FollowUpSetupView extends StatelessWidget {
           title: const Text("Follow Up Set Up", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
           centerTitle: true,
         ),
-        body: Padding(
-          padding: EdgeInsets.all(24.r),
+        body: FutureBuilder(
+          future: Future.delayed(const Duration(milliseconds: 1500)),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return _buildSkeletonLoader();
+            }
+            return Padding(
+              padding: EdgeInsets.all(24.r),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -84,6 +89,8 @@ class FollowUpSetupView extends StatelessWidget {
               SizedBox(height: 20.h),
             ],
           ),
+            );
+          },
         ),
       ),
     );
@@ -109,6 +116,33 @@ class FollowUpSetupView extends StatelessWidget {
           ),
           SizedBox(width: 10.w),
           Text(title, style: TextStyle(color: isSelected ? const Color(0xFFC19E5F) : Colors.white70, fontSize: 14)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSkeletonLoader() {
+    return Padding(
+      padding: EdgeInsets.all(24.r),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ShimmerLoader(width: 150.w, height: 20.h),
+          SizedBox(height: 4.h),
+          ShimmerLoader(width: 250.w, height: 14.h),
+          SizedBox(height: 16.h),
+          ShimmerLoader(width: double.infinity, height: 180.h, borderRadius: 12.r),
+          SizedBox(height: 32.h),
+          ShimmerLoader(width: 200.w, height: 20.h),
+          SizedBox(height: 16.h),
+          Wrap(
+            spacing: 24.w,
+            runSpacing: 16.h,
+            children: List.generate(7, (_) => ShimmerLoader(width: 80.w, height: 20.h)),
+          ),
+          const Spacer(),
+          ShimmerLoader(width: double.infinity, height: 50.h, borderRadius: 25.r),
+          SizedBox(height: 20.h),
         ],
       ),
     );

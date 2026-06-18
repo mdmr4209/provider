@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
+
 import 'package:provider/provider.dart';
 
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/input_text_widget.dart';
 import '../../../../core/widgets/background_widget.dart';
-import '../../../../routes/app_router.dart';
+
 import '../../localization/localization_extension.dart';
 import '../controllers/auth_controller.dart';
 
 class ChangePasswordView extends StatelessWidget {
-  const ChangePasswordView({super.key});
+  final String? origin;
+  const ChangePasswordView({super.key, this.origin});
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +100,19 @@ class ChangePasswordView extends StatelessWidget {
                                 onPress: auth.isLoading
                                     ? null
                                     : () async {
-                                        context.push(AppRoutes.goToHome);
+                                        if (auth.setPasswordController.text.length < 6) {
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              const SnackBar(content: Text('Password must be at least 6 characters')),
+                                            );
+                                            return;
+                                        }
+                                        if (auth.setPasswordController.text != auth.confirmPasswordController.text) {
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              const SnackBar(content: Text('Passwords do not match')),
+                                            );
+                                            return;
+                                        }
+                                        await auth.setPassword(origin: origin ?? 'Forget');
                                       },
                                 loading: auth.isLoading,
                               ),
