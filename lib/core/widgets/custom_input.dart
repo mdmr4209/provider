@@ -8,10 +8,7 @@ class _InputState {
   bool isFocused;
   String? errorText;
 
-  _InputState({
-    required this.isObscured,
-    required this.isFocused,
-  });
+  _InputState({required this.isObscured, required this.isFocused});
 }
 
 class CustomInput extends StatelessWidget {
@@ -196,10 +193,7 @@ class CustomInput extends StatelessWidget {
     final theme = Theme.of(context);
 
     return FormField<_InputState>(
-      initialValue: _InputState(
-        isObscured: obscureText,
-        isFocused: false,
-      ),
+      initialValue: _InputState(isObscured: obscureText, isFocused: false),
       builder: (FormFieldState<_InputState> fieldState) {
         final state = fieldState.value!;
         final hasError = state.errorText != null;
@@ -222,7 +216,8 @@ class CustomInput extends StatelessWidget {
       padding: EdgeInsets.only(bottom: titlePaddingBottom.h),
       child: Text(
         title!,
-        style: titleStyle ??
+        style:
+            titleStyle ??
             theme.textTheme.labelLarge?.copyWith(
               color: titleColor ?? theme.textTheme.labelLarge?.color,
               fontSize: (titleFontSize ?? 14).sp,
@@ -246,7 +241,11 @@ class CustomInput extends StatelessWidget {
     );
   }
 
-  Widget _buildInputField(ThemeData theme, FormFieldState<_InputState> fieldState, _InputState state) {
+  Widget _buildInputField(
+    ThemeData theme,
+    FormFieldState<_InputState> fieldState,
+    _InputState state,
+  ) {
     final hasError = state.errorText != null;
     final isEnabled = enabled;
 
@@ -326,7 +325,8 @@ class CustomInput extends StatelessWidget {
               }
               return null;
             },
-            style: textStyle ??
+            style:
+                textStyle ??
                 theme.textTheme.bodyMedium?.copyWith(
                   color: isEnabled
                       ? (textColor ?? Colors.white)
@@ -338,14 +338,16 @@ class CustomInput extends StatelessWidget {
             decoration: InputDecoration(
               hintText: hintText,
               labelText: labelText,
-              hintStyle: hintStyle ??
+              hintStyle:
+                  hintStyle ??
                   TextStyle(
                     color: Colors.white.withValues(alpha: 0.3),
                     fontSize: (fontSize ?? 14).sp,
                   ),
               labelStyle: hintStyle ?? theme.inputDecorationTheme.labelStyle,
               isDense: true,
-              contentPadding: contentPadding ??
+              contentPadding:
+                  contentPadding ??
                   EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
               border: InputBorder.none,
               enabledBorder: InputBorder.none,
@@ -356,7 +358,7 @@ class CustomInput extends StatelessWidget {
               suffixIcon: _buildTrailing(theme, hasError, fieldState, state),
               errorStyle: const TextStyle(height: 0, fontSize: 0),
               counterText: '',
-              fillColor: backgroundColor
+              fillColor: backgroundColor,
             ),
           ),
         ),
@@ -366,54 +368,128 @@ class CustomInput extends StatelessWidget {
 
   Widget? _buildLeading(ThemeData theme, bool hasError) {
     if (leadingWidget == null && leadingIcon.isEmpty) return null;
-    final color = hasError ? theme.colorScheme.error : (leadingColor ?? theme.hintColor);
-    final leading = leadingWidget ??
+    final color = hasError
+        ? theme.colorScheme.error
+        : (leadingColor ?? theme.hintColor);
+    final leading =
+        leadingWidget ??
         Padding(
           padding: leadingPadding,
-          child: _buildAsset(leadingIcon, leadingIconWidth, leadingIconHeight, useLeadingColor, color),
+          child: _buildAsset(
+            leadingIcon,
+            leadingIconWidth,
+            leadingIconHeight,
+            useLeadingColor,
+            color,
+          ),
         );
-    return Row(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.center, children: [leading]);
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [leading],
+    );
   }
 
-  Widget? _buildTrailing(ThemeData theme, bool hasError, FormFieldState<_InputState> fieldState, _InputState state) {
+  Widget? _buildTrailing(
+    ThemeData theme,
+    bool hasError,
+    FormFieldState<_InputState> fieldState,
+    _InputState state,
+  ) {
     final List<Widget> children = [];
-    final color = hasError ? theme.colorScheme.error : (trailingColor ?? theme.hintColor);
+    final color = hasError
+        ? theme.colorScheme.error
+        : (trailingColor ?? theme.hintColor);
     if (showObscureToggle || obscureText) {
-      children.add(GestureDetector(
-        onTap: () {
-          state.isObscured = !state.isObscured;
-          fieldState.didChange(state);
-        }, 
-        child: _buildObscureIcon(theme, hasError, state)
-      ));
+      children.add(
+        GestureDetector(
+          onTap: () {
+            state.isObscured = !state.isObscured;
+            fieldState.didChange(state);
+          },
+          child: _buildObscureIcon(theme, hasError, state),
+        ),
+      );
     }
     if (trailingWidget != null || trailingIcon.isNotEmpty) {
-      final trailing = trailingWidget ??
+      final trailing =
+          trailingWidget ??
           Padding(
             padding: trailingPadding,
-            child: _buildAsset(trailingIcon, trailingIconWidth, trailingIconHeight, useTrailingColor, color),
+            child: _buildAsset(
+              trailingIcon,
+              trailingIconWidth,
+              trailingIconHeight,
+              useTrailingColor,
+              color,
+            ),
           );
       children.add(trailing);
     }
     if (children.isEmpty) return null;
-    return Row(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.center, children: children);
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: children,
+    );
   }
 
   Widget _buildObscureIcon(ThemeData theme, bool hasError, _InputState state) {
-    final color = hasError ? theme.colorScheme.error : (trailingColor ?? theme.hintColor);
+    final color = hasError
+        ? theme.colorScheme.error
+        : (trailingColor ?? theme.hintColor);
     if (state.isObscured) {
-      if (hiddenIcon != null) return _buildAsset(hiddenIcon!, obscureIconSize, obscureIconSize, true, color);
-      return Icon(Icons.visibility_off_outlined, size: obscureIconSize.sp, color: color);
+      if (hiddenIcon != null)
+        return _buildAsset(
+          hiddenIcon!,
+          obscureIconSize,
+          obscureIconSize,
+          true,
+          color,
+        );
+      return Icon(
+        Icons.visibility_off_outlined,
+        size: obscureIconSize.sp,
+        color: color,
+      );
     } else {
-      if (visibleIcon != null) return _buildAsset(visibleIcon!, obscureIconSize, obscureIconSize, true, color);
-      return Icon(Icons.visibility_outlined, size: obscureIconSize.sp, color: color);
+      if (visibleIcon != null)
+        return _buildAsset(
+          visibleIcon!,
+          obscureIconSize,
+          obscureIconSize,
+          true,
+          color,
+        );
+      return Icon(
+        Icons.visibility_outlined,
+        size: obscureIconSize.sp,
+        color: color,
+      );
     }
   }
 
-  Widget _buildAsset(String path, double width, double height, bool useColor, Color color) {
+  Widget _buildAsset(
+    String path,
+    double width,
+    double height,
+    bool useColor,
+    Color color,
+  ) {
     if (path.toLowerCase().endsWith('.svg')) {
-      return SvgPicture.asset(path, width: width.w, height: height.h, colorFilter: useColor ? ColorFilter.mode(color, BlendMode.srcIn) : null);
+      return SvgPicture.asset(
+        path,
+        width: width.w,
+        height: height.h,
+        colorFilter: useColor ? ColorFilter.mode(color, BlendMode.srcIn) : null,
+      );
     }
-    return Image.asset(path, width: width.w, height: height.h, color: useColor ? color : null, fit: BoxFit.contain);
+    return Image.asset(
+      path,
+      width: width.w,
+      height: height.h,
+      color: useColor ? color : null,
+      fit: BoxFit.contain,
+    );
   }
 }

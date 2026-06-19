@@ -64,17 +64,19 @@ class SessionListView extends StatelessWidget {
                       hintColor: AppColors.greyColor,
                       hintStyle: Theme.of(context).textTheme.bodyLarge
                           ?.copyWith(
-                        color: AppColors.whiteColor.withAlpha(153),
-                        fontSize: 14.sp,
-                      ),
+                            color: AppColors.whiteColor.withAlpha(153),
+                            fontSize: 14.sp,
+                          ),
                       shadow: true,
-                      backgroundColor: AppColors.backgroundColor,
+                      shadowColor:  Color(0xFF2E4429),
+                      backgroundColor: Color(0xFF21321E),
                       leadingIcon: AppAssets.feather,
                       leadingPadding: EdgeInsets.only(left: 16.w, right: 8.w),
                     ),
                   ),
                 ),
-                SizedBox(height: 20.h),Container(
+                SizedBox(height: 20.h),
+                Container(
                   width: 342.46,
                   height: 44,
                   decoration: ShapeDecoration(
@@ -92,12 +94,12 @@ class SessionListView extends StatelessWidget {
                         blurRadius: 4,
                         offset: Offset(0, 2),
                         spreadRadius: 0,
-                      )
+                      ),
                     ],
                   ),
                 ),
                 SizedBox(height: 20.h),
-                InputTextWidget(backgroundColor: AppColors.backgroundColor,),
+                InputTextWidget(backgroundColor: AppColors.backgroundColor),
                 SizedBox(height: 20.h),
                 // ── Search Bar ──────────────────────────────────────────────
                 Padding(
