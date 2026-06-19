@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:newproject/core/widgets/custom_input.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_assets.dart';
+import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/background_widget.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_loader.dart';
@@ -20,13 +23,28 @@ class BuyTicketsView extends StatelessWidget {
       backgroundColor: Color(0xFF2D3D2A),
       appBar: AppBar(
         backgroundColor: Color(0xFF22331F),
+        // These two lines prevent the color change / tinting when scrolling
+        scrolledUnderElevation: 0,
+        surfaceTintColor: const Color(0xFF22331F),
+
         elevation: 0,
+        centerTitle: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(24.r)),
+        ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.west, color: Color(0xFF5E7958), size: 24),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text("Raffle Draw", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-        centerTitle: true,
+        title: Text(
+          'Raffle Draw',
+          style: TextStyle(
+            color: const Color(0xFFF5F0E8),
+            fontSize: 16,
+            fontFamily: 'Georgia',
+            fontWeight: FontWeight.w400,
+          ),
+        ),
       ),
       body: FutureBuilder(
         future: Future.delayed(const Duration(milliseconds: 1500)),
@@ -36,76 +54,120 @@ class BuyTicketsView extends StatelessWidget {
           }
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 20.h),
-            // ── Price Card ─────────────────────────────────────────────
-            Container(
-              padding: EdgeInsets.all(24.r),
-              decoration: BoxDecoration(
-                color: const Color(0xFF2D3D2D),
-                borderRadius: BorderRadius.circular(16.r),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 20.h),
+                // ── Price Card ─────────────────────────────────────────────
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: ShapeDecoration(
+                    color: const Color(0xFF243521),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text("Daily Raffle Update", style: TextStyle(color: Colors.white54, fontSize: 13)),
-                      SizedBox(height: 8.h),
-                      Row(
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text("\$5.00", style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
-                          const Text(" /Ticket", style: TextStyle(color: Colors.white70, fontSize: 14)),
+                          Text(
+                            'Daily Raffle Update',
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(
+                              color: const Color(0xFF868A85),
+                              fontSize: 13,
+                              fontFamily: 'Segoe UI',
+                              fontWeight: FontWeight.w400,
+                              height: 1.20,
+                            ),
+                          ),
+                          SizedBox(height: 8.h),
+                          Row(
+                            spacing: 4.w,
+                            children: [
+                              Text(
+                                '\$5.00',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 32,
+                                  fontFamily: 'Segoe UI',
+                                  fontWeight: FontWeight.w700,
+                                  height: 1.50,
+                                ),
+                              ),
+
+                              Text(
+                                '/Ticket',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12.07,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w400,
+                                  height: 1.50,
+                                ),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
+                      SvgPicture.asset(AppAssets.ticket),
                     ],
                   ),
-                  const Icon(Icons.confirmation_number_outlined, color: Color(0xFF81C784), size: 40),
-                ],
-              ),
-            ),
-
-            SizedBox(height: 32.h),
-
-            const Text("Proffered Times", style: TextStyle(color: Colors.white70, fontSize: 14)),
-            SizedBox(height: 12.h),
-
-            // ── Quantity Input ──────────────────────────────────────────
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              decoration: BoxDecoration(
-                color: const Color(0xFF2D3D2D),
-                borderRadius: BorderRadius.circular(12.r),
-              ),
-              child: TextField(
-                controller: controller.ticketQuantityController,
-                style: const TextStyle(color: Colors.white),
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  hintText: "Enter amount of tickets",
-                  hintStyle: TextStyle(color: Colors.white24, fontSize: 14),
-                  border: InputBorder.none,
                 ),
-              ),
+
+                SizedBox(height: 18.h),
+
+                Text(
+                  'Preffered Times',
+                  style: TextStyle(
+                    color: const Color(0xFFB9BBB0),
+                    fontSize: 14,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+
+                // ── Quantity Input ──────────────────────────────────────────
+                CustomInput(
+                  height: 44,
+                  hintText: "Enter amount of tickets",
+                  fontSize: 14,
+                  hintColor: AppColors.greyColor,
+                  hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: AppColors.whiteColor.withAlpha(153),
+                    fontSize: 14,
+                  ),
+                  shadow: true,
+                  shadowColor: Color(0xFF2E4429),
+                  backgroundColor: Color(0xFF21321E),
+                  borderRadius: 4,
+                  borderWidth: 0.50,
+                  borderColor: Color(0xFF334B2F),
+                ),
+
+                const Spacer(),
+
+                CustomButton(
+                  onPress: () async {
+                    controller.buyTickets(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const PaymentSuccessView(),
+                      ),
+                    );
+                  },
+                  title: "Pay Now",
+                  linearGradient: true,
+                ),
+
+                SizedBox(height: 40.h),
+              ],
             ),
-
-            const Spacer(),
-
-            CustomButton(
-              onPress: () async {
-                 controller.buyTickets(context);
-                 Navigator.push(context, MaterialPageRoute(builder: (_) => const PaymentSuccessView()));
-              },
-              title: "Pay Now",
-              linearGradient: true,
-            ),
-
-            SizedBox(height: 40.h),
-          ],
-        ),
           );
         },
       ),
@@ -119,13 +181,25 @@ class BuyTicketsView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 20.h),
-          ShimmerLoader(width: double.infinity, height: 100.h, borderRadius: 16.r),
+          ShimmerLoader(
+            width: double.infinity,
+            height: 100.h,
+            borderRadius: 16.r,
+          ),
           SizedBox(height: 32.h),
           ShimmerLoader(width: 120.w, height: 16.h),
           SizedBox(height: 12.h),
-          ShimmerLoader(width: double.infinity, height: 48.h, borderRadius: 12.r),
+          ShimmerLoader(
+            width: double.infinity,
+            height: 48.h,
+            borderRadius: 12.r,
+          ),
           const Spacer(),
-          ShimmerLoader(width: double.infinity, height: 48.h, borderRadius: 24.r),
+          ShimmerLoader(
+            width: double.infinity,
+            height: 48.h,
+            borderRadius: 24.r,
+          ),
           SizedBox(height: 40.h),
         ],
       ),

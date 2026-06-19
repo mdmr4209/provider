@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_assets.dart';
@@ -17,17 +18,25 @@ class TotalEarningsView extends StatelessWidget {
     final controller = context.watch<CoachProfileController>();
 
     return BackgroundWidget(
-      imagePath: AppAssets.bgHome,
+      imagePath: AppAssets.bgMain,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.white70),
+            icon: const Icon(Icons.west, color: Color(0xFF5E7958), size: 24),
             onPressed: () => Navigator.pop(context),
           ),
-          title: const Text("Total Earnings", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          title: Text(
+            'Total Earnings',
+            style: TextStyle(
+              color: const Color(0xFFF5F0E8),
+              fontSize: 16,
+              fontFamily: 'Georgia',
+              fontWeight: FontWeight.w400,
+            ),
+          ),
           centerTitle: true,
         ),
         body: FutureBuilder(
@@ -38,54 +47,86 @@ class TotalEarningsView extends StatelessWidget {
             }
             return Padding(
               padding: EdgeInsets.all(24.r),
-          child: Column(
-            children: [
-              SizedBox(height: 20.h),
-              // --- Balance Card ---
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(24.r),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF2D3D2D).withAlpha(150),
-                  borderRadius: BorderRadius.circular(16.r),
-                  border: Border.all(color: Colors.white10),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text("Balance", style: TextStyle(color: Colors.white70, fontSize: 13)),
-                    SizedBox(height: 12.h),
-                    Row(
+              child: Column(
+                children: [
+                  // --- Balance Card ---
+                  Container(
+                    width: double.infinity,
+                    clipBehavior: Clip.antiAlias,
+                    padding: EdgeInsets.only(
+                      left: 20.w,
+                      top: 16.h,
+                      right: 21.w,
+                      bottom: 14.h,
+                    ),
+                    decoration: ShapeDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment(0.03, 0.86),
+                        end: Alignment(0.97, 0.14),
+                        colors: [
+                          const Color(0xFF193115),
+                          const Color(0xFF486244),
+                        ],
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          controller.balance.toStringAsFixed(0).padLeft(3, '0'),
-                          style: TextStyle(color: Colors.white, fontSize: 28.sp, fontWeight: FontWeight.bold, letterSpacing: 8),
-                        ),
-                        // Mock overlapping circles
-                        Stack(
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(width: 30.r, height: 30.r, decoration: BoxDecoration(color: Colors.white10, shape: BoxShape.circle)),
-                            Positioned(left: 10, child: Container(width: 30.r, height: 30.r, decoration: BoxDecoration(color: Colors.white.withAlpha(15), shape: BoxShape.circle))),
+                            Text(
+                              'Balance',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontFamily: 'Segoe UI',
+                                fontWeight: FontWeight.w400,
+                                height: 1.50,
+                                letterSpacing: 0.56,
+                              ),
+                            ),
+                            SizedBox(height: 9.h),
+                            Text(
+                              controller.balance
+                                  .toStringAsFixed(0)
+                                  .padLeft(3, '0'),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontFamily: 'Segoe UI',
+                                fontWeight: FontWeight.w400,
+                                height: 1.05,
+                                letterSpacing: 3.60,
+                              ),
+                            ),
                           ],
                         ),
+                        // Mock overlapping circles
+                        SvgPicture.asset(AppAssets.balance),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+
+                  SizedBox(height: 40.h),
+
+                  CustomButton(
+                    onPress: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const WithdrawalRequestView(),
+                        ),
+                      );
+                    },
+                    title: "Request Withdrawal",
+                    linearGradient: true,
+                  ),
+                ],
               ),
-              
-              SizedBox(height: 40.h),
-              
-              CustomButton(
-                onPress: () async {
-                   Navigator.push(context, MaterialPageRoute(builder: (_) => const WithdrawalRequestView()));
-                },
-                title: "Request Withdrawal",
-                linearGradient: true,
-              ),
-            ],
-          ),
             );
           },
         ),
@@ -99,9 +140,17 @@ class TotalEarningsView extends StatelessWidget {
       child: Column(
         children: [
           SizedBox(height: 20.h),
-          ShimmerLoader(width: double.infinity, height: 110.h, borderRadius: 16.r),
+          ShimmerLoader(
+            width: double.infinity,
+            height: 110.h,
+            borderRadius: 16.r,
+          ),
           SizedBox(height: 40.h),
-          ShimmerLoader(width: double.infinity, height: 50.h, borderRadius: 25.r),
+          ShimmerLoader(
+            width: double.infinity,
+            height: 50.h,
+            borderRadius: 25.r,
+          ),
         ],
       ),
     );

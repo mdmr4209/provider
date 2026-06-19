@@ -4,7 +4,6 @@ class CoachBidSlotModel {
   final String title;
   final String startingBid;
   final String topBid;
-  final String hexColor; // "0xFFC19E5F"
 
   CoachBidSlotModel({
     required this.id,
@@ -12,7 +11,6 @@ class CoachBidSlotModel {
     required this.title,
     required this.startingBid,
     required this.topBid,
-    required this.hexColor,
   });
 
   factory CoachBidSlotModel.fromJson(Map<String, dynamic> json) {
@@ -22,7 +20,6 @@ class CoachBidSlotModel {
       title: json['title'] ?? '',
       startingBid: json['startingBid'] ?? '',
       topBid: json['topBid'] ?? '',
-      hexColor: json['hexColor'] ?? '0xFFFFFFFF',
     );
   }
 }

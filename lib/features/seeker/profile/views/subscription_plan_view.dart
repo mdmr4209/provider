@@ -15,12 +15,17 @@ class SubscriptionPlanView extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.west, color: Color(0xFF5E7958), size: 24),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          "Choose Plan",
-          style: TextStyle(color: Colors.white, fontSize: 18.sp),
+          'Choose Plan',
+          style: TextStyle(
+            color: const Color(0xFFF5F0E8),
+            fontSize: 16,
+            fontFamily: 'Georgia',
+            fontWeight: FontWeight.w400,
+          ),
         ),
         centerTitle: true,
       ),
@@ -91,7 +96,7 @@ class SubscriptionPlanView extends StatelessWidget {
       onTap: () => _selectedPlan.value = index,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white.withAlpha(isSelected ? 13 : 8),
+          color: isSelected ? Colors.white.withAlpha(8) : Color(0xFF263523),
           borderRadius: BorderRadius.circular(16.r),
           border: Border.all(
             color: isSelected ? Colors.green : Colors.transparent,

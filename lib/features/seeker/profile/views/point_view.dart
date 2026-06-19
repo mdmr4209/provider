@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:newproject/core/constants/app_assets.dart';
+import 'package:newproject/core/widgets/background_widget.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_loader.dart';
@@ -17,141 +20,151 @@ class PointView extends StatelessWidget {
       }
     });
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text(
-          "Credit Balance",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18.sp,
-            fontFamily: 'Georgia',
+    return BackgroundWidget(
+      imagePath: AppAssets.bgMain,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.west, color: Color(0xFF5E7958), size: 24),
+            onPressed: () => Navigator.pop(context),
           ),
-        ),
-        centerTitle: true,
-      ),
-      body: Consumer<ProfileController>(
-        builder: (context, controller, child) {
-          if (controller.isLoading && controller.history.isEmpty) {
-            return const SafeArea(child: _PointShimmer());
-          }
-
-          final pointsDigits = controller.currentPoints.toString().padLeft(3, '0').split('');
-          final pointsStr = pointsDigits.join(' ');
-
-          return Stack(
-            children: [
-              RefreshIndicator(
-                onRefresh: () => controller.fetchPointHistory(isRefresh: true),
-                color: Colors.transparent,
-                backgroundColor: Colors.transparent,
-                strokeWidth: 0,
-                elevation: 0,
-                child: SingleChildScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  padding: EdgeInsets.all(20.r),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // ── Credit Balance Card ────────────────────────────────────────
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.all(24.r),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16.r),
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF1B2B1B), Color(0xFF2D402D)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    border: Border.all(color: Colors.white.withAlpha(13)),
-                  ),
-                  child: Stack(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Credits Balance",
-                            style: TextStyle(
-                              color: Colors.white.withAlpha(204),
-                              fontSize: 15.sp,
-                            ),
-                          ),
-                          SizedBox(height: 12.h),
-                          Text(
-                            pointsStr,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 32.sp,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 4,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Positioned(
-                        right: -10,
-                        top: -10,
-                        child: Opacity(
-                          opacity: 0.1,
-                          child: Row(
-                            children: [
-                              _buildCircle(40),
-                              Transform.translate(offset: const Offset(-20, 10), child: _buildCircle(45)),
-                              Transform.translate(offset: const Offset(-40, 0), child: _buildCircle(35)),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 24.h),
-                Text(
-                  "Valid Until 23 April 2026",
-                  style: TextStyle(
-                    color: Colors.white.withAlpha(128),
-                    fontSize: 13.sp,
-                  ),
-                ),
-                SizedBox(height: 16.h),
-                const Divider(color: Colors.white12),
-                SizedBox(height: 24.h),
-                // ── Instructions ────────────────────────────────────────────────
-                _buildNumberedText("1.", "Welcome to Ai. By using our services, you agree to abide by the terms and conditions outlined below. These terms govern your access to and"),
-                _buildNumberedText("2.", "use of Ai tools and services, so please review them carefully before proceeding."),
-                _buildNumberedText("3.", "Ai provides innovative tools designed to enhance how you capture and manage voice recordings. Our services include voice-to-text transcription and AI-driven summarization, which are intended"),
-                _buildNumberedText("4.", "for lawful, ethical purposes only. You must ensure compliance with applicable laws, including obtaining consent from all participants when recording conversations. CleverTalk disclaims liability for any misuse of its tools."),
-                SizedBox(height: 40.h),
-              ],
+          title: Text(
+            'Credit Balance',
+            style: TextStyle(
+              color: const Color(0xFFF5F0E8),
+              fontSize: 16,
+              fontFamily: 'Georgia',
+              fontWeight: FontWeight.w400,
             ),
           ),
+          centerTitle: true,
         ),
-        if (controller.isRefreshing)
-          Positioned(
-            top: 16.h,
-            left: 0,
-            right: 0,
-            child: const Center(child: CustomLoader(size: 150)),
+        body: Consumer<ProfileController>(
+          builder: (context, controller, child) {
+            if (controller.isLoading && controller.history.isEmpty) {
+              return const SafeArea(child: _PointShimmer());
+            }
+
+            final pointsDigits = controller.currentPoints.toString().padLeft(3, '0').split('');
+            final pointsStr = pointsDigits.join(' ');
+
+            return Stack(
+              children: [
+                RefreshIndicator(
+                  onRefresh: () => controller.fetchPointHistory(isRefresh: true),
+                  color: Colors.transparent,
+                  backgroundColor: Colors.transparent,
+                  strokeWidth: 0,
+                  elevation: 0,
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: EdgeInsets.all(20.r),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // ── Credit Balance Card ────────────────────────────────────────
+
+                  Container(
+                    width: double.infinity,
+                    clipBehavior: Clip.antiAlias,
+                    padding: EdgeInsets.only(
+                      left: 20.w,
+                      top: 16.h,
+                      right: 21.w,
+                      bottom: 14.h,
+                    ),
+                    decoration: ShapeDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment(0.03, 0.86),
+                        end: Alignment(0.97, 0.14),
+                        colors: [
+                          const Color(0xFF193115),
+                          const Color(0xFF486244),
+                        ],
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Credits Balance',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontFamily: 'Segoe UI',
+                                fontWeight: FontWeight.w400,
+                                height: 1.50,
+                                letterSpacing: 0.56,
+                              ),
+                            ),
+                            SizedBox(height: 9.h),
+                            Text(
+                              pointsStr,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontFamily: 'Segoe UI',
+                                fontWeight: FontWeight.w400,
+                                height: 1.05,
+                                letterSpacing: 3.60,
+                              ),
+                            ),
+                          ],
+                        ),
+                        // Mock overlapping circles
+                        SvgPicture.asset(AppAssets.balance),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 24.h),
+                  Text(
+                    "Valid Until 23 April 2026",
+                    style: TextStyle(
+                      color: Colors.white.withAlpha(128),
+                      fontSize: 13.sp,
+                    ),
+                  ),
+                  SizedBox(height: 16.h),
+                  const Divider(color: Colors.white12),
+                  SizedBox(height: 24.h),
+                  // ── Instructions ────────────────────────────────────────────────
+                  _buildNumberedText("1.", "Welcome to Ai. By using our services, you agree to abide by the terms and conditions outlined below. These terms govern your access to and"),
+                  _buildNumberedText("2.", "use of Ai tools and services, so please review them carefully before proceeding."),
+                  _buildNumberedText("3.", "Ai provides innovative tools designed to enhance how you capture and manage voice recordings. Our services include voice-to-text transcription and AI-driven summarization, which are intended"),
+                  _buildNumberedText("4.", "for lawful, ethical purposes only. You must ensure compliance with applicable laws, including obtaining consent from all participants when recording conversations. CleverTalk disclaims liability for any misuse of its tools."),
+                  SizedBox(height: 40.h),
+                ],
+              ),
+            ),
           ),
-      ],
-    );
-  },
-),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.all(20.r),
-        child: CustomButton(
-          onPress: () async {
-            // Handle buy more credits
-          },
-          title: "Buy More Credits",
-          linearGradient: true,
+          if (controller.isRefreshing)
+            Positioned(
+              top: 16.h,
+              left: 0,
+              right: 0,
+              child: const Center(child: CustomLoader(size: 150)),
+            ),
+        ],
+      );
+        },
+      ),
+        bottomNavigationBar: Padding(
+          padding: EdgeInsets.all(20.r),
+          child: CustomButton(
+            onPress: () async {
+              // Handle buy more credits
+            },
+            title: "Buy More Credits",
+            linearGradient: true,
+          ),
         ),
       ),
     );

@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:newproject/core/constants/app_assets.dart';
+import 'package:newproject/core/widgets/custom_button.dart';
 import '../../../../core/utils/helpers/snack_bar_helper.dart';
 import '../../../seeker/circle/models/group_model.dart'; // Reuse GroupModel
 
@@ -91,55 +94,50 @@ class CoachCircleController extends ChangeNotifier {
               ),
             ),
             const SizedBox(height: 32),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: const Color(0xFFC19E5F), width: 1.5),
-              ),
-              child: const Icon(Icons.lock_outline, color: Color(0xFFC19E5F), size: 40),
+            SvgPicture.asset(AppAssets.lock),
+            const SizedBox(height: 12),
+          Text(
+            'Unlock More Groups',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontFamily: 'Segoe UI',
+              fontWeight: FontWeight.w600,
+              height: 1.50,
             ),
-            const SizedBox(height: 24),
-            const Text(
-              'Unlock More Groups',
-              style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            const Text(
+          ),
+            const SizedBox(height: 20),
+            Text(
               'You can only one free circle at a time, to join more upgrade now.',
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white70, fontSize: 15, height: 1.5),
-            ),
-            const SizedBox(height: 32),
-            SizedBox(
-              width: double.infinity,
-              height: 54,
-              child: ElevatedButton(
-                onPressed: () {
-                  _isPremium = true;
-                  Navigator.pop(context);
-                  showSuccessSnackBar(message: "Premium unlocked! (Mock)");
-                  notifyListeners();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFC19E5F),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                ),
-                child: const Text('Upgrade Now', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+              style: TextStyle(
+                color: const Color(0xFF838383),
+                fontSize: 14,
+                fontFamily: 'Segoe UI',
+                fontWeight: FontWeight.w400,
+                height: 1.50,
               ),
             ),
+            const SizedBox(height: 20),
+            CustomButton(
+              linearGradient: true,
+                height: 48,
+                onPress: () async{
+              _isPremium = true;
+              Navigator.pop(context);
+              showSuccessSnackBar(message: "Premium unlocked! (Mock)");
+              notifyListeners();
+            }, title: "Upgrade Now"),
             const SizedBox(height: 12),
-            SizedBox(
-              width: double.infinity,
-              height: 54,
-              child: OutlinedButton(
-                onPressed: () => Navigator.pop(context),
-                style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: Colors.white24),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                ),
-                child: const Text('Later', style: TextStyle(color: Colors.white, fontSize: 16)),
-              ),
+            CustomButton(
+              height: 44,
+              onPress: () async => Navigator.pop(context),
+              title: "Later",
+              buttonColor: Color(0x33434928),
+              borderColor: Color(0xF2C9A84C),
+              borderWidth: .5,
+              radius: 8,
             ),
             const SizedBox(height: 20),
           ],

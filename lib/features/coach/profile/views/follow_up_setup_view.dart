@@ -3,8 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_assets.dart';
+import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/background_widget.dart';
 import '../../../../core/widgets/custom_button.dart';
+import '../../../../core/widgets/custom_input.dart';
 import '../../../../core/widgets/custom_loader.dart';
 import '../controllers/coach_profile_controller.dart';
 
@@ -15,20 +17,36 @@ class FollowUpSetupView extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = context.watch<CoachProfileController>();
 
-    final intervals = ["7 Days", "60 Days", "30 Days", "90 Days", "6 Months", "12 Months", "14 Months"];
+    final intervals = [
+      "7 Days",
+      "60 Days",
+      "30 Days",
+      "90 Days",
+      "6 Months",
+      "12 Months",
+      "14 Months",
+    ];
 
     return BackgroundWidget(
-      imagePath: AppAssets.bgHome,
+      imagePath: AppAssets.bgMain,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.white70),
+            icon: const Icon(Icons.west, color: Color(0xFF5E7958), size: 24),
             onPressed: () => Navigator.pop(context),
           ),
-          title: const Text("Follow Up Set Up", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          title: Text(
+            'Follow Up Set Up',
+            style: TextStyle(
+              color: const Color(0xFFF5F0E8),
+              fontSize: 16,
+              fontFamily: 'Georgia',
+              fontWeight: FontWeight.w400,
+            ),
+          ),
           centerTitle: true,
         ),
         body: FutureBuilder(
@@ -39,56 +57,79 @@ class FollowUpSetupView extends StatelessWidget {
             }
             return Padding(
               padding: EdgeInsets.all(24.r),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text("Follow Up Text", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
-              const Text("Set automated Follow Up Text to send your clients", style: TextStyle(color: Colors.white38, fontSize: 12)),
-              
-              SizedBox(height: 16.h),
-              
-              Container(
-                padding: EdgeInsets.all(16.r),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF2D3D2D).withAlpha(100),
-                  borderRadius: BorderRadius.circular(12.r),
-                  border: Border.all(color: Colors.white10),
-                ),
-                child: TextField(
-                  controller: controller.followUpTextController,
-                  maxLines: 8,
-                  style: const TextStyle(color: Colors.white),
-                  decoration: const InputDecoration(
-                    hintText: "Enter here",
-                    hintStyle: TextStyle(color: Colors.white24, fontSize: 14),
-                    border: InputBorder.none,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Follow Up Text',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontFamily: 'Segoe UI',
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
-                ),
+                  Text(
+                    'Set automated Follow Up Text to send your clients',
+                    style: TextStyle(
+                      color: const Color(0xFF99A1AF),
+                      fontSize: 12,
+                      fontFamily: 'Segoe UI',
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+
+                  SizedBox(height: 16.h),
+
+                  CustomInput(
+                    height: 180,
+                    hintText: "Enter here",
+                    fontSize: 12,
+                    hintColor: AppColors.greyColor,
+                    hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: AppColors.whiteColor.withAlpha(153),
+                      fontSize: 12.sp,
+                    ),
+                    maxLines: 10,
+                    shadow: true,
+                    shadowColor: Color(0xFF2E4429),
+                    backgroundColor: Color(0xFF21321E),
+                    borderRadius: 8,
+                    borderWidth: 0.50,
+                    borderColor: Color(0xFF334B2F),
+                  ),
+                  SizedBox(height: 32.h),
+
+                  const Text(
+                    "Follow Up Message Set Up",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+
+                  SizedBox(height: 16.h),
+
+                  Wrap(
+                    spacing: 24.w,
+                    runSpacing: 16.h,
+                    children: intervals
+                        .map((interval) => _buildCheckbox(controller, interval))
+                        .toList(),
+                  ),
+
+                  const Spacer(),
+
+                  CustomButton(
+                    onPress: () async {},
+                    title: "Save Follow Up Set Up",
+                    linearGradient: true,
+                  ),
+
+                  SizedBox(height: 20.h),
+                ],
               ),
-
-              SizedBox(height: 32.h),
-              
-              const Text("Follow Up Message Set Up", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
-              
-              SizedBox(height: 16.h),
-              
-              Wrap(
-                spacing: 24.w,
-                runSpacing: 16.h,
-                children: intervals.map((interval) => _buildCheckbox(controller, interval)).toList(),
-              ),
-
-              const Spacer(),
-
-              CustomButton(
-                onPress: () async {},
-                title: "Save Follow Up Set Up",
-                linearGradient: true,
-              ),
-
-              SizedBox(height: 20.h),
-            ],
-          ),
             );
           },
         ),
@@ -108,14 +149,25 @@ class FollowUpSetupView extends StatelessWidget {
             width: 18.r,
             height: 18.r,
             decoration: BoxDecoration(
-              border: Border.all(color: isSelected ? const Color(0xFFC19E5F) : Colors.white38, width: 1.5),
+              border: Border.all(
+                color: isSelected ? const Color(0xFFC19E5F) : Colors.white38,
+                width: 1.5,
+              ),
               borderRadius: BorderRadius.circular(4.r),
               color: isSelected ? const Color(0xFFC19E5F) : Colors.transparent,
             ),
-            child: isSelected ? const Icon(Icons.check, color: Colors.white, size: 12) : null,
+            child: isSelected
+                ? const Icon(Icons.check, color: Colors.white, size: 12)
+                : null,
           ),
           SizedBox(width: 10.w),
-          Text(title, style: TextStyle(color: isSelected ? const Color(0xFFC19E5F) : Colors.white70, fontSize: 14)),
+          Text(
+            title,
+            style: TextStyle(
+              color: isSelected ? const Color(0xFFC19E5F) : Colors.white70,
+              fontSize: 14,
+            ),
+          ),
         ],
       ),
     );
@@ -131,17 +183,28 @@ class FollowUpSetupView extends StatelessWidget {
           SizedBox(height: 4.h),
           ShimmerLoader(width: 250.w, height: 14.h),
           SizedBox(height: 16.h),
-          ShimmerLoader(width: double.infinity, height: 180.h, borderRadius: 12.r),
+          ShimmerLoader(
+            width: double.infinity,
+            height: 180.h,
+            borderRadius: 12.r,
+          ),
           SizedBox(height: 32.h),
           ShimmerLoader(width: 200.w, height: 20.h),
           SizedBox(height: 16.h),
           Wrap(
             spacing: 24.w,
             runSpacing: 16.h,
-            children: List.generate(7, (_) => ShimmerLoader(width: 80.w, height: 20.h)),
+            children: List.generate(
+              7,
+              (_) => ShimmerLoader(width: 80.w, height: 20.h),
+            ),
           ),
           const Spacer(),
-          ShimmerLoader(width: double.infinity, height: 50.h, borderRadius: 25.r),
+          ShimmerLoader(
+            width: double.infinity,
+            height: 50.h,
+            borderRadius: 25.r,
+          ),
           SizedBox(height: 20.h),
         ],
       ),

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:newproject/core/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_assets.dart';
+import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/background_widget.dart';
+import '../../../../core/widgets/custom_input.dart';
 import '../../../../core/widgets/custom_loader.dart';
 import '../controllers/coach_circle_controller.dart';
 import 'coach_group_detail_view.dart';
@@ -23,121 +27,154 @@ class CoachCircleView extends StatelessWidget {
       }
     });
 
-    return Scaffold(
-      backgroundColor: Color(0xFF2D3D2A),
-      appBar: AppBar(
-        backgroundColor: Color(0xFF22331F),
-        elevation: 0,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.groups_outlined, color: Color(0xFFC19E5F)),
-            SizedBox(width: 8.w),
-            Text(
-              "Circles",
-              style: theme.textTheme.titleLarge?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
-            ),
-          ],
+    return GestureDetector(
+      onTap: FocusScope.of(context).unfocus,
+      child: Scaffold(
+        backgroundColor: Color(0xFF2D3D2A),
+        appBar: AppBar(
+          backgroundColor: Color(0xFF22331F),
+          scrolledUnderElevation: 0,
+          surfaceTintColor: const Color(0xFF22331F),
+          elevation: 0,
+          centerTitle: true,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(24.r)),
+          ),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SvgPicture.asset(AppAssets.circleIcon),
+              SizedBox(width: 8.w),
+              Text(
+                "Circles",
+                style: theme.textTheme.titleSmall?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Georgia',
+                ),
+              ),
+            ],
+          ),
         ),
-        centerTitle: true,
-      ),
-      body: controller.isLoading
-          ? _buildSkeletonLoader(context)
-          : Stack(
-              children: [
-                RefreshIndicator(
-                  onRefresh: () => controller.fetchCircles(isRefresh: true),
-                  color: Colors.transparent,
-                  backgroundColor: Colors.transparent,
-                  strokeWidth: 0,
-                  elevation: 0,
-                  child: Column(
-                    children: [
-                      SizedBox(height: 20.h),
-                      // ── Search Bar ──────────────────────────────────────────────
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20.w),
-                        child: Container(
+        body: controller.isLoading
+            ? _buildSkeletonLoader(context)
+            : Stack(
+                children: [
+                  RefreshIndicator(
+                    onRefresh: () => controller.fetchCircles(isRefresh: true),
+                    color: Colors.transparent,
+                    backgroundColor: Colors.transparent,
+                    strokeWidth: 0,
+                    elevation: 0,
+                    child: Column(
+                      children: [
+                        SizedBox(height: 20.h),
+                        // ── Search Bar ──────────────────────────────────────────────
+                        Padding(
                           padding: EdgeInsets.symmetric(horizontal: 16.w),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF2D3D2D),
-                            borderRadius: BorderRadius.circular(24.r),
-                          ),
-                          child: Row(
-                            children: [
-                              const Icon(Icons.search, color: Colors.white38),
-                              SizedBox(width: 8.w),
-                              const Expanded(
-                                child: TextField(
-                                  style: TextStyle(color: Colors.white),
-                                  decoration: InputDecoration(
-                                    hintText: "Search groups",
-                                    hintStyle: TextStyle(color: Colors.white38, fontSize: 14),
-                                    border: InputBorder.none,
-                                  ),
+                          child: CustomInput(
+                            height: 50,
+                            hintText: "Search groups",
+                            fontSize: 14,
+                            hintColor: AppColors.greyColor,
+                            hintStyle: Theme.of(context).textTheme.bodyLarge
+                                ?.copyWith(
+                                  color: AppColors.whiteColor.withAlpha(153),
+                                  fontSize: 14.sp,
                                 ),
-                              ),
-                            ],
+                            shadow: true,
+                            shadowColor: Color(0xFF2E4429),
+                            backgroundColor: Color(0xFF21321E),
+                            borderRadius: 24,
+                            borderWidth: 0.50,
+                            borderColor: Color(0xFF334B2F),
+                            leadingIcon: AppAssets.search,
+                            leadingPadding: EdgeInsets.only(
+                              left: 16.w,
+                              right: 8.w,
+                            ),
                           ),
                         ),
-                      ),
+                        SizedBox(height: 24.h),
 
-                      SizedBox(height: 24.h),
-
-                      // ── Group List ───────────────────────────────────────────────
-                      Expanded(
-                        child: controller.circles.isEmpty
-                            ? ListView(
-                                children: const [
-                                  Padding(
-                                    padding: EdgeInsets.only(top: 50.0),
-                                    child: Center(
-                                      child: Text("No circles found", style: TextStyle(color: Colors.white54)),
+                        // ── Group List ───────────────────────────────────────────────
+                        Expanded(
+                          child: controller.circles.isEmpty
+                              ? ListView(
+                                  children: const [
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 50.0),
+                                      child: Center(
+                                        child: Text(
+                                          "No circles found",
+                                          style: TextStyle(
+                                            color: Colors.white54,
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  )
-                                ],
-                              )
-                            : ListView.builder(
-                                padding: EdgeInsets.symmetric(horizontal: 20.w),
-                                itemCount: controller.circles.length,
-                                itemBuilder: (context, index) {
-                                  final circle = controller.circles[index];
-                                  return _buildGroupCard(
-                                    context,
-                                    controller,
-                                    circle.id,
-                                    circle.name,
-                                    "${circle.memberCount} members",
-                                    circle.description,
-                                    circle.icon, // NetworkImage can be handled inside
-                                    circle.isJoined,
-                                  );
-                                },
-                              ),
-                      ),
-                    ],
+                                  ],
+                                )
+                              : ListView.builder(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 20.w,
+                                  ),
+                                  itemCount: controller.circles.length,
+                                  itemBuilder: (context, index) {
+                                    final circle = controller.circles[index];
+                                    return _buildGroupCard(
+                                      context,
+                                      controller,
+                                      circle.id,
+                                      circle.name,
+                                      "${circle.memberCount} members",
+                                      circle.description,
+                                      circle
+                                          .icon, // NetworkImage can be handled inside
+                                      circle.isJoined,
+                                    );
+                                  },
+                                ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                if (controller.isRefreshing)
-                  Positioned(
-                    top: 16.h,
-                    left: 0,
-                    right: 0,
-                    child: const Center(child: CustomLoader(size: 100)),
-                  ),
-              ],
-            ),
+                  if (controller.isRefreshing)
+                    Positioned(
+                      top: 16.h,
+                      left: 0,
+                      right: 0,
+                      child: const Center(child: CustomLoader(size: 100)),
+                    ),
+                ],
+              ),
+      ),
     );
   }
 
-  Widget _buildGroupCard(BuildContext context, CoachCircleController controller, String id, String name, String members, String description, String icon, bool isJoined) {
+  Widget _buildGroupCard(
+    BuildContext context,
+    CoachCircleController controller,
+    String id,
+    String name,
+    String members,
+    String description,
+    String icon,
+    bool isJoined,
+  ) {
     return GestureDetector(
       onTap: () {
-         Navigator.push(context, MaterialPageRoute(builder: (_) => CoachGroupDetailView(groupName: name, members: members)));
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) =>
+                CoachGroupDetailView(groupName: name, members: members),
+          ),
+        );
       },
       child: Container(
         margin: EdgeInsets.only(bottom: 16.h),
-        padding:  EdgeInsets.symmetric(horizontal: 11.w, vertical: 15.h),
+        padding: EdgeInsets.symmetric(horizontal: 11.w, vertical: 15.h),
         decoration: ShapeDecoration(
           color: const Color(0xFF253523),
           shape: RoundedRectangleBorder(
@@ -149,7 +186,7 @@ class CoachCircleView extends StatelessWidget {
               blurRadius: 24.20,
               offset: Offset(0, 13),
               spreadRadius: 0,
-            )
+            ),
           ],
         ),
         child: Column(
@@ -163,7 +200,11 @@ class CoachCircleView extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: icon.startsWith('http')
-                        ? Image.network(icon, errorBuilder: (c, e, s) => const Icon(Icons.group, color: Colors.grey))
+                        ? Image.network(
+                            icon,
+                            errorBuilder: (c, e, s) =>
+                                const Icon(Icons.group, color: Colors.grey),
+                          )
                         : Image.asset(icon),
                   ),
                 ),
@@ -172,8 +213,21 @@ class CoachCircleView extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(name, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
-                      Text(members, style: const TextStyle(color: Colors.white38, fontSize: 12)),
+                      Text(
+                        name,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      Text(
+                        members,
+                        style: const TextStyle(
+                          color: Colors.white38,
+                          fontSize: 12,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -182,28 +236,34 @@ class CoachCircleView extends StatelessWidget {
             SizedBox(height: 16.h),
             Text(
               description,
-              style: const TextStyle(color: Colors.white70, fontSize: 13, height: 1.4),
+              style: const TextStyle(
+                color: Colors.white70,
+                fontSize: 13,
+                height: 1.4,
+              ),
             ),
             SizedBox(height: 24.h),
             SizedBox(
               width: double.infinity,
-              height: 48.h,
+              height: 44.h,
               child: isJoined
-                  ? ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF3A4D3A),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
-                      ),
-                      child: const Text("Joined", style: TextStyle(color: Colors.white70, fontWeight: FontWeight.bold)),
+                  ? CustomButton(
+                      height: 44,
+                      onPress: null,
+                      title: "Joined",
+                      buttonColor: Color(0xFF4C6D45),
+                      borderColor: Color(0xFF4C6D45),
+                      borderWidth: .5,
+                      radius: 8,
                     )
-                  : OutlinedButton(
-                      onPressed: () => controller.joinGroup(context, id),
-                      style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: Color(0xFFC19E5F)),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
-                      ),
-                      child: const Text("Join Now", style: TextStyle(color: Color(0xFFC19E5F), fontWeight: FontWeight.bold)),
+                  : CustomButton(
+                      height: 44,
+                      onPress: () async => controller.joinGroup(context, id),
+                      title: "Join Now",
+                      buttonColor: Color(0x33434928),
+                      borderColor: Color(0xF2C9A84C),
+                      borderWidth: .5,
+                      radius: 8,
                     ),
             ),
           ],
@@ -218,7 +278,11 @@ class CoachCircleView extends StatelessWidget {
         SizedBox(height: 20.h),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
-          child: ShimmerLoader(width: double.infinity, height: 48.h, borderRadius: 24.r),
+          child: ShimmerLoader(
+            width: double.infinity,
+            height: 48.h,
+            borderRadius: 24.r,
+          ),
         ),
         SizedBox(height: 24.h),
         Expanded(
@@ -239,7 +303,11 @@ class CoachCircleView extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        ShimmerLoader(width: 48.r, height: 48.r, borderRadius: 24.r),
+                        ShimmerLoader(
+                          width: 48.r,
+                          height: 48.r,
+                          borderRadius: 24.r,
+                        ),
                         SizedBox(width: 16.w),
                         Expanded(
                           child: Column(
@@ -258,7 +326,11 @@ class CoachCircleView extends StatelessWidget {
                     SizedBox(height: 4.h),
                     ShimmerLoader(width: 200.w, height: 14.h),
                     SizedBox(height: 24.h),
-                    ShimmerLoader(width: double.infinity, height: 48.h, borderRadius: 8.r),
+                    ShimmerLoader(
+                      width: double.infinity,
+                      height: 48.h,
+                      borderRadius: 8.r,
+                    ),
                   ],
                 ),
               );

@@ -217,7 +217,7 @@ class CustomInput extends StatelessWidget {
       child: Text(
         title!,
         style:
-            titleStyle ??
+        titleStyle ??
             theme.textTheme.labelLarge?.copyWith(
               color: titleColor ?? theme.textTheme.labelLarge?.color,
               fontSize: (titleFontSize ?? 14).sp,
@@ -242,10 +242,10 @@ class CustomInput extends StatelessWidget {
   }
 
   Widget _buildInputField(
-    ThemeData theme,
-    FormFieldState<_InputState> fieldState,
-    _InputState state,
-  ) {
+      ThemeData theme,
+      FormFieldState<_InputState> fieldState,
+      _InputState state,
+      ) {
     final hasError = state.errorText != null;
     final isEnabled = enabled;
 
@@ -257,6 +257,7 @@ class CustomInput extends StatelessWidget {
       duration: const Duration(milliseconds: 200),
       width: width.w,
       height: height?.h,
+      clipBehavior: Clip.antiAlias,
       decoration: ShapeDecoration(
         color: backgroundColor ?? const Color(0xFF21321E),
         shape: RoundedRectangleBorder(
@@ -270,13 +271,13 @@ class CustomInput extends StatelessWidget {
         ),
         shadows: shadow
             ? [
-                BoxShadow(
-                  color: shadowColor ?? const Color(0xFF2E4429),
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
-                  spreadRadius: 0,
-                ),
-              ]
+          BoxShadow(
+            color: shadowColor ?? const Color(0xFF2E4429),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+            spreadRadius: 0,
+          ),
+        ]
             : null,
       ),
       child: Center(
@@ -326,7 +327,7 @@ class CustomInput extends StatelessWidget {
               return null;
             },
             style:
-                textStyle ??
+            textStyle ??
                 theme.textTheme.bodyMedium?.copyWith(
                   color: isEnabled
                       ? (textColor ?? Colors.white)
@@ -339,7 +340,7 @@ class CustomInput extends StatelessWidget {
               hintText: hintText,
               labelText: labelText,
               hintStyle:
-                  hintStyle ??
+              hintStyle ??
                   TextStyle(
                     color: Colors.white.withValues(alpha: 0.3),
                     fontSize: (fontSize ?? 14).sp,
@@ -347,7 +348,7 @@ class CustomInput extends StatelessWidget {
               labelStyle: hintStyle ?? theme.inputDecorationTheme.labelStyle,
               isDense: true,
               contentPadding:
-                  contentPadding ??
+              contentPadding ??
                   EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
               border: InputBorder.none,
               enabledBorder: InputBorder.none,
@@ -373,16 +374,16 @@ class CustomInput extends StatelessWidget {
         : (leadingColor ?? theme.hintColor);
     final leading =
         leadingWidget ??
-        Padding(
-          padding: leadingPadding,
-          child: _buildAsset(
-            leadingIcon,
-            leadingIconWidth,
-            leadingIconHeight,
-            useLeadingColor,
-            color,
-          ),
-        );
+            Padding(
+              padding: leadingPadding,
+              child: _buildAsset(
+                leadingIcon,
+                leadingIconWidth,
+                leadingIconHeight,
+                useLeadingColor,
+                color,
+              ),
+            );
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -391,11 +392,11 @@ class CustomInput extends StatelessWidget {
   }
 
   Widget? _buildTrailing(
-    ThemeData theme,
-    bool hasError,
-    FormFieldState<_InputState> fieldState,
-    _InputState state,
-  ) {
+      ThemeData theme,
+      bool hasError,
+      FormFieldState<_InputState> fieldState,
+      _InputState state,
+      ) {
     final List<Widget> children = [];
     final color = hasError
         ? theme.colorScheme.error
@@ -414,16 +415,16 @@ class CustomInput extends StatelessWidget {
     if (trailingWidget != null || trailingIcon.isNotEmpty) {
       final trailing =
           trailingWidget ??
-          Padding(
-            padding: trailingPadding,
-            child: _buildAsset(
-              trailingIcon,
-              trailingIconWidth,
-              trailingIconHeight,
-              useTrailingColor,
-              color,
-            ),
-          );
+              Padding(
+                padding: trailingPadding,
+                child: _buildAsset(
+                  trailingIcon,
+                  trailingIconWidth,
+                  trailingIconHeight,
+                  useTrailingColor,
+                  color,
+                ),
+              );
       children.add(trailing);
     }
     if (children.isEmpty) return null;
@@ -439,7 +440,7 @@ class CustomInput extends StatelessWidget {
         ? theme.colorScheme.error
         : (trailingColor ?? theme.hintColor);
     if (state.isObscured) {
-      if (hiddenIcon != null)
+      if (hiddenIcon != null) {
         return _buildAsset(
           hiddenIcon!,
           obscureIconSize,
@@ -447,13 +448,14 @@ class CustomInput extends StatelessWidget {
           true,
           color,
         );
+      }
       return Icon(
         Icons.visibility_off_outlined,
         size: obscureIconSize.sp,
         color: color,
       );
     } else {
-      if (visibleIcon != null)
+      if (visibleIcon != null) {
         return _buildAsset(
           visibleIcon!,
           obscureIconSize,
@@ -461,6 +463,7 @@ class CustomInput extends StatelessWidget {
           true,
           color,
         );
+      }
       return Icon(
         Icons.visibility_outlined,
         size: obscureIconSize.sp,
@@ -470,12 +473,12 @@ class CustomInput extends StatelessWidget {
   }
 
   Widget _buildAsset(
-    String path,
-    double width,
-    double height,
-    bool useColor,
-    Color color,
-  ) {
+      String path,
+      double width,
+      double height,
+      bool useColor,
+      Color color,
+      ) {
     if (path.toLowerCase().endsWith('.svg')) {
       return SvgPicture.asset(
         path,

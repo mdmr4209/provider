@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:newproject/core/widgets/custom_button.dart';
 import '../models/coach_home_model.dart';
 import '../../../../core/utils/helpers/snack_bar_helper.dart';
 
@@ -16,7 +17,7 @@ class CoachHomeController extends ChangeNotifier {
   bool get isActive => _isActive;
   bool get isLoading => _isLoading;
   bool get isRefreshing => _isRefreshing;
-  
+
   CoachStatsModel? get stats => _stats;
   List<CoachSessionModel> get sessions => _sessions;
   List<CoachMessageModel> get messages => _messages;
@@ -31,12 +32,18 @@ class CoachHomeController extends ChangeNotifier {
 
     try {
       await Future.delayed(const Duration(milliseconds: 1000));
-      final String jsonString = await rootBundle.loadString('assets/json/coach_home.json');
+      final String jsonString = await rootBundle.loadString(
+        'assets/json/coach_home.json',
+      );
       final Map<String, dynamic> data = jsonDecode(jsonString);
 
       _stats = CoachStatsModel.fromJson(data['stats']);
-      _sessions = (data['upcomingSessions'] as List).map((x) => CoachSessionModel.fromJson(x)).toList();
-      _messages = (data['newMessages'] as List).map((x) => CoachMessageModel.fromJson(x)).toList();
+      _sessions = (data['upcomingSessions'] as List)
+          .map((x) => CoachSessionModel.fromJson(x))
+          .toList();
+      _messages = (data['newMessages'] as List)
+          .map((x) => CoachMessageModel.fromJson(x))
+          .toList();
     } catch (e) {
       showErrorSnackBar(message: "Failed to load dashboard: $e");
     } finally {
@@ -60,41 +67,55 @@ class CoachHomeController extends ChangeNotifier {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF1B2B1B),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        backgroundColor: const Color(0xFF2C3F28),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               padding: const EdgeInsets.all(12),
               decoration: const BoxDecoration(
-                color: Color(0xFF2D3D2D),
+                color: Color(0xFF132312),
                 shape: BoxShape.circle,
               ),
-              child: const Icon(Icons.priority_high, color: Color(0xFFE57373), size: 30),
+              child: const Icon(
+                Icons.error_outline,
+                color: const Color(0xFFFB6262),
+                size: 30,
+              ),
             ),
-            const SizedBox(height: 16),
-            const Text(
+            const SizedBox(height: 5),
+            Text(
               'Hold On!!',
-              style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 12),
-            const Text(
-              'You cant disable account before taking decision about arranged Sessions',
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white70, fontSize: 14),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w500,
+              ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 14),
+            SizedBox(
+              width: 251,
+              child: Text(
+                'You cant disable account before taking decision about arranged Sessions',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ),
+            const SizedBox(height: 25),
             SizedBox(
               width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () => Navigator.pop(context),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFC19E5F),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                ),
-                child: const Text('Got it', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+              child: CustomButton(
+                onPress: () async => Navigator.pop(context),
+                title: 'Got it',
+                linearGradient: true,
               ),
             ),
           ],
@@ -107,48 +128,51 @@ class CoachHomeController extends ChangeNotifier {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF1B2B1B),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        backgroundColor: const Color(0xFF2C3E28),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-             Align(
+            Align(
               alignment: Alignment.topRight,
-              child: IconButton(
-                icon: const Icon(Icons.close, color: Colors.white54, size: 20),
-                onPressed: () => Navigator.pop(context),
+              child: InkWell(
+                child: const Icon(Icons.close, color: Colors.white54, size: 20),
+                onTap: () => Navigator.pop(context),
               ),
             ),
-            const Text(
+            Text(
               'Are you sure about Cancelling Session?',
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w400,
+              ),
             ),
             const SizedBox(height: 24),
             Row(
               children: [
                 Expanded(
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.pop(context),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF4A5D4A),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                    ),
-                    child: const Text('No', style: TextStyle(color: Colors.white)),
+                  child: CustomButton(
+                    width: 125.64,
+                    height: 32,
+                    onPress: () async => Navigator.pop(context),
+                    title: 'No',
+                    buttonColor: Color(0xFF4C6D45),
+                    borderColor: Color(0xFF4C6D45),
+                    radius: 4,
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Perform cancel logic
-                      Navigator.pop(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFC19E5F),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                    ),
-                    child: const Text('Yes', style: TextStyle(color: Colors.white)),
+                  child: CustomButton(
+                    width: 125.64,
+                    height: 32,
+                    onPress: () async => Navigator.pop(context),
+                    title: 'Yes',
+                    linearGradient: true,
+                    radius: 4,
                   ),
                 ),
               ],

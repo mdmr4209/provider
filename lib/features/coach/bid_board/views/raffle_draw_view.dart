@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_assets.dart';
-import '../../../../core/widgets/background_widget.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_loader.dart';
 import '../controllers/coach_bid_controller.dart';
@@ -20,16 +20,29 @@ class RaffleDrawView extends StatelessWidget {
       backgroundColor: Color(0xFF2D3D2A),
       appBar: AppBar(
         backgroundColor: Color(0xFF22331F),
+        // These two lines prevent the color change / tinting when scrolling
+        scrolledUnderElevation: 0,
+        surfaceTintColor: const Color(0xFF22331F),
+
         elevation: 0,
+        centerTitle: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(24.r)),
+        ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.west, color: Color(0xFF5E7958), size: 24),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
-          "Raffle Draw",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+
+        title: Text(
+          'Raffle Draw',
+          style: TextStyle(
+            color: const Color(0xFFF5F0E8),
+            fontSize: 16,
+            fontFamily: 'Georgia',
+            fontWeight: FontWeight.w400,
+          ),
         ),
-        centerTitle: true,
       ),
       body: FutureBuilder(
         future: Future.delayed(const Duration(milliseconds: 1500)),
@@ -54,7 +67,7 @@ class RaffleDrawView extends StatelessWidget {
                   (index) => Padding(
                     padding: EdgeInsets.only(bottom: 16.h),
                     child: Text(
-                      "${index + 1}. Welcome to Ai. By using our services, you agree to abide by the terms and conditions outlined below. These terms govern your access to and use of Ai tools and services, so please review them carefully before proceeding.",
+                      "${index + 1}. Welcome to Ai. By using our services, you agree to abide by the terms and conditions outlined below. ",
                       style: const TextStyle(
                         color: Colors.white54,
                         fontSize: 13,
@@ -69,6 +82,7 @@ class RaffleDrawView extends StatelessWidget {
                 // ── Raffle Summary Card ──────────────────────────────────────
                 _buildSummaryCard(controller),
 
+                SizedBox(height: 25.h),
 
                 CustomButton(
                   onPress: () async {
@@ -104,11 +118,7 @@ class RaffleDrawView extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Icon(
-            Icons.emoji_events_outlined,
-            color: Color(0xFFC19E5F),
-            size: 50,
-          ),
+          SvgPicture.asset(AppAssets.dailyRaffle),
           SizedBox(width: 16.w),
           const Expanded(
             child: Column(
@@ -155,11 +165,7 @@ class RaffleDrawView extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Icon(
-            Icons.emoji_events_outlined,
-            color: Color(0xFFC19E5F),
-            size: 60,
-          ),
+          Image.asset(AppAssets.win),
           SizedBox(width: 16.w),
           const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,19 +191,22 @@ class RaffleDrawView extends StatelessWidget {
 
   Widget _buildSummaryCard(CoachBidController controller) {
     return Container(
-      padding: EdgeInsets.all(24.r),
-      decoration: BoxDecoration(
-        color: const Color(0xFF2D3D2D),
-        borderRadius: BorderRadius.circular(16.r),
+      padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 12),
+      decoration: ShapeDecoration(
+        color: const Color(0xFF243521),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       ),
       child: Column(
         children: [
-          const Text(
-            "My Raffle Summary",
+          Text(
+            'My Raffle Summary',
+            textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
+              fontSize: 14,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w500,
+              height: 1.07,
             ),
           ),
           SizedBox(height: 24.h),
@@ -228,7 +237,14 @@ class RaffleDrawView extends StatelessWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(color: Colors.white54, fontSize: 12),
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: const Color(0xFF868A85),
+            fontSize: 10,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w400,
+            height: 1.50,
+          ),
         ),
         SizedBox(height: 8.h),
         Row(
@@ -266,7 +282,7 @@ class RaffleDrawView extends StatelessWidget {
             height: 120.h,
             borderRadius: 16.r,
           ),
-          SizedBox(height: 32.h),
+          SizedBox(height: 25.h),
           ...List.generate(
             3,
             (index) => Padding(
@@ -278,7 +294,7 @@ class RaffleDrawView extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 32.h),
+          SizedBox(height: 25.h),
           ShimmerLoader(
             width: double.infinity,
             height: 120.h,

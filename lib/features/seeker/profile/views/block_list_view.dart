@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import '../../../../core/constants/app_assets.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_input.dart';
@@ -24,12 +25,17 @@ class BlockListView extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.west, color: Color(0xFF5E7958), size: 24),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          "Block List",
-          style: TextStyle(color: Colors.white, fontSize: 18.sp),
+          'Block List',
+          style: TextStyle(
+            color: const Color(0xFFF5F0E8),
+            fontSize: 16,
+            fontFamily: 'Georgia',
+            fontWeight: FontWeight.w400,
+          ),
         ),
         centerTitle: true,
       ),
@@ -42,18 +48,31 @@ class BlockListView extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.all(16.w),
                 child: CustomInput(
-                  height: 48,
+                  height: 50,
                   hintText: "Search By Name",
-                  backgroundColor: Colors.white.withAlpha(13),
+                  fontSize: 14,
+                  hintColor: AppColors.greyColor,
+                  hintStyle: Theme.of(context).textTheme.bodyLarge
+                      ?.copyWith(
+                    color: AppColors.whiteColor.withAlpha(153),
+                    fontSize: 14.sp,
+                  ),
+                  shadow: true,
+                  shadowColor: Color(0xFF2E4429),
+                  backgroundColor: Color(0xFF21321E),
                   borderRadius: 24,
-                  shadow: false,
+                  borderWidth: 0.50,
+                  borderColor: Color(0xFF334B2F),
+                  leadingIcon: AppAssets.search,
+                  leadingPadding: EdgeInsets.only(left: 16.w, right: 8.w),
                 ),
               ),
               Expanded(
                 child: Stack(
                   children: [
                     RefreshIndicator(
-                      onRefresh: () => controller.fetchBlockedUsers(isRefresh: true),
+                      onRefresh: () =>
+                          controller.fetchBlockedUsers(isRefresh: true),
                       color: Colors.transparent,
                       backgroundColor: Colors.transparent,
                       strokeWidth: 0,
@@ -72,35 +91,38 @@ class BlockListView extends StatelessWidget {
                               ),
                             )
                           : blocked.isEmpty
-                              ? ListView(
-                                  physics: const AlwaysScrollableScrollPhysics(),
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(vertical: 40.h),
-                                      child: Center(
-                                        child: Text(
-                                          "No blocked users.",
-                                          style: TextStyle(color: Colors.white.withAlpha(128)),
-                                        ),
+                          ? ListView(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 40.h),
+                                  child: Center(
+                                    child: Text(
+                                      "No blocked users.",
+                                      style: TextStyle(
+                                        color: Colors.white.withAlpha(128),
                                       ),
                                     ),
-                                  ],
-                                )
-                              : ListView.builder(
-                                  physics: const AlwaysScrollableScrollPhysics(),
-                                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                                  itemCount: blocked.length,
-                                  itemBuilder: (context, index) {
-                                    final user = blocked[index];
-                                    return _BlockTile(
-                                      id: user['id'],
-                                      name: user['name'],
-                                      avatar: user['avatar'],
-                                      date: user['date'],
-                                      onUnblock: () => controller.unblockUser(user['id']),
-                                    );
-                                  },
+                                  ),
                                 ),
+                              ],
+                            )
+                          : ListView.builder(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              padding: EdgeInsets.symmetric(horizontal: 16.w),
+                              itemCount: blocked.length,
+                              itemBuilder: (context, index) {
+                                final user = blocked[index];
+                                return _BlockTile(
+                                  id: user['id'],
+                                  name: user['name'],
+                                  avatar: user['avatar'],
+                                  date: user['date'],
+                                  onUnblock: () =>
+                                      controller.unblockUser(user['id']),
+                                );
+                              },
+                            ),
                     ),
                     if (controller.isRefreshing)
                       Positioned(
@@ -141,15 +163,12 @@ class _BlockTile extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 12.h),
       padding: EdgeInsets.all(12.r),
       decoration: BoxDecoration(
-        color: AppColors.postCardColor,
-        borderRadius: BorderRadius.circular(12.r),
+        color: Color(0xFF22331F),
+        borderRadius: BorderRadius.circular(4.r),
       ),
       child: Row(
         children: [
-          CircleAvatar(
-            radius: 20.r,
-            backgroundImage: NetworkImage(avatar),
-          ),
+          CircleAvatar(radius: 20.r, backgroundImage: NetworkImage(avatar)),
           SizedBox(width: 12.w),
           Expanded(
             child: Column(
@@ -157,11 +176,18 @@ class _BlockTile extends StatelessWidget {
               children: [
                 Text(
                   name,
-                  style: TextStyle(color: Colors.white, fontSize: 14.sp, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 Text(
                   date,
-                  style: TextStyle(color: Colors.white.withAlpha(128), fontSize: 11.sp),
+                  style: TextStyle(
+                    color: Colors.white.withAlpha(128),
+                    fontSize: 11.sp,
+                  ),
                 ),
               ],
             ),
@@ -169,7 +195,7 @@ class _BlockTile extends StatelessWidget {
           CustomButton(
             onPress: () async => onUnblock(),
             title: "Unblock",
-            width: 80,
+            width: 105,
             height: 32,
             fontSize: 12,
             buttonColor: Colors.white.withAlpha(13),

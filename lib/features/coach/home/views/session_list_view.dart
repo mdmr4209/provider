@@ -17,177 +17,121 @@ class SessionListView extends StatelessWidget {
     final theme = Theme.of(context);
     final coachHome = context.watch<CoachHomeController>();
 
-    return BackgroundWidget(
-      imagePath: AppAssets.bgHome,
-      child: Scaffold(
-        backgroundColor: Color(0xFF2D3D2A),
-        appBar: AppBar(
-          backgroundColor: const Color(0xFF22331F),
-          // These two lines prevent the color change / tinting when scrolling
-          scrolledUnderElevation: 0,
-          surfaceTintColor: const Color(0xFF22331F),
+    return Scaffold(
+      backgroundColor:AppColors.backgroundColor,
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF22331F),
+        // These two lines prevent the color change / tinting when scrolling
+        scrolledUnderElevation: 0,
+        surfaceTintColor: const Color(0xFF22331F),
 
-          elevation: 0,
-          centerTitle: true,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(bottom: Radius.circular(24.r)),
-          ),
-          leading: IconButton(
-            icon: const Icon(Icons.west, color: Color(0xFF5E7958), size: 24),
-            onPressed: () => Navigator.pop(context),
-          ),
-          title: Text(
-            "Session List",
-            style: theme.textTheme.titleLarge?.copyWith(
-              color: const Color(0xFFF4F6F0),
-              fontWeight: FontWeight.w500,
-              fontSize: 16.sp,
-            ),
+        elevation: 0,
+        centerTitle: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(24.r)),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.west, color: Color(0xFF5E7958), size: 24),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          "Session List",
+          style: theme.textTheme.titleLarge?.copyWith(
+            color: const Color(0xFFF4F6F0),
+            fontWeight: FontWeight.w500,
+            fontSize: 16.sp,
           ),
         ),
-        body: FutureBuilder(
-          future: Future.delayed(const Duration(milliseconds: 1500)),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return _buildSkeletonLoader();
-            }
-            return Column(
-              children: [
-                SizedBox(height: 20.h),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  child: AbsorbPointer(
-                    child: CustomInput(
-                      height: 50,
-                      hintText: "Word Your Thoughts",
-                      fontSize: 14,
-                      hintColor: AppColors.greyColor,
-                      hintStyle: Theme.of(context).textTheme.bodyLarge
-                          ?.copyWith(
-                            color: AppColors.whiteColor.withAlpha(153),
-                            fontSize: 14.sp,
-                          ),
-                      shadow: true,
-                      shadowColor:  Color(0xFF2E4429),
-                      backgroundColor: Color(0xFF21321E),
-                      leadingIcon: AppAssets.feather,
-                      leadingPadding: EdgeInsets.only(left: 16.w, right: 8.w),
-                    ),
+      ),
+      body: FutureBuilder(
+        future: Future.delayed(const Duration(milliseconds: 1500)),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return _buildSkeletonLoader();
+          }
+          return Column(
+            children: [
+              SizedBox(height: 20.h),
+              // ── Search Bar ──────────────────────────────────────────────
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                child: AbsorbPointer(
+                  child: CustomInput(
+                    height: 50,
+                    hintText: "Search by Client name",
+                    fontSize: 14,
+                    hintColor: AppColors.greyColor,
+                    hintStyle: Theme.of(context).textTheme.bodyLarge
+                        ?.copyWith(
+                          color: AppColors.whiteColor.withAlpha(153),
+                          fontSize: 14.sp,
+                        ),
+                    shadow: true,
+                    shadowColor: Color(0xFF2E4429),
+                    backgroundColor: Color(0xFF21321E),
+                    borderRadius: 24,
+                    borderWidth: 0.50,
+                    borderColor: Color(0xFF334B2F),
+                    leadingIcon: AppAssets.search,
+                    leadingPadding: EdgeInsets.only(left: 16.w, right: 8.w),
                   ),
                 ),
-                SizedBox(height: 20.h),
-                Container(
-                  width: 342.46,
-                  height: 44,
-                  decoration: ShapeDecoration(
-                    color: const Color(0xFF21321E),
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                        width: 0.50,
-                        color: const Color(0xFF334B2F),
-                      ),
-                      borderRadius: BorderRadius.circular(24),
+              ),
+              SizedBox(height: 13.h),
+
+              // ── Session Filter Header ─────────────────────────────────────
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "All Sessions (4)",
+                      style: TextStyle(color: Colors.white70),
                     ),
-                    shadows: [
-                      BoxShadow(
-                        color: Color(0xFF2E4429),
-                        blurRadius: 4,
-                        offset: Offset(0, 2),
-                        spreadRadius: 0,
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 20.h),
-                InputTextWidget(backgroundColor: AppColors.backgroundColor),
-                SizedBox(height: 20.h),
-                // ── Search Bar ──────────────────────────────────────────────
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.w),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF2D3D2D),
-                      borderRadius: BorderRadius.circular(24.r),
-                    ),
-                    child: Row(
+                    Row(
                       children: [
-                        const Icon(Icons.search, color: Colors.white38),
-                        SizedBox(width: 8.w),
-                        const Expanded(
-                          child: TextField(
-                            style: TextStyle(color: Colors.white),
-                            decoration: InputDecoration(
-                              hintText: "Search by Client name",
-                              hintStyle: TextStyle(
-                                color: Colors.white38,
-                                fontSize: 14,
-                              ),
-                              border: InputBorder.none,
-                            ),
+                        const Text(
+                          "Date",
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: 12,
                           ),
+                        ),
+                        const Icon(
+                          Icons.keyboard_arrow_down,
+                          color: Colors.white70,
+                          size: 16,
                         ),
                       ],
                     ),
-                  ),
+                  ],
                 ),
+              ),
 
-                SizedBox(height: 24.h),
+              SizedBox(height: 10.h),
 
-                // ── Session Filter Header ─────────────────────────────────────
-                Padding(
+              // ── Scrollable Session List ───────────────────────────────────
+              Expanded(
+                child: ListView.builder(
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        "All Sessions (4)",
-                        style: TextStyle(color: Colors.white70),
-                      ),
-                      Row(
-                        children: [
-                          const Text(
-                            "Date",
-                            style: TextStyle(
-                              color: Colors.white70,
-                              fontSize: 12,
-                            ),
-                          ),
-                          const Icon(
-                            Icons.keyboard_arrow_down,
-                            color: Colors.white70,
-                            size: 16,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                  itemCount: 6,
+                  itemBuilder: (context, index) {
+                    return _buildSessionCard(
+                      context,
+                      coachHome,
+                      "Session ${index + 1}",
+                      "Mon, Mar 27",
+                      "01:00 PM - 01:03 PM (30Min)",
+                      "Miles Esther",
+                      "20\$",
+                    );
+                  },
                 ),
-
-                SizedBox(height: 16.h),
-
-                // ── Scrollable Session List ───────────────────────────────────
-                Expanded(
-                  child: ListView.builder(
-                    padding: EdgeInsets.symmetric(horizontal: 20.w),
-                    itemCount: 6,
-                    itemBuilder: (context, index) {
-                      return _buildSessionCard(
-                        context,
-                        coachHome,
-                        "Session ${index + 1}",
-                        "Mon, Mar 27",
-                        "01:00 PM - 01:03 PM (30Min)",
-                        "Miles Esther",
-                        "20\$",
-                      );
-                    },
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

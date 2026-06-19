@@ -25,20 +25,7 @@ class PaymentSuccessView extends StatelessWidget {
           children: [
             const Spacer(),
             // ── Illustration (Mock with Icon/Container) ────────────────
-            Container(
-              height: 300.h,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                image: const DecorationImage(
-                  image: AssetImage('assets/images/banner.png'), // Using existing placeholder
-                  fit: BoxFit.contain,
-                ),
-                borderRadius: BorderRadius.circular(20.r),
-              ),
-              child: Center(
-                child: Icon(Icons.check_circle, color: const Color(0xFF81C784), size: 100.r),
-              ),
-            ),
+            Image.asset(AppAssets.paySuccess),
 
             SizedBox(height: 40.h),
 

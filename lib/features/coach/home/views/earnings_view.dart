@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:newproject/core/constants/app_colors.dart';
 import '../../../../core/widgets/background_widget.dart';
 import '../../../../core/constants/app_assets.dart';
 import '../../../../core/widgets/custom_loader.dart';
@@ -12,7 +13,7 @@ class EarningsView extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: Color(0xFF2D3D2A),
+      backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
         backgroundColor: const Color(0xFF22331F),
         // These two lines prevent the color change / tinting when scrolling

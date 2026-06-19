@@ -55,6 +55,9 @@ class AppAssets {
   static const String logout = 'assets/image/logout.svg';
   static const String camera = 'assets/image/camera.svg';
   static const String home2 = 'assets/image/home2.svg';
+  static const String top = 'assets/images/top.png';
+  static const String win = 'assets/images/win.png';
+  static const String paySuccess = 'assets/images/paySuccess.png';
 
 
   // ── Circle flow, Group , Friends connection───────────────────────────────────────────────────────────
@@ -84,6 +87,19 @@ class AppAssets {
   static const String video = 'assets/icons/video.svg';
   static const String view = 'assets/icons/view.svg';
   static const String addBid = 'assets/icons/addBid.svg';
+  static const String missedCall = 'assets/icons/missedCall.svg';
+  static const String availableNotify = 'assets/icons/availableNotify.svg';
+  static const String circleIcon = 'assets/icons/circleIcon.svg';
+  static const String lock = 'assets/icons/lock.svg';
+  static const String icon1 = 'assets/icons/1.svg';
+  static const String icon2 = 'assets/icons/2.svg';
+  static const String icon3 = 'assets/icons/3.svg';
+  static const String icon4 = 'assets/icons/4.svg';
+  static const String icon5 = 'assets/icons/5.svg';
+  static const String dailyRaffle = 'assets/icons/dailyRaffle.svg';
+  static const String ticket = 'assets/icons/ticket.svg';
+  static const String copy = 'assets/icons/copy.svg';
+  static const String balance = 'assets/icons/balance.svg';
   // static const String  = 'assets/icons/.svg';
 
 }

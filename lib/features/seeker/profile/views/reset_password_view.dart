@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:newproject/core/constants/app_assets.dart';
+import 'package:newproject/core/widgets/background_widget.dart';
+import 'package:newproject/core/widgets/glass_widget.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_input.dart';
@@ -13,122 +16,103 @@ class ResetPasswordView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
+    return BackgroundWidget(
+      imagePath: AppAssets.bgMain,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.west, color: Color(0xFF5E7958), size: 24),
+            onPressed: () => Navigator.pop(context),
+          ),
+          centerTitle: true,
         ),
-        centerTitle: true,
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(24.r),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 20.h),
-            Center(
-              child: Text(
-                "Reset Your Password",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24.sp,
-                  fontFamily: 'Georgia',
+        body: SingleChildScrollView(
+          padding: EdgeInsets.all(24.r),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 20.h),
+              Center(
+                child: Text(
+                  'Reset Your Password',
+                  style: TextStyle(
+                    color: const Color(0xFFF5F0E8),
+                    fontSize: 22,
+                    fontFamily: 'Georgia',
+                    fontWeight: FontWeight.w400,
+                    height: 1.30,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 60.h),
-            _buildLabel("Old Password"),
-            ValueListenableBuilder<bool>(
-              valueListenable: _oldPassVisible,
-              builder: (context, visible, _) {
-                return CustomInput(
-                  hintText: "Password",
-                  backgroundColor: Colors.white10,
-                  borderRadius: 12,
-                  shadow: false,
-                  obscureText: !visible,
-                  trailingWidget: IconButton(
-                    icon: Icon(
-                      visible ? Icons.visibility : Icons.visibility_off,
-                      color: Colors.white.withAlpha(51),
+              SizedBox(height: 60.h),
+              _buildLabel("Old Password"),
+              ValueListenableBuilder<bool>(
+                valueListenable: _oldPassVisible,
+                builder: (context, visible, _) {
+                  return GlassWidget(
+                    height: 45,
+                    child: CustomInput(
+                      hintText: "Password",
+                      backgroundColor: Color(0x33384737),
+                      borderRadius: 12,
+                      height: 43,
+                      shadow: false,
+                      obscureText: true,
                     ),
-                    onPressed: () => _oldPassVisible.value = !_oldPassVisible.value,
-                  ),
-                  leadingWidget: const Icon(
-                    Icons.lock_outline,
-                    color: Colors.amber,
-                    size: 20,
-                  ),
-                );
-              },
-            ),
-            SizedBox(height: 24.h),
-            _buildLabel("Password"),
-            ValueListenableBuilder<bool>(
-              valueListenable: _passVisible,
-              builder: (context, visible, _) {
-                return CustomInput(
-                  hintText: "Confirm Password",
-                  backgroundColor: Colors.white10,
-                  borderRadius: 12,
-                  shadow: false,
-                  obscureText: !visible,
-                  trailingWidget: IconButton(
-                    icon: Icon(
-                      visible ? Icons.visibility : Icons.visibility_off,
-                      color: Colors.white.withAlpha(51),
+                  );
+                },
+              ),
+              SizedBox(height: 24.h),
+              _buildLabel("Password"),
+              ValueListenableBuilder<bool>(
+                valueListenable: _passVisible,
+                builder: (context, visible, _) {
+                  return GlassWidget(
+                    height: 45,
+                    child: CustomInput(
+                      hintText: "Confirm Password",
+                      backgroundColor: Color(0x33384737),
+                      borderRadius: 12,
+                      height: 43,
+                      shadow: false,
+                      obscureText: true,
                     ),
-                    onPressed: () => _passVisible.value = !_passVisible.value,
-                  ),
-                  leadingWidget: const Icon(
-                    Icons.lock_outline,
-                    color: Colors.amber,
-                    size: 20,
-                  ),
-                );
-              },
-            ),
-            SizedBox(height: 24.h),
-            _buildLabel("Confirm Password"),
-            ValueListenableBuilder<bool>(
-              valueListenable: _confirmPassVisible,
-              builder: (context, visible, _) {
-                return CustomInput(
-                  hintText: "Confirm Password",
-                  backgroundColor: Colors.white10,
-                  borderRadius: 12,
-                  shadow: false,
-                  obscureText: !visible,
-                  trailingWidget: IconButton(
-                    icon: Icon(
-                      visible ? Icons.visibility : Icons.visibility_off,
-                      color: Colors.white.withAlpha(51),
+                  );
+                },
+              ),
+              SizedBox(height: 24.h),
+              _buildLabel("Confirm Password"),
+              ValueListenableBuilder<bool>(
+                valueListenable: _confirmPassVisible,
+                builder: (context, visible, _) {
+                  return GlassWidget(
+                    height: 45,
+                    child: CustomInput(
+                      hintText: "Confirm Password",
+                      backgroundColor: Color(0x33384737),
+                      borderRadius: 12,
+                      height: 43,
+                      shadow: false,
+                      obscureText: true,
                     ),
-                    onPressed: () => _confirmPassVisible.value = !_confirmPassVisible.value,
-                  ),
-                  leadingWidget: const Icon(
-                    Icons.lock_outline,
-                    color: Colors.amber,
-                    size: 20,
-                  ),
-                );
-              },
-            ),
-            SizedBox(height: 80.h),
-          ],
+                  );
+                },
+              ),
+              SizedBox(height: 80.h),
+            ],
+          ),
         ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.all(20.r),
-        child: CustomButton(
-          onPress: () async {
-            Navigator.pop(context);
-          },
-          title: "Save Change",
-          linearGradient: true,
+        bottomNavigationBar: Padding(
+          padding: EdgeInsets.all(20.r),
+          child: CustomButton(
+            onPress: () async {
+              Navigator.pop(context);
+            },
+            title: "Save Change",
+            linearGradient: true,
+          ),
         ),
       ),
     );

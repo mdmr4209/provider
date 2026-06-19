@@ -18,6 +18,7 @@ class CustomButton extends StatelessWidget {
     this.subtextColor = AppColors.textWhiteColor,
     this.borderColor = AppColors.borderColor,
     this.borderShadowColor = AppColors.boxShadowColor,
+    this.borderWidth = 1,
     this.height = 50,
     this.width = double.infinity,
     this.radius = 12,
@@ -58,7 +59,8 @@ class CustomButton extends StatelessWidget {
       leadingIcon,
       trailingIcon;
   final Widget? leadingWidget, trailingWidget;
-  final double height,
+  final double borderWidth,
+      height,
       width,
       radius,
       fontSize,
@@ -98,11 +100,11 @@ class CustomButton extends StatelessWidget {
     // Determine Gradient
     final Gradient? effectiveGradient = linearGradient
         ? (designSystem?.primaryGradient ??
-            LinearGradient(
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-              colors: [buttonColor, buttonColor1, buttonColor],
-            ))
+              LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [buttonColor, buttonColor1, buttonColor],
+              ))
         : null;
 
     return Material(
@@ -118,7 +120,7 @@ class CustomButton extends StatelessWidget {
             gradient: effectiveGradient,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(radius.r),
-              side: BorderSide(color: borderColor, width: 1.w),
+              side: BorderSide(color: borderColor, width: borderWidth.r),
             ),
             shadows: [
               if (borderShadowColor != Colors.transparent)
