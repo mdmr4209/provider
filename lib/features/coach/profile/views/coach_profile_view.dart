@@ -1,3 +1,4 @@
+import 'package:newproject/core/theme/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -6,6 +7,7 @@ import '../../../../core/constants/app_assets.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_loader.dart';
 import '../controllers/coach_profile_controller.dart';
+import '../../../../core/constants/app_colors.dart';
 
 class CoachProfileView extends StatelessWidget {
   const CoachProfileView({super.key});
@@ -29,11 +31,11 @@ class CoachProfileView extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          title: const Text("Coach Profile", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          title: Text("Coach Profile", style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
           centerTitle: true,
           actions: [
             IconButton(
-              icon: const Icon(Icons.settings_outlined, color: Color(0xFFC19E5F)),
+              icon: const Icon(Icons.settings_outlined, color: AppColors.coachColorFFC19E5F),
               onPressed: () {},
             ),
           ],
@@ -69,7 +71,7 @@ class CoachProfileView extends StatelessWidget {
                                       right: 0,
                                       child: Container(
                                         padding: const EdgeInsets.all(4),
-                                        decoration: const BoxDecoration(color: Color(0xFFC19E5F), shape: BoxShape.circle),
+                                        decoration: const BoxDecoration(color: AppColors.coachColorFFC19E5F, shape: BoxShape.circle),
                                         child: const Icon(Icons.camera_alt, color: Colors.white, size: 18),
                                       ),
                                     ),
@@ -80,9 +82,9 @@ class CoachProfileView extends StatelessWidget {
                                   "Md. Kamran",
                                   style: theme.textTheme.headlineSmall?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
                                 ),
-                                const Text(
+                                Text(
                                   "Relationship Specialist",
-                                  style: TextStyle(color: Color(0xFFC19E5F), fontWeight: FontWeight.w500),
+                                  style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.coachColorFFC19E5F, fontWeight: FontWeight.w500),
                                 ),
                               ],
                             ),
@@ -103,11 +105,12 @@ class CoachProfileView extends StatelessWidget {
                           SizedBox(height: 32.h),
 
                           // ── Details Sections ────────────────────────────────────────
-                          _buildInfoSection("About Me", "Helping individuals navigate complex relationship dynamics with over 8 years of experience. Specialized in No Contact strategy and emotional recovery."),
+                          _buildInfoSection(context, "About Me", "Helping individuals navigate complex relationship dynamics with over 8 years of experience. Specialized in No Contact strategy and emotional recovery."),
                           
                           SizedBox(height: 24.h),
 
                           _buildInfoSection(
+                            context,
                             "Service Rates", 
                             controller.services.isNotEmpty 
                                 ? controller.services.map((s) => "• ${s.duration}: ${s.price}").join('\n')
@@ -152,28 +155,28 @@ class CoachProfileView extends StatelessWidget {
   Widget _buildStat(String value, String label, IconData icon) {
     return Column(
       children: [
-        Icon(icon, color: const Color(0xFFC19E5F), size: 24),
+        Icon(icon, color: AppColors.coachColorFFC19E5F, size: 24),
         SizedBox(height: 8.h),
-        Text(value, style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-        Text(label, style: const TextStyle(color: Colors.white54, fontSize: 12)),
+        Text(value, style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+        Text(label, style: TextStyle(color: Colors.white54, fontSize: 12)),
       ],
     );
   }
 
-  Widget _buildInfoSection(String title, String content) {
+  Widget _buildInfoSection(BuildContext context, String title, String content) {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(20.r),
       decoration: BoxDecoration(
-        color: const Color(0xFF2D3D2D),
+        color: Theme.of(context).extension<AppDesignSystem>()!.panelColor,
         borderRadius: BorderRadius.circular(16.r),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
+          Text(title, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
           SizedBox(height: 12.h),
-          Text(content, style: const TextStyle(color: Colors.white70, fontSize: 14, height: 1.5)),
+          Text(content, style: TextStyle(color: Colors.white70, fontSize: 14, height: 1.5)),
         ],
       ),
     );

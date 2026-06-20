@@ -113,9 +113,9 @@ class AppTheme {
 
     // ── AppBar ─────────────────────────────────────────────────────────────
     appBarTheme: AppBarTheme(
-      backgroundColor: AppColors.defaultColor,  // #22331F
+      backgroundColor: AppColors.backgroundColor,
       scrolledUnderElevation: 0,
-      surfaceTintColor: AppColors.defaultColor,
+      surfaceTintColor: AppColors.backgroundColor,
       elevation: 0,
       centerTitle: true,
       iconTheme: IconThemeData(color: AppColors.textColor2), // #8CA08B muted icons
@@ -241,18 +241,17 @@ class AppTheme {
     ),
 
     // ── Input Decoration ───────────────────────────────────────────────────
-    //   Matches coach folder: semi-transparent green fill, subtle white border
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: AppColors.buttonColor4,                         // #BA384737
+      fillColor: const Color(0xFF21321E),
       contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.r),
-        borderSide: BorderSide(color: AppColors.inputBorderColor),  // #66EBEBEB
+        borderSide: const BorderSide(color: Color(0xFF334B2F)),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.r),
-        borderSide: BorderSide(color: AppColors.inputBorderColor),
+        borderSide: const BorderSide(color: Color(0xFF334B2F)),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.r),
@@ -433,9 +432,9 @@ class AppTheme {
 
     // ── AppBar ─────────────────────────────────────────────────────────────
     appBarTheme: AppBarTheme(
-      backgroundColor: AppColors.defaultColor,
+      backgroundColor: AppColors.backgroundColor,
       scrolledUnderElevation: 0,
-      surfaceTintColor: AppColors.defaultColor,
+      surfaceTintColor: AppColors.backgroundColor,
       elevation: 0,
       centerTitle: true,
       iconTheme: const IconThemeData(color: Colors.white),
@@ -554,15 +553,15 @@ class AppTheme {
     // ── Input Decoration ───────────────────────────────────────────────────
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: AppColors.buttonColor4,
+      fillColor: const Color(0xFF21321E),
       contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.r),
-        borderSide: BorderSide(color: AppColors.inputBorderColor),
+        borderSide: const BorderSide(color: Color(0xFF334B2F)),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.r),
-        borderSide: BorderSide(color: AppColors.inputBorderColor),
+        borderSide: const BorderSide(color: Color(0xFF334B2F)),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.r),

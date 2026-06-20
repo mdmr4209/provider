@@ -46,8 +46,8 @@ class CoachInboxView extends StatelessWidget {
                     children: [
                       Text(
                         'Inbox',
-                        style: TextStyle(
-                          color: const Color(0xFFF5F0E8),
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: AppColors.coachColorFFF5F0E8,
                           fontSize: 18,
                           fontFamily: 'Georgia',
                           fontWeight: FontWeight.w400,
@@ -68,12 +68,12 @@ class CoachInboxView extends StatelessWidget {
                           },
                           child: Row(
                             children: [
-                              Icon(Icons.add, color: const Color(0xFFC19E5F), size: 20),
+                              Icon(Icons.add, color: AppColors.coachColorFFC19E5F, size: 20),
                               SizedBox(width: 4.w),
                               Text(
                                 "Add",
-                                style: TextStyle(
-                                  color: const Color(0xFFC19E5F),
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  color: AppColors.coachColorFFC19E5F,
                                   fontSize: 14.sp,
                                 ),
                               ),
@@ -112,8 +112,8 @@ class CoachInboxView extends StatelessWidget {
                                       ),
                                       child: Text(
                                         'Stories',
-                                        style: TextStyle(
-                                          color: const Color(0xFFB9BBB0),
+                                        style: theme.textTheme.bodyMedium?.copyWith(
+                                          color: AppColors.coachColorFFB9BBB0,
                                           fontSize: 12.03,
                                           fontFamily: 'Poppins',
                                           fontWeight: FontWeight.w500,
@@ -133,8 +133,7 @@ class CoachInboxView extends StatelessWidget {
                                           height: 50,
                                           hintText: "Search by Client name",
                                           fontSize: 14,
-                                          hintColor: AppColors.greyColor,
-                                          hintStyle: Theme.of(context)
+hintStyle: Theme.of(context)
                                               .textTheme
                                               .bodyLarge
                                               ?.copyWith(
@@ -143,12 +142,9 @@ class CoachInboxView extends StatelessWidget {
                                                 fontSize: 14.sp,
                                               ),
                                           shadow: true,
-                                          shadowColor: Color(0xFF2E4429),
-                                          backgroundColor: Color(0xFF21321E),
-                                          borderRadius: 24,
+borderRadius: 24,
                                           borderWidth: 0.50,
-                                          borderColor: Color(0xFF334B2F),
-                                          leadingIcon: AppAssets.search,
+leadingIcon: AppAssets.search,
                                           leadingPadding: EdgeInsets.only(
                                             left: 16.w,
                                             right: 8.w,
@@ -190,7 +186,7 @@ class CoachInboxView extends StatelessWidget {
                                         child: Divider(
                                           height: .5,
                                           thickness: .5,
-                                          color: Color(0xFF1D311A),
+                                          color: AppColors.coachColorFF1D311A,
                                         ),
                                       ),
                                       SizedBox(height: 7.5.h),
@@ -235,7 +231,7 @@ class CoachInboxView extends StatelessWidget {
   Widget _buildContextToggle(CoachInboxController controller) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF182617),
+        color: AppColors.coachColorFF182617,
         borderRadius: BorderRadius.circular(20.r),
       ),
       child: Row(
@@ -259,7 +255,7 @@ class CoachInboxView extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 6.h),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF3E5E39) : const Color(0xFF182617),
+          color: isSelected ? AppColors.coachColorFF3E5E39 : AppColors.coachColorFF182617,
           borderRadius: BorderRadius.circular(20.r),
         ),
         child: Text(
@@ -279,7 +275,7 @@ class CoachInboxView extends StatelessWidget {
       width: 80,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: ShapeDecoration(
-        color: const Color(0xFF355530),
+        color: AppColors.coachColorFF355530,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(12),
@@ -291,13 +287,13 @@ class CoachInboxView extends StatelessWidget {
         children: [
           Text(
             "$credits",
-            style: const TextStyle(
-              color: Color(0xFFC19E5F),
+            style: TextStyle(
+              color: AppColors.coachColorFFC19E5F,
               fontWeight: FontWeight.bold,
             ),
           ),
           SizedBox(width: 4.w),
-          const Text(
+          Text(
             "Credits",
             style: TextStyle(color: Colors.white70, fontSize: 11),
           ),
@@ -350,7 +346,7 @@ class CoachInboxView extends StatelessWidget {
             ],
           ),
           SizedBox(height: 4.h),
-          Text(name, style: const TextStyle(color: Colors.white, fontSize: 10)),
+          Text(name, style: TextStyle(color: Colors.white, fontSize: 10)),
         ],
       ),
     );
@@ -366,7 +362,7 @@ class CoachInboxView extends StatelessWidget {
             padding: const EdgeInsets.all(2),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(color: const Color(0xFFC19E5F), width: 1.5),
+              border: Border.all(color: AppColors.coachColorFFC19E5F, width: 1.5),
             ),
             child: CircleAvatar(
               radius: 26.r,
@@ -376,7 +372,7 @@ class CoachInboxView extends StatelessWidget {
           SizedBox(height: 4.h),
           Text(
             name,
-            style: const TextStyle(color: Colors.white, fontSize: 10),
+            style: TextStyle(color: Colors.white, fontSize: 10),
             overflow: TextOverflow.ellipsis,
           ),
         ],
@@ -389,11 +385,11 @@ class CoachInboxView extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
       decoration: ShapeDecoration(
-        color: isSelected ? const Color(0xFF355530) : Colors.transparent,
+        color: isSelected ? AppColors.coachColorFF355530 : Colors.transparent,
         shape: RoundedRectangleBorder(
           side: BorderSide(
             width: 1.r,
-            color: !isSelected ? Colors.transparent : const Color(0xFF4F9445),
+            color: !isSelected ? Colors.transparent : AppColors.coachColorFF4F9445,
           ),
           borderRadius: BorderRadius.circular(12.r),
         ),
@@ -433,7 +429,7 @@ class CoachInboxView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           "Chats List",
           style: TextStyle(
             color: Colors.white,
@@ -443,7 +439,7 @@ class CoachInboxView extends StatelessWidget {
         ),
         SizedBox(height: 8.h),
         if (controller.messages.isEmpty)
-          const Padding(
+          Padding(
             padding: EdgeInsets.only(top: 20),
             child: Text("No messages", style: TextStyle(color: Colors.white54)),
           )
@@ -469,7 +465,7 @@ class CoachInboxView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           "My Clients",
           style: TextStyle(
             color: Colors.white,
@@ -482,13 +478,13 @@ class CoachInboxView extends StatelessWidget {
           width: double.infinity,
           padding: EdgeInsets.symmetric(horizontal: 17.w, vertical: 14.h),
           decoration: ShapeDecoration(
-            color: const Color(0xFF263523),
+            color: AppColors.coachColorFF263523,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
             shadows: [
               BoxShadow(
-                color: Color(0x0F000000),
+                color: AppColors.coachColor0F000000,
                 blurRadius: 24.20,
                 offset: Offset(0, 13),
                 spreadRadius: 0,
@@ -502,7 +498,7 @@ class CoachInboxView extends StatelessWidget {
                 'Day 14 of No Contact. It was really hard today today, I almost texted him when I saw his favorite song playing. But I stayed strong!',
                 textAlign: TextAlign.justify,
                 style: TextStyle(
-                  color: const Color(0xFFD1D1D1),
+                  color: AppColors.coachColorFFD1D1D1,
                   fontSize: 10,
                   fontFamily: 'Segoe UI',
                   fontWeight: FontWeight.w400,
@@ -515,8 +511,8 @@ class CoachInboxView extends StatelessWidget {
                 width: 115,
                 height: 31,
                 fontSize: 10,
-                buttonColor: const Color(0xFF354C30),
-                borderColor: const Color(0x33434928),
+                buttonColor: AppColors.coachColorFF354C30,
+                borderColor: AppColors.coachColor33434928,
                 radius: 4,
               ),
               SizedBox(height: 2.h),
@@ -525,7 +521,7 @@ class CoachInboxView extends StatelessWidget {
         ),
         SizedBox(height: 7.h),
         if (controller.clients.isEmpty)
-          const Padding(
+          Padding(
             padding: EdgeInsets.only(top: 20),
             child: Text("No clients", style: TextStyle(color: Colors.white54)),
           )
@@ -575,15 +571,15 @@ class CoachInboxView extends StatelessWidget {
                 children: [
                   Text(
                     name,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     status,
-                    style: const TextStyle(
-                      color: Color(0xFF81C784),
+                    style: TextStyle(
+                      color: AppColors.coachColorFF81C784,
                       fontSize: 12,
                     ),
                   ),
@@ -595,19 +591,19 @@ class CoachInboxView extends StatelessWidget {
               children: [
                 Text(
                   time,
-                  style: const TextStyle(color: Colors.white38, fontSize: 10),
+                  style: TextStyle(color: Colors.white38, fontSize: 10),
                 ),
                 SizedBox(height: 4.h),
                 if (count != "0")
                   Container(
                     padding: const EdgeInsets.all(4),
                     decoration: const BoxDecoration(
-                      color: Color(0xFF81C784),
+                      color: AppColors.coachColorFF81C784,
                       shape: BoxShape.circle,
                     ),
                     child: Text(
                       count,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.white,
                         fontSize: 10,
                         fontWeight: FontWeight.bold,
@@ -626,7 +622,7 @@ class CoachInboxView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           "Missed Calls",
           style: TextStyle(
             color: Colors.white,
@@ -636,7 +632,7 @@ class CoachInboxView extends StatelessWidget {
         ),
         SizedBox(height: 8.h),
         if (controller.missedCalls.isEmpty)
-          const Padding(
+          Padding(
             padding: EdgeInsets.only(top: 20),
             child: Text(
               "No missed calls",
@@ -656,7 +652,7 @@ class CoachInboxView extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 12.h),
       padding: EdgeInsets.all(12.r),
       decoration: BoxDecoration(
-        color: const Color(0xFF22331F),
+        color: AppColors.defaultColor,
         borderRadius: BorderRadius.circular(4.r),
       ),
       child: Row(
@@ -669,7 +665,7 @@ class CoachInboxView extends StatelessWidget {
               children: [
                 Text(
                   name,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
@@ -679,7 +675,7 @@ class CoachInboxView extends StatelessWidget {
                     SvgPicture.asset(AppAssets.missedCall),
                     Text(
                       " $time",
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.white38,
                         fontSize: 12,
                       ),
@@ -695,8 +691,8 @@ class CoachInboxView extends StatelessWidget {
             width: 140,
             height: 28,
             fontSize: 10,
-            buttonColor: Color(0xFF273B23),
-            borderColor: Color(0xFF425F3D),
+            buttonColor: AppColors.coachColorFF273B23,
+            borderColor: AppColors.coachColorFF425F3D,
             radius: 2,
             fontWeight: FontWeight.w400,
             horizontalPadding: 0,
@@ -715,7 +711,7 @@ class CoachInboxView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           "Call Back Request List",
           style: TextStyle(
             color: Colors.white,
@@ -725,7 +721,7 @@ class CoachInboxView extends StatelessWidget {
         ),
         SizedBox(height: 8.h),
         if (controller.callbacks.isEmpty)
-          const Padding(
+          Padding(
             padding: EdgeInsets.only(top: 20),
             child: Text(
               "No call back requests",
@@ -751,7 +747,7 @@ class CoachInboxView extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 12.h),
       padding: EdgeInsets.all(12.r),
       decoration: BoxDecoration(
-        color: const Color(0xFF22331F),
+        color: AppColors.defaultColor,
         borderRadius: BorderRadius.circular(4.r),
       ),
       child: Column(
@@ -766,7 +762,7 @@ class CoachInboxView extends StatelessWidget {
                   children: [
                     Text(
                       name,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
@@ -774,7 +770,7 @@ class CoachInboxView extends StatelessWidget {
                     ),
                     Text(
                       "Requested: $time",
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.white38,
                         fontSize: 12,
                       ),
@@ -794,8 +790,8 @@ class CoachInboxView extends StatelessWidget {
                   width: 140,
                   height: 28,
                   fontSize: 10,
-                  buttonColor: Color(0xFF273B23),
-                  borderColor: Color(0xFF425F3D),
+                  buttonColor: AppColors.coachColorFF273B23,
+                  borderColor: AppColors.coachColorFF425F3D,
                   radius: 2,
                   fontWeight: FontWeight.w400,
                   horizontalPadding: 0,

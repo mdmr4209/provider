@@ -1,3 +1,4 @@
+import 'package:newproject/core/theme/design_system.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -5,7 +6,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:newproject/core/constants/app_assets.dart';
 import 'package:newproject/core/widgets/custom_button.dart';
 import '../../../../core/utils/helpers/snack_bar_helper.dart';
-import '../../../seeker/circle/models/group_model.dart'; // Reuse GroupModel
+import '../../../seeker/circle/models/group_model.dart';
+import '../../../../core/constants/app_colors.dart'; // Reuse GroupModel
 
 class CoachCircleController extends ChangeNotifier {
   bool _isLoading = false;
@@ -78,8 +80,8 @@ class CoachCircleController extends ChangeNotifier {
       isScrollControlled: true,
       builder: (context) => Container(
         padding: const EdgeInsets.all(24),
-        decoration: const BoxDecoration(
-          color: Color(0xFF1B2B1B),
+        decoration: BoxDecoration(
+          color: Theme.of(context).extension<AppDesignSystem>()!.accentPanelColor,
           borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
         ),
         child: Column(
@@ -112,7 +114,7 @@ class CoachCircleController extends ChangeNotifier {
               'You can only one free circle at a time, to join more upgrade now.',
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: const Color(0xFF838383),
+                color: AppColors.coachColorFF838383,
                 fontSize: 14,
                 fontFamily: 'Segoe UI',
                 fontWeight: FontWeight.w400,
@@ -134,8 +136,8 @@ class CoachCircleController extends ChangeNotifier {
               height: 44,
               onPress: () async => Navigator.pop(context),
               title: "Later",
-              buttonColor: Color(0x33434928),
-              borderColor: Color(0xF2C9A84C),
+              buttonColor: AppColors.coachColor33434928,
+              borderColor: AppColors.coachColorF2C9A84C,
               borderWidth: .5,
               radius: 8,
             ),

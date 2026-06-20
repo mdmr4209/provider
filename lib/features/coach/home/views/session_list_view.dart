@@ -1,11 +1,11 @@
+import 'package:newproject/core/theme/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:newproject/core/widgets/custom_input.dart';
-import 'package:newproject/core/widgets/input_text_widget.dart';
 import 'package:provider/provider.dart';
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/widgets/background_widget.dart';
+
 import '../../../../core/constants/app_assets.dart';
+import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/custom_loader.dart';
 import '../controllers/coach_home_controller.dart';
 
@@ -18,12 +18,11 @@ class SessionListView extends StatelessWidget {
     final coachHome = context.watch<CoachHomeController>();
 
     return Scaffold(
-      backgroundColor:AppColors.backgroundColor,
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF22331F),
+appBar: AppBar(
+        backgroundColor: AppColors.defaultColor,
         // These two lines prevent the color change / tinting when scrolling
         scrolledUnderElevation: 0,
-        surfaceTintColor: const Color(0xFF22331F),
+        surfaceTintColor: AppColors.defaultColor,
 
         elevation: 0,
         centerTitle: true,
@@ -31,13 +30,13 @@ class SessionListView extends StatelessWidget {
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(24.r)),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.west, color: Color(0xFF5E7958), size: 24),
+          icon: const Icon(Icons.west, color: AppColors.coachColorFF5E7958, size: 24),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           "Session List",
           style: theme.textTheme.titleLarge?.copyWith(
-            color: const Color(0xFFF4F6F0),
+            color: AppColors.coachColorFFF4F6F0,
             fontWeight: FontWeight.w500,
             fontSize: 16.sp,
           ),
@@ -60,19 +59,15 @@ class SessionListView extends StatelessWidget {
                     height: 50,
                     hintText: "Search by Client name",
                     fontSize: 14,
-                    hintColor: AppColors.greyColor,
-                    hintStyle: Theme.of(context).textTheme.bodyLarge
+hintStyle: Theme.of(context).textTheme.bodyLarge
                         ?.copyWith(
                           color: AppColors.whiteColor.withAlpha(153),
                           fontSize: 14.sp,
                         ),
                     shadow: true,
-                    shadowColor: Color(0xFF2E4429),
-                    backgroundColor: Color(0xFF21321E),
-                    borderRadius: 24,
+borderRadius: 24,
                     borderWidth: 0.50,
-                    borderColor: Color(0xFF334B2F),
-                    leadingIcon: AppAssets.search,
+leadingIcon: AppAssets.search,
                     leadingPadding: EdgeInsets.only(left: 16.w, right: 8.w),
                   ),
                 ),
@@ -85,15 +80,15 @@ class SessionListView extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
+                    Text(
                       "All Sessions (4)",
-                      style: TextStyle(color: Colors.white70),
+                      style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white70),
                     ),
                     Row(
                       children: [
-                        const Text(
+                        Text(
                           "Date",
-                          style: TextStyle(
+                          style: theme.textTheme.bodyMedium?.copyWith(
                             color: Colors.white70,
                             fontSize: 12,
                           ),
@@ -149,7 +144,7 @@ class SessionListView extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 12.h),
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: const Color(0xFF1C2B19),
+        color: AppColors.coachColorFF1C2B19,
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: Column(
@@ -159,7 +154,7 @@ class SessionListView extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
@@ -174,7 +169,7 @@ class SessionListView extends StatelessWidget {
                     vertical: 2.45.h,
                   ),
                   decoration: ShapeDecoration(
-                    color: const Color(0xFF263424),
+                    color: AppColors.coachColorFF263424,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20.h),
                     ),
@@ -183,14 +178,14 @@ class SessionListView extends StatelessWidget {
                     children: [
                       const Icon(
                         Icons.cancel_outlined,
-                        color: Color(0xFFE57373),
+                        color: AppColors.coachColorFFE57373,
                         size: 16,
                       ),
                       SizedBox(width: 4.w),
-                      const Text(
+                      Text(
                         "Cancel",
                         style: TextStyle(
-                          color: Color(0xFFE57373),
+                          color: AppColors.coachColorFFE57373,
                           fontSize: 12,
                         ),
                       ),
@@ -207,7 +202,7 @@ class SessionListView extends StatelessWidget {
               SizedBox(width: 8.w),
               Text(
                 date,
-                style: const TextStyle(color: Colors.white70, fontSize: 12),
+                style: TextStyle(color: Colors.white70, fontSize: 12),
               ),
             ],
           ),
@@ -218,7 +213,7 @@ class SessionListView extends StatelessWidget {
               SizedBox(width: 8.w),
               Text(
                 time,
-                style: const TextStyle(color: Colors.white70, fontSize: 12),
+                style: TextStyle(color: Colors.white70, fontSize: 12),
               ),
             ],
           ),
@@ -227,7 +222,7 @@ class SessionListView extends StatelessWidget {
             height: 63.h,
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             decoration: ShapeDecoration(
-              color: const Color(0xFF263523),
+              color: AppColors.coachColorFF263523,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8.r),
               ),
@@ -241,11 +236,11 @@ class SessionListView extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: 12.w),
-                Text(name, style: const TextStyle(color: Colors.white)),
+                Text(name, style: TextStyle(color: Colors.white)),
                 const Spacer(),
                 Text(
                   rate,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
@@ -295,7 +290,7 @@ class SessionListView extends StatelessWidget {
                 margin: EdgeInsets.only(bottom: 16.h),
                 padding: EdgeInsets.all(16.r),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF2D3D2D),
+                  color: Theme.of(context).extension<AppDesignSystem>()!.panelColor,
                   borderRadius: BorderRadius.circular(12.r),
                 ),
                 child: Column(

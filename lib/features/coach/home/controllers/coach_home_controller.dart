@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:newproject/core/widgets/custom_button.dart';
 import '../models/coach_home_model.dart';
 import '../../../../core/utils/helpers/snack_bar_helper.dart';
+import '../../../../core/constants/app_colors.dart';
 
 class CoachHomeController extends ChangeNotifier {
   bool _isActive = true;
@@ -67,7 +68,7 @@ class CoachHomeController extends ChangeNotifier {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF2C3F28),
+        backgroundColor: AppColors.coachColorFF2C3F28,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -75,12 +76,12 @@ class CoachHomeController extends ChangeNotifier {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: const BoxDecoration(
-                color: Color(0xFF132312),
+                color: AppColors.coachColorFF132312,
                 shape: BoxShape.circle,
               ),
               child: const Icon(
                 Icons.error_outline,
-                color: const Color(0xFFFB6262),
+                color: AppColors.coachColorFFFB6262,
                 size: 30,
               ),
             ),
@@ -128,7 +129,7 @@ class CoachHomeController extends ChangeNotifier {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF2C3E28),
+        backgroundColor: AppColors.coachColorFF2C3E28,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -159,8 +160,8 @@ class CoachHomeController extends ChangeNotifier {
                     height: 32,
                     onPress: () async => Navigator.pop(context),
                     title: 'No',
-                    buttonColor: Color(0xFF4C6D45),
-                    borderColor: Color(0xFF4C6D45),
+                    buttonColor: AppColors.coachColorFF4C6D45,
+                    borderColor: AppColors.coachColorFF4C6D45,
                     radius: 4,
                   ),
                 ),

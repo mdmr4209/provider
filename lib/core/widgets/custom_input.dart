@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import '../theme/design_system.dart';
 
 class _InputState {
   bool isObscured;
@@ -191,6 +192,7 @@ class CustomInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final design = theme.extension<AppDesignSystem>();
 
     return FormField<_InputState>(
       initialValue: _InputState(isObscured: obscureText, isFocused: false),
@@ -203,7 +205,7 @@ class CustomInput extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (showTitle && title != null) _buildTitle(theme),
-            _buildInputField(theme, fieldState, state),
+            _buildInputField(theme, design, fieldState, state),
             if (hasError) _buildErrorText(theme, state.errorText!),
           ],
         );
@@ -243,6 +245,7 @@ class CustomInput extends StatelessWidget {
 
   Widget _buildInputField(
       ThemeData theme,
+      AppDesignSystem? design,
       FormFieldState<_InputState> fieldState,
       _InputState state,
       ) {
@@ -259,20 +262,20 @@ class CustomInput extends StatelessWidget {
       height: height?.h,
       clipBehavior: Clip.antiAlias,
       decoration: ShapeDecoration(
-        color: backgroundColor ?? const Color(0xFF21321E),
+        color: backgroundColor ?? design?.inputFillColor ?? const Color(0xFF21321E),
         shape: RoundedRectangleBorder(
           side: BorderSide(
             width: (borderWidth ?? 0.50).w,
             color: hasError
                 ? (errorBorderColor ?? theme.colorScheme.error)
-                : (borderColor ?? const Color(0xFF334B2F)),
+                : (borderColor ?? design?.inputBorderColor ?? const Color(0xFF334B2F)),
           ),
           borderRadius: effectiveRadius,
         ),
         shadows: shadow
             ? [
           BoxShadow(
-            color: shadowColor ?? const Color(0xFF2E4429),
+            color: shadowColor ?? design?.inputShadowColor ?? const Color(0xFF2E4429),
             blurRadius: 4,
             offset: const Offset(0, 2),
             spreadRadius: 0,
@@ -339,11 +342,11 @@ class CustomInput extends StatelessWidget {
             decoration: InputDecoration(
               hintText: hintText,
               labelText: labelText,
-              hintStyle:
-              hintStyle ??
+              hintStyle: hintStyle ??
                   TextStyle(
-                    color: Colors.white.withValues(alpha: 0.3),
-                    fontSize: (fontSize ?? 14).sp,
+                    color: hintColor ?? design?.inputHintColor ?? const Color(0xFF828282),
+                    fontSize: fontSize?.sp ?? 14.sp,
+                    fontWeight: FontWeight.w400,
                   ),
               labelStyle: hintStyle ?? theme.inputDecorationTheme.labelStyle,
               isDense: true,

@@ -26,10 +26,16 @@ class AppDesignSystem extends ThemeExtension<AppDesignSystem> {
   final Color cardFillMuted;      // lower alpha variant for saved-item cards
   final Color cardBorderMuted;    // lower alpha variant for saved-item borders
 
+  // ── Coach Specific Panels ──────────────────────────────────────────────────
+  final Color panelColor;
+  final Color accentPanelColor;
+
   // ── Input Field Colors ─────────────────────────────────────────────────────
   final Color inputFillColor;
   final Color inputBorderColor;
   final Color inputFocusBorderColor;
+  final Color inputShadowColor;
+  final Color inputHintColor;
 
   // ── Tab Bar ────────────────────────────────────────────────────────────────
   final Color tabActiveColor;
@@ -95,10 +101,16 @@ class AppDesignSystem extends ThemeExtension<AppDesignSystem> {
     this.cardFillMuted = const Color(0x4D384737),     // ~30 alpha
     this.cardBorderMuted = const Color(0x4DEBEBEB),    // ~30 alpha
 
+    // Coach Specific Panels
+    this.panelColor = const Color(0xFF2D3D2D),
+    this.accentPanelColor = const Color(0xFF1B2B1B),
+
     // Input
-    this.inputFillColor = const Color(0xBA384737),
-    this.inputBorderColor = const Color(0x66EBEBEB),
+    this.inputFillColor = const Color(0xFF21321E),
+    this.inputBorderColor = const Color(0xFF334B2F),
     this.inputFocusBorderColor = const Color(0xFFC9A84C),
+    this.inputShadowColor = const Color(0xFF2E4429),
+    this.inputHintColor = const Color(0xFF828282),
 
     // Tab Bar
     this.tabActiveColor = const Color(0xFFC9A84C),
@@ -144,9 +156,13 @@ class AppDesignSystem extends ThemeExtension<AppDesignSystem> {
     Color? cardBorderColor,
     Color? cardFillMuted,
     Color? cardBorderMuted,
+    Color? panelColor,
+    Color? accentPanelColor,
     Color? inputFillColor,
     Color? inputBorderColor,
     Color? inputFocusBorderColor,
+    Color? inputShadowColor,
+    Color? inputHintColor,
     Color? tabActiveColor,
     Color? tabInactiveColor,
     Color? tabIndicatorColor,
@@ -178,9 +194,13 @@ class AppDesignSystem extends ThemeExtension<AppDesignSystem> {
       cardBorderColor: cardBorderColor ?? this.cardBorderColor,
       cardFillMuted: cardFillMuted ?? this.cardFillMuted,
       cardBorderMuted: cardBorderMuted ?? this.cardBorderMuted,
+      panelColor: panelColor ?? this.panelColor,
+      accentPanelColor: accentPanelColor ?? this.accentPanelColor,
       inputFillColor: inputFillColor ?? this.inputFillColor,
       inputBorderColor: inputBorderColor ?? this.inputBorderColor,
       inputFocusBorderColor: inputFocusBorderColor ?? this.inputFocusBorderColor,
+      inputShadowColor: inputShadowColor ?? this.inputShadowColor,
+      inputHintColor: inputHintColor ?? this.inputHintColor,
       tabActiveColor: tabActiveColor ?? this.tabActiveColor,
       tabInactiveColor: tabInactiveColor ?? this.tabInactiveColor,
       tabIndicatorColor: tabIndicatorColor ?? this.tabIndicatorColor,
@@ -226,9 +246,13 @@ class AppDesignSystem extends ThemeExtension<AppDesignSystem> {
       cardBorderColor: Color.lerp(cardBorderColor, other.cardBorderColor, t)!,
       cardFillMuted: Color.lerp(cardFillMuted, other.cardFillMuted, t)!,
       cardBorderMuted: Color.lerp(cardBorderMuted, other.cardBorderMuted, t)!,
+      panelColor: Color.lerp(panelColor, other.panelColor, t)!,
+      accentPanelColor: Color.lerp(accentPanelColor, other.accentPanelColor, t)!,
       inputFillColor: Color.lerp(inputFillColor, other.inputFillColor, t)!,
       inputBorderColor: Color.lerp(inputBorderColor, other.inputBorderColor, t)!,
       inputFocusBorderColor: Color.lerp(inputFocusBorderColor, other.inputFocusBorderColor, t)!,
+      inputShadowColor: Color.lerp(inputShadowColor, other.inputShadowColor, t)!,
+      inputHintColor: Color.lerp(inputHintColor, other.inputHintColor, t)!,
       tabActiveColor: Color.lerp(tabActiveColor, other.tabActiveColor, t)!,
       tabInactiveColor: Color.lerp(tabInactiveColor, other.tabInactiveColor, t)!,
       tabIndicatorColor: Color.lerp(tabIndicatorColor, other.tabIndicatorColor, t)!,

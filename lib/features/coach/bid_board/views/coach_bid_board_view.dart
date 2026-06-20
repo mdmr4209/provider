@@ -16,6 +16,7 @@ class CoachBidBoardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final controller = context.watch<CoachBidController>();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -26,12 +27,11 @@ class CoachBidBoardView extends StatelessWidget {
     });
 
     return Scaffold(
-      backgroundColor: Color(0xFF2D3D2A),
-      appBar: AppBar(
-        backgroundColor: Color(0xFF22331F),
+appBar: AppBar(
+        backgroundColor: AppColors.defaultColor,
         // These two lines prevent the color change / tinting when scrolling
         scrolledUnderElevation: 0,
-        surfaceTintColor: const Color(0xFF22331F),
+        surfaceTintColor: AppColors.defaultColor,
 
         elevation: 0,
         centerTitle: true,
@@ -41,8 +41,8 @@ class CoachBidBoardView extends StatelessWidget {
         automaticallyImplyLeading: false,
         title: Text(
           'Bid Board',
-          style: TextStyle(
-            color: const Color(0xFFF5F0E8),
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: AppColors.coachColorFFF5F0E8,
             fontSize: 16,
             fontFamily: 'Georgia',
             fontWeight: FontWeight.w400,
@@ -78,8 +78,8 @@ class CoachBidBoardView extends StatelessWidget {
 
                         Text(
                           'List of bidders',
-                          style: TextStyle(
-                            color: const Color(0xFFB8BCB7),
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: AppColors.coachColorFFB8BCB7,
                             fontSize: 14,
                             fontFamily: 'Segoe UI',
                             fontWeight: FontWeight.w400,
@@ -89,12 +89,12 @@ class CoachBidBoardView extends StatelessWidget {
 
                         // ── Slots List ───────────────────────────────────────────────
                         if (controller.slots.isEmpty)
-                          const Padding(
+                          Padding(
                             padding: EdgeInsets.symmetric(vertical: 20.0),
                             child: Center(
                               child: Text(
                                 "No slots available",
-                                style: TextStyle(color: Colors.white54),
+                                style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white54),
                               ),
                             ),
                           )
@@ -124,8 +124,8 @@ class CoachBidBoardView extends StatelessWidget {
                         Text(
                           'Day 14 of No Contact. It was really hard today today, I almost texted him when I saw his favorite song playing. But I stayed strong! almost\nDay 14 of No Contact. It was really hard today today, I almost texted him when I saw his favorite song playing. But I=',
                           textAlign: TextAlign.justify,
-                          style: TextStyle(
-                            color: const Color(0xFF868A85),
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: AppColors.coachColorFF868A85,
                             fontSize: 11.19,
                             fontFamily: 'Segoe UI',
                             fontWeight: FontWeight.w400,
@@ -163,7 +163,7 @@ class CoachBidBoardView extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment(0.14, 1.55),
           end: Alignment(0.88, -0.49),
-          colors: [const Color(0xFF304C2B), const Color(0xFF0D1E0D)],
+          colors: [AppColors.coachColorFF304C2B, AppColors.coachColorFF0D1E0D],
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.r),
@@ -177,7 +177,7 @@ class CoachBidBoardView extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
@@ -186,7 +186,7 @@ class CoachBidBoardView extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(
                   description,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.white54,
                     fontSize: 11,
                     height: 1.4,
@@ -198,7 +198,7 @@ class CoachBidBoardView extends StatelessWidget {
           SizedBox(width: 16.w),
           const Icon(
             Icons.emoji_events_outlined,
-            color: Color(0xFFC19E5F),
+            color: AppColors.coachColorFFC19E5F,
             size: 60,
           ),
         ],
@@ -216,7 +216,7 @@ class CoachBidBoardView extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 4.h),
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       decoration: ShapeDecoration(
-        color: const Color(0xFF22331F),
+        color: AppColors.defaultColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.r)),
       ),
       child: Row(
@@ -229,14 +229,14 @@ class CoachBidBoardView extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
                 Text(
                   starting,
-                  style: const TextStyle(color: Colors.white38, fontSize: 11),
+                  style: TextStyle(color: Colors.white38, fontSize: 11),
                 ),
               ],
             ),
@@ -246,13 +246,13 @@ class CoachBidBoardView extends StatelessWidget {
             children: [
               Text(
                 top,
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
               ),
-              const Text(
+              Text(
                 "Top Bid",
                 style: TextStyle(color: Colors.white38, fontSize: 10),
               ),
@@ -279,7 +279,7 @@ class CoachBidBoardView extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 22.w, vertical: 24.h),
       decoration: ShapeDecoration(
-        color: const Color(0xFF243521),
+        color: AppColors.coachColorFF243521,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.r)),
       ),
       child: Column(
@@ -288,7 +288,7 @@ class CoachBidBoardView extends StatelessWidget {
           Text(
             'Select Slot',
             style: TextStyle(
-              color: const Color(0xFFB9BBB0),
+              color: AppColors.coachColorFFB9BBB0,
               fontSize: 14,
               fontFamily: 'Roboto',
               fontWeight: FontWeight.w300,
@@ -298,19 +298,19 @@ class CoachBidBoardView extends StatelessWidget {
           Container(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             decoration: BoxDecoration(
-              color: const Color(0xFF21321E),
+              color: AppColors.coachColorFF21321E,
               borderRadius: BorderRadius.circular(8.r),
               border: Border.all(color: Colors.white10),
             ),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<String>(
                 value: controller.selectedSlot,
-                hint: const Text(
+                hint: Text(
                   "Select one",
                   style: TextStyle(color: Colors.white38, fontSize: 14),
                 ),
                 isExpanded: true,
-                dropdownColor: const Color(0xFF21321E),
+                dropdownColor: AppColors.coachColorFF21321E,
                 icon: const Icon(
                   Icons.keyboard_arrow_down,
                   color: Colors.white54,
@@ -322,7 +322,7 @@ class CoachBidBoardView extends StatelessWidget {
                     value: value,
                     child: Text(
                       value,
-                      style: const TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.white),
                     ),
                   );
                 }).toList(),
@@ -334,7 +334,7 @@ class CoachBidBoardView extends StatelessWidget {
           Text(
             'Amount',
             style: TextStyle(
-              color: const Color(0xFFB9BBB0),
+              color: AppColors.coachColorFFB9BBB0,
               fontSize: 14,
               fontFamily: 'Roboto',
               fontWeight: FontWeight.w300,
@@ -345,26 +345,22 @@ class CoachBidBoardView extends StatelessWidget {
             height: 44,
             hintText: "Search by Client name",
             fontSize: 14,
-            hintColor: AppColors.greyColor,
-            hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
+hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
               color: AppColors.whiteColor.withAlpha(153),
               fontSize: 14,
             ),
             shadow: true,
-            shadowColor: Color(0xFF2E4429),
-            backgroundColor: Color(0xFF21321E),
-            borderRadius: 4,
+borderRadius: 4,
             borderWidth: 0.50,
-            borderColor: Color(0xFF334B2F),
-            leadingIcon: AppAssets.search,
+leadingIcon: AppAssets.search,
             leadingPadding: EdgeInsets.only(left: 16.w, right: 8.w),
           ),
           SizedBox(height: 25.h),
           CustomButton(
             onPress: () async => controller.confirmBid(context),
             title: "Confirm Bid →",
-            buttonColor: Color(0xA5354C30),
-            borderColor: Color(0x33434928),
+            buttonColor: AppColors.coachColorA5354C30,
+            borderColor: AppColors.coachColor33434928,
             height: 40,
             radius: 4,
             fontSize: 14,
@@ -383,7 +379,7 @@ class CoachBidBoardView extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(20.r),
         decoration: BoxDecoration(
-          color: const Color(0xFF22331F),
+          color: AppColors.defaultColor,
           borderRadius: BorderRadius.circular(16.r),
         ),
         child: Column(
@@ -392,7 +388,7 @@ class CoachBidBoardView extends StatelessWidget {
               children: [
                 SvgPicture.asset(AppAssets.dailyRaffle),
                 SizedBox(width: 12.w),
-                const Text(
+                Text(
                   'Daily Raffle',
                   style: TextStyle(
                     color: Colors.white,
@@ -409,7 +405,7 @@ class CoachBidBoardView extends StatelessWidget {
               'Day 14 of No Contact. It was really hard today today, I almost texted him when I saw his favorite song playing. But I stayed strong!',
               textAlign: TextAlign.justify,
               style: TextStyle(
-                color: const Color(0xFF868A85),
+                color: AppColors.coachColorFF868A85,
                 fontSize: 10,
                 fontFamily: 'Segoe UI',
                 fontWeight: FontWeight.w400,
@@ -434,7 +430,7 @@ class CoachBidBoardView extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment(-0.00, 0.94),
             end: Alignment(1.42, -0.62),
-            colors: [const Color(0xFF102710), const Color(0xFF2F432B)],
+            colors: [AppColors.coachColorFF102710, AppColors.coachColorFF2F432B],
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.r),
@@ -444,7 +440,7 @@ class CoachBidBoardView extends StatelessWidget {
           children: [
             Image.asset(AppAssets.win),
             SizedBox(width: 16.w),
-            const Expanded(
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -463,9 +459,9 @@ class CoachBidBoardView extends StatelessWidget {
                 ],
               ),
             ),
-            const Text(
+            Text(
               "View →",
-              style: TextStyle(color: Color(0xFFC19E5F), fontSize: 12),
+              style: TextStyle(color: AppColors.coachColorFFC19E5F, fontSize: 12),
             ),
           ],
         ),

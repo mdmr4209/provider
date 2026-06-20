@@ -1,3 +1,4 @@
+import 'package:newproject/core/theme/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -28,6 +29,7 @@ class _EditCoachProfileWizardState extends State<EditCoachProfileWizard> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final controller = context.watch<CoachProfileController>();
 
     return BackgroundWidget(
@@ -48,9 +50,9 @@ class _EditCoachProfileWizardState extends State<EditCoachProfileWizard> {
                 Navigator.pop(context);
               }
             },
-            child: const Text(
+            child: Text(
               "← Back",
-              style: TextStyle(color: Colors.white70),
+              style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white70),
             ),
           ),
           actions: [
@@ -58,7 +60,7 @@ class _EditCoachProfileWizardState extends State<EditCoachProfileWizard> {
               padding: EdgeInsets.only(right: 16.w, top: 16.h),
               child: Text(
                 "${controller.wizardCurrentPage + 1}/4",
-                style: const TextStyle(color: Color(0xFFC19E5F)),
+                style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.coachColorFFC19E5F),
               ),
             ),
           ],
@@ -77,7 +79,7 @@ class _EditCoachProfileWizardState extends State<EditCoachProfileWizard> {
                   child: LinearProgressIndicator(
                     value: (controller.wizardCurrentPage + 1) / 4,
                     backgroundColor: Colors.white10,
-                    color: const Color(0xFFC19E5F),
+                    color: AppColors.coachColorFFC19E5F,
                     minHeight: 2.h,
                   ),
                 ),
@@ -141,12 +143,12 @@ class _EditCoachProfileWizardState extends State<EditCoachProfileWizard> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: const Color(0xFFC19E5F),
+                          color: AppColors.coachColorFFC19E5F,
                           width: 2,
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFFC19E5F).withAlpha(80),
+                            color: AppColors.coachColorFFC19E5F.withAlpha(80),
                             blurRadius: 20,
                             spreadRadius: 5,
                           ),
@@ -165,7 +167,7 @@ class _EditCoachProfileWizardState extends State<EditCoachProfileWizard> {
                       child: Container(
                         padding: const EdgeInsets.all(6),
                         decoration: const BoxDecoration(
-                          color: Color(0xFF42513B),
+                          color: AppColors.coachColorFF42513B,
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(
@@ -178,7 +180,7 @@ class _EditCoachProfileWizardState extends State<EditCoachProfileWizard> {
                   ],
                 ),
                 SizedBox(height: 16.h),
-                const Text(
+                Text(
                   "Profile Photo",
                   style: TextStyle(
                     color: Colors.white,
@@ -186,7 +188,7 @@ class _EditCoachProfileWizardState extends State<EditCoachProfileWizard> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const Text(
+                Text(
                   "Tap to change your photo",
                   style: TextStyle(color: Colors.white54, fontSize: 12),
                 ),
@@ -232,18 +234,18 @@ class _EditCoachProfileWizardState extends State<EditCoachProfileWizard> {
           Container(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             decoration: BoxDecoration(
-              color: const Color(0xFF2D3D2D),
+              color: Theme.of(context).extension<AppDesignSystem>()!.panelColor,
               borderRadius: BorderRadius.circular(12.r),
             ),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<String>(
                 value: controller.yearsOfExperience,
-                hint: const Text(
+                hint: Text(
                   "How You Want To Be Addressed?",
                   style: TextStyle(color: Colors.white38, fontSize: 14),
                 ),
                 isExpanded: true,
-                dropdownColor: const Color(0xFF1B2B1B),
+                dropdownColor: Theme.of(context).extension<AppDesignSystem>()!.accentPanelColor,
                 items: ["1-2 Years", "3-5 Years", "5-8 Years", "8+ Years"].map((
                   String value,
                 ) {
@@ -251,7 +253,7 @@ class _EditCoachProfileWizardState extends State<EditCoachProfileWizard> {
                     value: value,
                     child: Text(
                       value,
-                      style: const TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.white),
                     ),
                   );
                 }).toList(),
@@ -315,7 +317,7 @@ class _EditCoachProfileWizardState extends State<EditCoachProfileWizard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             "This is What Clients Will See Before Reaching Out",
             style: TextStyle(
               color: Colors.white,
@@ -343,7 +345,7 @@ class _EditCoachProfileWizardState extends State<EditCoachProfileWizard> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 "Service List",
                 style: TextStyle(
                   color: Colors.white,
@@ -354,7 +356,7 @@ class _EditCoachProfileWizardState extends State<EditCoachProfileWizard> {
               TextButton.icon(
                 onPressed: controller.addServiceOption,
                 icon: const Icon(Icons.add, color: Colors.white70, size: 18),
-                label: const Text(
+                label: Text(
                   "Add Option",
                   style: TextStyle(color: Colors.white70),
                 ),
@@ -393,18 +395,14 @@ class _EditCoachProfileWizardState extends State<EditCoachProfileWizard> {
       maxLines: maxLines,
       hintText: hint,
       fontSize: 14,
-      hintColor: AppColors.greyColor,
-      hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
+hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
         color: AppColors.whiteColor.withAlpha(153),
         fontSize: 14,
       ),
       shadow: true,
-      shadowColor: const Color(0xFF2E4429),
-      backgroundColor: const Color(0xFF21321E),
-      borderRadius: 12,
+borderRadius: 12,
       borderWidth: 0.50,
-      borderColor: const Color(0xFF334B2F),
-      contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: maxLines == 1 ? 0 : 12.h),
+contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: maxLines == 1 ? 0 : 12.h),
     );
   }
 
@@ -422,7 +420,7 @@ class _EditCoachProfileWizardState extends State<EditCoachProfileWizard> {
                 border: Border.all(color: Colors.white38, width: 1.5),
                 borderRadius: BorderRadius.circular(4.r),
                 color: isSelected
-                    ? const Color(0xFFC19E5F)
+                    ? AppColors.coachColorFFC19E5F
                     : Colors.transparent,
               ),
               child: isSelected
@@ -448,7 +446,7 @@ class _EditCoachProfileWizardState extends State<EditCoachProfileWizard> {
       margin: EdgeInsets.only(bottom: 16.h),
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: const Color(0xFF2D3D2D).withAlpha(150),
+        color: Theme.of(context).extension<AppDesignSystem>()!.panelColor.withAlpha(150),
         borderRadius: BorderRadius.circular(16.r),
         border: Border.all(color: Colors.white10),
       ),
@@ -460,14 +458,14 @@ class _EditCoachProfileWizardState extends State<EditCoachProfileWizard> {
             children: [
               Text(
                 "Option ${index + 1}",
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               Row(
                 children: [
-                  const Text(
+                  Text(
                     "Active",
                     style: TextStyle(color: Colors.white54, fontSize: 10),
                   ),
@@ -482,7 +480,7 @@ class _EditCoachProfileWizardState extends State<EditCoachProfileWizard> {
                               () => controller.services[index].isActive = v,
                             );
                           },
-                          activeThumbColor: const Color(0xFFC19E5F),
+                          activeThumbColor: AppColors.coachColorFFC19E5F,
                           activeTrackColor: const Color(
                             0xFFC19E5F,
                           ).withAlpha(80),
@@ -493,7 +491,7 @@ class _EditCoachProfileWizardState extends State<EditCoachProfileWizard> {
                   IconButton(
                     icon: const Icon(
                       Icons.delete_outline,
-                      color: Color(0xFFE57373),
+                      color: AppColors.coachColorFFE57373,
                       size: 20,
                     ),
                     onPressed: () => controller.removeServiceOption(index),

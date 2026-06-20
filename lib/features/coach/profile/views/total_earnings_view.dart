@@ -9,12 +9,14 @@ import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_loader.dart';
 import '../controllers/coach_profile_controller.dart';
 import 'withdrawal_request_view.dart';
+import '../../../../core/constants/app_colors.dart';
 
 class TotalEarningsView extends StatelessWidget {
   const TotalEarningsView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final controller = context.watch<CoachProfileController>();
 
     return BackgroundWidget(
@@ -25,13 +27,13 @@ class TotalEarningsView extends StatelessWidget {
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.west, color: Color(0xFF5E7958), size: 24),
+            icon: const Icon(Icons.west, color: AppColors.coachColorFF5E7958, size: 24),
             onPressed: () => Navigator.pop(context),
           ),
           title: Text(
             'Total Earnings',
-            style: TextStyle(
-              color: const Color(0xFFF5F0E8),
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: AppColors.coachColorFFF5F0E8,
               fontSize: 16,
               fontFamily: 'Georgia',
               fontWeight: FontWeight.w400,
@@ -64,8 +66,8 @@ class TotalEarningsView extends StatelessWidget {
                         begin: Alignment(0.03, 0.86),
                         end: Alignment(0.97, 0.14),
                         colors: [
-                          const Color(0xFF193115),
-                          const Color(0xFF486244),
+                          AppColors.coachColorFF193115,
+                          AppColors.coachColorFF486244,
                         ],
                       ),
                       shape: RoundedRectangleBorder(
@@ -80,7 +82,7 @@ class TotalEarningsView extends StatelessWidget {
                           children: [
                             Text(
                               'Balance',
-                              style: TextStyle(
+                              style: theme.textTheme.bodyMedium?.copyWith(
                                 color: Colors.white,
                                 fontSize: 14,
                                 fontFamily: 'Segoe UI',
@@ -94,7 +96,7 @@ class TotalEarningsView extends StatelessWidget {
                               controller.balance
                                   .toStringAsFixed(0)
                                   .padLeft(3, '0'),
-                              style: TextStyle(
+                              style: theme.textTheme.bodyMedium?.copyWith(
                                 color: Colors.white,
                                 fontSize: 20,
                                 fontFamily: 'Segoe UI',

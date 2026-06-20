@@ -27,12 +27,9 @@ class CoachHomeView extends StatelessWidget {
     final coachHome = context.watch<CoachHomeController>();
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
-      appBar: AppBar(
+appBar: AppBar(
         scrolledUnderElevation: 0,
-        backgroundColor: AppColors.backgroundColor,
-        surfaceTintColor: AppColors.backgroundColor,
-        elevation: 0,
+elevation: 0,
         leading: Padding(
           padding: EdgeInsets.only(left: 16.w),
           child: Row(
@@ -82,7 +79,7 @@ class CoachHomeView extends StatelessWidget {
                         Container(
                           padding: EdgeInsets.all(16.92.r),
                           decoration: ShapeDecoration(
-                            color: const Color(0xFF21321D),
+                            color: AppColors.coachColorFF21321D,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8.r),
                             ),
@@ -148,19 +145,19 @@ class CoachHomeView extends StatelessWidget {
                                 "Call Back Requests",
                                 coachHome.stats!.callBackRequests,
                                 Icons.phone_callback,
-                                const Color(0xFF64B5F6),
+                                AppColors.coachColorFF64B5F6,
                               ),
                               _buildStatBox(
                                 "New Messages",
                                 coachHome.stats!.newMessages,
                                 Icons.chat_bubble_outline,
-                                const Color(0xFF81C784),
+                                AppColors.coachColorFF81C784,
                               ),
                               _buildStatBox(
                                 "Missed Calls",
                                 coachHome.stats!.missedCalls,
                                 Icons.phone_missed,
-                                const Color(0xFFE57373),
+                                AppColors.coachColorFFE57373,
                               ),
                             ],
                           ),
@@ -183,8 +180,8 @@ class CoachHomeView extends StatelessWidget {
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                                 colors: [
-                                  const Color(0xFF0D1E0D),
-                                  const Color(0xFF304C2B),
+                                  AppColors.coachColorFF0D1E0D,
+                                  AppColors.coachColorFF304C2B,
                                 ],
                               ),
                               shape: RoundedRectangleBorder(
@@ -258,9 +255,9 @@ class CoachHomeView extends StatelessWidget {
                             ),
                             TextButton(
                               onPressed: () => context.push('/coach-sessions'),
-                              child: const Text(
+                              child: Text(
                                 "See All",
-                                style: TextStyle(color: Colors.white54),
+                                style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white54),
                               ),
                             ),
                           ],
@@ -270,10 +267,10 @@ class CoachHomeView extends StatelessWidget {
                         if (coachHome.sessions.isEmpty)
                           Padding(
                             padding: EdgeInsets.symmetric(vertical: 20.h),
-                            child: const Center(
+                            child: Center(
                               child: Text(
                                 "No upcoming sessions",
-                                style: TextStyle(color: Colors.white54),
+                                style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white54),
                               ),
                             ),
                           )
@@ -301,13 +298,13 @@ class CoachHomeView extends StatelessWidget {
                             vertical: 13.h,
                           ),
                           decoration: ShapeDecoration(
-                            color: const Color(0xFF263523),
+                            color: AppColors.coachColorFF263523,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12.r),
                             ),
                             shadows: [
                               BoxShadow(
-                                color: Color(0x0F000000),
+                                color: AppColors.coachColor0F000000,
                                 blurRadius: 24.20,
                                 offset: Offset(0, 13),
                                 spreadRadius: 0,
@@ -320,11 +317,11 @@ class CoachHomeView extends StatelessWidget {
                                 width: 321.w,
                                 padding: EdgeInsets.all(11.44.r),
                                 decoration: ShapeDecoration(
-                                  color: const Color(0xFF21321D),
+                                  color: AppColors.coachColorFF21321D,
                                   shape: RoundedRectangleBorder(
                                     side: BorderSide(
                                       width: 0.95.r,
-                                      color: const Color(0xFF354C30),
+                                      color: AppColors.coachColorFF354C30,
                                     ),
                                     borderRadius: BorderRadius.circular(4.r),
                                   ),
@@ -340,7 +337,7 @@ class CoachHomeView extends StatelessWidget {
                                         children: [
                                           Text(
                                             "Add a BID to become a featured Coach",
-                                            style: TextStyle(
+                                            style: theme.textTheme.bodyMedium?.copyWith(
                                               color: Colors.white,
                                               fontWeight: FontWeight.bold,
                                               fontSize: 13.r,
@@ -349,7 +346,7 @@ class CoachHomeView extends StatelessWidget {
                                           SizedBox(height: 4.h),
                                           Text(
                                             "Increase your visibility and get more bookings by bidding for a featured spot.",
-                                            style: TextStyle(
+                                            style: theme.textTheme.bodyMedium?.copyWith(
                                               color: Colors.white70,
                                               fontSize: 10.r,
                                             ),
@@ -364,8 +361,8 @@ class CoachHomeView extends StatelessWidget {
                               Text(
                                 'Day 14 of No Contact. It was really hard today today, I almost texted him when I saw his favorite song playing. But I stayed strong!',
                                 textAlign: TextAlign.justify,
-                                style: TextStyle(
-                                  color: const Color(0xFFD1D1D1),
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  color: AppColors.coachColorFFD1D1D1,
                                   fontSize: 12,
                                   fontFamily: 'Segoe UI',
                                   fontWeight: FontWeight.w400,
@@ -373,7 +370,7 @@ class CoachHomeView extends StatelessWidget {
                               ),
                               SizedBox(height: 16.h),
                               GlassWidget(
-                                color: const Color(0xFF263523),
+                                color: AppColors.coachColorFF263523,
                                 child: SizedBox(
                                   width: double.infinity,
                                   height: 44.r,
@@ -386,8 +383,8 @@ class CoachHomeView extends StatelessWidget {
                                       Text(
                                         'Place a Bid Now',
                                         textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: const Color(0xFFEFC348),
+                                        style: theme.textTheme.bodyMedium?.copyWith(
+                                          color: AppColors.coachColorFFEFC348,
                                           fontSize: 14,
                                           fontFamily: 'Segoe UI',
                                           fontWeight: FontWeight.w400,
@@ -408,7 +405,7 @@ class CoachHomeView extends StatelessWidget {
                         Container(
                           padding: EdgeInsets.symmetric(horizontal: 12.w),
                           decoration: ShapeDecoration(
-                            color: const Color(0xFF1D2A1A),
+                            color: AppColors.coachColorFF1D2A1A,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(12.r),
@@ -423,7 +420,7 @@ class CoachHomeView extends StatelessWidget {
                                 children: [
                                   const Icon(
                                     Icons.chat_bubble_outline,
-                                    color: Color(0xFF81C784),
+                                    color: AppColors.coachColorFF81C784,
                                     size: 18,
                                   ),
                                   SizedBox(width: 8.w),
@@ -439,9 +436,9 @@ class CoachHomeView extends StatelessWidget {
                               ),
                               TextButton(
                                 onPressed: () {},
-                                child: const Text(
+                                child: Text(
                                   "See All",
-                                  style: TextStyle(color: AppColors.iconColor),
+                                  style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.iconColor),
                                 ),
                               ),
                             ],
@@ -455,7 +452,7 @@ class CoachHomeView extends StatelessWidget {
                             bottom: 12.h,
                           ),
                           decoration: ShapeDecoration(
-                            color: const Color(0xFF253523),
+                            color: AppColors.coachColorFF253523,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
                                 bottomLeft: Radius.circular(12.r),
@@ -464,7 +461,7 @@ class CoachHomeView extends StatelessWidget {
                             ),
                             shadows: [
                               BoxShadow(
-                                color: Color(0x0F000000),
+                                color: AppColors.coachColor0F000000,
                                 blurRadius: 24.20,
                                 offset: Offset(0, 13),
                                 spreadRadius: 0,
@@ -476,10 +473,10 @@ class CoachHomeView extends StatelessWidget {
                               if (coachHome.messages.isEmpty)
                                 Padding(
                                   padding: EdgeInsets.symmetric(vertical: 20.h),
-                                  child: const Center(
+                                  child: Center(
                                     child: Text(
                                       "No new messages",
-                                      style: TextStyle(color: Colors.white54),
+                                      style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white54),
                                     ),
                                   ),
                                 )
@@ -527,7 +524,7 @@ class CoachHomeView extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment(1.00, -0.22),
           end: Alignment(0.47, 0.45),
-          colors: [const Color(0xFF22391E), const Color(0xFF192915)],
+          colors: [AppColors.coachColorFF22391E, AppColors.coachColorFF192915],
         ),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
       ),
@@ -546,7 +543,7 @@ class CoachHomeView extends StatelessWidget {
                 height: 28.r,
                 clipBehavior: Clip.antiAlias,
                 decoration: ShapeDecoration(
-                  color: const Color(0xFF253921),
+                  color: AppColors.coachColorFF253921,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(14),
                   ),
@@ -583,7 +580,7 @@ class CoachHomeView extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 12.h),
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: const Color(0xFF1C2B19),
+        color: AppColors.coachColorFF1C2B19,
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: Column(
@@ -593,7 +590,7 @@ class CoachHomeView extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
@@ -608,7 +605,7 @@ class CoachHomeView extends StatelessWidget {
                     vertical: 2.45.h,
                   ),
                   decoration: ShapeDecoration(
-                    color: const Color(0xFF263424),
+                    color: AppColors.coachColorFF263424,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20.h),
                     ),
@@ -617,14 +614,14 @@ class CoachHomeView extends StatelessWidget {
                     children: [
                       const Icon(
                         Icons.cancel_outlined,
-                        color: Color(0xFFE57373),
+                        color: AppColors.coachColorFFE57373,
                         size: 16,
                       ),
                       SizedBox(width: 4.w),
-                      const Text(
+                      Text(
                         "Cancel",
                         style: TextStyle(
-                          color: Color(0xFFE57373),
+                          color: AppColors.coachColorFFE57373,
                           fontSize: 12,
                         ),
                       ),
@@ -641,7 +638,7 @@ class CoachHomeView extends StatelessWidget {
               SizedBox(width: 8.w),
               Text(
                 date,
-                style: const TextStyle(color: Colors.white70, fontSize: 12),
+                style: TextStyle(color: Colors.white70, fontSize: 12),
               ),
             ],
           ),
@@ -652,7 +649,7 @@ class CoachHomeView extends StatelessWidget {
               SizedBox(width: 8.w),
               Text(
                 time,
-                style: const TextStyle(color: Colors.white70, fontSize: 12),
+                style: TextStyle(color: Colors.white70, fontSize: 12),
               ),
             ],
           ),
@@ -661,7 +658,7 @@ class CoachHomeView extends StatelessWidget {
             height: 63.h,
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             decoration: ShapeDecoration(
-              color: const Color(0xFF263523),
+              color: AppColors.coachColorFF263523,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8.r),
               ),
@@ -673,11 +670,11 @@ class CoachHomeView extends StatelessWidget {
                   backgroundImage: NetworkImage(avatar),
                 ),
                 SizedBox(width: 12.w),
-                Text(name, style: const TextStyle(color: Colors.white)),
+                Text(name, style: TextStyle(color: Colors.white)),
                 const Spacer(),
                 Text(
                   rate,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
@@ -706,7 +703,7 @@ class CoachHomeView extends StatelessWidget {
         bottom: 16.h,
       ),
       decoration: ShapeDecoration(
-        color: const Color(0xFF2B3C28),
+        color: AppColors.coachColorFF2B3C28,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.r)),
       ),
       child: Row(
@@ -719,15 +716,15 @@ class CoachHomeView extends StatelessWidget {
               children: [
                 Text(
                   name,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
                   status,
-                  style: const TextStyle(
-                    color: Color(0xFF81C784),
+                  style: TextStyle(
+                    color: AppColors.coachColorFF81C784,
                     fontSize: 12,
                   ),
                 ),
@@ -739,18 +736,18 @@ class CoachHomeView extends StatelessWidget {
             children: [
               Text(
                 time,
-                style: const TextStyle(color: Colors.white38, fontSize: 10),
+                style: TextStyle(color: Colors.white38, fontSize: 10),
               ),
               SizedBox(height: 4.h),
               Container(
                 padding: const EdgeInsets.all(4),
                 decoration: const BoxDecoration(
-                  color: Color(0xFF81C784),
+                  color: AppColors.coachColorFF81C784,
                   shape: BoxShape.circle,
                 ),
                 child: Text(
                   count,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.white,
                     fontSize: 10,
                     fontWeight: FontWeight.bold,

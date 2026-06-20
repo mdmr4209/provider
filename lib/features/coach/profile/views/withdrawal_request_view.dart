@@ -1,3 +1,4 @@
+import 'package:newproject/core/theme/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -7,12 +8,14 @@ import '../../../../core/widgets/background_widget.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_loader.dart';
 import '../controllers/coach_profile_controller.dart';
+import '../../../../core/constants/app_colors.dart';
 
 class WithdrawalRequestView extends StatelessWidget {
   const WithdrawalRequestView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final controller = context.watch<CoachProfileController>();
 
     return BackgroundWidget(
@@ -26,7 +29,7 @@ class WithdrawalRequestView extends StatelessWidget {
             icon: const Icon(Icons.arrow_back, color: Colors.white70),
             onPressed: () => Navigator.pop(context),
           ),
-          title: const Text("Request Withdrawal", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          title: Text("Request Withdrawal", style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
           centerTitle: true,
         ),
         body: FutureBuilder(
@@ -41,12 +44,12 @@ class WithdrawalRequestView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildLabel("Card Holder Name"),
-              _buildTextField(controller.cardHolderNameController, "Prabal Pratap Singh"),
+              _buildTextField(context, controller.cardHolderNameController, "Prabal Pratap Singh"),
               
               SizedBox(height: 24.h),
               
               _buildLabel("Card Number"),
-              _buildTextField(controller.cardNumberController, "5296 7820 4820 9637"),
+              _buildTextField(context, controller.cardNumberController, "5296 7820 4820 9637"),
               
               SizedBox(height: 24.h),
               
@@ -57,7 +60,7 @@ class WithdrawalRequestView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _buildLabel("MM/YY"),
-                        _buildTextField(controller.expiryDateController, "12/24"),
+                        _buildTextField(context, controller.expiryDateController, "12/24"),
                       ],
                     ),
                   ),
@@ -67,7 +70,7 @@ class WithdrawalRequestView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _buildLabel("CVC"),
-                        _buildTextField(controller.cvcController, "****"),
+                        _buildTextField(context, controller.cvcController, "****"),
                       ],
                     ),
                   ),
@@ -77,7 +80,7 @@ class WithdrawalRequestView extends StatelessWidget {
               SizedBox(height: 24.h),
               
               _buildLabel("Request Amount"),
-              _buildTextField(controller.withdrawalAmountController, "Enter here"),
+              _buildTextField(context, controller.withdrawalAmountController, "Enter here"),
               
               SizedBox(height: 100.h),
             ],
@@ -108,19 +111,19 @@ class WithdrawalRequestView extends StatelessWidget {
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String hint) {
+  Widget _buildTextField(BuildContext context, TextEditingController controller, String hint) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16.w),
       decoration: BoxDecoration(
-        color: const Color(0xFF2D3D2D).withAlpha(150),
+        color: Theme.of(context).extension<AppDesignSystem>()!.panelColor.withAlpha(150),
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: TextField(
         controller: controller,
-        style: const TextStyle(color: Colors.white),
+        style: TextStyle(color: Colors.white),
         decoration: InputDecoration(
           hintText: hint,
-          hintStyle: const TextStyle(color: Colors.white24, fontSize: 14),
+          hintStyle: TextStyle(color: Colors.white24, fontSize: 14),
           border: InputBorder.none,
         ),
       ),

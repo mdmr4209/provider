@@ -15,6 +15,7 @@ class FollowUpSetupView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final controller = context.watch<CoachProfileController>();
 
     final intervals = [
@@ -35,13 +36,13 @@ class FollowUpSetupView extends StatelessWidget {
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.west, color: Color(0xFF5E7958), size: 24),
+            icon: const Icon(Icons.west, color: AppColors.coachColorFF5E7958, size: 24),
             onPressed: () => Navigator.pop(context),
           ),
           title: Text(
             'Follow Up Set Up',
-            style: TextStyle(
-              color: const Color(0xFFF5F0E8),
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: AppColors.coachColorFFF5F0E8,
               fontSize: 16,
               fontFamily: 'Georgia',
               fontWeight: FontWeight.w400,
@@ -62,7 +63,7 @@ class FollowUpSetupView extends StatelessWidget {
                 children: [
                   Text(
                     'Follow Up Text',
-                    style: TextStyle(
+                    style: theme.textTheme.bodyMedium?.copyWith(
                       color: Colors.white,
                       fontSize: 14,
                       fontFamily: 'Segoe UI',
@@ -71,8 +72,8 @@ class FollowUpSetupView extends StatelessWidget {
                   ),
                   Text(
                     'Set automated Follow Up Text to send your clients',
-                    style: TextStyle(
-                      color: const Color(0xFF99A1AF),
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: AppColors.coachColorFF99A1AF,
                       fontSize: 12,
                       fontFamily: 'Segoe UI',
                       fontWeight: FontWeight.w400,
@@ -85,24 +86,20 @@ class FollowUpSetupView extends StatelessWidget {
                     height: 180,
                     hintText: "Enter here",
                     fontSize: 12,
-                    hintColor: AppColors.greyColor,
-                    hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
+hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: AppColors.whiteColor.withAlpha(153),
                       fontSize: 12.sp,
                     ),
                     maxLines: 10,
                     shadow: true,
-                    shadowColor: Color(0xFF2E4429),
-                    backgroundColor: Color(0xFF21321E),
-                    borderRadius: 8,
+borderRadius: 8,
                     borderWidth: 0.50,
-                    borderColor: Color(0xFF334B2F),
-                  ),
+),
                   SizedBox(height: 32.h),
 
-                  const Text(
+                  Text(
                     "Follow Up Message Set Up",
-                    style: TextStyle(
+                    style: theme.textTheme.bodyMedium?.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
@@ -150,11 +147,11 @@ class FollowUpSetupView extends StatelessWidget {
             height: 18.r,
             decoration: BoxDecoration(
               border: Border.all(
-                color: isSelected ? const Color(0xFFC19E5F) : Colors.white38,
+                color: isSelected ? AppColors.coachColorFFC19E5F : Colors.white38,
                 width: 1.5,
               ),
               borderRadius: BorderRadius.circular(4.r),
-              color: isSelected ? const Color(0xFFC19E5F) : Colors.transparent,
+              color: isSelected ? AppColors.coachColorFFC19E5F : Colors.transparent,
             ),
             child: isSelected
                 ? const Icon(Icons.check, color: Colors.white, size: 12)
@@ -164,7 +161,7 @@ class FollowUpSetupView extends StatelessWidget {
           Text(
             title,
             style: TextStyle(
-              color: isSelected ? const Color(0xFFC19E5F) : Colors.white70,
+              color: isSelected ? AppColors.coachColorFFC19E5F : Colors.white70,
               fontSize: 14,
             ),
           ),

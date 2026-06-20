@@ -1,3 +1,4 @@
+import 'package:newproject/core/theme/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -30,11 +31,10 @@ class CoachCircleView extends StatelessWidget {
     return GestureDetector(
       onTap: FocusScope.of(context).unfocus,
       child: Scaffold(
-        backgroundColor: Color(0xFF2D3D2A),
-        appBar: AppBar(
-          backgroundColor: Color(0xFF22331F),
+appBar: AppBar(
+          backgroundColor: AppColors.defaultColor,
           scrolledUnderElevation: 0,
-          surfaceTintColor: const Color(0xFF22331F),
+          surfaceTintColor: AppColors.defaultColor,
           elevation: 0,
           centerTitle: true,
           shape: RoundedRectangleBorder(
@@ -76,19 +76,15 @@ class CoachCircleView extends StatelessWidget {
                             height: 50,
                             hintText: "Search groups",
                             fontSize: 14,
-                            hintColor: AppColors.greyColor,
-                            hintStyle: Theme.of(context).textTheme.bodyLarge
+hintStyle: Theme.of(context).textTheme.bodyLarge
                                 ?.copyWith(
                                   color: AppColors.whiteColor.withAlpha(153),
                                   fontSize: 14.sp,
                                 ),
                             shadow: true,
-                            shadowColor: Color(0xFF2E4429),
-                            backgroundColor: Color(0xFF21321E),
-                            borderRadius: 24,
+borderRadius: 24,
                             borderWidth: 0.50,
-                            borderColor: Color(0xFF334B2F),
-                            leadingIcon: AppAssets.search,
+leadingIcon: AppAssets.search,
                             leadingPadding: EdgeInsets.only(
                               left: 16.w,
                               right: 8.w,
@@ -101,13 +97,13 @@ class CoachCircleView extends StatelessWidget {
                         Expanded(
                           child: controller.circles.isEmpty
                               ? ListView(
-                                  children: const [
+                                  children: [
                                     Padding(
                                       padding: EdgeInsets.only(top: 50.0),
                                       child: Center(
                                         child: Text(
                                           "No circles found",
-                                          style: TextStyle(
+                                          style: theme.textTheme.bodyMedium?.copyWith(
                                             color: Colors.white54,
                                           ),
                                         ),
@@ -176,13 +172,13 @@ class CoachCircleView extends StatelessWidget {
         margin: EdgeInsets.only(bottom: 16.h),
         padding: EdgeInsets.symmetric(horizontal: 11.w, vertical: 15.h),
         decoration: ShapeDecoration(
-          color: const Color(0xFF253523),
+          color: AppColors.coachColorFF253523,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.r),
           ),
           shadows: [
             BoxShadow(
-              color: Color(0x0F000000),
+              color: AppColors.coachColor0F000000,
               blurRadius: 24.20,
               offset: Offset(0, 13),
               spreadRadius: 0,
@@ -215,7 +211,7 @@ class CoachCircleView extends StatelessWidget {
                     children: [
                       Text(
                         name,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -223,7 +219,7 @@ class CoachCircleView extends StatelessWidget {
                       ),
                       Text(
                         members,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: Colors.white38,
                           fontSize: 12,
                         ),
@@ -236,7 +232,7 @@ class CoachCircleView extends StatelessWidget {
             SizedBox(height: 16.h),
             Text(
               description,
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.white70,
                 fontSize: 13,
                 height: 1.4,
@@ -251,8 +247,8 @@ class CoachCircleView extends StatelessWidget {
                       height: 44,
                       onPress: null,
                       title: "Joined",
-                      buttonColor: Color(0xFF4C6D45),
-                      borderColor: Color(0xFF4C6D45),
+                      buttonColor: AppColors.coachColorFF4C6D45,
+                      borderColor: AppColors.coachColorFF4C6D45,
                       borderWidth: .5,
                       radius: 8,
                     )
@@ -260,8 +256,8 @@ class CoachCircleView extends StatelessWidget {
                       height: 44,
                       onPress: () async => controller.joinGroup(context, id),
                       title: "Join Now",
-                      buttonColor: Color(0x33434928),
-                      borderColor: Color(0xF2C9A84C),
+                      buttonColor: AppColors.coachColor33434928,
+                      borderColor: AppColors.coachColorF2C9A84C,
                       borderWidth: .5,
                       radius: 8,
                     ),
@@ -295,7 +291,7 @@ class CoachCircleView extends StatelessWidget {
                 margin: EdgeInsets.only(bottom: 16.h),
                 padding: EdgeInsets.all(20.r),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF2D3D2D),
+                  color: Theme.of(context).extension<AppDesignSystem>()!.panelColor,
                   borderRadius: BorderRadius.circular(16.r),
                 ),
                 child: Column(

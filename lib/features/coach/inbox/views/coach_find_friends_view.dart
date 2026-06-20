@@ -1,3 +1,4 @@
+import 'package:newproject/core/theme/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -5,12 +6,14 @@ import '../../../../core/constants/app_assets.dart';
 import '../../../../core/widgets/background_widget.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_loader.dart';
+import '../../../../core/constants/app_colors.dart';
 
 class CoachFindFriendsView extends StatelessWidget {
   const CoachFindFriendsView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return BackgroundWidget(
       imagePath: AppAssets.bgMain,
       child: Scaffold(
@@ -22,7 +25,7 @@ class CoachFindFriendsView extends StatelessWidget {
             icon: const Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () => Navigator.pop(context),
           ),
-          title: const Text("Find Friends", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          title: Text("Find Friends", style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
           centerTitle: true,
         ),
         body: FutureBuilder(
@@ -40,19 +43,19 @@ class CoachFindFriendsView extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF2D3D2D),
+                  color: Theme.of(context).extension<AppDesignSystem>()!.panelColor,
                   borderRadius: BorderRadius.circular(24.r),
                 ),
-                child: const Row(
+                child: Row(
                   children: [
                     Icon(Icons.search, color: Colors.white38),
                     SizedBox(width: 8),
                     Expanded(
                       child: TextField(
-                        style: TextStyle(color: Colors.white),
+                        style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white),
                         decoration: InputDecoration(
                           hintText: "Search Friends",
-                          hintStyle: TextStyle(color: Colors.white38, fontSize: 14),
+                          hintStyle: theme.textTheme.bodyMedium?.copyWith(color: Colors.white38, fontSize: 14),
                           border: InputBorder.none,
                         ),
                       ),
@@ -66,9 +69,9 @@ class CoachFindFriendsView extends StatelessWidget {
 
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: const Align(
+              child: Align(
                 alignment: Alignment.centerLeft,
-                child: Text("Suggestions", style: TextStyle(color: Colors.white70, fontSize: 14)),
+                child: Text("Suggestions", style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white70, fontSize: 14)),
               ),
             ),
 
@@ -86,7 +89,7 @@ class CoachFindFriendsView extends StatelessWidget {
                 ),
                 itemCount: 6,
                 itemBuilder: (context, index) {
-                  return _buildFriendCard("Mike Lee", "2 mutual Friend");
+                  return _buildFriendCard(context, "Mike Lee", "2 mutual Friend");
                 },
               ),
             ),
@@ -98,11 +101,11 @@ class CoachFindFriendsView extends StatelessWidget {
     );
   }
 
-  Widget _buildFriendCard(String name, String mutual) {
+  Widget _buildFriendCard(BuildContext context, String name, String mutual) {
     return Container(
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: const Color(0xFF2D3D2D),
+        color: Theme.of(context).extension<AppDesignSystem>()!.panelColor,
         borderRadius: BorderRadius.circular(16.r),
         border: Border.all(color: Colors.white10),
       ),
@@ -113,8 +116,8 @@ class CoachFindFriendsView extends StatelessWidget {
             backgroundImage: const NetworkImage('https://i.pravatar.cc/150?u=mike'),
           ),
           SizedBox(height: 12.h),
-          Text(name, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
-          Text(mutual, style: const TextStyle(color: Colors.white38, fontSize: 11)),
+          Text(name, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
+          Text(mutual, style: TextStyle(color: Colors.white38, fontSize: 11)),
           const Spacer(),
           CustomButton(
             onPress: () async {},
@@ -160,7 +163,7 @@ class CoachFindFriendsView extends StatelessWidget {
               return Container(
                 padding: EdgeInsets.all(16.r),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF2D3D2D),
+                  color: Theme.of(context).extension<AppDesignSystem>()!.panelColor,
                   borderRadius: BorderRadius.circular(16.r),
                 ),
                 child: Column(

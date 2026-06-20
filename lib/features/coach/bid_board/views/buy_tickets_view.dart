@@ -17,15 +17,15 @@ class BuyTicketsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final controller = context.watch<CoachBidController>();
 
     return Scaffold(
-      backgroundColor: Color(0xFF2D3D2A),
-      appBar: AppBar(
-        backgroundColor: Color(0xFF22331F),
+appBar: AppBar(
+        backgroundColor: AppColors.defaultColor,
         // These two lines prevent the color change / tinting when scrolling
         scrolledUnderElevation: 0,
-        surfaceTintColor: const Color(0xFF22331F),
+        surfaceTintColor: AppColors.defaultColor,
 
         elevation: 0,
         centerTitle: true,
@@ -33,13 +33,13 @@ class BuyTicketsView extends StatelessWidget {
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(24.r)),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.west, color: Color(0xFF5E7958), size: 24),
+          icon: const Icon(Icons.west, color: AppColors.coachColorFF5E7958, size: 24),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           'Raffle Draw',
-          style: TextStyle(
-            color: const Color(0xFFF5F0E8),
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: AppColors.coachColorFFF5F0E8,
             fontSize: 16,
             fontFamily: 'Georgia',
             fontWeight: FontWeight.w400,
@@ -62,7 +62,7 @@ class BuyTicketsView extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: ShapeDecoration(
-                    color: const Color(0xFF243521),
+                    color: AppColors.coachColorFF243521,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(4),
                     ),
@@ -76,8 +76,8 @@ class BuyTicketsView extends StatelessWidget {
                           Text(
                             'Daily Raffle Update',
                             textAlign: TextAlign.justify,
-                            style: TextStyle(
-                              color: const Color(0xFF868A85),
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: AppColors.coachColorFF868A85,
                               fontSize: 13,
                               fontFamily: 'Segoe UI',
                               fontWeight: FontWeight.w400,
@@ -90,7 +90,7 @@ class BuyTicketsView extends StatelessWidget {
                             children: [
                               Text(
                                 '\$5.00',
-                                style: TextStyle(
+                                style: theme.textTheme.bodyMedium?.copyWith(
                                   color: Colors.white,
                                   fontSize: 32,
                                   fontFamily: 'Segoe UI',
@@ -101,7 +101,7 @@ class BuyTicketsView extends StatelessWidget {
 
                               Text(
                                 '/Ticket',
-                                style: TextStyle(
+                                style: theme.textTheme.bodyMedium?.copyWith(
                                   color: Colors.white,
                                   fontSize: 12.07,
                                   fontFamily: 'Poppins',
@@ -122,8 +122,8 @@ class BuyTicketsView extends StatelessWidget {
 
                 Text(
                   'Preffered Times',
-                  style: TextStyle(
-                    color: const Color(0xFFB9BBB0),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: AppColors.coachColorFFB9BBB0,
                     fontSize: 14,
                     fontFamily: 'Roboto',
                     fontWeight: FontWeight.w300,
@@ -136,18 +136,14 @@ class BuyTicketsView extends StatelessWidget {
                   height: 44,
                   hintText: "Enter amount of tickets",
                   fontSize: 14,
-                  hintColor: AppColors.greyColor,
-                  hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
+hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: AppColors.whiteColor.withAlpha(153),
                     fontSize: 14,
                   ),
                   shadow: true,
-                  shadowColor: Color(0xFF2E4429),
-                  backgroundColor: Color(0xFF21321E),
-                  borderRadius: 4,
+borderRadius: 4,
                   borderWidth: 0.50,
-                  borderColor: Color(0xFF334B2F),
-                ),
+),
 
                 const Spacer(),
 

@@ -4,15 +4,16 @@ import '../../../../core/widgets/background_widget.dart';
 import '../../../../core/constants/app_assets.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_loader.dart';
+import '../../../../core/constants/app_colors.dart';
 
 class PaymentSuccessView extends StatelessWidget {
   const PaymentSuccessView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-        backgroundColor: Color(0xFF2D3D2A),
-      body: FutureBuilder(
+body: FutureBuilder(
         future: Future.delayed(const Duration(milliseconds: 1500)),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -29,17 +30,17 @@ class PaymentSuccessView extends StatelessWidget {
 
             SizedBox(height: 40.h),
 
-            const Text(
+            Text(
               "Payment Successful",
-              style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+              style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
             ),
 
             SizedBox(height: 16.h),
 
-            const Text(
+            Text(
               "Please Check Your Notification, We Just Sent You A Message.",
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white54, fontSize: 15, height: 1.5),
+              style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white54, fontSize: 15, height: 1.5),
             ),
 
             const Spacer(),

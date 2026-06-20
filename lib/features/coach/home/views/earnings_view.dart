@@ -13,12 +13,11 @@ class EarningsView extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF22331F),
+appBar: AppBar(
+        backgroundColor: AppColors.defaultColor,
         // These two lines prevent the color change / tinting when scrolling
         scrolledUnderElevation: 0,
-        surfaceTintColor: const Color(0xFF22331F),
+        surfaceTintColor: AppColors.defaultColor,
 
         elevation: 0,
         centerTitle: true,
@@ -26,13 +25,13 @@ class EarningsView extends StatelessWidget {
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(24.r)),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.west, color: Color(0xFF5E7958), size: 24),
+          icon: const Icon(Icons.west, color: AppColors.coachColorFF5E7958, size: 24),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           "Earnings",
           style: theme.textTheme.titleLarge?.copyWith(
-            color: const Color(0xFFF4F6F0),
+            color: AppColors.coachColorFFF4F6F0,
             fontWeight: FontWeight.w500,
             fontSize: 16.sp,
           ),
@@ -65,8 +64,8 @@ class EarningsView extends StatelessWidget {
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
-                        const Color(0xFF0D1E0D),
-                        const Color(0xFF304C2B),
+                        AppColors.coachColorFF0D1E0D,
+                        AppColors.coachColorFF304C2B,
                       ],
                     ),
                     shape: RoundedRectangleBorder(
@@ -76,9 +75,9 @@ class EarningsView extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         "Net Earnings",
-                        style: TextStyle(color: Colors.white70),
+                        style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white70),
                       ),
                       SizedBox(height: 8.h),
                       Text(
@@ -88,9 +87,9 @@ class EarningsView extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const Text(
+                      Text(
                         "This month",
-                        style: TextStyle(color: Colors.white38),
+                        style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white38),
                       ),
                     ],
                   ),
@@ -106,7 +105,7 @@ class EarningsView extends StatelessWidget {
                         "Total Minutes Coached",
                         "1200 min",
                         Icons.phone_in_talk,
-                        const Color(0xFF64B5F6),
+                        AppColors.coachColorFF64B5F6,
                       ),
                     ),
                     SizedBox(width: 16.w),
@@ -115,7 +114,7 @@ class EarningsView extends StatelessWidget {
                         "Avg. Client Rating",
                         "4.9 (187)",
                         Icons.star,
-                        const Color(0xFFFBC02D),
+                        AppColors.coachColorFFFBC02D,
                       ),
                     ),
                   ],
@@ -147,8 +146,8 @@ class EarningsView extends StatelessWidget {
                 SizedBox(height: 10.h),
                 Text(
                   'Earing List',
-                  style: TextStyle(
-                    color: const Color(0xFFB8BCB7),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: AppColors.coachColorFFB8BCB7,
                     fontSize: 14.r,
                     fontFamily: 'Segoe UI',
                     fontWeight: FontWeight.w400,
@@ -188,12 +187,12 @@ class EarningsView extends StatelessWidget {
                   "400\$",
                 ),
 
-                Divider(color: const Color(0xFF22331F), height: 24.r),
+                Divider(color: AppColors.defaultColor, height: 24.r),
 
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 7),
                   decoration: ShapeDecoration(
-                    color: const Color(0xFF243521),
+                    color: AppColors.coachColorFF243521,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(4),
                     ),
@@ -203,8 +202,8 @@ class EarningsView extends StatelessWidget {
                     children: [
                       Text(
                         'Total Earning',
-                        style: TextStyle(
-                          color: const Color(0xFFB8BCB7),
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: AppColors.coachColorFFB8BCB7,
                           fontSize: 14,
                           fontFamily: 'Segoe UI',
                           fontWeight: FontWeight.w400,
@@ -228,13 +227,13 @@ class EarningsView extends StatelessWidget {
                   width: double.infinity,
                   padding: EdgeInsets.all(20.r),
                   decoration: ShapeDecoration(
-                    color: const Color(0xFF263523),
+                    color: AppColors.coachColorFF263523,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                     shadows: [
                       BoxShadow(
-                        color: Color(0x0F000000),
+                        color: AppColors.coachColor0F000000,
                         blurRadius: 24.20,
                         offset: Offset(0, 13),
                         spreadRadius: 0,
@@ -246,7 +245,7 @@ class EarningsView extends StatelessWidget {
                     children: [
                       Text(
                         'BID to become a featured Coach',
-                        style: TextStyle(
+                        style: theme.textTheme.bodyMedium?.copyWith(
                           color: Colors.white,
                           fontSize: 13.34,
                           fontFamily: 'Segoe UI',
@@ -257,8 +256,8 @@ class EarningsView extends StatelessWidget {
                       Text(
                         'Day 14 of No Contact. It was really hard today today, I almost texted him when I saw his favorite song playing. But I stayed strong!',
                         textAlign: TextAlign.justify,
-                        style: TextStyle(
-                          color: const Color(0xFFD1D1D1),
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: AppColors.coachColorFFD1D1D1,
                           fontSize: 10,
                           fontFamily: 'Segoe UI',
                           fontWeight: FontWeight.w400,
@@ -268,14 +267,14 @@ class EarningsView extends StatelessWidget {
                       ElevatedButton(
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF354C30),
+                          backgroundColor: AppColors.coachColorFF354C30,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(4.r),
                           ),
                         ),
-                        child: const Text(
+                        child: Text(
                           "View all Bids",
-                          style: TextStyle(color: Colors.white70),
+                          style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white70),
                         ),
                       ),
                     ],
@@ -304,7 +303,7 @@ class EarningsView extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment(1.00, -0.22),
           end: Alignment(0.47, 0.45),
-          colors: [const Color(0xFF22391E), const Color(0xFF192915)],
+          colors: [AppColors.coachColorFF22391E, AppColors.coachColorFF192915],
         ),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
       ),
@@ -322,7 +321,7 @@ class EarningsView extends StatelessWidget {
                 height: 18.r,
                 clipBehavior: Clip.antiAlias,
                 decoration: ShapeDecoration(
-                  color: const Color(0xFF253921),
+                  color: AppColors.coachColorFF253921,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(9.r),
                   ),
@@ -348,15 +347,15 @@ class EarningsView extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
       decoration: ShapeDecoration(
-        color: const Color(0xFF2C4728),
+        color: AppColors.coachColorFF2C4728,
         shape: RoundedRectangleBorder(
-          side: BorderSide(width: 0.50.r, color: const Color(0xFF42673C)),
+          side: BorderSide(width: 0.50.r, color: AppColors.coachColorFF42673C),
           borderRadius: BorderRadius.circular(12.r),
         ),
       ),
       child: Row(
         children: [
-          Text(text, style: const TextStyle(color: Colors.white, fontSize: 12)),
+          Text(text, style: TextStyle(color: Colors.white, fontSize: 12)),
           const Icon(
             Icons.keyboard_arrow_down,
             color: Colors.white54,
@@ -379,7 +378,7 @@ class EarningsView extends StatelessWidget {
         height: 68.h,
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
         decoration: ShapeDecoration(
-          color: const Color(0xFF22331F),
+          color: AppColors.defaultColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(4.r),
           ),
@@ -400,14 +399,14 @@ class EarningsView extends StatelessWidget {
                 children: [
                   Text(
                     name,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     dateTime,
-                    style: const TextStyle(color: Colors.white38, fontSize: 10),
+                    style: TextStyle(color: Colors.white38, fontSize: 10),
                   ),
                 ],
               ),
@@ -418,11 +417,11 @@ class EarningsView extends StatelessWidget {
               children: [
                 Text(
                   duration,
-                  style: const TextStyle(color: Colors.white38, fontSize: 10),
+                  style: TextStyle(color: Colors.white38, fontSize: 10),
                 ),
                 Text(
                   amount,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 18,

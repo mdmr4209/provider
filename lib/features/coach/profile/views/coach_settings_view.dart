@@ -1,3 +1,4 @@
+import 'package:newproject/core/theme/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,6 +14,7 @@ import 'manage_availability_view.dart';
 import 'follow_up_setup_view.dart';
 import 'total_earnings_view.dart';
 import '../../../../routes/app_router.dart';
+import '../../../../core/constants/app_colors.dart';
 
 class CoachSettingsView extends StatelessWidget {
   const CoachSettingsView({super.key});
@@ -42,7 +44,7 @@ class CoachSettingsView extends StatelessWidget {
                 children: [
                   SizedBox(height: 20.h),
                   _buildSectionHeader("Account"),
-                  _buildSettingsTile(
+                  _buildSettingsTile(context, 
                     Icons.person_outline,
                     "Personal Information",
                     () {
@@ -54,22 +56,22 @@ class CoachSettingsView extends StatelessWidget {
                       );
                     },
                   ),
-                  _buildSettingsTile(
+                  _buildSettingsTile(context, 
                     Icons.account_balance_wallet_outlined,
                     "Payment Method",
                     () => context.push(AppRoutes.paymentMethod),
                   ),
-                  _buildSettingsTile(
+                  _buildSettingsTile(context, 
                     Icons.lock_outline,
                     "Change Password",
                     () => context.push(AppRoutes.resetPassword),
                   ),
-                  _buildSettingsTile(
+                  _buildSettingsTile(context, 
                     Icons.workspace_premium_outlined,
                     "Subscription Plan",
                     () => context.push(AppRoutes.subscriptionPlan),
                   ),
-                  _buildSettingsTile(Icons.access_time, "Set availability", () {
+                  _buildSettingsTile(context, Icons.access_time, "Set availability", () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -77,12 +79,12 @@ class CoachSettingsView extends StatelessWidget {
                       ),
                     );
                   }),
-                  _buildSettingsTile(
+                  _buildSettingsTile(context, 
                     Icons.balance_outlined,
                     "Credits Balance",
                     () => context.push(AppRoutes.points),
                   ),
-                  _buildSettingsTile(
+                  _buildSettingsTile(context, 
                     Icons.connect_without_contact_outlined,
                     "Follow Up Set up",
                     () {
@@ -94,12 +96,12 @@ class CoachSettingsView extends StatelessWidget {
                       );
                     },
                   ),
-                  _buildSettingsTile(
+                  _buildSettingsTile(context, 
                     Icons.block_outlined,
                     "Block List",
                     () => context.push(AppRoutes.blockList),
                   ),
-                  _buildSettingsTile(
+                  _buildSettingsTile(context, 
                     Icons.history_outlined,
                     "Total Earnings",
                     () {
@@ -114,7 +116,7 @@ class CoachSettingsView extends StatelessWidget {
 
                   SizedBox(height: 24.h),
                   _buildSectionHeader("Preferences"),
-                  _buildSettingsTile(
+                  _buildSettingsTile(context, 
                     Icons.palette_outlined,
                     "Theme & Appearance",
                     () => context.push(AppRoutes.theme),
@@ -123,12 +125,12 @@ class CoachSettingsView extends StatelessWidget {
 
                   SizedBox(height: 24.h),
                   _buildSectionHeader("Support"),
-                  _buildSettingsTile(
+                  _buildSettingsTile(context, 
                     Icons.help_outline,
                     "Help & Support",
                     () => context.push(AppRoutes.helpSupport),
                   ),
-                  _buildSettingsTile(Icons.logout, "Sign Out", () {
+                  _buildSettingsTile(context, Icons.logout, "Sign Out", () {
                     showDialog(
                       context: context,
                       builder: (context) => const Logout(),
@@ -137,7 +139,7 @@ class CoachSettingsView extends StatelessWidget {
 
                   SizedBox(height: 24.h),
                   _buildSectionHeader("Referral Link"),
-                  _buildReferralCard(referralLink),
+                  _buildReferralCard(context, referralLink),
 
                   SizedBox(height: 100.h),
                 ],
@@ -163,14 +165,14 @@ class CoachSettingsView extends StatelessWidget {
     );
   }
 
-  Widget _buildSettingsTile(IconData icon, String title, VoidCallback onTap) {
+  Widget _buildSettingsTile(context, IconData icon, String title, VoidCallback onTap) {
     return Container(
       height: 49.h,
       margin: EdgeInsets.only(bottom: 12.h),
       decoration: ShapeDecoration(
-        color: const Color(0xFF273B24),
+        color: AppColors.coachColorFF273B24,
         shape: RoundedRectangleBorder(
-          side: BorderSide(width: 0.50.r, color: const Color(0xFF354D31)),
+          side: BorderSide(width: 0.50.r, color: AppColors.coachColorFF354D31),
           borderRadius: BorderRadius.circular(8.r),
         ),
       ),
@@ -196,7 +198,7 @@ class CoachSettingsView extends StatelessWidget {
         return Container(
           padding: EdgeInsets.symmetric(vertical: 4.h),
           decoration: BoxDecoration(
-            color: const Color(0xFF2D3D2D),
+            color: Theme.of(context).extension<AppDesignSystem>()!.panelColor,
             borderRadius: BorderRadius.circular(12.r),
           ),
           child: ListTile(
@@ -205,15 +207,15 @@ class CoachSettingsView extends StatelessWidget {
               color: Colors.white70,
               size: 22,
             ),
-            title: const Text(
+            title: Text(
               "Notifications",
               style: TextStyle(color: Colors.white, fontSize: 14),
             ),
             trailing: Switch(
               value: notificationsEnabled,
               onChanged: (val) => setState(() => notificationsEnabled = val),
-              activeThumbColor: const Color(0xFFC19E5F),
-              activeTrackColor: const Color(0xFFC19E5F).withAlpha(100),
+              activeThumbColor: AppColors.coachColorFFC19E5F,
+              activeTrackColor: AppColors.coachColorFFC19E5F.withAlpha(100),
             ),
           ),
         );
@@ -221,11 +223,11 @@ class CoachSettingsView extends StatelessWidget {
     );
   }
 
-  Widget _buildReferralCard(String referralLink) {
+  Widget _buildReferralCard(BuildContext context, String referralLink) {
     return Container(
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: const Color(0xFF2D3D2D),
+        color: Theme.of(context).extension<AppDesignSystem>()!.panelColor,
         borderRadius: BorderRadius.circular(16.r),
       ),
       child: Column(
@@ -235,7 +237,7 @@ class CoachSettingsView extends StatelessWidget {
             children: [
               const Icon(Icons.help_outline, color: Colors.white38, size: 18),
               SizedBox(width: 12.w),
-              const Expanded(
+              Expanded(
                 child: Text(
                   "Personalized Profile Link",
                   style: TextStyle(color: Colors.white, fontSize: 14),

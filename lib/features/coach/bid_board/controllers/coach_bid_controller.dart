@@ -1,8 +1,10 @@
+import 'package:newproject/core/theme/design_system.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../core/utils/helpers/snack_bar_helper.dart';
 import '../models/coach_bid_model.dart';
+import '../../../../core/constants/app_colors.dart';
 
 class CoachBidController extends ChangeNotifier {
   bool _isLoading = false;
@@ -70,7 +72,7 @@ class CoachBidController extends ChangeNotifier {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF1B2B1B),
+        backgroundColor: Theme.of(context).extension<AppDesignSystem>()!.accentPanelColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -82,13 +84,13 @@ class CoachBidController extends ChangeNotifier {
                 onPressed: () => Navigator.pop(context),
               ),
             ),
-            const Text(
+            Text(
               'Are you sure about Bidding amount?',
               textAlign: TextAlign.center,
               style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500),
             ),
             const SizedBox(height: 8),
-            const Text(
+            Text(
               'You will be charged, if you win the Slot',
               textAlign: TextAlign.center,
               style: TextStyle(color: Colors.white54, fontSize: 13),
@@ -100,10 +102,10 @@ class CoachBidController extends ChangeNotifier {
                   child: ElevatedButton(
                     onPressed: () => Navigator.pop(context),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF4A5D4A),
+                      backgroundColor: AppColors.coachColorFF4A5D4A,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     ),
-                    child: const Text('No', style: TextStyle(color: Colors.white)),
+                    child: Text('No', style: TextStyle(color: Colors.white)),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -117,10 +119,10 @@ class CoachBidController extends ChangeNotifier {
                       notifyListeners();
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFC19E5F),
+                      backgroundColor: AppColors.coachColorFFC19E5F,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     ),
-                    child: const Text('Yes', style: TextStyle(color: Colors.white)),
+                    child: Text('Yes', style: TextStyle(color: Colors.white)),
                   ),
                 ),
               ],

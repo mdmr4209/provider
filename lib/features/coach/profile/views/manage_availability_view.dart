@@ -1,3 +1,4 @@
+import 'package:newproject/core/theme/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -7,12 +8,14 @@ import '../../../../core/widgets/background_widget.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_loader.dart';
 import '../controllers/coach_profile_controller.dart';
+import '../../../../core/constants/app_colors.dart';
 
 class ManageAvailabilityView extends StatelessWidget {
   const ManageAvailabilityView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final controller = context.watch<CoachProfileController>();
 
     return BackgroundWidget(
@@ -23,13 +26,13 @@ class ManageAvailabilityView extends StatelessWidget {
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.west, color: Color(0xFF5E7958), size: 24),
+            icon: const Icon(Icons.west, color: AppColors.coachColorFF5E7958, size: 24),
             onPressed: () => Navigator.pop(context),
           ),
-          title: const Text(
+          title: Text(
             'Manage availability',
-            style: TextStyle(
-              color: Color(0xFFF5F0E8),
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: AppColors.coachColorFFF5F0E8,
               fontSize: 16,
               fontFamily: 'Georgia',
               fontWeight: FontWeight.w400,
@@ -58,12 +61,12 @@ class ManageAvailabilityView extends StatelessWidget {
                           children: [
                             Text(
                               "On Days", 
-                              style: TextStyle(
+                              style: theme.textTheme.bodyMedium?.copyWith(
                                 color: controller.isOnDays ? Colors.white : Colors.white70, 
                                 fontWeight: controller.isOnDays ? FontWeight.bold : FontWeight.normal
                               )
                             ),
-                            if (controller.isOnDays) Container(margin: const EdgeInsets.only(top: 4), height: 2, width: 40, color: const Color(0xFFC19E5F)),
+                            if (controller.isOnDays) Container(margin: const EdgeInsets.only(top: 4), height: 2, width: 40, color: AppColors.coachColorFFC19E5F),
                           ],
                         ),
                       ),
@@ -75,12 +78,12 @@ class ManageAvailabilityView extends StatelessWidget {
                           children: [
                             Text(
                               "Off Days", 
-                              style: TextStyle(
+                              style: theme.textTheme.bodyMedium?.copyWith(
                                 color: !controller.isOnDays ? Colors.white : Colors.white70, 
                                 fontWeight: !controller.isOnDays ? FontWeight.bold : FontWeight.normal
                               )
                             ),
-                            if (!controller.isOnDays) Container(margin: const EdgeInsets.only(top: 4), height: 2, width: 45, color: const Color(0xFFC19E5F)),
+                            if (!controller.isOnDays) Container(margin: const EdgeInsets.only(top: 4), height: 2, width: 45, color: AppColors.coachColorFFC19E5F),
                           ],
                         ),
                       ),
@@ -107,14 +110,14 @@ class ManageAvailabilityView extends StatelessWidget {
         Container(
           padding: EdgeInsets.all(20.r),
           decoration: BoxDecoration(
-            color: const Color(0xFF2D3D2D).withAlpha(150),
+            color: Theme.of(context).extension<AppDesignSystem>()!.panelColor.withAlpha(150),
             borderRadius: BorderRadius.circular(16.r),
             border: Border.all(color: Colors.white10),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text("Days of Week", style: TextStyle(color: Colors.white70, fontSize: 13)),
+              Text("Days of Week", style: TextStyle(color: Colors.white70, fontSize: 13)),
               SizedBox(height: 8.h),
               _buildSelectionField(
                 context,
@@ -129,7 +132,7 @@ class ManageAvailabilityView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text("Start Time", style: TextStyle(color: Colors.white70, fontSize: 13)),
+                        Text("Start Time", style: TextStyle(color: Colors.white70, fontSize: 13)),
                         SizedBox(height: 8.h),
                         _buildSelectionField(
                           context,
@@ -146,7 +149,7 @@ class ManageAvailabilityView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text("End Time", style: TextStyle(color: Colors.white70, fontSize: 13)),
+                        Text("End Time", style: TextStyle(color: Colors.white70, fontSize: 13)),
                         SizedBox(height: 8.h),
                         _buildSelectionField(
                           context,
@@ -172,7 +175,7 @@ class ManageAvailabilityView extends StatelessWidget {
           ),
         ),
         SizedBox(height: 32.h),
-        const Text("Current Availability", style: TextStyle(color: Colors.white70, fontSize: 14)),
+        Text("Current Availability", style: TextStyle(color: Colors.white70, fontSize: 14)),
         SizedBox(height: 16.h),
         ...List.generate(controller.currentAvailability.length, (index) {
           final item = controller.currentAvailability[index];
@@ -189,7 +192,7 @@ class ManageAvailabilityView extends StatelessWidget {
         Container(
           padding: EdgeInsets.all(20.r),
           decoration: BoxDecoration(
-            color: const Color(0xFF2D3D2D).withAlpha(150),
+            color: Theme.of(context).extension<AppDesignSystem>()!.panelColor.withAlpha(150),
             borderRadius: BorderRadius.circular(16.r),
             border: Border.all(color: Colors.white10),
           ),
@@ -202,7 +205,7 @@ class ManageAvailabilityView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text("From", style: TextStyle(color: Colors.white70, fontSize: 13)),
+                        Text("From", style: TextStyle(color: Colors.white70, fontSize: 13)),
                         SizedBox(height: 8.h),
                         _buildSelectionField(
                           context,
@@ -218,7 +221,7 @@ class ManageAvailabilityView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text("Start Time", style: TextStyle(color: Colors.white70, fontSize: 13)),
+                        Text("Start Time", style: TextStyle(color: Colors.white70, fontSize: 13)),
                         SizedBox(height: 8.h),
                         _buildSelectionField(
                           context,
@@ -239,7 +242,7 @@ class ManageAvailabilityView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text("To", style: TextStyle(color: Colors.white70, fontSize: 13)),
+                        Text("To", style: TextStyle(color: Colors.white70, fontSize: 13)),
                         SizedBox(height: 8.h),
                         _buildSelectionField(
                           context,
@@ -255,7 +258,7 @@ class ManageAvailabilityView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text("End Time", style: TextStyle(color: Colors.white70, fontSize: 13)),
+                        Text("End Time", style: TextStyle(color: Colors.white70, fontSize: 13)),
                         SizedBox(height: 8.h),
                         _buildSelectionField(
                           context,
@@ -282,7 +285,7 @@ class ManageAvailabilityView extends StatelessWidget {
         ),
 
         SizedBox(height: 32.h),
-        const Text("Current Unavailability", style: TextStyle(color: Colors.white70, fontSize: 14)),
+        Text("Current Unavailability", style: TextStyle(color: Colors.white70, fontSize: 14)),
         SizedBox(height: 16.h),
 
         ...List.generate(controller.offDaysList.length, (index) {
@@ -299,7 +302,7 @@ class ManageAvailabilityView extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: isSmall ? 10.h : 14.h),
         decoration: BoxDecoration(
-          color: const Color(0xFF1F2E1F),
+          color: AppColors.coachColorFF1F2E1F,
           borderRadius: BorderRadius.circular(12.r),
         ),
         child: Row(
@@ -361,10 +364,10 @@ class ManageAvailabilityView extends StatelessWidget {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.dark(
-              primary: Color(0xFFC19E5F),
+            colorScheme: ColorScheme.dark(
+              primary: AppColors.coachColorFFC19E5F,
               onPrimary: Colors.white,
-              surface: Color(0xFF1B2B1B),
+              surface: Theme.of(context).extension<AppDesignSystem>()!.accentPanelColor,
               onSurface: Colors.white,
             ),
           ),
@@ -387,8 +390,8 @@ class ManageAvailabilityView extends StatelessWidget {
       context: context,
       backgroundColor: Colors.transparent,
       builder: (context) => Container(
-        decoration: const BoxDecoration(
-          color: Color(0xFF1B2B1B),
+        decoration: BoxDecoration(
+          color: Theme.of(context).extension<AppDesignSystem>()!.accentPanelColor,
           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         ),
         child: Column(
@@ -396,7 +399,7 @@ class ManageAvailabilityView extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Text(title, style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+              child: Text(title, style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
             ),
             const Divider(color: Colors.white10, height: 1),
             Flexible(
@@ -404,7 +407,7 @@ class ManageAvailabilityView extends StatelessWidget {
                 shrinkWrap: true,
                 itemCount: items.length,
                 itemBuilder: (context, index) => ListTile(
-                  title: Text(items[index], textAlign: TextAlign.center, style: const TextStyle(color: Colors.white70)),
+                  title: Text(items[index], textAlign: TextAlign.center, style: TextStyle(color: Colors.white70)),
                   onTap: () {
                     onSelect(items[index]);
                     Navigator.pop(context);
@@ -423,7 +426,7 @@ class ManageAvailabilityView extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 12.h),
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: const Color(0xFF2D3D2D).withAlpha(150),
+        color: Theme.of(context).extension<AppDesignSystem>()!.panelColor.withAlpha(150),
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: Row(
@@ -432,9 +435,9 @@ class ManageAvailabilityView extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(item.day, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15)),
+              Text(item.day, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15)),
               SizedBox(height: 4.h),
-              Text(item.timeRange, style: const TextStyle(color: Colors.white38, fontSize: 12)),
+              Text(item.timeRange, style: TextStyle(color: Colors.white38, fontSize: 12)),
             ],
           ),
           GestureDetector(
@@ -458,7 +461,7 @@ class ManageAvailabilityView extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 12.h),
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: const Color(0xFF2D3D2D).withAlpha(150),
+        color: Theme.of(context).extension<AppDesignSystem>()!.panelColor.withAlpha(150),
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: Row(
@@ -471,9 +474,9 @@ class ManageAvailabilityView extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text("Starts", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13)),
+                      Text("Starts", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13)),
                       SizedBox(height: 4.h),
-                      Text(item['start'] ?? '', style: const TextStyle(color: Colors.white70, fontSize: 12)),
+                      Text(item['start'] ?? '', style: TextStyle(color: Colors.white70, fontSize: 12)),
                     ],
                   ),
                 ),
@@ -482,9 +485,9 @@ class ManageAvailabilityView extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text("Ends", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13)),
+                      Text("Ends", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13)),
                       SizedBox(height: 4.h),
-                      Text(item['end'] ?? '', style: const TextStyle(color: Colors.white70, fontSize: 12)),
+                      Text(item['end'] ?? '', style: TextStyle(color: Colors.white70, fontSize: 12)),
                     ],
                   ),
                 ),
@@ -514,7 +517,7 @@ class ManageAvailabilityView extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF1B2B1B),
+        backgroundColor: Theme.of(context).extension<AppDesignSystem>()!.accentPanelColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -526,7 +529,7 @@ class ManageAvailabilityView extends StatelessWidget {
                 onPressed: () => Navigator.pop(context),
               ),
             ),
-            const Text(
+            Text(
               'Do you want to Delete this availability time?',
               textAlign: TextAlign.center,
               style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500),
@@ -538,10 +541,10 @@ class ManageAvailabilityView extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () => Navigator.pop(context),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF4A5D4A),
+                      backgroundColor: AppColors.coachColorFF4A5D4A,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     ),
-                    child: const Text('No', style: TextStyle(color: Colors.white)),
+                    child: Text('No', style: TextStyle(color: Colors.white)),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -552,10 +555,10 @@ class ManageAvailabilityView extends StatelessWidget {
                       Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFC19E5F),
+                      backgroundColor: AppColors.coachColorFFC19E5F,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     ),
-                    child: const Text('Yes', style: TextStyle(color: Colors.white)),
+                    child: Text('Yes', style: TextStyle(color: Colors.white)),
                   ),
                 ),
               ],
