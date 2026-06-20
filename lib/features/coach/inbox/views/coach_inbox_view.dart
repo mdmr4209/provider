@@ -12,6 +12,7 @@ import '../../../../core/widgets/background_widget.dart';
 import '../../../../core/widgets/custom_loader.dart';
 import '../controllers/coach_inbox_controller.dart';
 import '../../../../routes/app_router.dart';
+import 'coach_find_friends_view.dart';
 
 class CoachInboxView extends StatelessWidget {
   const CoachInboxView({super.key});
@@ -55,7 +56,32 @@ class CoachInboxView extends StatelessWidget {
                       const Spacer(),
                       _buildContextToggle(controller),
                       const Spacer(),
-                      _buildCreditsBadge(controller.credits),
+                      if (controller.selectedContext == 1)
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const CoachFindFriendsView(),
+                              ),
+                            );
+                          },
+                          child: Row(
+                            children: [
+                              Icon(Icons.add, color: const Color(0xFFC19E5F), size: 20),
+                              SizedBox(width: 4.w),
+                              Text(
+                                "Add",
+                                style: TextStyle(
+                                  color: const Color(0xFFC19E5F),
+                                  fontSize: 14.sp,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      else
+                        _buildCreditsBadge(controller.credits),
                     ],
                   ),
                 ),
@@ -133,40 +159,42 @@ class CoachInboxView extends StatelessWidget {
 
                                     SizedBox(height: 20.h),
 
-                                    // ── Tabs ───────────────────────────────────────────────────
-                                    TabBar(
-                                      isScrollable: true,
-                                      indicatorColor: Colors.transparent,
-                                      dividerColor: Colors.transparent,
-                                      tabAlignment: TabAlignment.start,
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 16.w,
+                                    if (controller.selectedContext == 0) ...[
+                                      // ── Tabs ───────────────────────────────────────────────────
+                                      TabBar(
+                                        isScrollable: true,
+                                        indicatorColor: Colors.transparent,
+                                        dividerColor: Colors.transparent,
+                                        tabAlignment: TabAlignment.start,
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 16.w,
+                                        ),
+                                        labelPadding: EdgeInsets.only(
+                                          right: 12.w,
+                                        ),
+                                        onTap: (index) =>
+                                            controller.setSelectedTab(index),
+                                        tabs: [
+                                          _buildTab("Messages", 0, controller),
+                                          _buildTab("Missed call", 1, controller),
+                                          _buildTab("Call Back", 2, controller),
+                                          _buildTab("Clients", 3, controller),
+                                        ],
                                       ),
-                                      labelPadding: EdgeInsets.only(
-                                        right: 12.w,
-                                      ),
-                                      onTap: (index) =>
-                                          controller.setSelectedTab(index),
-                                      tabs: [
-                                        _buildTab("Messages", 0, controller),
-                                        _buildTab("Missed call", 1, controller),
-                                        _buildTab("Call Back", 2, controller),
-                                        _buildTab("Clients", 3, controller),
-                                      ],
-                                    ),
 
-                                    SizedBox(height: 13.h),
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 16.w,
+                                      SizedBox(height: 13.h),
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 16.w,
+                                        ),
+                                        child: Divider(
+                                          height: .5,
+                                          thickness: .5,
+                                          color: Color(0xFF1D311A),
+                                        ),
                                       ),
-                                      child: Divider(
-                                        height: .5,
-                                        thickness: .5,
-                                        color: Color(0xFF1D311A),
-                                      ),
-                                    ),
-                                    SizedBox(height: 7.5.h),
+                                      SizedBox(height: 7.5.h),
+                                    ],
 
                                     // ── Content Area ────────────────────────────────────────────
                                     Padding(

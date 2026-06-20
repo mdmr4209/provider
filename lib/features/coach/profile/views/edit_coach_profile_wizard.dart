@@ -3,20 +3,35 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_assets.dart';
+import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/background_widget.dart';
 import '../../../../core/widgets/custom_button.dart';
+import '../../../../core/widgets/custom_input.dart';
 import '../../../../core/widgets/custom_loader.dart';
 import '../controllers/coach_profile_controller.dart';
 
-class EditCoachProfileWizard extends StatelessWidget {
+class EditCoachProfileWizard extends StatefulWidget {
   const EditCoachProfileWizard({super.key});
+
+  @override
+  State<EditCoachProfileWizard> createState() => _EditCoachProfileWizardState();
+}
+
+class _EditCoachProfileWizardState extends State<EditCoachProfileWizard> {
+  late Future<void> _initFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _initFuture = Future.delayed(const Duration(milliseconds: 1500));
+  }
 
   @override
   Widget build(BuildContext context) {
     final controller = context.watch<CoachProfileController>();
 
     return BackgroundWidget(
-      imagePath: AppAssets.bgHome,
+      imagePath: AppAssets.bgMain,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
@@ -42,14 +57,14 @@ class EditCoachProfileWizard extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(right: 16.w, top: 16.h),
               child: Text(
-                "${controller.wizardCurrentPage < 2 ? 1 : 2}/10",
+                "${controller.wizardCurrentPage + 1}/4",
                 style: const TextStyle(color: Color(0xFFC19E5F)),
               ),
             ),
           ],
         ),
         body: FutureBuilder(
-          future: Future.delayed(const Duration(milliseconds: 1500)),
+          future: _initFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return _buildSkeletonLoader();
@@ -372,22 +387,24 @@ class EditCoachProfileWizard extends StatelessWidget {
     String hint, {
     int maxLines = 1,
   }) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.w),
-      decoration: BoxDecoration(
-        color: const Color(0xFF2D3D2D),
-        borderRadius: BorderRadius.circular(12.r),
+    return CustomInput(
+      controller: controller,
+      height: maxLines == 1 ? 42 : null,
+      maxLines: maxLines,
+      hintText: hint,
+      fontSize: 14,
+      hintColor: AppColors.greyColor,
+      hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
+        color: AppColors.whiteColor.withAlpha(153),
+        fontSize: 14,
       ),
-      child: TextField(
-        controller: controller,
-        maxLines: maxLines,
-        style: const TextStyle(color: Colors.white),
-        decoration: InputDecoration(
-          hintText: hint,
-          hintStyle: const TextStyle(color: Colors.white24, fontSize: 14),
-          border: InputBorder.none,
-        ),
-      ),
+      shadow: true,
+      shadowColor: const Color(0xFF2E4429),
+      backgroundColor: const Color(0xFF21321E),
+      borderRadius: 12,
+      borderWidth: 0.50,
+      borderColor: const Color(0xFF334B2F),
+      contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: maxLines == 1 ? 0 : 12.h),
     );
   }
 
@@ -461,10 +478,14 @@ class EditCoachProfileWizard extends StatelessWidget {
                         return Switch(
                           value: controller.services[index].isActive,
                           onChanged: (v) {
-                            setState(() => controller.services[index].isActive = v);
+                            setState(
+                              () => controller.services[index].isActive = v,
+                            );
                           },
                           activeThumbColor: const Color(0xFFC19E5F),
-                          activeTrackColor: const Color(0xFFC19E5F).withAlpha(80),
+                          activeTrackColor: const Color(
+                            0xFFC19E5F,
+                          ).withAlpha(80),
                         );
                       },
                     ),

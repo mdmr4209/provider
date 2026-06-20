@@ -16,11 +16,10 @@ class ResetPasswordView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BackgroundWidget(
-      imagePath: AppAssets.bgMain,
-      child: Scaffold(
+    return  Scaffold(
+        backgroundColor: AppColors.backgroundColor,
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.backgroundColor,
           elevation: 0,
           leading: IconButton(
             icon: const Icon(Icons.west, color: Color(0xFF5E7958), size: 24),
@@ -55,7 +54,7 @@ class ResetPasswordView extends StatelessWidget {
                     height: 45,
                     child: CustomInput(
                       hintText: "Password",
-                      backgroundColor: Color(0x33384737),
+                      backgroundColor: AppColors.backgroundColor,
                       borderRadius: 12,
                       height: 43,
                       shadow: false,
@@ -73,7 +72,7 @@ class ResetPasswordView extends StatelessWidget {
                     height: 45,
                     child: CustomInput(
                       hintText: "Confirm Password",
-                      backgroundColor: Color(0x33384737),
+                      backgroundColor: AppColors.backgroundColor,
                       borderRadius: 12,
                       height: 43,
                       shadow: false,
@@ -91,7 +90,7 @@ class ResetPasswordView extends StatelessWidget {
                     height: 45,
                     child: CustomInput(
                       hintText: "Confirm Password",
-                      backgroundColor: Color(0x33384737),
+                      backgroundColor:AppColors.backgroundColor,
                       borderRadius: 12,
                       height: 43,
                       shadow: false,
@@ -114,8 +113,8 @@ class ResetPasswordView extends StatelessWidget {
             linearGradient: true,
           ),
         ),
-      ),
-    );
+      );
+    
   }
 
   Widget _buildLabel(String text) {
