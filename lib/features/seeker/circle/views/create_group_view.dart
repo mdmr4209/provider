@@ -15,12 +15,16 @@ class CreateGroupView extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: AppColors.whiteColor),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           "Create New Group",
-          style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.bold),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: AppColors.whiteColor,
+            fontSize: 18.sp,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         centerTitle: true,
       ),
@@ -29,21 +33,21 @@ class CreateGroupView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildFieldTitle("Group Name"),
+            _buildFieldTitle(context, "Group Name"),
             const CustomInput(
               hintText: "Enter here",
-              backgroundColor: Color(0xFF21321E),
-              borderColor: Color(0xFF334B2F),
+              backgroundColor: AppColors.coachColorFF21321E,
+              borderColor: AppColors.coachColorFF334B2F,
               borderRadius: 12,
             ),
             SizedBox(height: 20.h),
-            _buildFieldTitle("Group Logo"),
+            _buildFieldTitle(context, "Group Logo"),
             Container(
               padding: EdgeInsets.all(12.r),
               decoration: BoxDecoration(
-                color: const Color(0xFF21321E),
+                color: AppColors.coachColorFF21321E,
                 borderRadius: BorderRadius.circular(12.r),
-                border: Border.all(color: const Color(0xFF334B2F)),
+                border: Border.all(color: AppColors.coachColorFF334B2F),
               ),
               child: Row(
                 children: [
@@ -53,26 +57,29 @@ class CreateGroupView extends StatelessWidget {
                     width: 80,
                     height: 32,
                     fontSize: 12,
-                    buttonColor: const Color(0xFF334B2F),
+                    buttonColor: AppColors.coachColorFF334B2F,
                     borderColor: Colors.transparent,
                     radius: 8,
                   ),
                   SizedBox(width: 12.w),
                   Text(
                     "False Logo.jpeg",
-                    style: TextStyle(color: Colors.white.withAlpha(128), fontSize: 14.sp),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.whiteColor.withAlpha(128),
+                      fontSize: 14.sp,
+                    ),
                   ),
                 ],
               ),
             ),
             SizedBox(height: 20.h),
-            _buildFieldTitle("Group Instruction"),
+            _buildFieldTitle(context, "Group Instruction"),
             const CustomInput(
               hintText: "Share Your Thoughts",
               maxLines: 10,
               leadingIcon: AppAssets.feather,
-              backgroundColor: Color(0xFF21321E),
-              borderColor: Color(0xFF334B2F),
+              backgroundColor: AppColors.coachColorFF21321E,
+              borderColor: AppColors.coachColorFF334B2F,
               borderRadius: 24,
             ),
             const Spacer(),
@@ -88,12 +95,15 @@ class CreateGroupView extends StatelessWidget {
     );
   }
 
-  Widget _buildFieldTitle(String title) {
+  Widget _buildFieldTitle(BuildContext context, String title) {
     return Padding(
       padding: EdgeInsets.only(bottom: 8.h),
       child: Text(
         title,
-        style: TextStyle(color: Colors.white.withAlpha(200), fontSize: 14.sp),
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          color: AppColors.whiteColor.withAlpha(200),
+          fontSize: 14.sp,
+        ),
       ),
     );
   }

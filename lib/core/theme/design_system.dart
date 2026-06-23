@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../constants/app_colors.dart';
 
 @immutable
 class AppDesignSystem extends ThemeExtension<AppDesignSystem> {
@@ -23,8 +24,8 @@ class AppDesignSystem extends ThemeExtension<AppDesignSystem> {
   // ── Card / Container Colors ────────────────────────────────────────────────
   final Color cardFillColor;
   final Color cardBorderColor;
-  final Color cardFillMuted;      // lower alpha variant for saved-item cards
-  final Color cardBorderMuted;    // lower alpha variant for saved-item borders
+  final Color cardFillMuted; // lower alpha variant for saved-item cards
+  final Color cardBorderMuted; // lower alpha variant for saved-item borders
 
   // ── Coach Specific Panels ──────────────────────────────────────────────────
   final Color panelColor;
@@ -38,13 +39,13 @@ class AppDesignSystem extends ThemeExtension<AppDesignSystem> {
   final Color inputHintColor;
 
   // ── Tab Bar ────────────────────────────────────────────────────────────────
-  final Color tabActiveColor;
-  final Color tabInactiveColor;
+  final Color tabactiveThumbColor;
+  final Color tabInactiveThumbColor;
   final Color tabIndicatorColor;
 
   // ── Checkbox ───────────────────────────────────────────────────────────────
-  final Color checkboxActiveColor;
-  final Color checkboxInactiveColor;
+  final Color checkboxactiveThumbColor;
+  final Color checkboxInactiveThumbColor;
   final Color checkboxCheckColor;
 
   // ── Bottom Sheet ───────────────────────────────────────────────────────────
@@ -72,7 +73,7 @@ class AppDesignSystem extends ThemeExtension<AppDesignSystem> {
     this.progressBarGradient = const LinearGradient(
       begin: Alignment.centerLeft,
       end: Alignment.centerRight,
-      colors: [Color(0xFFAC823A), Color(0xFFF3D194)],
+      colors: [AppColors.buttonColor, AppColors.borderColor],
     ),
 
     // Glass
@@ -82,12 +83,12 @@ class AppDesignSystem extends ThemeExtension<AppDesignSystem> {
 
     // Shadows
     this.softShadow = const BoxShadow(
-      color: Color(0x14000000),
+      color: AppColors.color14000000,
       blurRadius: 10,
       offset: Offset(0, 4),
     ),
     this.deepShadow = const BoxShadow(
-      color: Color(0x3D000000),
+      color: AppColors.color3D000000,
       blurRadius: 20,
       offset: Offset(0, 10),
     ),
@@ -96,48 +97,47 @@ class AppDesignSystem extends ThemeExtension<AppDesignSystem> {
     this.navDuration = const Duration(milliseconds: 400),
 
     // Card / Container  (buttonColor4 + buttonBorderColor4 from AppColors)
-    this.cardFillColor = const Color(0xBA384737),
-    this.cardBorderColor = const Color(0x66EBEBEB),
-    this.cardFillMuted = const Color(0x4D384737),     // ~30 alpha
-    this.cardBorderMuted = const Color(0x4DEBEBEB),    // ~30 alpha
-
+    this.cardFillColor = AppColors.buttonColor4,
+    this.cardBorderColor = AppColors.inputBorderColor,
+    this.cardFillMuted = AppColors.color4D384737, // ~30 alpha
+    this.cardBorderMuted = AppColors.color4DEBEBEB, // ~30 alpha
     // Coach Specific Panels
-    this.panelColor = const Color(0xFF2D3D2D),
-    this.accentPanelColor = const Color(0xFF1B2B1B),
+    this.panelColor = AppColors.colorFF2D3D2D,
+    this.accentPanelColor = AppColors.colorFF1B2B1B,
 
     // Input
-    this.inputFillColor = const Color(0xFF21321E),
-    this.inputBorderColor = const Color(0xFF334B2F),
-    this.inputFocusBorderColor = const Color(0xFFC9A84C),
-    this.inputShadowColor = const Color(0xFF2E4429),
-    this.inputHintColor = const Color(0xFF828282),
+    this.inputFillColor = AppColors.colorFF21321E,
+    this.inputBorderColor = AppColors.colorFF334B2F,
+    this.inputFocusBorderColor = AppColors.iconColor,
+    this.inputShadowColor = AppColors.colorFF2E4429,
+    this.inputHintColor = AppColors.greyColor,
 
     // Tab Bar
-    this.tabActiveColor = const Color(0xFFC9A84C),
-    this.tabInactiveColor = const Color(0x96DAE0DA),   // textColor alpha 150
-    this.tabIndicatorColor = const Color(0xFFC9A84C),
+    this.tabactiveThumbColor = AppColors.iconColor,
+    this.tabInactiveThumbColor = AppColors.color96DAE0DA, // textColor alpha 150
+    this.tabIndicatorColor = AppColors.iconColor,
 
     // Checkbox
-    this.checkboxActiveColor = const Color(0xFFC9A84C),
-    this.checkboxInactiveColor = const Color(0x66EBEBEB),
-    this.checkboxCheckColor = const Color(0xFF2D3D2A),
+    this.checkboxactiveThumbColor = AppColors.iconColor,
+    this.checkboxInactiveThumbColor = AppColors.inputBorderColor,
+    this.checkboxCheckColor = AppColors.backgroundColor,
 
     // Bottom Sheet
-    this.bottomSheetBackground = const Color(0xFF20341F),
-    this.bottomSheetDivider = const Color(0x64C7C7C7),
-    this.bottomSheetSelectedItem = const Color(0xFFC9A84C),
+    this.bottomSheetBackground = AppColors.popupBackgroundColor,
+    this.bottomSheetDivider = AppColors.color64C7C7C7,
+    this.bottomSheetSelectedItem = AppColors.iconColor,
 
     // Upload / Chip
-    this.uploadPillColor = const Color(0xFF434928),
-    this.addChipFillColor = const Color(0xBA384737),
-    this.addChipBorderColor = const Color(0x66EBEBEB),
+    this.uploadPillColor = AppColors.buttonColor3,
+    this.addChipFillColor = AppColors.buttonColor4,
+    this.addChipBorderColor = AppColors.inputBorderColor,
 
     // Celebration
-    this.badgeGlowColor = const Color(0x1EC9A84C),    // alpha ~30
-    this.badgeSolidColor = const Color(0xFFC9A84C),
+    this.badgeGlowColor = AppColors.color1EC9A84C, // alpha ~30
+    this.badgeSolidColor = AppColors.iconColor,
 
     // Status Bar
-    this.statusBarColor = const Color(0xFF111B10),
+    this.statusBarColor = AppColors.colorFF111B10,
   });
 
   @override
@@ -163,11 +163,11 @@ class AppDesignSystem extends ThemeExtension<AppDesignSystem> {
     Color? inputFocusBorderColor,
     Color? inputShadowColor,
     Color? inputHintColor,
-    Color? tabActiveColor,
-    Color? tabInactiveColor,
+    Color? tabactiveThumbColor,
+    Color? tabInactiveThumbColor,
     Color? tabIndicatorColor,
-    Color? checkboxActiveColor,
-    Color? checkboxInactiveColor,
+    Color? checkboxactiveThumbColor,
+    Color? checkboxInactiveThumbColor,
     Color? checkboxCheckColor,
     Color? bottomSheetBackground,
     Color? bottomSheetDivider,
@@ -198,18 +198,24 @@ class AppDesignSystem extends ThemeExtension<AppDesignSystem> {
       accentPanelColor: accentPanelColor ?? this.accentPanelColor,
       inputFillColor: inputFillColor ?? this.inputFillColor,
       inputBorderColor: inputBorderColor ?? this.inputBorderColor,
-      inputFocusBorderColor: inputFocusBorderColor ?? this.inputFocusBorderColor,
+      inputFocusBorderColor:
+          inputFocusBorderColor ?? this.inputFocusBorderColor,
       inputShadowColor: inputShadowColor ?? this.inputShadowColor,
       inputHintColor: inputHintColor ?? this.inputHintColor,
-      tabActiveColor: tabActiveColor ?? this.tabActiveColor,
-      tabInactiveColor: tabInactiveColor ?? this.tabInactiveColor,
+      tabactiveThumbColor: tabactiveThumbColor ?? this.tabactiveThumbColor,
+      tabInactiveThumbColor:
+          tabInactiveThumbColor ?? this.tabInactiveThumbColor,
       tabIndicatorColor: tabIndicatorColor ?? this.tabIndicatorColor,
-      checkboxActiveColor: checkboxActiveColor ?? this.checkboxActiveColor,
-      checkboxInactiveColor: checkboxInactiveColor ?? this.checkboxInactiveColor,
+      checkboxactiveThumbColor:
+          checkboxactiveThumbColor ?? this.checkboxactiveThumbColor,
+      checkboxInactiveThumbColor:
+          checkboxInactiveThumbColor ?? this.checkboxInactiveThumbColor,
       checkboxCheckColor: checkboxCheckColor ?? this.checkboxCheckColor,
-      bottomSheetBackground: bottomSheetBackground ?? this.bottomSheetBackground,
+      bottomSheetBackground:
+          bottomSheetBackground ?? this.bottomSheetBackground,
       bottomSheetDivider: bottomSheetDivider ?? this.bottomSheetDivider,
-      bottomSheetSelectedItem: bottomSheetSelectedItem ?? this.bottomSheetSelectedItem,
+      bottomSheetSelectedItem:
+          bottomSheetSelectedItem ?? this.bottomSheetSelectedItem,
       uploadPillColor: uploadPillColor ?? this.uploadPillColor,
       addChipFillColor: addChipFillColor ?? this.addChipFillColor,
       addChipBorderColor: addChipBorderColor ?? this.addChipBorderColor,
@@ -224,15 +230,31 @@ class AppDesignSystem extends ThemeExtension<AppDesignSystem> {
     if (other is! AppDesignSystem) return this;
     return AppDesignSystem(
       // Gradients
-      primaryGradient: LinearGradient.lerp(primaryGradient, other.primaryGradient, t)!,
-      secondaryGradient: LinearGradient.lerp(secondaryGradient, other.secondaryGradient, t)!,
+      primaryGradient: LinearGradient.lerp(
+        primaryGradient,
+        other.primaryGradient,
+        t,
+      )!,
+      secondaryGradient: LinearGradient.lerp(
+        secondaryGradient,
+        other.secondaryGradient,
+        t,
+      )!,
       deepGradient: LinearGradient.lerp(deepGradient, other.deepGradient, t)!,
-      progressBarGradient: LinearGradient.lerp(progressBarGradient, other.progressBarGradient, t)!,
+      progressBarGradient: LinearGradient.lerp(
+        progressBarGradient,
+        other.progressBarGradient,
+        t,
+      )!,
 
       // Glass
       glassBlur: _lerpDouble(glassBlur, other.glassBlur, t),
       glassOpacity: _lerpDouble(glassOpacity, other.glassOpacity, t),
-      glassBorderOpacity: _lerpDouble(glassBorderOpacity, other.glassBorderOpacity, t),
+      glassBorderOpacity: _lerpDouble(
+        glassBorderOpacity,
+        other.glassBorderOpacity,
+        t,
+      ),
 
       // Shadows
       softShadow: BoxShadow.lerp(softShadow, other.softShadow, t)!,
@@ -247,24 +269,84 @@ class AppDesignSystem extends ThemeExtension<AppDesignSystem> {
       cardFillMuted: Color.lerp(cardFillMuted, other.cardFillMuted, t)!,
       cardBorderMuted: Color.lerp(cardBorderMuted, other.cardBorderMuted, t)!,
       panelColor: Color.lerp(panelColor, other.panelColor, t)!,
-      accentPanelColor: Color.lerp(accentPanelColor, other.accentPanelColor, t)!,
+      accentPanelColor: Color.lerp(
+        accentPanelColor,
+        other.accentPanelColor,
+        t,
+      )!,
       inputFillColor: Color.lerp(inputFillColor, other.inputFillColor, t)!,
-      inputBorderColor: Color.lerp(inputBorderColor, other.inputBorderColor, t)!,
-      inputFocusBorderColor: Color.lerp(inputFocusBorderColor, other.inputFocusBorderColor, t)!,
-      inputShadowColor: Color.lerp(inputShadowColor, other.inputShadowColor, t)!,
+      inputBorderColor: Color.lerp(
+        inputBorderColor,
+        other.inputBorderColor,
+        t,
+      )!,
+      inputFocusBorderColor: Color.lerp(
+        inputFocusBorderColor,
+        other.inputFocusBorderColor,
+        t,
+      )!,
+      inputShadowColor: Color.lerp(
+        inputShadowColor,
+        other.inputShadowColor,
+        t,
+      )!,
       inputHintColor: Color.lerp(inputHintColor, other.inputHintColor, t)!,
-      tabActiveColor: Color.lerp(tabActiveColor, other.tabActiveColor, t)!,
-      tabInactiveColor: Color.lerp(tabInactiveColor, other.tabInactiveColor, t)!,
-      tabIndicatorColor: Color.lerp(tabIndicatorColor, other.tabIndicatorColor, t)!,
-      checkboxActiveColor: Color.lerp(checkboxActiveColor, other.checkboxActiveColor, t)!,
-      checkboxInactiveColor: Color.lerp(checkboxInactiveColor, other.checkboxInactiveColor, t)!,
-      checkboxCheckColor: Color.lerp(checkboxCheckColor, other.checkboxCheckColor, t)!,
-      bottomSheetBackground: Color.lerp(bottomSheetBackground, other.bottomSheetBackground, t)!,
-      bottomSheetDivider: Color.lerp(bottomSheetDivider, other.bottomSheetDivider, t)!,
-      bottomSheetSelectedItem: Color.lerp(bottomSheetSelectedItem, other.bottomSheetSelectedItem, t)!,
+      tabactiveThumbColor: Color.lerp(
+        tabactiveThumbColor,
+        other.tabactiveThumbColor,
+        t,
+      )!,
+      tabInactiveThumbColor: Color.lerp(
+        tabInactiveThumbColor,
+        other.tabInactiveThumbColor,
+        t,
+      )!,
+      tabIndicatorColor: Color.lerp(
+        tabIndicatorColor,
+        other.tabIndicatorColor,
+        t,
+      )!,
+      checkboxactiveThumbColor: Color.lerp(
+        checkboxactiveThumbColor,
+        other.checkboxactiveThumbColor,
+        t,
+      )!,
+      checkboxInactiveThumbColor: Color.lerp(
+        checkboxInactiveThumbColor,
+        other.checkboxInactiveThumbColor,
+        t,
+      )!,
+      checkboxCheckColor: Color.lerp(
+        checkboxCheckColor,
+        other.checkboxCheckColor,
+        t,
+      )!,
+      bottomSheetBackground: Color.lerp(
+        bottomSheetBackground,
+        other.bottomSheetBackground,
+        t,
+      )!,
+      bottomSheetDivider: Color.lerp(
+        bottomSheetDivider,
+        other.bottomSheetDivider,
+        t,
+      )!,
+      bottomSheetSelectedItem: Color.lerp(
+        bottomSheetSelectedItem,
+        other.bottomSheetSelectedItem,
+        t,
+      )!,
       uploadPillColor: Color.lerp(uploadPillColor, other.uploadPillColor, t)!,
-      addChipFillColor: Color.lerp(addChipFillColor, other.addChipFillColor, t)!,
-      addChipBorderColor: Color.lerp(addChipBorderColor, other.addChipBorderColor, t)!,
+      addChipFillColor: Color.lerp(
+        addChipFillColor,
+        other.addChipFillColor,
+        t,
+      )!,
+      addChipBorderColor: Color.lerp(
+        addChipBorderColor,
+        other.addChipBorderColor,
+        t,
+      )!,
       badgeGlowColor: Color.lerp(badgeGlowColor, other.badgeGlowColor, t)!,
       badgeSolidColor: Color.lerp(badgeSolidColor, other.badgeSolidColor, t)!,
       statusBarColor: Color.lerp(statusBarColor, other.statusBarColor, t)!,

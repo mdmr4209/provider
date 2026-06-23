@@ -15,13 +15,17 @@ class SubscriptionPlanView extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.west, color: Color(0xFF5E7958), size: 24),
+          icon: const Icon(
+            Icons.west,
+            color: AppColors.coachColorFF5E7958,
+            size: 24,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           'Choose Plan',
-          style: TextStyle(
-            color: const Color(0xFFF5F0E8),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: AppColors.coachColorFFF5F0E8,
             fontSize: 16,
             fontFamily: 'Georgia',
             fontWeight: FontWeight.w400,
@@ -37,6 +41,7 @@ class SubscriptionPlanView extends StatelessWidget {
             child: Column(
               children: [
                 _buildPlanCard(
+                  context,
                   index: 0,
                   title: "Essential",
                   price: "\$14.99",
@@ -47,6 +52,7 @@ class SubscriptionPlanView extends StatelessWidget {
                 ),
                 SizedBox(height: 16.h),
                 _buildPlanCard(
+                  context,
                   index: 1,
                   title: "Professional",
                   price: "\$49.00",
@@ -56,6 +62,7 @@ class SubscriptionPlanView extends StatelessWidget {
                 ),
                 SizedBox(height: 16.h),
                 _buildPlanCard(
+                  context,
                   index: 2,
                   title: "Elite",
                   price: "\$125.0",
@@ -82,7 +89,8 @@ class SubscriptionPlanView extends StatelessWidget {
     );
   }
 
-  Widget _buildPlanCard({
+  Widget _buildPlanCard(
+    BuildContext context, {
     required int index,
     required String title,
     required String price,
@@ -96,10 +104,12 @@ class SubscriptionPlanView extends StatelessWidget {
       onTap: () => _selectedPlan.value = index,
       child: Container(
         decoration: BoxDecoration(
-          color: isSelected ? Colors.white.withAlpha(8) : Color(0xFF263523),
+          color: isSelected
+              ? AppColors.whiteColor.withAlpha(8)
+              : AppColors.coachColorFF263523,
           borderRadius: BorderRadius.circular(16.r),
           border: Border.all(
-            color: isSelected ? Colors.green : Colors.transparent,
+            color: isSelected ? AppColors.greenColor : Colors.transparent,
             width: 1.5.r,
           ),
         ),
@@ -115,7 +125,7 @@ class SubscriptionPlanView extends StatelessWidget {
                     vertical: 4.h,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.green.withAlpha(204),
+                    color: AppColors.greenColor.withAlpha(204),
                     borderRadius: BorderRadius.only(
                       topRight: Radius.circular(16.r),
                       bottomLeft: Radius.circular(8.r),
@@ -123,8 +133,8 @@ class SubscriptionPlanView extends StatelessWidget {
                   ),
                   child: Text(
                     "Most Popular",
-                    style: TextStyle(
-                      color: Colors.white,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.whiteColor,
                       fontSize: 10.sp,
                       fontWeight: FontWeight.bold,
                     ),
@@ -141,24 +151,24 @@ class SubscriptionPlanView extends StatelessWidget {
                       children: [
                         Text(
                           title,
-                          style: TextStyle(
-                            color: Colors.white.withAlpha(128),
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppColors.whiteColor.withAlpha(128),
                             fontSize: 14.sp,
                           ),
                         ),
                         SizedBox(height: 8.h),
                         Text(
                           price,
-                          style: TextStyle(
-                            color: Colors.white,
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppColors.whiteColor,
                             fontSize: 28.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(
                           "USD / month",
-                          style: TextStyle(
-                            color: Colors.white.withAlpha(102),
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppColors.whiteColor.withAlpha(102),
                             fontSize: 12.sp,
                           ),
                         ),
@@ -168,7 +178,7 @@ class SubscriptionPlanView extends StatelessWidget {
                   Container(
                     height: 60.h,
                     width: 1.r,
-                    color: Colors.white.withAlpha(26),
+                    color: AppColors.whiteColor.withAlpha(26),
                   ),
                   SizedBox(width: 20.w),
                   Expanded(
@@ -177,24 +187,24 @@ class SubscriptionPlanView extends StatelessWidget {
                       children: [
                         Text(
                           messages,
-                          style: TextStyle(
-                            color: Colors.white,
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppColors.whiteColor,
                             fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(
                           "Cold Start message",
-                          style: TextStyle(
-                            color: Colors.white.withAlpha(128),
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppColors.whiteColor.withAlpha(128),
                             fontSize: 12.sp,
                           ),
                         ),
                         SizedBox(height: 4.h),
                         Text(
                           groups,
-                          style: TextStyle(
-                            color: Colors.white.withAlpha(128),
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppColors.whiteColor.withAlpha(128),
                             fontSize: 12.sp,
                           ),
                         ),

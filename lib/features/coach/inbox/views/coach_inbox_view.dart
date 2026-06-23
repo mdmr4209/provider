@@ -54,7 +54,7 @@ class CoachInboxView extends StatelessWidget {
                         ),
                       ),
                       const Spacer(),
-                      _buildContextToggle(controller),
+                      _buildContextToggle(context, controller),
                       const Spacer(),
                       if (controller.selectedContext == 1)
                         GestureDetector(
@@ -81,7 +81,7 @@ class CoachInboxView extends StatelessWidget {
                           ),
                         )
                       else
-                        _buildCreditsBadge(controller.credits),
+                        _buildCreditsBadge(context, controller.credits),
                     ],
                   ),
                 ),
@@ -171,10 +171,10 @@ leadingIcon: AppAssets.search,
                                         onTap: (index) =>
                                             controller.setSelectedTab(index),
                                         tabs: [
-                                          _buildTab("Messages", 0, controller),
-                                          _buildTab("Missed call", 1, controller),
-                                          _buildTab("Call Back", 2, controller),
-                                          _buildTab("Clients", 3, controller),
+                                          _buildTab(context, "Messages", 0, controller),
+                                          _buildTab(context, "Missed call", 1, controller),
+                                          _buildTab(context, "Call Back", 2, controller),
+                                          _buildTab(context, "Clients", 3, controller),
                                         ],
                                       ),
 
@@ -228,7 +228,7 @@ leadingIcon: AppAssets.search,
     );
   }
 
-  Widget _buildContextToggle(CoachInboxController controller) {
+  Widget _buildContextToggle(BuildContext context, CoachInboxController controller) {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.coachColorFF182617,
@@ -237,15 +237,15 @@ leadingIcon: AppAssets.search,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _buildToggleItem("Clients", 0, controller),
-          _buildToggleItem("Friends", 1, controller),
+          _buildToggleItem(context, "Clients", 0, controller),
+          _buildToggleItem(context, "Friends", 1, controller),
         ],
       ),
     );
   }
 
   Widget _buildToggleItem(
-    String label,
+    BuildContext context, String label,
     int index,
     CoachInboxController controller,
   ) {
@@ -260,8 +260,8 @@ leadingIcon: AppAssets.search,
         ),
         child: Text(
           label,
-          style: TextStyle(
-            color: isSelected ? Colors.white : Colors.white54,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: isSelected ? AppColors.whiteColor : AppColors.white54Color,
             fontSize: 13.sp,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           ),
@@ -270,7 +270,7 @@ leadingIcon: AppAssets.search,
     );
   }
 
-  Widget _buildCreditsBadge(int credits) {
+  Widget _buildCreditsBadge(BuildContext context, int credits) {
     return Container(
       width: 80,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -287,7 +287,7 @@ leadingIcon: AppAssets.search,
         children: [
           Text(
             "$credits",
-            style: TextStyle(
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: AppColors.coachColorFFC19E5F,
               fontWeight: FontWeight.bold,
             ),
@@ -295,7 +295,7 @@ leadingIcon: AppAssets.search,
           SizedBox(width: 4.w),
           Text(
             "Credits",
-            style: TextStyle(color: Colors.white70, fontSize: 11),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white70Color, fontSize: 11),
           ),
         ],
       ),
@@ -311,14 +311,14 @@ leadingIcon: AppAssets.search,
         itemCount: controller.stories.length,
         itemBuilder: (context, index) {
           final story = controller.stories[index];
-          if (story.isMine) return _buildAddStory(story.name);
-          return _buildStoryItem(story.name, story.avatar);
+          if (story.isMine) return _buildAddStory(context, story.name);
+          return _buildStoryItem(context, story.name, story.avatar);
         },
       ),
     );
   }
 
-  Widget _buildAddStory(String name) {
+  Widget _buildAddStory(BuildContext context, String name) {
     return Container(
       width: 70.w,
       margin: EdgeInsets.only(right: 12.w),
@@ -328,8 +328,8 @@ leadingIcon: AppAssets.search,
             children: [
               CircleAvatar(
                 radius: 28.r,
-                backgroundColor: Colors.white.withAlpha(13),
-                child: const Icon(Icons.add, color: Colors.white, size: 24),
+                backgroundColor: AppColors.whiteColor.withAlpha(13),
+                child: const Icon(Icons.add, color: AppColors.whiteColor, size: 24),
               ),
               Positioned(
                 bottom: 0,
@@ -337,22 +337,22 @@ leadingIcon: AppAssets.search,
                 child: Container(
                   padding: const EdgeInsets.all(2),
                   decoration: const BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.whiteColor,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.add, size: 12, color: Colors.black),
+                  child: const Icon(Icons.add, size: 12, color: AppColors.blackColor),
                 ),
               ),
             ],
           ),
           SizedBox(height: 4.h),
-          Text(name, style: TextStyle(color: Colors.white, fontSize: 10)),
+          Text(name, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 10)),
         ],
       ),
     );
   }
 
-  Widget _buildStoryItem(String name, String avatar) {
+  Widget _buildStoryItem(BuildContext context, String name, String avatar) {
     return Container(
       width: 70.w,
       margin: EdgeInsets.only(right: 12.w),
@@ -372,7 +372,7 @@ leadingIcon: AppAssets.search,
           SizedBox(height: 4.h),
           Text(
             name,
-            style: TextStyle(color: Colors.white, fontSize: 10),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 10),
             overflow: TextOverflow.ellipsis,
           ),
         ],
@@ -380,7 +380,7 @@ leadingIcon: AppAssets.search,
     );
   }
 
-  Widget _buildTab(String label, int index, CoachInboxController controller) {
+  Widget _buildTab(BuildContext context, String label, int index, CoachInboxController controller) {
     final isSelected = controller.selectedTabIndex == index;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
@@ -396,8 +396,8 @@ leadingIcon: AppAssets.search,
       ),
       child: Text(
         label,
-        style: TextStyle(
-          color: isSelected ? Colors.white : Colors.white54,
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          color: isSelected ? AppColors.whiteColor : AppColors.white54Color,
           fontSize: 12.sp,
         ),
       ),
@@ -412,7 +412,7 @@ leadingIcon: AppAssets.search,
       case 0:
         return _buildMessagesList(context, controller);
       case 1:
-        return _buildMissedCallsList(controller);
+        return _buildMissedCallsList(context, controller);
       case 2:
         return _buildCallBackList(context, controller);
       case 3:
@@ -431,8 +431,8 @@ leadingIcon: AppAssets.search,
       children: [
         Text(
           "Chats List",
-          style: TextStyle(
-            color: Colors.white,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: AppColors.whiteColor,
             fontWeight: FontWeight.bold,
             fontSize: 16,
           ),
@@ -441,7 +441,7 @@ leadingIcon: AppAssets.search,
         if (controller.messages.isEmpty)
           Padding(
             padding: EdgeInsets.only(top: 20),
-            child: Text("No messages", style: TextStyle(color: Colors.white54)),
+            child: Text("No messages", style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white54Color)),
           )
         else
           ...controller.messages.map(
@@ -467,8 +467,8 @@ leadingIcon: AppAssets.search,
       children: [
         Text(
           "My Clients",
-          style: TextStyle(
-            color: Colors.white,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: AppColors.whiteColor,
             fontWeight: FontWeight.bold,
             fontSize: 16,
           ),
@@ -497,7 +497,7 @@ leadingIcon: AppAssets.search,
               Text(
                 'Day 14 of No Contact. It was really hard today today, I almost texted him when I saw his favorite song playing. But I stayed strong!',
                 textAlign: TextAlign.justify,
-                style: TextStyle(
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppColors.coachColorFFD1D1D1,
                   fontSize: 10,
                   fontFamily: 'Segoe UI',
@@ -523,7 +523,7 @@ leadingIcon: AppAssets.search,
         if (controller.clients.isEmpty)
           Padding(
             padding: EdgeInsets.only(top: 20),
-            child: Text("No clients", style: TextStyle(color: Colors.white54)),
+            child: Text("No clients", style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white54Color)),
           )
         else
           ...controller.clients.map(
@@ -571,14 +571,14 @@ leadingIcon: AppAssets.search,
                 children: [
                   Text(
                     name,
-                    style: TextStyle(
-                      color: Colors.white,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.whiteColor,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     status,
-                    style: TextStyle(
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: AppColors.coachColorFF81C784,
                       fontSize: 12,
                     ),
@@ -591,7 +591,7 @@ leadingIcon: AppAssets.search,
               children: [
                 Text(
                   time,
-                  style: TextStyle(color: Colors.white38, fontSize: 10),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white38Color, fontSize: 10),
                 ),
                 SizedBox(height: 4.h),
                 if (count != "0")
@@ -603,8 +603,8 @@ leadingIcon: AppAssets.search,
                     ),
                     child: Text(
                       count,
-                      style: TextStyle(
-                        color: Colors.white,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppColors.whiteColor,
                         fontSize: 10,
                         fontWeight: FontWeight.bold,
                       ),
@@ -618,14 +618,14 @@ leadingIcon: AppAssets.search,
     );
   }
 
-  Widget _buildMissedCallsList(CoachInboxController controller) {
+  Widget _buildMissedCallsList(BuildContext context, CoachInboxController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           "Missed Calls",
-          style: TextStyle(
-            color: Colors.white,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: AppColors.whiteColor,
             fontWeight: FontWeight.bold,
             fontSize: 16,
           ),
@@ -636,18 +636,18 @@ leadingIcon: AppAssets.search,
             padding: EdgeInsets.only(top: 20),
             child: Text(
               "No missed calls",
-              style: TextStyle(color: Colors.white54),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white54Color),
             ),
           )
         else
           ...controller.missedCalls.map(
-            (m) => _buildMissedCallTile(m.name, m.timeRequested, m.avatar),
+            (m) => _buildMissedCallTile(context, m.name, m.timeRequested, m.avatar),
           ),
       ],
     );
   }
 
-  Widget _buildMissedCallTile(String name, String time, String avatar) {
+  Widget _buildMissedCallTile(BuildContext context, String name, String time, String avatar) {
     return Container(
       margin: EdgeInsets.only(bottom: 12.h),
       padding: EdgeInsets.all(12.r),
@@ -665,8 +665,8 @@ leadingIcon: AppAssets.search,
               children: [
                 Text(
                   name,
-                  style: TextStyle(
-                    color: Colors.white,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.whiteColor,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -675,8 +675,8 @@ leadingIcon: AppAssets.search,
                     SvgPicture.asset(AppAssets.missedCall),
                     Text(
                       " $time",
-                      style: TextStyle(
-                        color: Colors.white38,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppColors.white38Color,
                         fontSize: 12,
                       ),
                     ),
@@ -713,8 +713,8 @@ leadingIcon: AppAssets.search,
       children: [
         Text(
           "Call Back Request List",
-          style: TextStyle(
-            color: Colors.white,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: AppColors.whiteColor,
             fontWeight: FontWeight.bold,
             fontSize: 16,
           ),
@@ -725,7 +725,7 @@ leadingIcon: AppAssets.search,
             padding: EdgeInsets.only(top: 20),
             child: Text(
               "No call back requests",
-              style: TextStyle(color: Colors.white54),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white54Color),
             ),
           )
         else
@@ -762,16 +762,16 @@ leadingIcon: AppAssets.search,
                   children: [
                     Text(
                       name,
-                      style: TextStyle(
-                        color: Colors.white,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppColors.whiteColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                       ),
                     ),
                     Text(
                       "Requested: $time",
-                      style: TextStyle(
-                        color: Colors.white38,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppColors.white38Color,
                         fontSize: 12,
                       ),
                     ),
@@ -819,7 +819,7 @@ leadingIcon: AppAssets.search,
                   radius: 8,
                   leadingWidget: const Icon(
                     Icons.call_outlined,
-                    color: Colors.white,
+                    color: AppColors.whiteColor,
                     size: 18,
                   ),
                 ),

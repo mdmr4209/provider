@@ -35,7 +35,7 @@ class BreathingView extends StatelessWidget {
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [Color(0xFF4A5D44), Color(0xFF22331F)],
+                  colors: [AppColors.coachColorFF4A5D44, AppColors.defaultColor],
                 ),
               ),
               child: SafeArea(
@@ -45,7 +45,7 @@ class BreathingView extends StatelessWidget {
                       alignment: Alignment.topLeft,
                       child: IconButton(
                         onPressed: () => context.pop(),
-                        icon: const Icon(Icons.close, color: Colors.white70),
+                        icon: const Icon(Icons.close, color: AppColors.white70Color),
                       ),
                     ),
                     const Spacer(flex: 1),
@@ -236,7 +236,7 @@ class BreathingController extends ChangeNotifier {
             color: AppColors.defaultColor,
             borderRadius: BorderRadius.circular(24.r),
             border: Border.all(
-              color: const Color(0xFFD4AF37).withAlpha(102),
+              color:  AppColors.coachColorFFD4AF37.withAlpha(102),
               width: 1.5,
             ),
           ),
@@ -248,8 +248,8 @@ class BreathingController extends ChangeNotifier {
               Text(
                 "We're still here to support you $name",
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.whiteColor,
                   fontSize: 22.sp,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Georgia',
@@ -259,8 +259,8 @@ class BreathingController extends ChangeNotifier {
               Text(
                 "Sorry you are not feeling any better, what is going on?",
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white.withAlpha(217),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.whiteColor.withAlpha(217),
                   fontSize: 14.sp,
                   fontFamily: 'Proxima Nova',
                 ),
@@ -268,12 +268,12 @@ class BreathingController extends ChangeNotifier {
               SizedBox(height: 20.h),
               TextField(
                 maxLines: 4,
-                style: const TextStyle(color: Colors.white),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor),
                 decoration: InputDecoration(
                   hintText: "Write here",
-                  hintStyle: TextStyle(color: Colors.white.withAlpha(102)),
+                  hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(102)),
                   filled: true,
-                  fillColor: Colors.black.withAlpha(51),
+                  fillColor: AppColors.blackColor.withAlpha(51),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.r),
                     borderSide: BorderSide.none,
@@ -310,7 +310,7 @@ class BreathingController extends ChangeNotifier {
             color: AppColors.defaultColor,
             borderRadius: BorderRadius.circular(24.r),
             border: Border.all(
-              color: const Color(0xFFD4AF37).withAlpha(102),
+              color:  AppColors.coachColorFFD4AF37.withAlpha(102),
               width: 1.5,
             ),
           ),
@@ -322,8 +322,8 @@ class BreathingController extends ChangeNotifier {
               Text(
                 "I am so sorry you feel this way",
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.whiteColor,
                   fontSize: 22.sp,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Georgia',
@@ -333,8 +333,8 @@ class BreathingController extends ChangeNotifier {
               Text(
                 "Would you like me to redirect you to one of our expert coaches, who can help you?",
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white.withAlpha(217),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.whiteColor.withAlpha(217),
                   fontSize: 14.sp,
                   fontFamily: 'Proxima Nova',
                 ),
@@ -350,13 +350,13 @@ class BreathingController extends ChangeNotifier {
                   padding: EdgeInsets.symmetric(vertical: 14.h),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12.r),
-                    border: Border.all(color: Colors.white.withAlpha(102)),
+                    border: Border.all(color: AppColors.whiteColor.withAlpha(102)),
                   ),
                   child: Text(
                     "Yes, Connect me with a coach",
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.whiteColor,
                       fontSize: 15.sp,
                       fontWeight: FontWeight.w600,
                     ),

@@ -4,11 +4,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_assets.dart';
+import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_loader.dart';
 import '../controllers/coach_bid_controller.dart';
 import 'buy_tickets_view.dart';
-import '../../../../core/constants/app_colors.dart';
 
 class RaffleDrawView extends StatelessWidget {
   const RaffleDrawView({super.key});
@@ -19,7 +19,7 @@ class RaffleDrawView extends StatelessWidget {
     final controller = context.watch<CoachBidController>();
 
     return Scaffold(
-appBar: AppBar(
+      appBar: AppBar(
         backgroundColor: AppColors.defaultColor,
         // These two lines prevent the color change / tinting when scrolling
         scrolledUnderElevation: 0,
@@ -31,7 +31,11 @@ appBar: AppBar(
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(24.r)),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.west, color: AppColors.coachColorFF5E7958, size: 24),
+          icon: const Icon(
+            Icons.west,
+            color: AppColors.coachColorFF5E7958,
+            size: 24,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
 
@@ -58,7 +62,9 @@ appBar: AppBar(
               children: [
                 SizedBox(height: 20.h),
                 // ── Top Banner (Raffle or Win) ───────────────────────────────
-                controller.hasWon ? _buildWinnerBanner() : _buildRaffleBanner(),
+                controller.hasWon
+                    ? _buildWinnerBanner(context)
+                    : _buildRaffleBanner(context),
 
                 SizedBox(height: 20.h),
 
@@ -70,7 +76,7 @@ appBar: AppBar(
                     child: Text(
                       "${index + 1}. Welcome to Ai. By using our services, you agree to abide by the terms and conditions outlined below. ",
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color: Colors.white54,
+                        color: AppColors.white54Color,
                         fontSize: 13,
                         height: 1.5,
                       ),
@@ -81,7 +87,7 @@ appBar: AppBar(
                 SizedBox(height: 25.h),
 
                 // ── Raffle Summary Card ──────────────────────────────────────
-                _buildSummaryCard(controller),
+                _buildSummaryCard(context, controller),
 
                 SizedBox(height: 25.h),
 
@@ -103,7 +109,7 @@ appBar: AppBar(
     );
   }
 
-  Widget _buildRaffleBanner() {
+  Widget _buildRaffleBanner(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
@@ -127,8 +133,8 @@ appBar: AppBar(
               children: [
                 Text(
                   "Daily Raffle",
-                  style: TextStyle(
-                    color: Colors.white,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.whiteColor,
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
                   ),
@@ -136,8 +142,8 @@ appBar: AppBar(
                 SizedBox(height: 4),
                 Text(
                   "Day 14 of No Contact. It was really hard today today, I almost texted him when I saw his favorite song playing. But I stayed strong!",
-                  style: TextStyle(
-                    color: Colors.white54,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.white54Color,
                     fontSize: 11,
                     height: 1.4,
                   ),
@@ -150,7 +156,7 @@ appBar: AppBar(
     );
   }
 
-  Widget _buildWinnerBanner() {
+  Widget _buildWinnerBanner(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
@@ -173,15 +179,18 @@ appBar: AppBar(
             children: [
               Text(
                 "Congratulations's",
-                style: TextStyle(
-                  color: Colors.white,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.whiteColor,
                   fontWeight: FontWeight.bold,
                   fontSize: 22,
                 ),
               ),
               Text(
                 "You Win the Spot 5",
-                style: TextStyle(color: Colors.white70, fontSize: 16),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.white70Color,
+                  fontSize: 16,
+                ),
               ),
             ],
           ),
@@ -190,7 +199,10 @@ appBar: AppBar(
     );
   }
 
-  Widget _buildSummaryCard(CoachBidController controller) {
+  Widget _buildSummaryCard(
+    BuildContext context,
+    CoachBidController controller,
+  ) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 12),
       decoration: ShapeDecoration(
@@ -202,8 +214,8 @@ appBar: AppBar(
           Text(
             'My Raffle Summary',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.white,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColors.whiteColor,
               fontSize: 14,
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w500,
@@ -215,13 +227,15 @@ appBar: AppBar(
             children: [
               Expanded(
                 child: _buildSummaryItem(
+                  context,
                   "My Ticket",
                   controller.myTickets.toString(),
                 ),
               ),
-              Container(width: 1, height: 40, color: Colors.white12),
+              Container(width: 1, height: 40, color: AppColors.white12Color),
               Expanded(
                 child: _buildSummaryItem(
+                  context,
                   "Total Coaches",
                   controller.totalCoaches.toString(),
                 ),
@@ -233,13 +247,13 @@ appBar: AppBar(
     );
   }
 
-  Widget _buildSummaryItem(String label, String value) {
+  Widget _buildSummaryItem(BuildContext context, String label, String value) {
     return Column(
       children: [
         Text(
           label,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: AppColors.coachColorFF868A85,
             fontSize: 10,
             fontFamily: 'Poppins',
@@ -259,8 +273,8 @@ appBar: AppBar(
             SizedBox(width: 8.w),
             Text(
               value,
-              style: TextStyle(
-                color: Colors.white,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.whiteColor,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),

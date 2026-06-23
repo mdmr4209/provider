@@ -113,14 +113,16 @@ class CallView extends StatelessWidget {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: const Color(0xFF438A3F),
+                                color: AppColors.coachColorFF438A3F,
                                 width: 3.r,
                               ),
                             ),
                             padding: EdgeInsets.all(4.r),
                             child: CircleAvatar(
                               backgroundImage: NetworkImage(avatar),
-                              backgroundColor: Colors.white.withAlpha(26),
+                              backgroundColor: AppColors.whiteColor.withAlpha(
+                                26,
+                              ),
                             ),
                           ),
                         ],
@@ -131,8 +133,8 @@ class CallView extends StatelessWidget {
                   // Name
                   Text(
                     name,
-                    style: TextStyle(
-                      color: Colors.white,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.whiteColor,
                       fontSize: 24.sp,
                       fontWeight: FontWeight.bold,
                     ),
@@ -142,8 +144,8 @@ class CallView extends StatelessWidget {
                   // Status
                   Text(
                     "Calling...",
-                    style: TextStyle(
-                      color: Colors.white.withAlpha(153),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.whiteColor.withAlpha(153),
                       fontSize: 14.sp,
                     ),
                   ),
@@ -152,8 +154,8 @@ class CallView extends StatelessWidget {
                   // Rate
                   Text(
                     rate,
-                    style: TextStyle(
-                      color: Colors.white.withAlpha(102),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.whiteColor.withAlpha(102),
                       fontSize: 14.sp,
                     ),
                   ),
@@ -163,8 +165,8 @@ class CallView extends StatelessWidget {
                   // Call Timer & Charges
                   Text(
                     _formatDuration(controller.secondsElapsed),
-                    style: TextStyle(
-                      color: Colors.white.withAlpha(102),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.whiteColor.withAlpha(102),
                       fontSize: 15.sp,
                       fontFamily: 'monospace',
                     ),
@@ -172,8 +174,8 @@ class CallView extends StatelessWidget {
                   SizedBox(height: 8.h),
                   Text(
                     "Total Charge: ${controller.totalCharge.toStringAsFixed(0)}\$",
-                    style: TextStyle(
-                      color: Colors.white.withAlpha(153),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.whiteColor.withAlpha(153),
                       fontSize: 15.sp,
                     ),
                   ),
@@ -220,12 +222,12 @@ class CallView extends StatelessWidget {
                             width: 50.r,
                             height: 50.r,
                             decoration: const BoxDecoration(
-                              color: Color(0xFFE55656),
+                              color: AppColors.coachColorFFE55656,
                               shape: BoxShape.circle,
                             ),
                             child: Icon(
                               Icons.call_end,
-                              color: Colors.white,
+                              color: AppColors.whiteColor,
                               size: 22.r,
                             ),
                           ),
@@ -239,7 +241,7 @@ class CallView extends StatelessWidget {
               ),
             ),
           );
-        }
+        },
       ),
     );
   }
@@ -256,12 +258,15 @@ class CallView extends StatelessWidget {
         height: 50.r,
         decoration: BoxDecoration(
           color: isActive
-              ? Colors.white.withAlpha(51)
-              : Colors.white.withAlpha(13),
+              ? AppColors.whiteColor.withAlpha(51)
+              : AppColors.whiteColor.withAlpha(13),
           shape: BoxShape.circle,
-          border: Border.all(color: Colors.white.withAlpha(26), width: 1.r),
+          border: Border.all(
+            color: AppColors.whiteColor.withAlpha(26),
+            width: 1.r,
+          ),
         ),
-        child: Icon(icon, color: Colors.white, size: 22.r),
+        child: Icon(icon, color: AppColors.whiteColor, size: 22.r),
       ),
     );
   }

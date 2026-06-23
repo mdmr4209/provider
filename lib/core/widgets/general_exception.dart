@@ -20,7 +20,7 @@ class GeneralExceptionWidget extends StatelessWidget {
             child: Center(
               child: Text(
                 'general_exception',
-                style: TextStyle(color: AppColors.deepred, fontSize: 20),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.deepred, fontSize: 20),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -40,7 +40,7 @@ class GeneralExceptionWidget extends StatelessWidget {
                   'Retry',
                   style: Theme.of(
                     context,
-                  ).textTheme.titleMedium!.copyWith(color: Colors.white),
+                  ).textTheme.titleMedium!.copyWith(color: AppColors.whiteColor),
                 ),
               ),
             ),

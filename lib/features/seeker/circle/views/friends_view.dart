@@ -39,7 +39,7 @@ class FriendsView extends StatelessWidget {
                   backgroundColor: Colors.transparent,
                   elevation: 0,
                   leading: IconButton(
-                    icon: const Icon(Icons.arrow_back, color: Colors.white),
+                    icon: const Icon(Icons.arrow_back, color: AppColors.whiteColor),
                     onPressed: () => Navigator.pop(context),
                   ),
                   title: Row(
@@ -57,7 +57,7 @@ class FriendsView extends StatelessWidget {
                       Text(
                         "Friends",
                         style: theme.textTheme.titleLarge?.copyWith(
-                          color: Colors.white,
+                          color: AppColors.whiteColor,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -79,15 +79,15 @@ class FriendsView extends StatelessWidget {
                               vertical: 4.h,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.white.withAlpha(13),
+                              color: AppColors.whiteColor.withAlpha(13),
                               borderRadius: BorderRadius.circular(20.r),
                             ),
                             child: Row(
                               children: [
                                 Text(
                                   "Add",
-                                  style: TextStyle(
-                                    color: Colors.white.withAlpha(204),
+                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: AppColors.whiteColor.withAlpha(204),
                                     fontSize: 13.sp,
                                   ),
                                 ),
@@ -116,7 +116,7 @@ class FriendsView extends StatelessWidget {
                             height: 48,
                             hintText: _getSearchHint(tabController.index),
                             leadingIcon: '',
-                            backgroundColor: Colors.white.withAlpha(13),
+                            backgroundColor: AppColors.whiteColor.withAlpha(13),
                             borderRadius: 24,
                             shadow: false,
                           ),
@@ -126,8 +126,8 @@ class FriendsView extends StatelessWidget {
                           isScrollable: true,
                           indicatorColor: AppColors.secondaryColorLight,
                           labelColor: AppColors.secondaryColorLight,
-                          unselectedLabelColor: Colors.white.withAlpha(128),
-                          dividerColor: Colors.white.withAlpha(13),
+                          unselectedLabelColor: AppColors.whiteColor.withAlpha(128),
+                          dividerColor: AppColors.whiteColor.withAlpha(13),
                           tabAlignment: TabAlignment.start,
                           padding: EdgeInsets.symmetric(horizontal: 16.w),
                           labelPadding: EdgeInsets.only(right: 24.w),
@@ -203,7 +203,7 @@ class FriendsView extends StatelessWidget {
                     Center(
                       child: Text(
                         "No friends found",
-                        style: TextStyle(color: Colors.white.withAlpha(128)),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(128)),
                       ),
                     ),
                   ],
@@ -246,7 +246,7 @@ class FriendsView extends StatelessWidget {
                     Center(
                       child: Text(
                         "No friend requests",
-                        style: TextStyle(color: Colors.white.withAlpha(128)),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(128)),
                       ),
                     ),
                   ],
@@ -289,7 +289,7 @@ class FriendsView extends StatelessWidget {
                     Center(
                       child: Text(
                         "No followers yet",
-                        style: TextStyle(color: Colors.white.withAlpha(128)),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(128)),
                       ),
                     ),
                   ],
@@ -332,7 +332,7 @@ class FriendsView extends StatelessWidget {
                     Center(
                       child: Text(
                         "Not following anyone",
-                        style: TextStyle(color: Colors.white.withAlpha(128)),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(128)),
                       ),
                     ),
                   ],
@@ -389,7 +389,7 @@ class _SocialTile extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.postCardColor,
           borderRadius: BorderRadius.circular(12.r),
-          border: Border.all(color: Colors.white.withAlpha(13)),
+          border: Border.all(color: AppColors.whiteColor.withAlpha(13)),
         ),
         child: Row(
           children: [
@@ -404,16 +404,16 @@ class _SocialTile extends StatelessWidget {
                 children: [
                   Text(
                     name,
-                    style: TextStyle(
-                      color: Colors.white,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.whiteColor,
                       fontSize: 15.sp,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     _getSubTitle(),
-                    style: TextStyle(
-                      color: Colors.white.withAlpha(128),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.whiteColor.withAlpha(128),
                       fontSize: 12.sp,
                     ),
                   ),
@@ -447,8 +447,8 @@ class _SocialTile extends StatelessWidget {
           children: [
             Text(
               data['lastActive'] ?? "09:30 PM",
-              style: TextStyle(
-                color: Colors.white.withAlpha(102),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.whiteColor.withAlpha(102),
                 fontSize: 11.sp,
               ),
             ),
@@ -456,10 +456,10 @@ class _SocialTile extends StatelessWidget {
               SizedBox(height: 4.h),
               CircleAvatar(
                 radius: 8.r,
-                backgroundColor: Colors.green,
+                backgroundColor: AppColors.greenColor,
                 child: Text(
                   unread.toString(),
-                  style: TextStyle(color: Colors.white, fontSize: 10.sp),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 10.sp),
                 ),
               ),
             ],
@@ -484,7 +484,7 @@ class _SocialTile extends StatelessWidget {
               width: 80,
               height: 32,
               fontSize: 12,
-              buttonColor: Colors.white.withAlpha(13),
+              buttonColor: AppColors.whiteColor.withAlpha(13),
               borderColor: Colors.transparent,
               radius: 8,
             ),
@@ -497,7 +497,7 @@ class _SocialTile extends StatelessWidget {
           width: 120,
           height: 32,
           fontSize: 12,
-          buttonColor: Colors.white.withAlpha(13),
+          buttonColor: AppColors.whiteColor.withAlpha(13),
           borderColor: Colors.transparent,
           radius: 8,
         );
@@ -508,7 +508,7 @@ class _SocialTile extends StatelessWidget {
           width: 100,
           height: 32,
           fontSize: 12,
-          buttonColor: Colors.white.withAlpha(13),
+          buttonColor: AppColors.whiteColor.withAlpha(13),
           borderColor: Colors.transparent,
           radius: 8,
         );

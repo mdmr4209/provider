@@ -1,0 +1,27 @@
+{
+  "milestones": [
+    {"label": "$3", "pts": "100 pts", "value": 100},
+    {"label": "$6", "pts": "200 pts", "value": 200},
+    {"label": "$8", "pts": "250 pts", "value": 250}
+  ],
+  "blockedUsers": [
+    {
+      "id": "b1",
+      "name": "Miles Esther",
+      "avatar": "https://i.pravatar.cc/150?u=miles",
+      "date": "12 April 2026"
+    },
+    {
+      "id": "b2",
+      "name": "Thomas stieve",
+      "avatar": "https://i.pravatar.cc/150?u=thomas",
+      "date": "10 April 2026"
+    },
+    {
+      "id": "b3",
+      "name": "Sarah Jenkins",
+      "avatar": "https://i.pravatar.cc/150?u=sarah",
+      "date": "08 April 2026"
+    }
+  ]
+}

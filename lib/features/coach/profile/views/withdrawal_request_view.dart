@@ -26,10 +26,10 @@ class WithdrawalRequestView extends StatelessWidget {
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.white70),
+            icon: const Icon(Icons.arrow_back, color: AppColors.white70Color),
             onPressed: () => Navigator.pop(context),
           ),
-          title: Text("Request Withdrawal", style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
+          title: Text("Request Withdrawal", style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontWeight: FontWeight.bold)),
           centerTitle: true,
         ),
         body: FutureBuilder(
@@ -43,12 +43,12 @@ class WithdrawalRequestView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildLabel("Card Holder Name"),
+              _buildLabel(context, "Card Holder Name"),
               _buildTextField(context, controller.cardHolderNameController, "Prabal Pratap Singh"),
               
               SizedBox(height: 24.h),
               
-              _buildLabel("Card Number"),
+              _buildLabel(context, "Card Number"),
               _buildTextField(context, controller.cardNumberController, "5296 7820 4820 9637"),
               
               SizedBox(height: 24.h),
@@ -59,7 +59,7 @@ class WithdrawalRequestView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildLabel("MM/YY"),
+                        _buildLabel(context, "MM/YY"),
                         _buildTextField(context, controller.expiryDateController, "12/24"),
                       ],
                     ),
@@ -69,7 +69,7 @@ class WithdrawalRequestView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildLabel("CVC"),
+                        _buildLabel(context, "CVC"),
                         _buildTextField(context, controller.cvcController, "****"),
                       ],
                     ),
@@ -79,7 +79,7 @@ class WithdrawalRequestView extends StatelessWidget {
               
               SizedBox(height: 24.h),
               
-              _buildLabel("Request Amount"),
+              _buildLabel(context, "Request Amount"),
               _buildTextField(context, controller.withdrawalAmountController, "Enter here"),
               
               SizedBox(height: 100.h),
@@ -104,10 +104,10 @@ class WithdrawalRequestView extends StatelessWidget {
     );
   }
 
-  Widget _buildLabel(String text) {
+  Widget _buildLabel(BuildContext context, String text) {
     return Padding(
       padding: EdgeInsets.only(bottom: 12.h, left: 4.w),
-      child: Text(text, style: TextStyle(color: Colors.white70, fontSize: 14.sp)),
+      child: Text(text, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white70Color, fontSize: 14.sp)),
     );
   }
 
@@ -120,10 +120,10 @@ class WithdrawalRequestView extends StatelessWidget {
       ),
       child: TextField(
         controller: controller,
-        style: TextStyle(color: Colors.white),
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor),
         decoration: InputDecoration(
           hintText: hint,
-          hintStyle: TextStyle(color: Colors.white24, fontSize: 14),
+          hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white24Color, fontSize: 14),
           border: InputBorder.none,
         ),
       ),

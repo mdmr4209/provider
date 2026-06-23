@@ -82,13 +82,16 @@ class ChatView extends StatelessWidget {
   void _showUpgradePopup(BuildContext context) {
     showDialog(
       context: context,
-      barrierColor: Colors.black.withAlpha(204),
+      barrierColor: AppColors.blackColor.withAlpha(204),
       builder: (context) {
         return Dialog(
           backgroundColor: AppColors.popupBackgroundColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(24.r),
-            side: BorderSide(color: AppColors.primaryColor.withAlpha(102), width: 1.5),
+            side: BorderSide(
+              color: AppColors.primaryColor.withAlpha(102),
+              width: 1.5,
+            ),
           ),
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
@@ -98,9 +101,9 @@ class ChatView extends StatelessWidget {
                 SizedBox(height: 10.h),
                 Text(
                   "Upgrade Your Plan",
-                  style: TextStyle(
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontFamily: 'Georgia',
-                    color: Colors.white,
+                    color: AppColors.whiteColor,
                     fontSize: 22.sp,
                     fontWeight: FontWeight.bold,
                   ),
@@ -109,8 +112,8 @@ class ChatView extends StatelessWidget {
                 Text(
                   "Add your payment details to call and connect with your coach",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white.withAlpha(204),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.whiteColor.withAlpha(204),
                     fontSize: 14.sp,
                     height: 1.5,
                   ),
@@ -133,14 +136,17 @@ class ChatView extends StatelessWidget {
                     width: double.infinity,
                     padding: EdgeInsets.symmetric(vertical: 12.h),
                     decoration: BoxDecoration(
-                      border: Border.all(color: AppColors.iconColor.withAlpha(102), width: 1.2),
+                      border: Border.all(
+                        color: AppColors.iconColor.withAlpha(102),
+                        width: 1.2,
+                      ),
                       borderRadius: BorderRadius.circular(8.r),
                     ),
                     child: Text(
                       "Later",
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppColors.whiteColor,
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
                       ),
@@ -159,13 +165,16 @@ class ChatView extends StatelessWidget {
   void _showUnavailablePopup(BuildContext context) {
     showDialog(
       context: context,
-      barrierColor: Colors.black.withAlpha(204),
+      barrierColor: AppColors.blackColor.withAlpha(204),
       builder: (context) {
         return Dialog(
           backgroundColor: AppColors.popupBackgroundColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(24.r),
-            side: BorderSide(color: AppColors.primaryColor.withAlpha(102), width: 1.5),
+            side: BorderSide(
+              color: AppColors.primaryColor.withAlpha(102),
+              width: 1.5,
+            ),
           ),
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
@@ -179,7 +188,11 @@ class ChatView extends StatelessWidget {
                       Stack(
                         alignment: Alignment.topRight,
                         children: [
-                          Icon(Icons.person_outline, size: 50.r, color: AppColors.iconColor),
+                          Icon(
+                            Icons.person_outline,
+                            size: 50.r,
+                            color: AppColors.iconColor,
+                          ),
                           Positioned(
                             right: 0,
                             top: 0,
@@ -189,7 +202,11 @@ class ChatView extends StatelessWidget {
                                 color: Colors.transparent,
                                 shape: BoxShape.circle,
                               ),
-                              child: Icon(Icons.cancel, size: 20.r, color: AppColors.iconColor),
+                              child: Icon(
+                                Icons.cancel,
+                                size: 20.r,
+                                color: AppColors.iconColor,
+                              ),
                             ),
                           ),
                         ],
@@ -205,9 +222,9 @@ class ChatView extends StatelessWidget {
                 SizedBox(height: 16.h),
                 Text(
                   "We Apologize",
-                  style: TextStyle(
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontFamily: 'Georgia',
-                    color: Colors.white,
+                    color: AppColors.whiteColor,
                     fontSize: 22.sp,
                     fontWeight: FontWeight.bold,
                   ),
@@ -216,8 +233,8 @@ class ChatView extends StatelessWidget {
                 Text(
                   '"Coach X is unavailable right now. Would you like to?"',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white.withAlpha(204),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.whiteColor.withAlpha(204),
                     fontSize: 14.sp,
                     fontStyle: FontStyle.italic,
                     height: 1.5,
@@ -244,14 +261,17 @@ class ChatView extends StatelessWidget {
                     width: double.infinity,
                     padding: EdgeInsets.symmetric(vertical: 12.h),
                     decoration: BoxDecoration(
-                      border: Border.all(color: AppColors.iconColor.withAlpha(102), width: 1.2),
+                      border: Border.all(
+                        color: AppColors.iconColor.withAlpha(102),
+                        width: 1.2,
+                      ),
                       borderRadius: BorderRadius.circular(8.r),
                     ),
                     child: Text(
                       "Schedule a Session",
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppColors.whiteColor,
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
                       ),
@@ -283,7 +303,9 @@ class ChatView extends StatelessWidget {
   Widget build(BuildContext context) {
     final inboxController = context.watch<InboxController>();
     final chatId = name == "Thomas stieve" ? "chat_002" : "chat_001";
-    final userId = name == "Miles Esther" ? "u1" : (name == "Thomas stieve" ? "u2" : "u3");
+    final userId = name == "Miles Esther"
+        ? "u1"
+        : (name == "Thomas stieve" ? "u2" : "u3");
 
     return ChangeNotifierProvider<ChatController>(
       create: (_) => ChatController(
@@ -298,19 +320,22 @@ class ChatView extends StatelessWidget {
             backgroundColor: AppColors.backgroundColor,
             appBar: AppBar(
               automaticallyImplyLeading: false,
-              backgroundColor: const Color(0xFF20341F),
+              backgroundColor: AppColors.popupBackgroundColor,
               elevation: 0,
               titleSpacing: 0,
               title: Row(
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.arrow_back, color: Colors.white),
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: AppColors.whiteColor,
+                    ),
                     onPressed: () => context.pop(),
                   ),
                   CircleAvatar(
                     radius: 18.r,
                     backgroundImage: NetworkImage(avatar),
-                    backgroundColor: Colors.white.withAlpha(26),
+                    backgroundColor: AppColors.whiteColor.withAlpha(26),
                   ),
                   SizedBox(width: 8.w),
                   Expanded(
@@ -320,16 +345,16 @@ class ChatView extends StatelessWidget {
                       children: [
                         Text(
                           name,
-                          style: TextStyle(
-                            color: Colors.white,
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppColors.whiteColor,
                             fontSize: 16.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(
                           "Online",
-                          style: TextStyle(
-                            color: Colors.white.withAlpha(153),
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppColors.whiteColor.withAlpha(153),
                             fontSize: 11.sp,
                           ),
                         ),
@@ -340,7 +365,11 @@ class ChatView extends StatelessWidget {
               ),
               actions: [
                 IconButton(
-                  icon: Icon(Icons.videocam_outlined, color: Colors.white, size: 24.r),
+                  icon: Icon(
+                    Icons.videocam_outlined,
+                    color: AppColors.whiteColor,
+                    size: 24.r,
+                  ),
                   onPressed: () {
                     if (isCoach) {
                       _showUpgradePopup(context);
@@ -350,7 +379,11 @@ class ChatView extends StatelessWidget {
                   },
                 ),
                 IconButton(
-                  icon: Icon(Icons.call_outlined, color: Colors.white, size: 22.r),
+                  icon: Icon(
+                    Icons.call_outlined,
+                    color: AppColors.whiteColor,
+                    size: 22.r,
+                  ),
                   onPressed: () {
                     if (isCoach) {
                       _showUnavailablePopup(context);
@@ -360,7 +393,11 @@ class ChatView extends StatelessWidget {
                   },
                 ),
                 PopupMenuButton<String>(
-                  icon: Icon(Icons.more_vert, color: Colors.white, size: 22.r),
+                  icon: Icon(
+                    Icons.more_vert,
+                    color: AppColors.whiteColor,
+                    size: 22.r,
+                  ),
                   color: AppColors.popupBackgroundColor,
                   shape: const TooltipShapeBorder(),
                   offset: Offset(0, 48.h),
@@ -369,7 +406,9 @@ class ChatView extends StatelessWidget {
                       if (isCoach) {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (_) => const CoachProfileView()),
+                          MaterialPageRoute(
+                            builder: (_) => const CoachProfileView(),
+                          ),
                         );
                       } else {
                         Navigator.push(
@@ -388,16 +427,31 @@ class ChatView extends StatelessWidget {
                     } else if (value == 'report') {
                       context.push(AppRoutes.reportToAdmin);
                     } else if (value == 'block') {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('$name blocked')),
-                      );
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text('$name blocked')));
                     }
                   },
                   itemBuilder: (context) => [
-                    _buildPopupMenuItem('profile', 'View Profile', Icons.visibility_outlined),
-                    _buildPopupMenuItem('review', 'Give a review', Icons.star_border),
-                    _buildPopupMenuItem('report', 'Report', Icons.insert_chart_outlined_outlined),
-                    _buildPopupMenuItem('block', 'Block', Icons.block_outlined),
+                    _buildPopupMenuItem(
+                      context,
+                      'profile',
+                      'View Profile',
+                      Icons.visibility_outlined,
+                    ),
+                    _buildPopupMenuItem(
+                      context,
+                      'review',
+                      'Give a review',
+                      Icons.star_border,
+                    ),
+                    _buildPopupMenuItem(
+                      context,
+                      'report',
+                      'Report',
+                      Icons.insert_chart_outlined_outlined,
+                    ),
+                    _buildPopupMenuItem(context, 'block', 'Block', Icons.block_outlined),
                   ],
                 ),
                 SizedBox(width: 8.w),
@@ -409,23 +463,39 @@ class ChatView extends StatelessWidget {
                   child: Stack(
                     children: [
                       RefreshIndicator(
-                        onRefresh: () => inboxController.fetchChatMessages(chatId, isRefresh: true),
+                        onRefresh: () => inboxController.fetchChatMessages(
+                          chatId,
+                          isRefresh: true,
+                        ),
                         color: Colors.transparent,
                         backgroundColor: Colors.transparent,
                         strokeWidth: 0,
                         elevation: 0,
-                        child: inboxController.isLoading && chat.messages.isEmpty
+                        child:
+                            inboxController.isLoading && chat.messages.isEmpty
                             ? const _ChatShimmer()
                             : ListView.builder(
                                 controller: chat.scrollController,
                                 physics: const AlwaysScrollableScrollPhysics(),
-                                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 16.w,
+                                  vertical: 12.h,
+                                ),
                                 itemCount: chat.messages.length,
                                 itemBuilder: (context, index) {
                                   final message = chat.messages[index];
                                   final isMe = message.isMe;
-                                  final showAvatar = !isMe && (index == chat.messages.length - 1 || chat.messages[index + 1].isMe == true || chat.messages[index + 1].sender != name);
-                                  final bool showDivider = index == 0 || chat.messages[index - 1].time != message.time;
+                                  final showAvatar =
+                                      !isMe &&
+                                      (index == chat.messages.length - 1 ||
+                                          chat.messages[index + 1].isMe ==
+                                              true ||
+                                          chat.messages[index + 1].sender !=
+                                              name);
+                                  final bool showDivider =
+                                      index == 0 ||
+                                      chat.messages[index - 1].time !=
+                                          message.time;
 
                                   return Column(
                                     children: [
@@ -433,34 +503,60 @@ class ChatView extends StatelessWidget {
                                         SizedBox(height: 16.h),
                                         Row(
                                           children: [
-                                            Expanded(child: Divider(color: Colors.white.withAlpha(26), thickness: 1)),
+                                            Expanded(
+                                              child: Divider(
+                                                color: AppColors.whiteColor
+                                                    .withAlpha(26),
+                                                thickness: 1,
+                                              ),
+                                            ),
                                             Padding(
-                                              padding: EdgeInsets.symmetric(horizontal: 16.w),
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 16.w,
+                                              ),
                                               child: Text(
                                                 message.time,
-                                                style: TextStyle(
-                                                  color: Colors.white.withAlpha(102),
+                                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                                  color: AppColors.whiteColor
+                                                      .withAlpha(102),
                                                   fontSize: 12.sp,
                                                 ),
                                               ),
                                             ),
-                                            Expanded(child: Divider(color: Colors.white.withAlpha(26), thickness: 1)),
+                                            Expanded(
+                                              child: Divider(
+                                                color: AppColors.whiteColor
+                                                    .withAlpha(26),
+                                                thickness: 1,
+                                              ),
+                                            ),
                                           ],
                                         ),
                                         SizedBox(height: 16.h),
                                       ],
                                       Padding(
-                                        padding: EdgeInsets.symmetric(vertical: 4.h),
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: 4.h,
+                                        ),
                                         child: Row(
-                                          mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
-                                          crossAxisAlignment: CrossAxisAlignment.end,
+                                          mainAxisAlignment: isMe
+                                              ? MainAxisAlignment.end
+                                              : MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
                                           children: [
                                             if (!isMe) ...[
                                               if (showAvatar)
                                                 CircleAvatar(
                                                   radius: 15.r,
-                                                  backgroundImage: NetworkImage(message.avatar.isNotEmpty ? message.avatar : avatar),
-                                                  backgroundColor: Colors.white.withAlpha(26),
+                                                  backgroundImage: NetworkImage(
+                                                    message.avatar.isNotEmpty
+                                                        ? message.avatar
+                                                        : avatar,
+                                                  ),
+                                                  backgroundColor: AppColors
+                                                      .whiteColor
+                                                      .withAlpha(26),
                                                 )
                                               else
                                                 SizedBox(width: 30.r),
@@ -468,22 +564,46 @@ class ChatView extends StatelessWidget {
                                             ],
                                             Flexible(
                                               child: Container(
-                                                padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
+                                                padding: EdgeInsets.symmetric(
+                                                  horizontal: 14.w,
+                                                  vertical: 10.h,
+                                                ),
                                                 decoration: BoxDecoration(
-                                                  color: isMe 
-                                                      ? const Color(0xFF1E331A)
-                                                      : Colors.white.withAlpha(26),
-                                                  borderRadius: BorderRadius.only(
-                                                    topLeft: Radius.circular(16.r),
-                                                    topRight: Radius.circular(16.r),
-                                                    bottomLeft: isMe ? Radius.circular(16.r) : Radius.circular(4.r),
-                                                    bottomRight: isMe ? Radius.circular(4.r) : Radius.circular(16.r),
-                                                  ),
+                                                  color: isMe
+                                                      ? AppColors
+                                                            .coachColorFF1E331A
+                                                      : AppColors.whiteColor
+                                                            .withAlpha(26),
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                        topLeft:
+                                                            Radius.circular(
+                                                              16.r,
+                                                            ),
+                                                        topRight:
+                                                            Radius.circular(
+                                                              16.r,
+                                                            ),
+                                                        bottomLeft: isMe
+                                                            ? Radius.circular(
+                                                                16.r,
+                                                              )
+                                                            : Radius.circular(
+                                                                4.r,
+                                                              ),
+                                                        bottomRight: isMe
+                                                            ? Radius.circular(
+                                                                4.r,
+                                                              )
+                                                            : Radius.circular(
+                                                                16.r,
+                                                              ),
+                                                      ),
                                                 ),
                                                 child: Text(
                                                   message.text,
-                                                  style: TextStyle(
-                                                    color: Colors.white,
+                                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                                    color: AppColors.whiteColor,
                                                     fontSize: 13.5.sp,
                                                     height: 1.4,
                                                   ),
@@ -516,25 +636,29 @@ class ChatView extends StatelessWidget {
                       Expanded(
                         child: Container(
                           decoration: BoxDecoration(
-                            color: Colors.white.withAlpha(13),
+                            color: AppColors.whiteColor.withAlpha(13),
                             borderRadius: BorderRadius.circular(24.r),
-                            border: Border.all(color: Colors.white.withAlpha(26)),
+                            border: Border.all(
+                              color: AppColors.whiteColor.withAlpha(26),
+                            ),
                           ),
                           padding: EdgeInsets.symmetric(horizontal: 16.w),
                           child: TextField(
                             controller: chat.messageController,
-                            style: const TextStyle(color: Colors.white),
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor),
                             cursorColor: AppColors.secondaryColorLight,
                             decoration: InputDecoration(
                               hintText: "Type here",
-                              hintStyle: TextStyle(
-                                color: Colors.white.withAlpha(102),
+                              hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                color: AppColors.whiteColor.withAlpha(102),
                                 fontSize: 14.sp,
                               ),
                               border: InputBorder.none,
                               enabledBorder: InputBorder.none,
                               focusedBorder: InputBorder.none,
-                              contentPadding: EdgeInsets.symmetric(vertical: 12.h),
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 12.h,
+                              ),
                             ),
                             onSubmitted: (_) => chat.sendMessage(),
                           ),
@@ -545,11 +669,11 @@ class ChatView extends StatelessWidget {
                         onTap: chat.sendMessage,
                         child: CircleAvatar(
                           radius: 22.r,
-                          backgroundColor: const Color(0xFF1E331A),
+                          backgroundColor: AppColors.coachColorFF1E331A,
                           child: SvgPicture.asset(
                             AppAssets.send,
                             colorFilter: const ColorFilter.mode(
-                              Colors.white,
+                              AppColors.whiteColor,
                               BlendMode.srcIn,
                             ),
                             width: 18.r,
@@ -567,19 +691,21 @@ class ChatView extends StatelessWidget {
     );
   }
 
-  PopupMenuItem<String> _buildPopupMenuItem(String value, String text, IconData icon) {
+  PopupMenuItem<String> _buildPopupMenuItem(
+    BuildContext context,
+    String value,
+    String text,
+    IconData icon,
+  ) {
     return PopupMenuItem(
       value: value,
       child: Row(
         children: [
-          Icon(icon, color: Colors.white.withAlpha(153), size: 20.r),
+          Icon(icon, color: AppColors.whiteColor.withAlpha(153), size: 20.r),
           SizedBox(width: 12.w),
           Text(
             text,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 14.sp,
-            ),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 14.sp),
           ),
         ],
       ),
@@ -614,13 +740,13 @@ class TooltipShapeBorder extends ShapeBorder {
     );
     final path = Path();
     path.addRRect(RRect.fromRectAndRadius(rect, Radius.circular(radius)));
-    
+
     final double x = rect.right - arrowOffset - arrowWidth;
     path.moveTo(x, rect.top);
     path.lineTo(x + arrowWidth / 2, rect.top - arrowHeight);
     path.lineTo(x + arrowWidth, rect.top);
     path.close();
-    
+
     return path;
   }
 
@@ -645,7 +771,9 @@ class _ChatShimmer extends StatelessWidget {
         return Padding(
           padding: EdgeInsets.symmetric(vertical: 8.h),
           child: Row(
-            mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+            mainAxisAlignment: isMe
+                ? MainAxisAlignment.end
+                : MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               if (!isMe) ...[

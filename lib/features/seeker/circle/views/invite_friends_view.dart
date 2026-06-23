@@ -24,12 +24,12 @@ class InviteFriendsView extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: AppColors.whiteColor),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           "Invite to Group",
-          style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.bold),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 18.sp, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),
@@ -44,7 +44,7 @@ class InviteFriendsView extends StatelessWidget {
                   height: 48,
                   hintText: "Search Friends",
                   leadingIcon: '',
-                  backgroundColor: Colors.white.withAlpha(13),
+                  backgroundColor: AppColors.whiteColor.withAlpha(13),
                   borderRadius: 24,
                   shadow: false,
                 ),
@@ -53,7 +53,7 @@ class InviteFriendsView extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                 child: Text(
                   "Suggestions",
-                  style: TextStyle(color: Colors.white.withAlpha(128), fontSize: 13.sp),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(128), fontSize: 13.sp),
                 ),
               ),
               Expanded(
@@ -86,7 +86,7 @@ class InviteFriendsView extends StatelessWidget {
                                       Center(
                                         child: Text(
                                           "No friends available to invite.",
-                                          style: TextStyle(color: Colors.white.withAlpha(128)),
+                                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(128)),
                                         ),
                                       ),
                                     ],
@@ -147,7 +147,7 @@ class _InviteTile extends StatelessWidget {
           Expanded(
             child: Text(
               name,
-              style: TextStyle(color: Colors.white, fontSize: 14.sp, fontWeight: FontWeight.w500),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 14.sp, fontWeight: FontWeight.w500),
             ),
           ),
           CustomButton(
@@ -156,7 +156,7 @@ class _InviteTile extends StatelessWidget {
             width: 80,
             height: 32,
             fontSize: 12,
-            buttonColor: Colors.white.withAlpha(13),
+            buttonColor: AppColors.whiteColor.withAlpha(13),
             borderColor: Colors.transparent,
             radius: 8,
           ),

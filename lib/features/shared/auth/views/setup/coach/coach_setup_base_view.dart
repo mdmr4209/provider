@@ -68,7 +68,7 @@ class CoachSetupBaseView extends StatelessWidget {
                         child: Container(
                           decoration: BoxDecoration(
                             gradient: const LinearGradient(
-                              colors: [Color(0xFFAC823A), Color(0xFFF3D194)],
+                              colors: [AppColors.buttonColor, AppColors.borderColor],
                               begin: Alignment.centerLeft,
                               end: Alignment.centerRight,
                             ),

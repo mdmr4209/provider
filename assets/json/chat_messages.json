@@ -1,0 +1,32 @@
+{
+  "messages": [
+    {
+      "sender": "Miles Esther",
+      "avatar": "https://i.pravatar.cc/150?u=miles",
+      "text": "ype and scrambled it to  scrsgfd",
+      "isMe": false,
+      "time": "Wednesday"
+    },
+    {
+      "sender": "Miles Esther",
+      "avatar": "https://i.pravatar.cc/150?u=miles",
+      "text": "ype and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
+      "isMe": false,
+      "time": "Wednesday"
+    },
+    {
+      "sender": "Me",
+      "avatar": "",
+      "text": "ype and scrambled it to",
+      "isMe": true,
+      "time": "Wednesday"
+    },
+    {
+      "sender": "Me",
+      "avatar": "",
+      "text": "ype and scrambled it to make a type specimen book. It has survived not only five centuries.",
+      "isMe": true,
+      "time": "Wednesday"
+    }
+  ]
+}

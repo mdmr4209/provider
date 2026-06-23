@@ -14,7 +14,7 @@ class EditView extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: AppColors.whiteColor),
           onPressed: () => Navigator.pop(context),
         ),
         centerTitle: true,
@@ -28,15 +28,21 @@ class EditView extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 60.r,
-                    backgroundImage: const NetworkImage('https://i.pravatar.cc/300?u=me'),
+                    backgroundImage: const NetworkImage(
+                      'https://i.pravatar.cc/300?u=me',
+                    ),
                   ),
                   Positioned(
                     bottom: 0,
                     right: 0,
                     child: CircleAvatar(
                       radius: 18.r,
-                      backgroundColor: const Color(0xFFC19E5F),
-                      child: Icon(Icons.camera_alt_outlined, color: Colors.black, size: 20.r),
+                      backgroundColor: AppColors.coachColorFFC19E5F,
+                      child: Icon(
+                        Icons.camera_alt_outlined,
+                        color: AppColors.blackColor,
+                        size: 20.r,
+                      ),
                     ),
                   ),
                 ],
@@ -45,32 +51,32 @@ class EditView extends StatelessWidget {
             SizedBox(height: 12.h),
             Text(
               "Profile Photo",
-              style: TextStyle(
-                color: Colors.white,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.whiteColor,
                 fontSize: 18.sp,
                 fontWeight: FontWeight.bold,
               ),
             ),
             Text(
               "Tap to change your photo",
-              style: TextStyle(
-                color: Colors.white.withAlpha(128),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.whiteColor.withAlpha(128),
                 fontSize: 13.sp,
               ),
             ),
             SizedBox(height: 40.h),
-            _buildLabel("Full Name"),
+            _buildLabel(context, "Full Name"),
             const CustomInput(
               hintText: "Rahim Rehman",
-              backgroundColor: Colors.white10,
+              backgroundColor: AppColors.white10Color,
               borderRadius: 12,
               shadow: false,
             ),
             SizedBox(height: 24.h),
-            _buildLabel("Bio"),
+            _buildLabel(context, "Bio"),
             const CustomInput(
               hintText: "Healing Journey Day 14",
-              backgroundColor: Colors.white10,
+              backgroundColor: AppColors.white10Color,
               borderRadius: 12,
               shadow: false,
               height: 120,
@@ -93,15 +99,15 @@ class EditView extends StatelessWidget {
     );
   }
 
-  Widget _buildLabel(String text) {
+  Widget _buildLabel(BuildContext context, String text) {
     return Padding(
       padding: EdgeInsets.only(bottom: 12.h, left: 4.w),
       child: Align(
         alignment: Alignment.centerLeft,
         child: Text(
           text,
-          style: TextStyle(
-            color: Colors.white,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: AppColors.whiteColor,
             fontSize: 15.sp,
             fontWeight: FontWeight.w500,
           ),

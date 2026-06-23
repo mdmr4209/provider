@@ -19,13 +19,13 @@ class ReportToAdminView extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: AppColors.whiteColor),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           "Report to Admin",
-          style: TextStyle(
-            color: Colors.white,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: AppColors.whiteColor,
             fontSize: 18.sp,
             fontFamily: 'Georgia',
           ),
@@ -37,34 +37,39 @@ class ReportToAdminView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildLabel("Select Reason"),
+            _buildLabel(context, "Select Reason"),
             GestureDetector(
               onTap: () => _showReasonPicker(context),
               child: ValueListenableBuilder<String?>(
                 valueListenable: _selectedReason,
                 builder: (context, selectedReason, _) {
                   return Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16.w,
+                      vertical: 14.h,
+                    ),
                     decoration: BoxDecoration(
-                      color: Colors.white.withAlpha(13),
+                      color: AppColors.whiteColor.withAlpha(13),
                       borderRadius: BorderRadius.circular(12.r),
-                      border: Border.all(color: Colors.white.withAlpha(26)),
+                      border: Border.all(
+                        color: AppColors.whiteColor.withAlpha(26),
+                      ),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           selectedReason ?? "Choose reason",
-                          style: TextStyle(
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             color: selectedReason == null
-                                ? Colors.white.withAlpha(102)
-                                : Colors.white,
+                                ? AppColors.whiteColor.withAlpha(102)
+                                : AppColors.whiteColor,
                             fontSize: 14.sp,
                           ),
                         ),
                         Icon(
                           Icons.arrow_forward_ios,
-                          color: Colors.white.withAlpha(128),
+                          color: AppColors.whiteColor.withAlpha(128),
                           size: 16.r,
                         ),
                       ],
@@ -74,10 +79,10 @@ class ReportToAdminView extends StatelessWidget {
               ),
             ),
             SizedBox(height: 24.h),
-            _buildLabel("Provide Report Details"),
+            _buildLabel(context, "Provide Report Details"),
             CustomInput(
               hintText: "Enter here",
-              backgroundColor: Colors.white.withAlpha(13),
+              backgroundColor: AppColors.whiteColor.withAlpha(13),
               borderRadius: 16,
               shadow: false,
               height: 200,
@@ -104,7 +109,7 @@ class ReportToAdminView extends StatelessWidget {
   void _showReasonPicker(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: const Color(0xFF1B2B1B),
+      backgroundColor: AppColors.coachColorFF1B2B1B,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
       ),
@@ -115,7 +120,7 @@ class ReportToAdminView extends StatelessWidget {
               (reason) => ListTile(
                 title: Text(
                   reason,
-                  style: const TextStyle(color: Colors.white),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor),
                 ),
                 onTap: () {
                   _selectedReason.value = reason;
@@ -128,13 +133,13 @@ class ReportToAdminView extends StatelessWidget {
     );
   }
 
-  Widget _buildLabel(String text) {
+  Widget _buildLabel(BuildContext context, String text) {
     return Padding(
       padding: EdgeInsets.only(bottom: 12.h, left: 4.w),
       child: Text(
         text,
-        style: TextStyle(
-          color: Colors.white.withAlpha(179),
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          color: AppColors.whiteColor.withAlpha(179),
           fontSize: 14.sp,
           fontWeight: FontWeight.w500,
         ),

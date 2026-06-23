@@ -45,7 +45,7 @@ class CustomDialog extends StatelessWidget {
               (dialogTheme.shape as RoundedRectangleBorder).borderRadius,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withAlpha(102),
+              color: AppColors.blackColor.withAlpha(102),
               blurRadius: 30,
               offset: const Offset(0, 10),
             ),
@@ -115,7 +115,7 @@ class CustomDialog extends StatelessWidget {
                   child: Text(
                     secondaryText!,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: dialogTheme.contentTextStyle?.color?.withAlpha(
                         230,
                       ),
@@ -149,7 +149,7 @@ void showAppCustomDialog(
   showDialog(
     context: context,
     barrierDismissible: barrierDismissible,
-    barrierColor: Colors.black.withAlpha(166),
+    barrierColor: AppColors.blackColor.withAlpha(166),
     builder: (context) => CustomDialog(
       title: title,
       description: description,

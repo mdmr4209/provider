@@ -151,7 +151,7 @@ class _WaterDropPainter extends CustomPainter {
     if (morph > 0.05) {
       final double tipR = lerpDouble(r, r * 1.30, morph)!;
       final highlightPaint = Paint()
-        ..color = Colors.white.withAlpha((opacity * morph * 140).round())
+        ..color = AppColors.whiteColor.withAlpha((opacity * morph * 140).round())
         ..style = PaintingStyle.fill;
       canvas.drawOval(
         Rect.fromCenter(
@@ -208,7 +208,7 @@ class FullScreenLoader extends StatelessWidget {
               SizedBox(height: 16.h),
               Text(
                 message!,
-                style: TextStyle(color: AppColors.textColor, fontSize: 14.sp),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textColor, fontSize: 14.sp),
               ),
             ],
           ],

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../constants/app_colors.dart';
+
 class BackgroundWidget extends StatelessWidget {
   final Widget child;
   final String imagePath;
@@ -20,7 +22,7 @@ class BackgroundWidget extends StatelessWidget {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
         statusBarColor: isDefaultBg
-            ? const Color(0xFF111B10)
+            ? AppColors.colorFF111B10
             : Colors.transparent,
         statusBarIconBrightness: isDefaultBg
             ? Brightness.light
@@ -40,7 +42,7 @@ class BackgroundWidget extends StatelessWidget {
             ? Column(
                 children: [
                   // This container colors the status bar area
-                  Container(height: topPadding, color: const Color(0xFF111B10)),
+                  Container(height: topPadding, color: AppColors.colorFF111B10),
                   // We MUST remove the top padding for the child,
                   // otherwise any SafeArea or AppBar inside 'child'
                   // will add another gap, making it look "too big".

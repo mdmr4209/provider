@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 import '../../../../core/constants/app_assets.dart';
 import '../../../../core/constants/app_colors.dart';
-import 'package:go_router/go_router.dart';
-import '../../../../routes/app_router.dart';
 import '../../../../core/services/navigation_service.dart';
 import '../../../../core/widgets/background_widget.dart';
 import '../../../../core/widgets/custom_loader.dart';
 import '../../../../core/widgets/glass_widget.dart';
+import '../../../../routes/app_router.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends StatelessWidget {
@@ -101,7 +101,7 @@ class HomeView extends StatelessWidget {
                                     child: SvgPicture.asset(
                                       AppAssets.notify,
                                       colorFilter: const ColorFilter.mode(
-                                        Color(0xFFF3D194),
+                                        AppColors.borderColor,
                                         BlendMode.srcIn,
                                       ),
                                       width: 28.r,
@@ -162,7 +162,8 @@ class HomeView extends StatelessWidget {
                                             showTicks: false,
                                             axisLineStyle: AxisLineStyle(
                                               thickness: 14.r,
-                                              color: const Color(0xFF41503C),
+                                              color:
+                                                  AppColors.coachColorFF41503C,
                                             ),
                                             pointers: [
                                               RangePointer(
@@ -175,10 +176,12 @@ class HomeView extends StatelessWidget {
                                                     CornerStyle.bothCurve,
                                                 gradient: const SweepGradient(
                                                   colors: [
-                                                    Color(0x55E6DBC9),
-                                                    Color(0xAAE6DBC9),
-                                                    Color(0xFFE6DBC9),
-                                                    Color(0xFFFFFFFF),
+                                                    AppColors
+                                                        .coachColor55E6DBC9,
+                                                    AppColors
+                                                        .coachColorAAE6DBC9,
+                                                    AppColors.softBeige,
+                                                    AppColors.textWhiteColor,
                                                   ],
                                                 ),
                                               ),
@@ -227,20 +230,23 @@ class HomeView extends StatelessWidget {
                                                 MainAxisAlignment.center,
                                             children: [
                                               _buildTimerUnit(
+                                                context,
                                                 timer?.displayDays.toString() ??
                                                     '0',
                                                 "Days",
                                               ),
-                                              _buildTimerSeparator(),
+                                              _buildTimerSeparator(context),
                                               _buildTimerUnit(
+                                                context,
                                                 timer?.displayHours
                                                         .toString()
                                                         .padLeft(2, '0') ??
                                                     '00',
                                                 "Hours",
                                               ),
-                                              _buildTimerSeparator(),
+                                              _buildTimerSeparator(context),
                                               _buildTimerUnit(
+                                                context,
                                                 timer?.displayMins
                                                         .toString()
                                                         .padLeft(2, '0') ??
@@ -259,7 +265,8 @@ class HomeView extends StatelessWidget {
                                               vertical: 4.h,
                                             ),
                                             decoration: ShapeDecoration(
-                                              color: const Color(0xFF62745E),
+                                              color:
+                                                  AppColors.coachColorFF62745E,
                                               shape: RoundedRectangleBorder(
                                                 side: BorderSide(
                                                   width: 0.58.r,
@@ -305,14 +312,14 @@ class HomeView extends StatelessWidget {
                               _buildActionButton(
                                 context: context,
                                 title: "HELP! I broke No Contact 💔",
-                                color: const Color(0xFFB03030),
+                                color: AppColors.coachColorFFB03030,
                                 onTap: () => home.handleBreakNoContact(context),
                               ),
                               SizedBox(height: 16.h),
                               _buildActionButton(
                                 context: context,
                                 title: "I'm About to Relapse — HELP! 🚨",
-                                color: const Color(0xFFC96630),
+                                color: AppColors.coachColorFFC96630,
                                 onTap: () =>
                                     home.handleRelapsePrevention(context),
                               ),
@@ -476,13 +483,13 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _buildTimerUnit(String value, String label) {
+  Widget _buildTimerUnit(BuildContext context, String value, String label) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
           value,
-          style: TextStyle(
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: AppColors.secondaryColorLight,
             fontSize: 24.sp,
             fontWeight: FontWeight.bold,
@@ -491,7 +498,7 @@ class HomeView extends StatelessWidget {
         ),
         Text(
           label,
-          style: TextStyle(
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: AppColors.textColor.withAlpha(179),
             fontSize: 10.sp,
             fontFamily: 'Georgia',
@@ -501,7 +508,7 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _buildTimerSeparator() {
+  Widget _buildTimerSeparator(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 4.w),
       child: Column(
@@ -509,7 +516,7 @@ class HomeView extends StatelessWidget {
         children: [
           Text(
             ":",
-            style: TextStyle(
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: AppColors.secondaryColorLight,
               fontSize: 24.sp,
               fontWeight: FontWeight.bold,
@@ -594,7 +601,7 @@ class HomeView extends StatelessWidget {
           child: Text(
             title,
             style: theme.textTheme.bodyLarge?.copyWith(
-              color: Colors.white,
+              color: AppColors.whiteColor,
               fontWeight: FontWeight.w800,
               fontSize: 16.sp,
             ),

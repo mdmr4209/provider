@@ -8,6 +8,7 @@ import '../../../../routes/app_router.dart';
 import '../controllers/profile_controller.dart';
 import 'logout.dart';
 import '../../../shared/localization/localization_extension.dart';
+import 'package:newproject/core/constants/app_colors.dart';
 
 class SettingsView extends StatelessWidget {
   final ValueNotifier<bool> _notificationsEnabled = ValueNotifier<bool>(true);
@@ -23,13 +24,13 @@ class SettingsView extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: AppColors.whiteColor),
           onPressed: () => Navigator.maybePop(context),
         ),
         title: Text(
           context.watchTr('settings'),
           style: theme.textTheme.titleLarge?.copyWith(
-            color: Colors.white,
+            color: AppColors.whiteColor,
             fontFamily: 'Georgia',
             fontSize: 20.sp,
           ),
@@ -44,42 +45,42 @@ class SettingsView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 20.h),
-                _buildSectionHeader("Account"),
-                _buildSettingsTile(
+                _buildSectionHeader(context, "Account"),
+                _buildSettingsTile(context, 
                   icon: Icons.person_outline,
                   title: "Personal Information",
                   onTap: () => context.push(AppRoutes.editProfile),
                 ),
-                _buildSettingsTile(
+                _buildSettingsTile(context, 
                   icon: Icons.payment_outlined,
                   title: "Payment Method",
                   onTap: () => context.push(AppRoutes.paymentMethod),
                 ),
-                _buildSettingsTile(
+                _buildSettingsTile(context, 
                   icon: Icons.lock_outline,
                   title: "Change Password",
                   onTap: () => context.push(AppRoutes.resetPassword),
                 ),
-                _buildSettingsTile(
+                _buildSettingsTile(context, 
                   icon: Icons.workspace_premium_outlined,
                   title: "Subscription Plan",
                   onTap: () => context.push(AppRoutes.subscriptionPlan),
                 ),
-                _buildSettingsTile(
+                _buildSettingsTile(context, 
                   icon: Icons.balance_outlined,
                   title: "Credits Balance",
                   onTap: () => context.push(AppRoutes.points),
                 ),
-                _buildSettingsTile(
+                _buildSettingsTile(context, 
                   icon: Icons.block_outlined,
                   title: "Block List",
                   onTap: () => context.push(AppRoutes.blockList),
                 ),
                 SizedBox(height: 24.h),
-                _buildNotificationTile(),
+                _buildNotificationTile(context),
                 SizedBox(height: 24.h),
-                _buildSectionHeader("Support"),
-                _buildSettingsTile(
+                _buildSectionHeader(context, "Support"),
+                _buildSettingsTile(context, 
                   icon: Icons.description_outlined,
                   title: "Payment Terms",
                   onTap: () => Navigator.push(
@@ -87,12 +88,12 @@ class SettingsView extends StatelessWidget {
                     MaterialPageRoute(builder: (_) => const PaymentTermsView()),
                   ),
                 ),
-                _buildSettingsTile(
+                _buildSettingsTile(context, 
                   icon: Icons.help_outline,
                   title: "Help & Support",
                   onTap: () => context.push(AppRoutes.helpSupport),
                 ),
-                _buildSettingsTile(
+                _buildSettingsTile(context, 
                   icon: Icons.logout,
                   title: context.watchTr('sign_out'),
                   isLogout: true,
@@ -112,13 +113,13 @@ class SettingsView extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionHeader(String title) {
+  Widget _buildSectionHeader(BuildContext context, String title) {
     return Padding(
       padding: EdgeInsets.only(bottom: 12.h, left: 4.w),
       child: Text(
         title,
-        style: TextStyle(
-          color: Colors.white,
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          color: AppColors.whiteColor,
           fontSize: 16.sp,
           fontWeight: FontWeight.bold,
         ),
@@ -126,7 +127,7 @@ class SettingsView extends StatelessWidget {
     );
   }
 
-  Widget _buildSettingsTile({
+  Widget _buildSettingsTile(BuildContext context, {
     required IconData icon,
     required String title,
     required VoidCallback onTap,
@@ -135,20 +136,24 @@ class SettingsView extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(bottom: 12.h),
       decoration: BoxDecoration(
-        color: Colors.white.withAlpha(13),
+        color: AppColors.whiteColor.withAlpha(13),
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: ListTile(
         onTap: onTap,
         leading: Icon(
           icon,
-          color: isLogout ? Colors.redAccent : Colors.white.withAlpha(179),
+          color: isLogout
+              ? AppColors.redAccentColor
+              : AppColors.whiteColor.withAlpha(179),
           size: 22.r,
         ),
         title: Text(
           title,
-          style: TextStyle(
-            color: isLogout ? Colors.redAccent : Colors.white.withAlpha(204),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: isLogout
+                ? AppColors.redAccentColor
+                : AppColors.whiteColor.withAlpha(204),
             fontSize: 14.sp,
           ),
         ),
@@ -156,30 +161,30 @@ class SettingsView extends StatelessWidget {
             ? null
             : Icon(
                 Icons.arrow_forward_ios,
-                color: Colors.white.withAlpha(128),
+                color: AppColors.whiteColor.withAlpha(128),
                 size: 16.r,
               ),
       ),
     );
   }
 
-  Widget _buildNotificationTile() {
+  Widget _buildNotificationTile(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(bottom: 12.h),
       padding: EdgeInsets.symmetric(vertical: 4.h),
       decoration: BoxDecoration(
-        color: Colors.white.withAlpha(13),
+        color: AppColors.whiteColor.withAlpha(13),
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: ListTile(
         leading: const Icon(
           Icons.notifications_none_outlined,
-          color: Color(0xB2FFFFFF),
+          color: AppColors.coachColorB2FFFFFF,
           size: 22,
         ),
-        title: const Text(
+        title: Text(
           "Notifications",
-          style: TextStyle(color: Color(0xCCFFFFFF), fontSize: 14),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.coachColorCCFFFFFF, fontSize: 14),
         ),
         trailing: Transform.scale(
           scale: 0.8,
@@ -189,10 +194,10 @@ class SettingsView extends StatelessWidget {
               return Switch(
                 value: enabled,
                 onChanged: (val) => _notificationsEnabled.value = val,
-                activeColor: const Color(0xFFC19E5F),
-                activeTrackColor: const Color(0xFFC19E5F).withAlpha(102),
-                inactiveThumbColor: Colors.white.withAlpha(128),
-                inactiveTrackColor: Colors.white.withAlpha(26),
+                activeThumbColor: AppColors.coachColorFFC19E5F,
+                activeTrackColor: AppColors.coachColorFFC19E5F.withAlpha(102),
+                inactiveThumbColor: AppColors.whiteColor.withAlpha(128),
+                inactiveTrackColor: AppColors.whiteColor.withAlpha(26),
               );
             },
           ),

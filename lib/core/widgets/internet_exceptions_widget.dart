@@ -21,8 +21,8 @@ class InternetExceptionsWidget extends StatelessWidget {
             child: Center(
               child: Text(
                 context.watchTr('internet_exception'),
-                style: TextStyle(
-                  color: const Color.fromARGB(255, 12, 0, 2),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.textColor,
                   fontSize: 20,
                 ),
                 textAlign: TextAlign.center,
@@ -44,7 +44,7 @@ class InternetExceptionsWidget extends StatelessWidget {
                   'Retry',
                   style: Theme.of(
                     context,
-                  ).textTheme.titleMedium!.copyWith(color: Colors.white),
+                  ).textTheme.titleMedium!.copyWith(color: AppColors.whiteColor),
                 ),
               ),
             ),

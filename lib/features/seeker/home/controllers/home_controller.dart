@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../../core/services/navigation_service.dart';
-import '../../../../core/widgets/showBreathingDialog.dart';
+import '../../../../core/widgets/show_breathing_dialog.dart';
 import '../models/dashboard_model.dart';
 
 /// Controller for the Home Dashboard and Guides.
@@ -47,9 +48,11 @@ class HomeController extends ChangeNotifier {
 
     try {
       await Future.delayed(const Duration(milliseconds: 1500));
-      final String jsonString = await rootBundle.loadString('assets/json/home.json');
+      final String jsonString = await rootBundle.loadString(
+        'assets/json/home.json',
+      );
       final Map<String, dynamic> rawData = jsonDecode(jsonString);
-      
+
       _dashboardModel = DashboardModel.fromJson(rawData);
     } catch (e) {
       debugPrint("Error loading home dashboard data: $e");
@@ -100,9 +103,9 @@ class HomeController extends ChangeNotifier {
     context,
     title: "Take A Breath, ${dashboardModel?.data?.user?.name ?? '[Name]'}",
     description:
-    "Stop. Don't press send. You are feeling a temporary wave of emotion. Before you do anything, let's take a quick 30 seconds, and breathe. Do it with me 4 seconds breath in, 4 seconds hold, 4 seconds breathe out. Do it 3 times.",
+        "Stop. Don't press send. You are feeling a temporary wave of emotion. Before you do anything, let's take a quick 30 seconds, and breathe. Do it with me 4 seconds breath in, 4 seconds hold, 4 seconds breathe out. Do it 3 times.",
     primaryButtonText: "Start Breathing",
-    onPrimaryTap: () { 
+    onPrimaryTap: () {
       NavigationService.goToBreathing(
         title: "Stop. Don't press send. 🔴",
         subtitle: "You are feeling a temporary wave of emotion.",
@@ -114,7 +117,7 @@ class HomeController extends ChangeNotifier {
     context,
     title: "How do you feel, ${dashboardModel?.data?.user?.name ?? '[Name]'}?",
     description:
-    "Take a breath. This happens. Breaking No Contact doesn't mean you've failed; it just means you're human.",
+        "Take a breath. This happens. Breaking No Contact doesn't mean you've failed; it just means you're human.",
     primaryButtonText: "I need to speak to someone 📞",
     onPrimaryTap: () {
       // Logic for contacting someone
@@ -135,14 +138,22 @@ class HomeController extends ChangeNotifier {
     try {
       await Future.delayed(const Duration(milliseconds: 600));
       _notifications = [
-        { "type": "invitation", "message": "You got a new a pod invitation from \"Sajib\"" },
-        { "type": "invitation", "message": "A pod invitation has been accepted from \"Sajib\"" },
+        {
+          "type": "invitation",
+          "message": "You got a new a pod invitation from \"Sajib\"",
+        },
+        {
+          "type": "invitation",
+          "message": "A pod invitation has been accepted from \"Sajib\"",
+        },
         {
           "type": "push",
           "title": "Title Of The Push Notification",
-          "message": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-          "image": "https://image.api.playstation.com/vulcan/ap/rnd/202102/1012/L0P0B1P6f1Q5v5S0Z1o1m3B6.png"
-        }
+          "message":
+              "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+          "image":
+              "https://image.api.playstation.com/vulcan/ap/rnd/202102/1012/L0P0B1P6f1Q5v5S0Z1o1m3B6.png",
+        },
       ];
     } catch (e) {
       // ignore

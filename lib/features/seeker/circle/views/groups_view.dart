@@ -33,7 +33,7 @@ class GroupsView extends StatelessWidget {
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            icon: const Icon(Icons.arrow_back, color: AppColors.whiteColor),
             onPressed: () => Navigator.pop(context),
           ),
           title: Row(
@@ -51,7 +51,7 @@ class GroupsView extends StatelessWidget {
               Text(
                 "Groups",
                 style: theme.textTheme.titleLarge?.copyWith(
-                  color: Colors.white,
+                  color: AppColors.whiteColor,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -66,7 +66,7 @@ class GroupsView extends StatelessWidget {
               ),
               child: Text(
                 "Create +",
-                style: TextStyle(
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppColors.secondaryColorLight,
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w500,
@@ -86,7 +86,7 @@ class GroupsView extends StatelessWidget {
                     height: 48,
                     hintText: "Search groups",
                     leadingIcon: AppAssets.feather,
-                    backgroundColor: Colors.white.withAlpha(13),
+                    backgroundColor: AppColors.whiteColor.withAlpha(13),
                     borderRadius: 24,
                     shadow: false,
                   ),
@@ -163,7 +163,7 @@ class GroupsView extends StatelessWidget {
                     Center(
                       child: Text(
                         "No joined groups found",
-                        style: TextStyle(color: Colors.white.withAlpha(128)),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(128)),
                       ),
                     ),
                   ],
@@ -223,7 +223,7 @@ class GroupsView extends StatelessWidget {
   Widget _buildFindGroupsList(BuildContext context, GroupController controller) {
     return Column(
       children: [
-        _buildFirstGroupFreeBanner(),
+        _buildFirstGroupFreeBanner(context),
         Expanded(
           child: Stack(
             children: [
@@ -241,7 +241,7 @@ class GroupsView extends StatelessWidget {
                           Center(
                             child: Text(
                               "No suggested groups available",
-                              style: TextStyle(color: Colors.white.withAlpha(128)),
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(128)),
                             ),
                           ),
                         ],
@@ -310,7 +310,7 @@ class GroupsView extends StatelessWidget {
                     Center(
                       child: Text(
                         "No group invitations",
-                        style: TextStyle(color: Colors.white.withAlpha(128)),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(128)),
                       ),
                     ),
                   ],
@@ -343,7 +343,7 @@ class GroupsView extends StatelessWidget {
     );
   }
 
-  Widget _buildFirstGroupFreeBanner() {
+  Widget _buildFirstGroupFreeBanner(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       padding: EdgeInsets.all(12.r),
@@ -361,16 +361,16 @@ class GroupsView extends StatelessWidget {
               children: [
                 Text(
                   "Your first group is free!",
-                  style: TextStyle(
-                    color: Colors.white.withAlpha(230),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.whiteColor.withAlpha(230),
                     fontWeight: FontWeight.bold,
                     fontSize: 14.sp,
                   ),
                 ),
                 Text(
                   "Join any free group to get started",
-                  style: TextStyle(
-                    color: Colors.white.withAlpha(128),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.whiteColor.withAlpha(128),
                     fontSize: 12.sp,
                   ),
                 ),
@@ -410,7 +410,7 @@ class _GroupCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.postCardColor,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: Colors.white.withAlpha(13)),
+        border: Border.all(color: AppColors.whiteColor.withAlpha(13)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -420,7 +420,7 @@ class _GroupCard extends StatelessWidget {
               CircleAvatar(
                 radius: 24.r,
                 backgroundImage: NetworkImage(icon),
-                backgroundColor: Colors.white.withAlpha(26),
+                backgroundColor: AppColors.whiteColor.withAlpha(26),
               ),
               SizedBox(width: 12.w),
               Expanded(
@@ -429,16 +429,16 @@ class _GroupCard extends StatelessWidget {
                   children: [
                     Text(
                       name,
-                      style: TextStyle(
-                        color: Colors.white,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppColors.whiteColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 14.sp,
                       ),
                     ),
                     Text(
                       "$membersCount members",
-                      style: TextStyle(
-                        color: Colors.white.withAlpha(128),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppColors.whiteColor.withAlpha(128),
                         fontSize: 11.sp,
                       ),
                     ),
@@ -450,8 +450,8 @@ class _GroupCard extends StatelessWidget {
           SizedBox(height: 12.h),
           Text(
             description,
-            style: TextStyle(
-              color: Colors.white.withAlpha(204),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColors.whiteColor.withAlpha(204),
               fontSize: 12.sp,
               height: 1.4,
             ),
@@ -467,7 +467,7 @@ class _GroupCard extends StatelessWidget {
                     },
                     title: "Leave",
                     buttonColor: Colors.transparent,
-                    borderColor: Colors.white.withAlpha(26),
+                    borderColor: AppColors.whiteColor.withAlpha(26),
                     height: 36,
                     fontSize: 13,
                   ),
@@ -477,8 +477,8 @@ class _GroupCard extends StatelessWidget {
                   child: CustomButton(
                     onPress: () async {},
                     title: "View",
-                    buttonColor: Colors.white.withAlpha(13),
-                    borderColor: Colors.white.withAlpha(26),
+                    buttonColor: AppColors.whiteColor.withAlpha(13),
+                    borderColor: AppColors.whiteColor.withAlpha(26),
                     height: 36,
                     fontSize: 13,
                   ),
@@ -514,8 +514,8 @@ class _GroupCard extends StatelessWidget {
                   child: CustomButton(
                     onPress: () async {},
                     title: "Ignore",
-                    buttonColor: Colors.white.withAlpha(13),
-                    borderColor: Colors.white.withAlpha(26),
+                    buttonColor: AppColors.whiteColor.withAlpha(13),
+                    borderColor: AppColors.whiteColor.withAlpha(26),
                     height: 36,
                     fontSize: 13,
                   ),

@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'create_group_post_view.dart';
-import 'invite_friends_view.dart';
-import 'group_reports_view.dart';
+
 import '../../../../core/constants/app_assets.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/custom_input.dart';
 import '../../../../core/widgets/custom_loader.dart';
-import '../../../../core/widgets/custom_button.dart';
+import '../controllers/group_controller.dart';
 import '../models/circle_post_model.dart';
 import '../widgets/circle_post_card.dart';
-import '../controllers/group_controller.dart';
+import 'create_group_post_view.dart';
+import 'group_reports_view.dart';
+import 'invite_friends_view.dart';
 
 class GroupDetailsView extends StatelessWidget {
   final String groupId;
@@ -37,7 +36,7 @@ class GroupDetailsView extends StatelessWidget {
                 backgroundColor: Colors.transparent,
                 elevation: 0,
                 leading: IconButton(
-                  icon: const Icon(Icons.arrow_back, color: Colors.white),
+                  icon: const Icon(Icons.arrow_back, color: AppColors.whiteColor),
                   onPressed: () => Navigator.pop(context),
                 ),
                 title: Row(
@@ -64,7 +63,7 @@ class GroupDetailsView extends StatelessWidget {
               backgroundColor: Colors.transparent,
               elevation: 0,
               leading: IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.white),
+                icon: const Icon(Icons.arrow_back, color: AppColors.whiteColor),
                 onPressed: () => Navigator.pop(context),
               ),
               title: Row(
@@ -79,16 +78,16 @@ class GroupDetailsView extends StatelessWidget {
                     children: [
                       Text(
                         details.name,
-                        style: TextStyle(
-                          color: Colors.white,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.whiteColor,
                           fontSize: 16.sp,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
                         "${details.memberCount} members",
-                        style: TextStyle(
-                          color: Colors.white.withAlpha(128),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.whiteColor.withAlpha(128),
                           fontSize: 11.sp,
                         ),
                       ),
@@ -115,7 +114,7 @@ class GroupDetailsView extends StatelessWidget {
                           height: 48,
                           hintText: "Share Your Thoughts in the group",
                           leadingIcon: AppAssets.feather,
-                          backgroundColor: Colors.white.withAlpha(13),
+                          backgroundColor: AppColors.whiteColor.withAlpha(13),
                           borderRadius: 24,
                           shadow: false,
                           readOnly: true,
@@ -163,7 +162,7 @@ class GroupDetailsView extends StatelessWidget {
 
   Widget _buildMenuButton(BuildContext context) {
     return PopupMenuButton<String>(
-      icon: const Icon(Icons.more_horiz, color: Colors.white),
+      icon: const Icon(Icons.more_horiz, color: AppColors.whiteColor),
       color: AppColors.postCardColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
       onSelected: (value) {
@@ -182,11 +181,12 @@ class GroupDetailsView extends StatelessWidget {
       itemBuilder: (context) {
         if (isAdmin) {
           return [
-            _buildMenuItem("Share link", Icons.share_outlined),
-            _buildMenuItem("Invite Friends", Icons.person_add_outlined),
-            _buildMenuItem("Edit Group", Icons.edit_outlined),
-            _buildMenuItem("Report to Platform", Icons.remove_red_eye_outlined),
+            _buildMenuItem(context, "Share link", Icons.share_outlined),
+            _buildMenuItem(context, "Invite Friends", Icons.person_add_outlined),
+            _buildMenuItem(context, "Edit Group", Icons.edit_outlined),
+            _buildMenuItem(context, "Report to Platform", Icons.remove_red_eye_outlined),
             _buildMenuItem(
+              context,
               "Delete Group",
               Icons.delete_outline,
               isDestructive: true,
@@ -194,10 +194,11 @@ class GroupDetailsView extends StatelessWidget {
           ];
         } else {
           return [
-            _buildMenuItem("Share link", Icons.share_outlined),
-            _buildMenuItem("Invite Friends", Icons.person_add_outlined),
-            _buildMenuItem("Report to admin", Icons.analytics_outlined),
+            _buildMenuItem(context, "Share link", Icons.share_outlined),
+            _buildMenuItem(context, "Invite Friends", Icons.person_add_outlined),
+            _buildMenuItem(context, "Report to admin", Icons.analytics_outlined),
             _buildMenuItem(
+              context,
               "Leave Group",
               Icons.logout_outlined,
               isDestructive: true,
@@ -209,6 +210,7 @@ class GroupDetailsView extends StatelessWidget {
   }
 
   PopupMenuItem<String> _buildMenuItem(
+    BuildContext context,
     String title,
     IconData icon, {
     bool isDestructive = false,
@@ -219,14 +221,14 @@ class GroupDetailsView extends StatelessWidget {
         children: [
           Icon(
             icon,
-            color: isDestructive ? Colors.red : Colors.white.withAlpha(200),
+            color: isDestructive ? AppColors.redColor : AppColors.whiteColor.withAlpha(200),
             size: 20.r,
           ),
           SizedBox(width: 12.w),
           Text(
             title,
-            style: TextStyle(
-              color: isDestructive ? Colors.red : Colors.white.withAlpha(200),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: isDestructive ? AppColors.redColor : AppColors.whiteColor.withAlpha(200),
               fontSize: 14.sp,
             ),
           ),

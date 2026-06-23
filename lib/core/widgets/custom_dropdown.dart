@@ -229,7 +229,7 @@ class CustomDropdown extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (showTitle && title.isNotEmpty) _buildTitle(),
+          if (showTitle && title.isNotEmpty) _buildTitle(context),
           ValueListenableBuilder(
             valueListenable: controller,
             builder: (context, value, child) {
@@ -241,16 +241,14 @@ class CustomDropdown extends StatelessWidget {
     );
   }
 
-  Widget _buildTitle() {
+  Widget _buildTitle(BuildContext context) {
     return Padding(
-      padding:
-          titlePadding ??
-          EdgeInsets.only(bottom: titlePaddingBottom.h),
+      padding: titlePadding ?? EdgeInsets.only(bottom: titlePaddingBottom.h),
       child: Text(
         title,
         style:
             titleStyle ??
-            TextStyle(
+            Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: titleColor,
               fontSize: titleFontSize.sp,
               fontWeight: titleFontWeight,
@@ -273,16 +271,11 @@ class CustomDropdown extends StatelessWidget {
         color: backgroundColor,
         gradient: gradient,
         borderRadius: BorderRadius.circular(borderRadius.r),
-        border: Border.all(
-          color: borderColor,
-          width: borderWidth.w,
-        ),
+        border: Border.all(color: borderColor, width: borderWidth.w),
         boxShadow: shadow
             ? [
                 BoxShadow(
-                  color:
-                      shadowColor ??
-                      AppColors.boxShadowColor,
+                  color: shadowColor ?? AppColors.boxShadowColor,
                   blurRadius: shadowBlur,
                   offset: shadowOffset,
                 ),
@@ -291,11 +284,11 @@ class CustomDropdown extends StatelessWidget {
       ),
       child: multiSelect
           ? _buildMultiSelectTrigger(context, currentValue)
-          : _buildSingleSelect(currentValue),
+          : _buildSingleSelect(context, currentValue),
     );
   }
 
-  Widget _buildSingleSelect(dynamic currentValue) {
+  Widget _buildSingleSelect(BuildContext context, dynamic currentValue) {
     final effectiveLeading = _getLeading(selectedTextColor);
 
     return DropdownButtonHideUnderline(
@@ -311,7 +304,7 @@ class CustomDropdown extends StatelessWidget {
         borderRadius: BorderRadius.circular(borderRadius.r),
         style:
             selectedTextStyle ??
-            TextStyle(
+            Theme.of(context).textTheme.bodyMedium?.copyWith(
               fontSize: selectedTextFontSize.sp,
               color: selectedTextColor,
               fontWeight: selectedTextFontWeight,
@@ -326,7 +319,7 @@ class CustomDropdown extends StatelessWidget {
                 hintText,
                 style:
                     hintStyle ??
-                    TextStyle(
+                    Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontSize: hintFontSize.sp,
                       color: hintColor,
                       fontWeight: hintFontWeight,
@@ -341,10 +334,7 @@ class CustomDropdown extends StatelessWidget {
             return Row(
               children: [
                 if (effectiveLeading != null)
-                  Padding(
-                    padding: leadingPadding,
-                    child: effectiveLeading,
-                  ),
+                  Padding(padding: leadingPadding, child: effectiveLeading),
                 Expanded(
                   child: Text(
                     item,
@@ -352,7 +342,7 @@ class CustomDropdown extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style:
                         selectedTextStyle ??
-                        TextStyle(
+                        Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontSize: selectedTextFontSize.sp,
                           color: selectedTextColor,
                           fontWeight: selectedTextFontWeight,
@@ -377,7 +367,7 @@ class CustomDropdown extends StatelessWidget {
               item,
               style:
                   menuItemStyle ??
-                  TextStyle(
+                  Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontSize: menuItemFontSize.sp,
                     color: menuItemColor,
                     fontWeight: menuItemFontWeight,
@@ -407,14 +397,14 @@ class CustomDropdown extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: selected.isEmpty
                   ? (hintStyle ??
-                        TextStyle(
+                        Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontSize: hintFontSize.sp,
                           color: hintColor,
                           fontWeight: hintFontWeight,
                           fontFamily: hintFontFamily,
                         ))
                   : (selectedTextStyle ??
-                        TextStyle(
+                        Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontSize: selectedTextFontSize.sp,
                           color: selectedTextColor,
                           fontWeight: selectedTextFontWeight,
@@ -434,9 +424,7 @@ class CustomDropdown extends StatelessWidget {
   }
 
   Future<void> _showMultiSelectDialog(BuildContext context) async {
-    final List<String> current = List<String>.from(
-      controller.value ?? [],
-    );
+    final List<String> current = List<String>.from(controller.value ?? []);
     final temp = ValueNotifier<List<String>>(List.from(current));
 
     await showDialog(
@@ -450,7 +438,7 @@ class CustomDropdown extends StatelessWidget {
           dialogTitle,
           style:
               dialogTitleStyle ??
-              TextStyle(
+              Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: dialogTitleColor,
                 fontSize: dialogTitleFontSize.sp,
                 fontWeight: dialogTitleFontWeight,
@@ -476,7 +464,7 @@ class CustomDropdown extends StatelessWidget {
                     item,
                     style:
                         dialogItemStyle ??
-                        TextStyle(
+                        Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontSize: dialogItemFontSize.sp,
                           color: dialogItemColor,
                           fontWeight: dialogItemFontWeight,
@@ -502,7 +490,10 @@ class CustomDropdown extends StatelessWidget {
             onPressed: () => Navigator.pop(context),
             child: Text(
               'Cancel',
-              style: TextStyle(color: AppColors.textColor3, fontSize: 14.sp),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.textColor3,
+                fontSize: 14.sp,
+              ),
             ),
           ),
           ElevatedButton(
@@ -514,13 +505,17 @@ class CustomDropdown extends StatelessWidget {
             ),
             onPressed: () {
               controller.value = List<String>.from(temp.value);
-              if (onChanged != null)
+              if (onChanged != null) {
                 onChanged!(controller.value);
+              }
               Navigator.pop(context);
             },
             child: Text(
               'OK',
-              style: TextStyle(color: AppColors.whiteColor, fontSize: 14.sp),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.whiteColor,
+                fontSize: 14.sp,
+              ),
             ),
           ),
         ],

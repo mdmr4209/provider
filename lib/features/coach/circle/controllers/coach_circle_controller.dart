@@ -91,7 +91,7 @@ class CoachCircleController extends ChangeNotifier {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: Colors.white24,
+                color: AppColors.white24Color,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -101,8 +101,8 @@ class CoachCircleController extends ChangeNotifier {
           Text(
             'Unlock More Groups',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.white,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColors.whiteColor,
               fontSize: 20,
               fontFamily: 'Segoe UI',
               fontWeight: FontWeight.w600,
@@ -113,7 +113,7 @@ class CoachCircleController extends ChangeNotifier {
             Text(
               'You can only one free circle at a time, to join more upgrade now.',
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: AppColors.coachColorFF838383,
                 fontSize: 14,
                 fontFamily: 'Segoe UI',

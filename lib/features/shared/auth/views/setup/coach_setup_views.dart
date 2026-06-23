@@ -55,29 +55,29 @@ class CoachWelcomeView extends StatelessWidget {
                   "Welcome 👋",
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                        fontFamily: 'Georgia',
-                        color: AppColors.whiteColor,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    fontFamily: 'Georgia',
+                    color: AppColors.whiteColor,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 SizedBox(height: 24.h),
                 Text(
                   "We’re excited to have you join as a coach.",
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontFamily: 'Georgia',
-                        color: AppColors.whiteColor,
-                        fontWeight: FontWeight.w500,
-                      ),
+                    fontFamily: 'Georgia',
+                    color: AppColors.whiteColor,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 SizedBox(height: 12.h),
                 Text(
                   "Let’s set up your profile so clients can find and connect with you.",
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: AppColors.textColor,
-                        fontFamily: 'Segoe UI',
-                      ),
+                    color: AppColors.textColor,
+                    fontFamily: 'Segoe UI',
+                  ),
                 ),
                 const Spacer(),
                 CustomButton(
@@ -132,18 +132,18 @@ class _CoachBasicsViewState extends State<CoachBasicsView> {
             Text(
               "Let’s Start With The Basics",
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontFamily: 'Georgia',
-                    color: AppColors.whiteColor,
-                    fontWeight: FontWeight.bold,
-                  ),
+                fontFamily: 'Georgia',
+                color: AppColors.whiteColor,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             SizedBox(height: 32.h),
             Text(
               "Name/ Professional Alias",
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: AppColors.textColor,
-                    fontWeight: FontWeight.w600,
-                  ),
+                color: AppColors.textColor,
+                fontWeight: FontWeight.w600,
+              ),
             ),
             SizedBox(height: 8.h),
             InputTextWidget(
@@ -155,9 +155,9 @@ class _CoachBasicsViewState extends State<CoachBasicsView> {
             Text(
               "Location (Optional)",
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: AppColors.textColor,
-                    fontWeight: FontWeight.w600,
-                  ),
+                color: AppColors.textColor,
+                fontWeight: FontWeight.w600,
+              ),
             ),
             SizedBox(height: 8.h),
             InputTextWidget(
@@ -174,7 +174,8 @@ class _CoachBasicsViewState extends State<CoachBasicsView> {
                   isEnabled: isNameEntered,
                   onPress: () {
                     // Update main AuthController name as well
-                    context.read<AuthController>().nameController.text = nameController.text.trim();
+                    context.read<AuthController>().nameController.text =
+                        nameController.text.trim();
                     context.push(AppRoutes.coachMatch);
                   },
                 );
@@ -207,7 +208,7 @@ class _CoachMatchViewState extends State<CoachMatchView> {
     "Divorce Support",
     "Anxiety & Stress Management",
     "Personal Growth",
-    "Communication Skills"
+    "Communication Skills",
   ];
 
   final Set<String> selectedSpecialties = {};
@@ -238,7 +239,7 @@ class _CoachMatchViewState extends State<CoachMatchView> {
                 padding: EdgeInsets.all(16.r),
                 child: Text(
                   "Years of Experience",
-                  style: TextStyle(
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: AppColors.whiteColor,
                     fontSize: 18.sp,
                     fontWeight: FontWeight.bold,
@@ -250,9 +251,13 @@ class _CoachMatchViewState extends State<CoachMatchView> {
                 (opt) => ListTile(
                   title: Text(
                     opt,
-                    style: TextStyle(
-                      color: opt == selectedExperience ? AppColors.iconColor : AppColors.textColor,
-                      fontWeight: opt == selectedExperience ? FontWeight.bold : FontWeight.normal,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: opt == selectedExperience
+                          ? AppColors.iconColor
+                          : AppColors.textColor,
+                      fontWeight: opt == selectedExperience
+                          ? FontWeight.bold
+                          : FontWeight.normal,
                     ),
                   ),
                   trailing: opt == selectedExperience
@@ -302,7 +307,9 @@ class _CoachMatchViewState extends State<CoachMatchView> {
               height: 20.r,
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: isSelected ? AppColors.iconColor : AppColors.inputBorderColor,
+                  color: isSelected
+                      ? AppColors.iconColor
+                      : AppColors.inputBorderColor,
                   width: 2.w,
                 ),
                 borderRadius: BorderRadius.circular(4.r),
@@ -320,7 +327,7 @@ class _CoachMatchViewState extends State<CoachMatchView> {
             SizedBox(width: 12.w),
             Text(
               label,
-              style: TextStyle(
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: isSelected ? AppColors.iconColor : AppColors.textColor,
                 fontSize: 16.sp,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
@@ -359,10 +366,7 @@ class _CoachMatchViewState extends State<CoachMatchView> {
           Expanded(
             child: Text(
               fileName,
-              style: TextStyle(
-                color: AppColors.textColor,
-                fontSize: 14.sp,
-              ),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textColor, fontSize: 14.sp),
             ),
           ),
           GestureDetector(
@@ -380,7 +384,8 @@ class _CoachMatchViewState extends State<CoachMatchView> {
 
   @override
   Widget build(BuildContext context) {
-    final bool isContinueEnabled = selectedSpecialties.isNotEmpty &&
+    final bool isContinueEnabled =
+        selectedSpecialties.isNotEmpty &&
         selectedExperience != "Select Experience" &&
         uploadedFiles.isNotEmpty;
 
@@ -397,15 +402,15 @@ class _CoachMatchViewState extends State<CoachMatchView> {
               Text(
                 "Help Us Match You With The Right Client",
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontFamily: 'Georgia',
-                      color: AppColors.whiteColor,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  fontFamily: 'Georgia',
+                  color: AppColors.whiteColor,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               SizedBox(height: 24.h),
               Text(
                 "Primary Specialty (Select multiple)",
-                style: TextStyle(
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppColors.textColor.withAlpha(200),
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
@@ -430,7 +435,7 @@ class _CoachMatchViewState extends State<CoachMatchView> {
               SizedBox(height: 20.h),
               Text(
                 "Year of Experience",
-                style: TextStyle(
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppColors.textColor.withAlpha(200),
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
@@ -453,17 +458,14 @@ class _CoachMatchViewState extends State<CoachMatchView> {
                     children: [
                       Text(
                         selectedExperience,
-                        style: TextStyle(
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: selectedExperience == "Select Experience"
                               ? AppColors.hintTextColor
                               : AppColors.textColor,
                           fontSize: 16.sp,
                         ),
                       ),
-                      Icon(
-                        Icons.chevron_right,
-                        color: AppColors.textColor,
-                      ),
+                      Icon(Icons.chevron_right, color: AppColors.textColor),
                     ],
                   ),
                 ),
@@ -471,7 +473,7 @@ class _CoachMatchViewState extends State<CoachMatchView> {
               SizedBox(height: 24.h),
               Text(
                 "Certification/Education",
-                style: TextStyle(
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppColors.textColor.withAlpha(200),
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
@@ -492,18 +494,28 @@ class _CoachMatchViewState extends State<CoachMatchView> {
                     child: Row(
                       children: [
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 12.w,
+                            vertical: 6.h,
+                          ),
                           decoration: BoxDecoration(
                             color: AppColors.buttonColor3,
                             borderRadius: BorderRadius.circular(8.r),
                           ),
                           child: Row(
                             children: [
-                              Icon(Icons.upload_file, color: Colors.white, size: 18.r),
+                              Icon(
+                                Icons.upload_file,
+                                color: AppColors.whiteColor,
+                                size: 18.r,
+                              ),
                               SizedBox(width: 6.w),
                               Text(
                                 "Upload",
-                                style: TextStyle(color: Colors.white, fontSize: 14.sp),
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                  color: AppColors.whiteColor,
+                                  fontSize: 14.sp,
+                                ),
                               ),
                             ],
                           ),
@@ -511,7 +523,10 @@ class _CoachMatchViewState extends State<CoachMatchView> {
                         SizedBox(width: 12.w),
                         Text(
                           "Click to upload files",
-                          style: TextStyle(color: AppColors.hintTextColor, fontSize: 14.sp),
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppColors.hintTextColor,
+                            fontSize: 14.sp,
+                          ),
                         ),
                       ],
                     ),
@@ -572,7 +587,7 @@ class _CoachStyleViewState extends State<CoachStyleView> {
     "Empathetic and soft",
     "Data-Driven",
     "Spiritual",
-    "Action-Oriented"
+    "Action-Oriented",
   ];
 
   final Set<String> selectedStyles = {};
@@ -593,7 +608,9 @@ class _CoachStyleViewState extends State<CoachStyleView> {
               height: 20.r,
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: isSelected ? AppColors.iconColor : AppColors.inputBorderColor,
+                  color: isSelected
+                      ? AppColors.iconColor
+                      : AppColors.inputBorderColor,
                   width: 2.w,
                 ),
                 borderRadius: BorderRadius.circular(4.r),
@@ -611,7 +628,7 @@ class _CoachStyleViewState extends State<CoachStyleView> {
             SizedBox(width: 12.w),
             Text(
               label,
-              style: TextStyle(
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: isSelected ? AppColors.iconColor : AppColors.textColor,
                 fontSize: 16.sp,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
@@ -637,15 +654,15 @@ class _CoachStyleViewState extends State<CoachStyleView> {
             Text(
               "Tell Us About Your Coaching Style",
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontFamily: 'Georgia',
-                    color: AppColors.whiteColor,
-                    fontWeight: FontWeight.bold,
-                  ),
+                fontFamily: 'Georgia',
+                color: AppColors.whiteColor,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             SizedBox(height: 24.h),
             Text(
               "My Coaching Style",
-              style: TextStyle(
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: AppColors.textColor.withAlpha(200),
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w600,
@@ -715,15 +732,15 @@ class _CoachPitchBioViewState extends State<CoachPitchBioView> {
             Text(
               "This is What Clients Will See Before Reaching Out",
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontFamily: 'Georgia',
-                    color: AppColors.whiteColor,
-                    fontWeight: FontWeight.bold,
-                  ),
+                fontFamily: 'Georgia',
+                color: AppColors.whiteColor,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             SizedBox(height: 32.h),
             Text(
               "Elevator Pitch (Max 250 characters)",
-              style: TextStyle(
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: AppColors.textColor.withAlpha(200),
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w600,
@@ -739,7 +756,7 @@ class _CoachPitchBioViewState extends State<CoachPitchBioView> {
             SizedBox(height: 24.h),
             Text(
               "Bio",
-              style: TextStyle(
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: AppColors.textColor.withAlpha(200),
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w600,
@@ -754,7 +771,9 @@ class _CoachPitchBioViewState extends State<CoachPitchBioView> {
             ),
             const Spacer(),
             _buildContinueButton(
-              isEnabled: pitchController.text.trim().isNotEmpty && bioController.text.trim().isNotEmpty,
+              isEnabled:
+                  pitchController.text.trim().isNotEmpty &&
+                  bioController.text.trim().isNotEmpty,
               onPress: () => context.push(AppRoutes.coachAvailability),
             ),
             SizedBox(height: 40.h),
@@ -806,19 +825,36 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
     showModalBottomSheet(
       context: context,
       backgroundColor: AppColors.popupBackgroundColor,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20.r))),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+      ),
       builder: (context) {
-        final List<String> days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+        final List<String> days = [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday",
+        ];
         return SafeArea(
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: days.map((d) => ListTile(
-              title: Text(d, style: const TextStyle(color: AppColors.textColor)),
-              onTap: () {
-                setState(() => selectedDay = d);
-                Navigator.pop(context);
-              },
-            )).toList(),
+            children: days
+                .map(
+                  (d) => ListTile(
+                    title: Text(
+                      d,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textColor),
+                    ),
+                    onTap: () {
+                      setState(() => selectedDay = d);
+                      Navigator.pop(context);
+                    },
+                  ),
+                )
+                .toList(),
           ),
         );
       },
@@ -829,29 +865,53 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
     showModalBottomSheet(
       context: context,
       backgroundColor: AppColors.popupBackgroundColor,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20.r))),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+      ),
       builder: (context) {
         final List<String> times = [
-          "09:00 AM", "10:00 AM", "11:00 AM", "12:00 PM",
-          "01:00 PM", "02:00 PM", "03:00 PM", "04:00 PM",
-          "05:00 PM", "06:00 PM"
+          "09:00 AM",
+          "10:00 AM",
+          "11:00 AM",
+          "12:00 PM",
+          "01:00 PM",
+          "02:00 PM",
+          "03:00 PM",
+          "04:00 PM",
+          "05:00 PM",
+          "06:00 PM",
         ];
         return SafeArea(
           child: ListView(
             shrinkWrap: true,
-            children: times.map((t) => ListTile(
-              title: Text(t, style: const TextStyle(color: AppColors.textColor)),
-              onTap: () {
-                setState(() {
-                  if (isOnTab) {
-                    if (isStart) onStartTime = t; else onEndTime = t;
-                  } else {
-                    if (isStart) offStartTime = t; else offEndTime = t;
-                  }
-                });
-                Navigator.pop(context);
-              },
-            )).toList(),
+            children: times
+                .map(
+                  (t) => ListTile(
+                    title: Text(
+                      t,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textColor),
+                    ),
+                    onTap: () {
+                      setState(() {
+                        if (isOnTab) {
+                          if (isStart) {
+                            onStartTime = t;
+                          } else {
+                            onEndTime = t;
+                          }
+                        } else {
+                          if (isStart) {
+                            offStartTime = t;
+                          } else {
+                            offEndTime = t;
+                          }
+                        }
+                      });
+                      Navigator.pop(context);
+                    },
+                  ),
+                )
+                .toList(),
           ),
         );
       },
@@ -860,7 +920,11 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
 
   void _showDatePicker(bool isFrom) {
     setState(() {
-      if (isFrom) selectedFromDate = "31/08/2026"; else selectedToDate = "31/08/2026";
+      if (isFrom) {
+        selectedFromDate = "31/08/2026";
+      } else {
+        selectedToDate = "31/08/2026";
+      }
     });
   }
 
@@ -885,16 +949,22 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                       children: [
                         Text(
                           "On Days",
-                          style: TextStyle(
-                            color: isOnDays ? AppColors.iconColor : AppColors.textColor.withAlpha(150),
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: isOnDays
+                                ? AppColors.iconColor
+                                : AppColors.textColor.withAlpha(150),
                             fontSize: 16.sp,
-                            fontWeight: isOnDays ? FontWeight.bold : FontWeight.normal,
+                            fontWeight: isOnDays
+                                ? FontWeight.bold
+                                : FontWeight.normal,
                           ),
                         ),
                         SizedBox(height: 8.h),
                         Container(
                           height: 2.h,
-                          color: isOnDays ? AppColors.iconColor : Colors.transparent,
+                          color: isOnDays
+                              ? AppColors.iconColor
+                              : Colors.transparent,
                         ),
                       ],
                     ),
@@ -907,16 +977,22 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                       children: [
                         Text(
                           "Off Days",
-                          style: TextStyle(
-                            color: !isOnDays ? AppColors.iconColor : AppColors.textColor.withAlpha(150),
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: !isOnDays
+                                ? AppColors.iconColor
+                                : AppColors.textColor.withAlpha(150),
                             fontSize: 16.sp,
-                            fontWeight: !isOnDays ? FontWeight.bold : FontWeight.normal,
+                            fontWeight: !isOnDays
+                                ? FontWeight.bold
+                                : FontWeight.normal,
                           ),
                         ),
                         SizedBox(height: 8.h),
                         Container(
                           height: 2.h,
-                          color: !isOnDays ? AppColors.iconColor : Colors.transparent,
+                          color: !isOnDays
+                              ? AppColors.iconColor
+                              : Colors.transparent,
                         ),
                       ],
                     ),
@@ -942,7 +1018,10 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
   }
 
   Widget _buildOnDaysTab() {
-    final bool canSave = selectedDay != "Enter here" && onStartTime != "Enter here" && onEndTime != "Enter here";
+    final bool canSave =
+        selectedDay != "Enter here" &&
+        onStartTime != "Enter here" &&
+        onEndTime != "Enter here";
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -952,12 +1031,17 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
           decoration: BoxDecoration(
             color: AppColors.buttonColor4.withAlpha(50),
             borderRadius: BorderRadius.circular(16.r),
-            border: Border.all(color: AppColors.buttonBorderColor4.withAlpha(50)),
+            border: Border.all(
+              color: AppColors.buttonBorderColor4.withAlpha(50),
+            ),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Days of Week", style: TextStyle(color: AppColors.textColor, fontSize: 14.sp)),
+              Text(
+                "Days of Week",
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textColor, fontSize: 14.sp),
+              ),
               SizedBox(height: 8.h),
               GestureDetector(
                 onTap: _showDayPicker,
@@ -972,8 +1056,18 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(selectedDay, style: TextStyle(color: AppColors.textColor, fontSize: 14.sp)),
-                      Icon(Icons.chevron_right, color: AppColors.textColor, size: 20.r),
+                      Text(
+                        selectedDay,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.textColor,
+                          fontSize: 14.sp,
+                        ),
+                      ),
+                      Icon(
+                        Icons.chevron_right,
+                        color: AppColors.textColor,
+                        size: 20.r,
+                      ),
                     ],
                   ),
                 ),
@@ -985,7 +1079,13 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Start Time", style: TextStyle(color: AppColors.textColor, fontSize: 14.sp)),
+                        Text(
+                          "Start Time",
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppColors.textColor,
+                            fontSize: 14.sp,
+                          ),
+                        ),
                         SizedBox(height: 8.h),
                         GestureDetector(
                           onTap: () => _showTimePicker(true, true),
@@ -995,13 +1095,25 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                             decoration: BoxDecoration(
                               color: AppColors.buttonColor4,
                               borderRadius: BorderRadius.circular(12.r),
-                              border: Border.all(color: AppColors.buttonBorderColor4),
+                              border: Border.all(
+                                color: AppColors.buttonBorderColor4,
+                              ),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Icon(Icons.access_time, color: AppColors.textColor, size: 18.r),
-                                Text(onStartTime, style: TextStyle(color: AppColors.textColor, fontSize: 14.sp)),
+                                Icon(
+                                  Icons.access_time,
+                                  color: AppColors.textColor,
+                                  size: 18.r,
+                                ),
+                                Text(
+                                  onStartTime,
+                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: AppColors.textColor,
+                                    fontSize: 14.sp,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -1014,7 +1126,13 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("End Time", style: TextStyle(color: AppColors.textColor, fontSize: 14.sp)),
+                        Text(
+                          "End Time",
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppColors.textColor,
+                            fontSize: 14.sp,
+                          ),
+                        ),
                         SizedBox(height: 8.h),
                         GestureDetector(
                           onTap: () => _showTimePicker(false, true),
@@ -1024,13 +1142,25 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                             decoration: BoxDecoration(
                               color: AppColors.buttonColor4,
                               borderRadius: BorderRadius.circular(12.r),
-                              border: Border.all(color: AppColors.buttonBorderColor4),
+                              border: Border.all(
+                                color: AppColors.buttonBorderColor4,
+                              ),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Icon(Icons.access_time, color: AppColors.textColor, size: 18.r),
-                                Text(onEndTime, style: TextStyle(color: AppColors.textColor, fontSize: 14.sp)),
+                                Icon(
+                                  Icons.access_time,
+                                  color: AppColors.textColor,
+                                  size: 18.r,
+                                ),
+                                Text(
+                                  onEndTime,
+                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: AppColors.textColor,
+                                    fontSize: 14.sp,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -1043,58 +1173,96 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
               SizedBox(height: 24.h),
               CustomButton(
                 title: "Save Availability",
-                buttonColor: canSave ? AppColors.iconColor : AppColors.buttonColor4,
-                textColor: canSave ? Colors.white : AppColors.whiteColor.withAlpha(100),
-                onPress: canSave ? () async {
-                  setState(() {
-                    onDaysList.add({
-                      "day": selectedDay,
-                      "time": "$onStartTime - $onEndTime"
-                    });
-                    selectedDay = "Enter here";
-                    onStartTime = "Enter here";
-                    onEndTime = "Enter here";
-                  });
-                } : null,
+                buttonColor: canSave
+                    ? AppColors.iconColor
+                    : AppColors.buttonColor4,
+                textColor: canSave
+                    ? AppColors.whiteColor
+                    : AppColors.whiteColor.withAlpha(100),
+                onPress: canSave
+                    ? () async {
+                        setState(() {
+                          onDaysList.add({
+                            "day": selectedDay,
+                            "time": "$onStartTime - $onEndTime",
+                          });
+                          selectedDay = "Enter here";
+                          onStartTime = "Enter here";
+                          onEndTime = "Enter here";
+                        });
+                      }
+                    : null,
               ),
             ],
           ),
         ),
         SizedBox(height: 24.h),
-        Text("Current Availability", style: TextStyle(color: AppColors.textColor, fontSize: 16.sp, fontWeight: FontWeight.bold)),
+        Text(
+          "Current Availability",
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: AppColors.textColor,
+            fontSize: 16.sp,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         SizedBox(height: 12.h),
-        ...onDaysList.map((item) => Container(
-          margin: EdgeInsets.only(bottom: 12.h),
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-          decoration: BoxDecoration(
-            color: AppColors.buttonColor4.withAlpha(30),
-            borderRadius: BorderRadius.circular(12.r),
-            border: Border.all(color: AppColors.buttonBorderColor4.withAlpha(30)),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(item["day"]!, style: TextStyle(color: Colors.white, fontSize: 14.sp, fontWeight: FontWeight.bold)),
-                  SizedBox(height: 4.h),
-                  Text(item["time"]!, style: TextStyle(color: AppColors.textColor, fontSize: 14.sp)),
-                ],
+        ...onDaysList.map(
+          (item) => Container(
+            margin: EdgeInsets.only(bottom: 12.h),
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+            decoration: BoxDecoration(
+              color: AppColors.buttonColor4.withAlpha(30),
+              borderRadius: BorderRadius.circular(12.r),
+              border: Border.all(
+                color: AppColors.buttonBorderColor4.withAlpha(30),
               ),
-              GestureDetector(
-                onTap: () => setState(() => onDaysList.remove(item)),
-                child: Icon(Icons.cancel, color: Colors.redAccent.withAlpha(200), size: 22.r),
-              ),
-            ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item["day"]!,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppColors.whiteColor,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 4.h),
+                    Text(
+                      item["time"]!,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppColors.textColor,
+                        fontSize: 14.sp,
+                      ),
+                    ),
+                  ],
+                ),
+                GestureDetector(
+                  onTap: () => setState(() => onDaysList.remove(item)),
+                  child: Icon(
+                    Icons.cancel,
+                    color: AppColors.redAccentColor.withAlpha(200),
+                    size: 22.r,
+                  ),
+                ),
+              ],
+            ),
           ),
-        )),
+        ),
       ],
     );
   }
 
   Widget _buildOffDaysTab() {
-    final bool canSave = selectedFromDate != "Select one" && selectedToDate != "Select one" && offStartTime != "Enter here" && offEndTime != "Enter here";
+    final bool canSave =
+        selectedFromDate != "Select one" &&
+        selectedToDate != "Select one" &&
+        offStartTime != "Enter here" &&
+        offEndTime != "Enter here";
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1104,7 +1272,9 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
           decoration: BoxDecoration(
             color: AppColors.buttonColor4.withAlpha(50),
             borderRadius: BorderRadius.circular(16.r),
-            border: Border.all(color: AppColors.buttonBorderColor4.withAlpha(50)),
+            border: Border.all(
+              color: AppColors.buttonBorderColor4.withAlpha(50),
+            ),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1115,7 +1285,13 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("From", style: TextStyle(color: AppColors.textColor, fontSize: 14.sp)),
+                        Text(
+                          "From",
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppColors.textColor,
+                            fontSize: 14.sp,
+                          ),
+                        ),
                         SizedBox(height: 8.h),
                         GestureDetector(
                           onTap: () => _showDatePicker(true),
@@ -1125,13 +1301,25 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                             decoration: BoxDecoration(
                               color: AppColors.buttonColor4,
                               borderRadius: BorderRadius.circular(12.r),
-                              border: Border.all(color: AppColors.buttonBorderColor4),
+                              border: Border.all(
+                                color: AppColors.buttonBorderColor4,
+                              ),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Icon(Icons.calendar_today, color: AppColors.textColor, size: 18.r),
-                                Text(selectedFromDate, style: TextStyle(color: AppColors.textColor, fontSize: 12.sp)),
+                                Icon(
+                                  Icons.calendar_today,
+                                  color: AppColors.textColor,
+                                  size: 18.r,
+                                ),
+                                Text(
+                                  selectedFromDate,
+                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: AppColors.textColor,
+                                    fontSize: 12.sp,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -1144,7 +1332,13 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Start Time", style: TextStyle(color: AppColors.textColor, fontSize: 14.sp)),
+                        Text(
+                          "Start Time",
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppColors.textColor,
+                            fontSize: 14.sp,
+                          ),
+                        ),
                         SizedBox(height: 8.h),
                         GestureDetector(
                           onTap: () => _showTimePicker(true, false),
@@ -1154,13 +1348,25 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                             decoration: BoxDecoration(
                               color: AppColors.buttonColor4,
                               borderRadius: BorderRadius.circular(12.r),
-                              border: Border.all(color: AppColors.buttonBorderColor4),
+                              border: Border.all(
+                                color: AppColors.buttonBorderColor4,
+                              ),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Icon(Icons.access_time, color: AppColors.textColor, size: 18.r),
-                                Text(offStartTime, style: TextStyle(color: AppColors.textColor, fontSize: 12.sp)),
+                                Icon(
+                                  Icons.access_time,
+                                  color: AppColors.textColor,
+                                  size: 18.r,
+                                ),
+                                Text(
+                                  offStartTime,
+                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: AppColors.textColor,
+                                    fontSize: 12.sp,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -1177,7 +1383,13 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("To", style: TextStyle(color: AppColors.textColor, fontSize: 14.sp)),
+                        Text(
+                          "To",
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppColors.textColor,
+                            fontSize: 14.sp,
+                          ),
+                        ),
                         SizedBox(height: 8.h),
                         GestureDetector(
                           onTap: () => _showDatePicker(false),
@@ -1187,13 +1399,25 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                             decoration: BoxDecoration(
                               color: AppColors.buttonColor4,
                               borderRadius: BorderRadius.circular(12.r),
-                              border: Border.all(color: AppColors.buttonBorderColor4),
+                              border: Border.all(
+                                color: AppColors.buttonBorderColor4,
+                              ),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Icon(Icons.calendar_today, color: AppColors.textColor, size: 18.r),
-                                Text(selectedToDate, style: TextStyle(color: AppColors.textColor, fontSize: 12.sp)),
+                                Icon(
+                                  Icons.calendar_today,
+                                  color: AppColors.textColor,
+                                  size: 18.r,
+                                ),
+                                Text(
+                                  selectedToDate,
+                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: AppColors.textColor,
+                                    fontSize: 12.sp,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -1206,7 +1430,13 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("End Time", style: TextStyle(color: AppColors.textColor, fontSize: 14.sp)),
+                        Text(
+                          "End Time",
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppColors.textColor,
+                            fontSize: 14.sp,
+                          ),
+                        ),
                         SizedBox(height: 8.h),
                         GestureDetector(
                           onTap: () => _showTimePicker(false, false),
@@ -1216,13 +1446,25 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                             decoration: BoxDecoration(
                               color: AppColors.buttonColor4,
                               borderRadius: BorderRadius.circular(12.r),
-                              border: Border.all(color: AppColors.buttonBorderColor4),
+                              border: Border.all(
+                                color: AppColors.buttonBorderColor4,
+                              ),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Icon(Icons.access_time, color: AppColors.textColor, size: 18.r),
-                                Text(offEndTime, style: TextStyle(color: AppColors.textColor, fontSize: 12.sp)),
+                                Icon(
+                                  Icons.access_time,
+                                  color: AppColors.textColor,
+                                  size: 18.r,
+                                ),
+                                Text(
+                                  offEndTime,
+                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: AppColors.textColor,
+                                    fontSize: 12.sp,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -1235,63 +1477,110 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
               SizedBox(height: 24.h),
               CustomButton(
                 title: "Save Availability",
-                buttonColor: canSave ? AppColors.iconColor : AppColors.buttonColor4,
-                textColor: canSave ? Colors.white : AppColors.whiteColor.withAlpha(100),
-                onPress: canSave ? () async {
-                  setState(() {
-                    offDaysList.add({
-                      "start": "$selectedFromDate; $offStartTime",
-                      "end": "$selectedToDate; $offEndTime"
-                    });
-                    selectedFromDate = "Select one";
-                    selectedToDate = "Select one";
-                    offStartTime = "Enter here";
-                    offEndTime = "Enter here";
-                  });
-                } : null,
+                buttonColor: canSave
+                    ? AppColors.iconColor
+                    : AppColors.buttonColor4,
+                textColor: canSave
+                    ? AppColors.whiteColor
+                    : AppColors.whiteColor.withAlpha(100),
+                onPress: canSave
+                    ? () async {
+                        setState(() {
+                          offDaysList.add({
+                            "start": "$selectedFromDate; $offStartTime",
+                            "end": "$selectedToDate; $offEndTime",
+                          });
+                          selectedFromDate = "Select one";
+                          selectedToDate = "Select one";
+                          offStartTime = "Enter here";
+                          offEndTime = "Enter here";
+                        });
+                      }
+                    : null,
               ),
             ],
           ),
         ),
         SizedBox(height: 24.h),
-        Text("Current Unavailability", style: TextStyle(color: AppColors.textColor, fontSize: 16.sp, fontWeight: FontWeight.bold)),
+        Text(
+          "Current Unavailability",
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: AppColors.textColor,
+            fontSize: 16.sp,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         SizedBox(height: 12.h),
-        ...offDaysList.map((item) => Container(
-          margin: EdgeInsets.only(bottom: 12.h),
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-          decoration: BoxDecoration(
-            color: AppColors.buttonColor4.withAlpha(30),
-            borderRadius: BorderRadius.circular(12.r),
-            border: Border.all(color: AppColors.buttonBorderColor4.withAlpha(30)),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text("Starts  ", style: TextStyle(color: AppColors.textColor, fontSize: 12.sp)),
-                      Text(item["start"]!, style: TextStyle(color: Colors.white, fontSize: 13.sp, fontWeight: FontWeight.bold)),
-                    ],
-                  ),
-                  SizedBox(height: 4.h),
-                  Row(
-                    children: [
-                      Text("Ends    ", style: TextStyle(color: AppColors.textColor, fontSize: 12.sp)),
-                      Text(item["end"]!, style: TextStyle(color: Colors.white, fontSize: 13.sp, fontWeight: FontWeight.bold)),
-                    ],
-                  ),
-                ],
+        ...offDaysList.map(
+          (item) => Container(
+            margin: EdgeInsets.only(bottom: 12.h),
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+            decoration: BoxDecoration(
+              color: AppColors.buttonColor4.withAlpha(30),
+              borderRadius: BorderRadius.circular(12.r),
+              border: Border.all(
+                color: AppColors.buttonBorderColor4.withAlpha(30),
               ),
-              GestureDetector(
-                onTap: () => setState(() => offDaysList.remove(item)),
-                child: Icon(Icons.cancel, color: Colors.redAccent.withAlpha(200), size: 22.r),
-              ),
-            ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          "Starts  ",
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppColors.textColor,
+                            fontSize: 12.sp,
+                          ),
+                        ),
+                        Text(
+                          item["start"]!,
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppColors.whiteColor,
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 4.h),
+                    Row(
+                      children: [
+                        Text(
+                          "Ends    ",
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppColors.textColor,
+                            fontSize: 12.sp,
+                          ),
+                        ),
+                        Text(
+                          item["end"]!,
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppColors.whiteColor,
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                GestureDetector(
+                  onTap: () => setState(() => offDaysList.remove(item)),
+                  child: Icon(
+                    Icons.cancel,
+                    color: AppColors.redAccentColor.withAlpha(200),
+                    size: 22.r,
+                  ),
+                ),
+              ],
+            ),
           ),
-        )),
+        ),
       ],
     );
   }
@@ -1310,13 +1599,30 @@ class CoachRatesServicesView extends StatefulWidget {
 class _CoachRatesServicesViewState extends State<CoachRatesServicesView> {
   final perMinuteController = TextEditingController(text: "150\$");
   final perTextController = TextEditingController(text: "150\$");
-  final cancellationPolicyController = TextEditingController(text: "Write cancellation policy");
+  final cancellationPolicyController = TextEditingController(
+    text: "Write cancellation policy",
+  );
   final cancelPriorController = TextEditingController(text: "48h");
 
   final List<Map<String, dynamic>> services = [
-    {"title": "Option 1", "duration": "Enter here", "price": "Enter here", "active": true},
-    {"title": "Option 2", "duration": "Enter here", "price": "Enter here", "active": true},
-    {"title": "Option 3", "duration": "Enter here", "price": "Enter here", "active": true},
+    {
+      "title": "Option 1",
+      "duration": "Enter here",
+      "price": "Enter here",
+      "active": true,
+    },
+    {
+      "title": "Option 2",
+      "duration": "Enter here",
+      "price": "Enter here",
+      "active": true,
+    },
+    {
+      "title": "Option 3",
+      "duration": "Enter here",
+      "price": "Enter here",
+      "active": true,
+    },
   ];
 
   @override
@@ -1343,32 +1649,80 @@ class _CoachRatesServicesViewState extends State<CoachRatesServicesView> {
               Text(
                 "This is What Clients Will See Before Reaching Out",
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontFamily: 'Georgia',
-                      color: AppColors.whiteColor,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  fontFamily: 'Georgia',
+                  color: AppColors.whiteColor,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               SizedBox(height: 24.h),
-              Text("Per Minute Rate", style: TextStyle(color: AppColors.textColor, fontSize: 14.sp, fontWeight: FontWeight.w600)),
+              Text(
+                "Per Minute Rate",
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.textColor,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
               SizedBox(height: 8.h),
-              InputTextWidget(hintText: "Rate per minute", controller: perMinuteController),
+              InputTextWidget(
+                hintText: "Rate per minute",
+                controller: perMinuteController,
+              ),
               SizedBox(height: 16.h),
-              Text("Per Text Rate", style: TextStyle(color: AppColors.textColor, fontSize: 14.sp, fontWeight: FontWeight.w600)),
+              Text(
+                "Per Text Rate",
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.textColor,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
               SizedBox(height: 8.h),
-              InputTextWidget(hintText: "Rate per text message", controller: perTextController),
+              InputTextWidget(
+                hintText: "Rate per text message",
+                controller: perTextController,
+              ),
               SizedBox(height: 16.h),
-              Text("Cancellation Policy", style: TextStyle(color: AppColors.textColor, fontSize: 14.sp, fontWeight: FontWeight.w600)),
+              Text(
+                "Cancellation Policy",
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.textColor,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
               SizedBox(height: 8.h),
-              InputTextWidget(hintText: "Write cancellation policy", controller: cancellationPolicyController, keyboardType: TextInputType.multiline),
+              InputTextWidget(
+                hintText: "Write cancellation policy",
+                controller: cancellationPolicyController,
+                keyboardType: TextInputType.multiline,
+              ),
               SizedBox(height: 16.h),
-              Text("Accept Cancellation Prior", style: TextStyle(color: AppColors.textColor, fontSize: 14.sp, fontWeight: FontWeight.w600)),
+              Text(
+                "Accept Cancellation Prior",
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.textColor,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
               SizedBox(height: 8.h),
-              InputTextWidget(hintText: "Prior window (e.g. 48h)", controller: cancelPriorController),
+              InputTextWidget(
+                hintText: "Prior window (e.g. 48h)",
+                controller: cancelPriorController,
+              ),
               SizedBox(height: 24.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Service List", style: TextStyle(color: AppColors.textColor, fontSize: 18.sp, fontWeight: FontWeight.bold)),
+                  Text(
+                    "Service List",
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.textColor,
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   GestureDetector(
                     onTap: () {
                       setState(() {
@@ -1376,12 +1730,15 @@ class _CoachRatesServicesViewState extends State<CoachRatesServicesView> {
                           "title": "Option ${services.length + 1}",
                           "duration": "Enter here",
                           "price": "Enter here",
-                          "active": true
+                          "active": true,
                         });
                       });
                     },
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10.w,
+                        vertical: 6.h,
+                      ),
                       decoration: BoxDecoration(
                         color: AppColors.buttonColor4,
                         borderRadius: BorderRadius.circular(8.r),
@@ -1389,9 +1746,19 @@ class _CoachRatesServicesViewState extends State<CoachRatesServicesView> {
                       ),
                       child: Row(
                         children: [
-                          Icon(Icons.add, color: AppColors.textColor, size: 16.r),
+                          Icon(
+                            Icons.add,
+                            color: AppColors.textColor,
+                            size: 16.r,
+                          ),
                           SizedBox(width: 4.w),
-                          Text("Add Option", style: TextStyle(color: AppColors.textColor, fontSize: 12.sp)),
+                          Text(
+                            "Add Option",
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: AppColors.textColor,
+                              fontSize: 12.sp,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -1417,8 +1784,12 @@ class _CoachRatesServicesViewState extends State<CoachRatesServicesView> {
   }
 
   Widget _buildServiceOptionCard(Map<String, dynamic> opt) {
-    final durCtrl = TextEditingController(text: opt["duration"] == "Enter here" ? "" : opt["duration"]);
-    final prCtrl = TextEditingController(text: opt["price"] == "Enter here" ? "" : opt["price"]);
+    final durCtrl = TextEditingController(
+      text: opt["duration"] == "Enter here" ? "" : opt["duration"],
+    );
+    final prCtrl = TextEditingController(
+      text: opt["price"] == "Enter here" ? "" : opt["price"],
+    );
 
     return Container(
       margin: EdgeInsets.only(bottom: 16.h),
@@ -1434,16 +1805,29 @@ class _CoachRatesServicesViewState extends State<CoachRatesServicesView> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(opt["title"]!, style: TextStyle(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.bold)),
+              Text(
+                opt["title"]!,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.whiteColor,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               Row(
                 children: [
-                  Text("Active", style: TextStyle(color: AppColors.textColor, fontSize: 12.sp)),
+                  Text(
+                    "Active",
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.textColor,
+                      fontSize: 12.sp,
+                    ),
+                  ),
                   SizedBox(width: 8.w),
                   SizedBox(
                     height: 20.h,
                     child: Switch(
                       value: opt["active"] as bool,
-                      activeColor: AppColors.iconColor,
+                      activeThumbColor: AppColors.iconColor,
                       onChanged: (val) {
                         setState(() {
                           opt["active"] = val;
@@ -1454,14 +1838,21 @@ class _CoachRatesServicesViewState extends State<CoachRatesServicesView> {
                   SizedBox(width: 12.w),
                   GestureDetector(
                     onTap: () => setState(() => services.remove(opt)),
-                    child: Icon(Icons.delete, color: Colors.redAccent.withAlpha(200), size: 20.r),
+                    child: Icon(
+                      Icons.delete,
+                      color: AppColors.redAccentColor.withAlpha(200),
+                      size: 20.r,
+                    ),
                   ),
                 ],
               ),
             ],
           ),
           SizedBox(height: 16.h),
-          Text("Duration", style: TextStyle(color: AppColors.textColor, fontSize: 14.sp)),
+          Text(
+            "Duration",
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textColor, fontSize: 14.sp),
+          ),
           SizedBox(height: 6.h),
           InputTextWidget(
             hintText: "Enter here",
@@ -1469,7 +1860,10 @@ class _CoachRatesServicesViewState extends State<CoachRatesServicesView> {
             onChanged: (val) => opt["duration"] = val,
           ),
           SizedBox(height: 12.h),
-          Text("Price", style: TextStyle(color: AppColors.textColor, fontSize: 14.sp)),
+          Text(
+            "Price",
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textColor, fontSize: 14.sp),
+          ),
           SizedBox(height: 6.h),
           InputTextWidget(
             hintText: "Enter here",
@@ -1507,7 +1901,7 @@ class CoachSetupCompleteView extends StatelessWidget {
                     width: 160.r,
                     height: 160.r,
                     decoration: BoxDecoration(
-                      color: const Color(0xFFC9A84C).withAlpha(30),
+                      color: AppColors.iconColor.withAlpha(30),
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -1515,7 +1909,7 @@ class CoachSetupCompleteView extends StatelessWidget {
                     width: 130.r,
                     height: 130.r,
                     decoration: const BoxDecoration(
-                      color: Color(0xFFC9A84C),
+                      color: AppColors.iconColor,
                       shape: BoxShape.circle,
                     ),
                     alignment: Alignment.center,
@@ -1525,7 +1919,7 @@ class CoachSetupCompleteView extends StatelessWidget {
                     child: Center(
                       child: Text(
                         "✨ 🎉 🥳",
-                        style: TextStyle(fontSize: 100.sp),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 100.sp),
                       ),
                     ),
                   ),
@@ -1560,8 +1954,8 @@ class CoachSetupCompleteView extends StatelessWidget {
                   height: 56.h,
                   title: "Go to Home →",
                   linearGradient: true,
-                  buttonColor: const Color(0xFFC9A84C),
-                  textColor: Colors.white,
+                  buttonColor: AppColors.iconColor,
+                  textColor: AppColors.whiteColor,
                   onPress: () async {
                     final router = GoRouter.of(context);
                     await ApiService.store(

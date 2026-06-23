@@ -64,7 +64,7 @@ class FollowUpSetupView extends StatelessWidget {
                   Text(
                     'Follow Up Text',
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: Colors.white,
+                      color: AppColors.whiteColor,
                       fontSize: 14,
                       fontFamily: 'Segoe UI',
                       fontWeight: FontWeight.w400,
@@ -100,7 +100,7 @@ borderRadius: 8,
                   Text(
                     "Follow Up Message Set Up",
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: Colors.white,
+                      color: AppColors.whiteColor,
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                     ),
@@ -112,7 +112,7 @@ borderRadius: 8,
                     spacing: 24.w,
                     runSpacing: 16.h,
                     children: intervals
-                        .map((interval) => _buildCheckbox(controller, interval))
+                        .map((interval) => _buildCheckbox(context, controller, interval))
                         .toList(),
                   ),
 
@@ -134,7 +134,7 @@ borderRadius: 8,
     );
   }
 
-  Widget _buildCheckbox(CoachProfileController controller, String title) {
+  Widget _buildCheckbox(BuildContext context, CoachProfileController controller, String title) {
     final bool isSelected = controller.selectedFollowUpInterval == title;
 
     return InkWell(
@@ -147,21 +147,21 @@ borderRadius: 8,
             height: 18.r,
             decoration: BoxDecoration(
               border: Border.all(
-                color: isSelected ? AppColors.coachColorFFC19E5F : Colors.white38,
+                color: isSelected ? AppColors.coachColorFFC19E5F : AppColors.white38Color,
                 width: 1.5,
               ),
               borderRadius: BorderRadius.circular(4.r),
               color: isSelected ? AppColors.coachColorFFC19E5F : Colors.transparent,
             ),
             child: isSelected
-                ? const Icon(Icons.check, color: Colors.white, size: 12)
+                ? const Icon(Icons.check, color: AppColors.whiteColor, size: 12)
                 : null,
           ),
           SizedBox(width: 10.w),
           Text(
             title,
-            style: TextStyle(
-              color: isSelected ? AppColors.coachColorFFC19E5F : Colors.white70,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: isSelected ? AppColors.coachColorFFC19E5F : AppColors.white70Color,
               fontSize: 14,
             ),
           ),

@@ -315,11 +315,11 @@ class _SnackBarOverlay extends StatelessWidget {
                                     child: Container(
                                       padding: EdgeInsets.all(8.w),
                                       decoration: BoxDecoration(
-                                        color: Colors.white.withValues(alpha: 0.2),
+                                        color: AppColors.whiteColor.withValues(alpha: 0.2),
                                         shape: BoxShape.circle,
                                         boxShadow: [
                                           BoxShadow(
-                                            color: Colors.white.withValues(alpha: 0.1),
+                                            color: AppColors.whiteColor.withValues(alpha: 0.1),
                                             blurRadius: 10,
                                             spreadRadius: 2,
                                           ),
@@ -339,7 +339,7 @@ class _SnackBarOverlay extends StatelessWidget {
                                       children: [
                                         Text(
                                           title,
-                                          style: TextStyle(
+                                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                             color: config.textColor,
                                             fontWeight: FontWeight.bold,
                                             fontSize: 14.sp,
@@ -351,7 +351,7 @@ class _SnackBarOverlay extends StatelessWidget {
                                         SizedBox(height: 4.h),
                                         Text(
                                           message,
-                                          style: TextStyle(
+                                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                             color: config.textColor.withValues(
                                               alpha: 0.9,
                                             ),
@@ -392,7 +392,7 @@ class _SnackBarOverlay extends StatelessWidget {
                                   return LinearProgressIndicator(
                                     value: progressVal, // Shrinks as time passes
                                     minHeight: 5.h,
-                                    backgroundColor: Colors.black.withValues(alpha: 0.1),
+                                    backgroundColor: AppColors.blackColor.withValues(alpha: 0.1),
                                     valueColor: AlwaysStoppedAnimation<Color>(
                                       config.textColor.withValues(alpha: 0.5),
                                     ),

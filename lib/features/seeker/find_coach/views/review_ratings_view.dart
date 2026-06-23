@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../../core/widgets/custom_loader.dart';
 import '../controllers/coach_controller.dart';
 import '../models/coach_model.dart';
+import 'package:newproject/core/constants/app_colors.dart';
 
 class ReviewRatingsView extends StatelessWidget {
   final CoachModel? coach;
@@ -22,8 +23,8 @@ class ReviewRatingsView extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(icon: const Icon(Icons.arrow_back, color: Colors.white), onPressed: () => Navigator.pop(context)),
-        title: Text("Review and Ratings", style: TextStyle(color: Colors.white, fontSize: 18.sp)),
+        leading: IconButton(icon: const Icon(Icons.arrow_back, color: AppColors.whiteColor), onPressed: () => Navigator.pop(context)),
+        title: Text("Review and Ratings", style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 18.sp)),
         centerTitle: true,
       ),
       body: Consumer<CoachController>(
@@ -48,12 +49,12 @@ class ReviewRatingsView extends StatelessWidget {
                   padding: EdgeInsets.all(20.r),
                   child: Column(
               children: [
-                _buildRatingSummary(rating, reviewsCount),
+                _buildRatingSummary(context, rating, reviewsCount),
                 SizedBox(height: 30.h),
                 if (controller.reviews.isEmpty)
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 20.h),
-                    child: Text("No reviews yet.", style: TextStyle(color: Colors.white.withAlpha(128))),
+                    child: Text("No reviews yet.", style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(128))),
                   )
                 else
                   ListView.builder(
@@ -62,7 +63,7 @@ class ReviewRatingsView extends StatelessWidget {
                     itemCount: controller.reviews.length,
                     itemBuilder: (context, index) {
                       final review = controller.reviews[index];
-                      return _buildReviewItem(
+                      return _buildReviewItem(context, 
                         review.reviewerName,
                         review.reviewerAvatar,
                         review.date,
@@ -89,24 +90,24 @@ class ReviewRatingsView extends StatelessWidget {
     );
   }
 
-  Widget _buildRatingSummary(double rating, int reviewsCount) {
+  Widget _buildRatingSummary(BuildContext context, double rating, int reviewsCount) {
     return Row(
       children: [
         Column(
           children: [
-            Text(rating.toStringAsFixed(1), style: TextStyle(color: Colors.white, fontSize: 32.sp, fontWeight: FontWeight.bold)),
-            Text("$reviewsCount Ratings", style: TextStyle(color: Colors.white.withAlpha(128), fontSize: 12.sp)),
+            Text(rating.toStringAsFixed(1), style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 32.sp, fontWeight: FontWeight.bold)),
+            Text("$reviewsCount Ratings", style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(128), fontSize: 12.sp)),
           ],
         ),
         SizedBox(width: 30.w),
         Expanded(
           child: Column(
             children: [
-              _buildRatingBar(5, (reviewsCount * 0.8).round(), 0.8),
-              _buildRatingBar(4, (reviewsCount * 0.12).round(), 0.4),
-              _buildRatingBar(3, (reviewsCount * 0.05).round(), 0.3),
-              _buildRatingBar(2, (reviewsCount * 0.02).round(), 0.1),
-              _buildRatingBar(1, (reviewsCount * 0.01).round(), 0.05),
+              _buildRatingBar(context, 5, (reviewsCount * 0.8).round(), 0.8),
+              _buildRatingBar(context, 4, (reviewsCount * 0.12).round(), 0.4),
+              _buildRatingBar(context, 3, (reviewsCount * 0.05).round(), 0.3),
+              _buildRatingBar(context, 2, (reviewsCount * 0.02).round(), 0.1),
+              _buildRatingBar(context, 1, (reviewsCount * 0.01).round(), 0.05),
             ],
           ),
         ),
@@ -114,31 +115,31 @@ class ReviewRatingsView extends StatelessWidget {
     );
   }
 
-  Widget _buildRatingBar(int stars, int count, double progress) {
+  Widget _buildRatingBar(BuildContext context, int stars, int count, double progress) {
     return Padding(
       padding: EdgeInsets.only(bottom: 4.h),
       child: Row(
         children: [
-          Row(children: List.generate(stars, (index) => Icon(Icons.star, color: Colors.amber, size: 10.r))),
+          Row(children: List.generate(stars, (index) => Icon(Icons.star, color: AppColors.amberColor, size: 10.r))),
           const Spacer(),
           Container(
             width: 140.w,
             height: 4.h,
-            decoration: BoxDecoration(color: Colors.white10, borderRadius: BorderRadius.circular(2.r)),
+            decoration: BoxDecoration(color: AppColors.white10Color, borderRadius: BorderRadius.circular(2.r)),
             child: FractionallySizedBox(
               alignment: Alignment.centerLeft,
               widthFactor: progress,
-              child: Container(decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(2.r))),
+              child: Container(decoration: BoxDecoration(color: AppColors.greenColor, borderRadius: BorderRadius.circular(2.r))),
             ),
           ),
           SizedBox(width: 12.w),
-          Text(count.toString(), style: TextStyle(color: Colors.white.withAlpha(128), fontSize: 11.sp)),
+          Text(count.toString(), style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(128), fontSize: 11.sp)),
         ],
       ),
     );
   }
 
-  Widget _buildReviewItem(String name, String avatar, String date, double rating, String content) {
+  Widget _buildReviewItem(BuildContext context, String name, String avatar, String date, double rating, String content) {
     return Padding(
       padding: EdgeInsets.only(bottom: 16.h),
       child: Row(
@@ -149,15 +150,15 @@ class ReviewRatingsView extends StatelessWidget {
           Expanded(
             child: Container(
               padding: EdgeInsets.all(16.r),
-              decoration: BoxDecoration(color: Colors.white.withAlpha(13), borderRadius: BorderRadius.circular(16.r)),
+              decoration: BoxDecoration(color: AppColors.whiteColor.withAlpha(13), borderRadius: BorderRadius.circular(16.r)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(name, style: TextStyle(color: Colors.white, fontSize: 14.sp, fontWeight: FontWeight.bold)),
-                      Text(date, style: TextStyle(color: Colors.white.withAlpha(128), fontSize: 11.sp)),
+                      Text(name, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 14.sp, fontWeight: FontWeight.bold)),
+                      Text(date, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(128), fontSize: 11.sp)),
                     ],
                   ),
                   SizedBox(height: 4.h),
@@ -166,7 +167,7 @@ class ReviewRatingsView extends StatelessWidget {
                       5,
                       (index) => Icon(
                         Icons.star,
-                        color: index < rating.round() ? Colors.amber : Colors.white10,
+                        color: index < rating.round() ? AppColors.amberColor : AppColors.white10Color,
                         size: 14.r,
                       ),
                     ),
@@ -174,7 +175,7 @@ class ReviewRatingsView extends StatelessWidget {
                   SizedBox(height: 12.h),
                   Text(
                     content,
-                    style: TextStyle(color: Colors.white.withAlpha(179), fontSize: 12.sp, height: 1.5),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(179), fontSize: 12.sp, height: 1.5),
                   ),
                 ],
               ),

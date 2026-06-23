@@ -26,7 +26,7 @@ class CirclePostCard extends StatelessWidget {
       context: context,
       barrierDismissible: true,
       barrierLabel: "Dismiss",
-      barrierColor: Colors.black.withValues(alpha: 0.1),
+      barrierColor: AppColors.blackColor.withValues(alpha: 0.1),
       pageBuilder: (context, animation, secondaryAnimation) {
         return Stack(
           children: [
@@ -160,7 +160,7 @@ class CirclePostCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(16.r),
             boxShadow: [designSystem.softShadow],
             border: Border.all(
-              color: Colors.white.withValues(alpha: 0.05),
+              color: AppColors.whiteColor.withValues(alpha: 0.05),
               width: 0.5,
             ),
           ),
@@ -195,16 +195,16 @@ class CirclePostCard extends StatelessWidget {
                             ),
                             child: CircleAvatar(
                               radius: 20.r,
-                              backgroundColor: Colors.white.withValues(alpha: 0.1),
+                              backgroundColor: AppColors.whiteColor.withValues(alpha: 0.1),
                               backgroundImage: post.userAvatar.isNotEmpty
                                   ? NetworkImage(post.userAvatar)
                                   : null,
                               child: post.userAvatar.isEmpty
                                   ? Text(
                                       post.userName[0],
-                                      style: TextStyle(
+                                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                         fontSize: 14.sp,
-                                        color: Colors.white,
+                                        color: AppColors.whiteColor,
                                       ),
                                     )
                                   : null,
@@ -228,7 +228,7 @@ class CirclePostCard extends StatelessWidget {
                                 Text(
                                   post.userName,
                                   style: theme.textTheme.titleMedium?.copyWith(
-                                    color: Colors.white,
+                                    color: AppColors.whiteColor,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15.sp,
                                   ),
@@ -236,7 +236,7 @@ class CirclePostCard extends StatelessWidget {
                                 Text(
                                   post.timeAgo,
                                   style: theme.textTheme.bodySmall?.copyWith(
-                                    color: Colors.white.withValues(alpha: 0.6),
+                                    color: AppColors.whiteColor.withValues(alpha: 0.6),
                                     fontSize: 12.sp,
                                   ),
                                 ),
@@ -266,7 +266,7 @@ class CirclePostCard extends StatelessWidget {
                     Text(
                       post.content,
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color: Colors.white.withValues(alpha: 0.9),
+                        color: AppColors.whiteColor.withValues(alpha: 0.9),
                         fontSize: 14.sp,
                         height: 1.4,
                       ),
@@ -317,7 +317,7 @@ class CirclePostCard extends StatelessWidget {
                                 Text(
                                   "Share",
                                   style: theme.textTheme.bodyMedium?.copyWith(
-                                    color: Colors.white,
+                                    color: AppColors.whiteColor,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
@@ -352,13 +352,13 @@ class CirclePostCard extends StatelessWidget {
                             Icon(
                               Icons.keyboard_arrow_down,
                               size: 18.sp,
-                              color: Colors.white.withValues(alpha: 0.6),
+                              color: AppColors.whiteColor.withValues(alpha: 0.6),
                             ),
                             SizedBox(width: 4.w),
                             Text(
                               "Comments",
                               style: theme.textTheme.bodySmall?.copyWith(
-                                color: Colors.white.withValues(alpha: 0.6),
+                                color: AppColors.whiteColor.withValues(alpha: 0.6),
                               ),
                             ),
                           ],
@@ -532,7 +532,7 @@ class CirclePostCard extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.05),
+                color: AppColors.whiteColor.withValues(alpha: 0.05),
                 borderRadius: BorderRadius.circular(12.r),
               ),
               child: Column(
@@ -541,7 +541,7 @@ class CirclePostCard extends StatelessWidget {
                   Text(
                     comment.userName,
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: Colors.white,
+                      color: AppColors.whiteColor,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -549,7 +549,7 @@ class CirclePostCard extends StatelessWidget {
                   Text(
                     comment.content,
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: Colors.white.withValues(alpha: 0.8),
+                      color: AppColors.whiteColor.withValues(alpha: 0.8),
                       fontSize: 12.sp,
                     ),
                   ),
@@ -589,9 +589,9 @@ class _ActionButton extends StatelessWidget {
           Container(
             padding: EdgeInsets.all(6.r),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.05),
+              color: AppColors.whiteColor.withValues(alpha: 0.05),
               shape: BoxShape.circle,
-              border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+              border: Border.all(color: AppColors.whiteColor.withValues(alpha: 0.1)),
             ),
             child: SvgPicture.asset(icon, width: 14.r),
           ),
@@ -599,7 +599,7 @@ class _ActionButton extends StatelessWidget {
           Text(
             count.toString(),
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: Colors.white,
+              color: AppColors.whiteColor,
               fontWeight: FontWeight.w500,
             ),
           ),

@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_assets.dart';
 import '../../../../core/constants/app_colors.dart';
-import '../../../../core/widgets/background_widget.dart';
 import '../../../../core/widgets/custom_input.dart';
 import '../../../../core/widgets/custom_loader.dart';
 import '../controllers/coach_circle_controller.dart';
@@ -48,7 +47,7 @@ appBar: AppBar(
               Text(
                 "Circles",
                 style: theme.textTheme.titleSmall?.copyWith(
-                  color: Colors.white,
+                  color: AppColors.whiteColor,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Georgia',
                 ),
@@ -104,7 +103,7 @@ leadingIcon: AppAssets.search,
                                         child: Text(
                                           "No circles found",
                                           style: theme.textTheme.bodyMedium?.copyWith(
-                                            color: Colors.white54,
+                                            color: AppColors.white54Color,
                                           ),
                                         ),
                                       ),
@@ -192,14 +191,14 @@ leadingIcon: AppAssets.search,
               children: [
                 CircleAvatar(
                   radius: 24.r,
-                  backgroundColor: Colors.white,
+                  backgroundColor: AppColors.whiteColor,
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: icon.startsWith('http')
                         ? Image.network(
                             icon,
                             errorBuilder: (c, e, s) =>
-                                const Icon(Icons.group, color: Colors.grey),
+                                const Icon(Icons.group, color: AppColors.greyColor),
                           )
                         : Image.asset(icon),
                   ),
@@ -211,16 +210,16 @@ leadingIcon: AppAssets.search,
                     children: [
                       Text(
                         name,
-                        style: TextStyle(
-                          color: Colors.white,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.whiteColor,
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                         ),
                       ),
                       Text(
                         members,
-                        style: TextStyle(
-                          color: Colors.white38,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.white38Color,
                           fontSize: 12,
                         ),
                       ),
@@ -232,8 +231,8 @@ leadingIcon: AppAssets.search,
             SizedBox(height: 16.h),
             Text(
               description,
-              style: TextStyle(
-                color: Colors.white70,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.white70Color,
                 fontSize: 13,
                 height: 1.4,
               ),

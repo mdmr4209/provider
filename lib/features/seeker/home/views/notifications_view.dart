@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import '../../../../core/theme/design_system.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_loader.dart';
 import '../controllers/home_controller.dart';
+import 'package:newproject/core/constants/app_colors.dart';
 
 class NotificationsView extends StatelessWidget {
   const NotificationsView({super.key});
@@ -22,17 +24,19 @@ class NotificationsView extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: AppColors.whiteColor),
           onPressed: () => Navigator.pop(context),
         ),
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.groups, color: const Color(0xFFC19E5F), size: 24.r),
+            Icon(Icons.groups, color: Theme.of(context).extension<AppDesignSystem>()?.badgeSolidColor ?? AppColors.coachColorFFC19E5F, size: 24.r),
             SizedBox(width: 8.w),
             Text(
               "Notification",
-              style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.bold),
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
           ],
         ),
@@ -74,7 +78,9 @@ class NotificationsView extends StatelessWidget {
                             child: Center(
                               child: Text(
                                 "No notifications yet.",
-                                style: TextStyle(color: Colors.white.withAlpha(128)),
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                      color: Theme.of(context).textTheme.bodyMedium?.color?.withAlpha(128),
+                                    ),
                               ),
                             ),
                           ),
@@ -89,12 +95,16 @@ class NotificationsView extends StatelessWidget {
                           if (item['type'] == 'invitation') {
                             return Padding(
                               padding: EdgeInsets.only(bottom: 12.h),
-                              child: _buildInvitationTile(item['message'] ?? ''),
+                              child: _buildInvitationTile(
+                                context,
+                                item['message'] ?? '',
+                              ),
                             );
                           } else {
                             return Padding(
                               padding: EdgeInsets.only(bottom: 12.h),
                               child: _buildPushNotificationCard(
+                                context,
                                 item['title'] ?? '',
                                 item['message'] ?? '',
                                 item['image'] ?? '',
@@ -117,13 +127,15 @@ class NotificationsView extends StatelessWidget {
       ),
     );
   }
-
-  Widget _buildInvitationTile(String message) {
+  Widget _buildInvitationTile(BuildContext context, String message) {
+    final theme = Theme.of(context);
+    final design = theme.extension<AppDesignSystem>();
+    
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       decoration: BoxDecoration(
-        color: Colors.white.withAlpha(13),
+        color: design?.cardFillMuted ?? AppColors.whiteColor.withAlpha(13),
         borderRadius: BorderRadius.circular(8.r),
       ),
       child: Text.rich(
@@ -131,16 +143,26 @@ class NotificationsView extends StatelessWidget {
           children: [
             TextSpan(
               text: message.split('"')[0],
-              style: TextStyle(color: Colors.white.withAlpha(179), fontSize: 13.sp),
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.textTheme.bodyMedium?.color?.withAlpha(179),
+                fontSize: 13.sp,
+              ),
             ),
             if (message.contains('"')) ...[
               TextSpan(
                 text: '"${message.split('"')[1]}"',
-                style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: AppColors.greenColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 13.sp,
+                ),
               ),
               TextSpan(
                 text: message.split('"')[2],
-                style: TextStyle(color: Colors.white.withAlpha(179), fontSize: 13.sp),
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.textTheme.bodyMedium?.color?.withAlpha(179),
+                  fontSize: 13.sp,
+                ),
               ),
             ],
           ],
@@ -149,11 +171,19 @@ class NotificationsView extends StatelessWidget {
     );
   }
 
-  Widget _buildPushNotificationCard(String title, String message, String imageUrl) {
+  Widget _buildPushNotificationCard(
+    BuildContext context,
+    String title,
+    String message,
+    String imageUrl,
+  ) {
+    final theme = Theme.of(context);
+    final design = theme.extension<AppDesignSystem>();
+
     return Container(
       padding: EdgeInsets.all(20.r),
       decoration: BoxDecoration(
-        color: Colors.white.withAlpha(13),
+        color: design?.cardFillMuted ?? AppColors.whiteColor.withAlpha(13),
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: Column(
@@ -161,12 +191,18 @@ class NotificationsView extends StatelessWidget {
         children: [
           Text(
             title,
-            style: TextStyle(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.bold),
+            style: theme.textTheme.titleSmall?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
           ),
           SizedBox(height: 12.h),
           Text(
             message,
-            style: TextStyle(color: Colors.white.withAlpha(153), fontSize: 13.sp, height: 1.5),
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.textTheme.bodyMedium?.color?.withAlpha(153),
+              fontSize: 13.sp,
+              height: 1.5,
+            ),
           ),
           if (imageUrl.isNotEmpty) ...[
             SizedBox(height: 20.h),

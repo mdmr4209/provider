@@ -1,0 +1,22 @@
+{
+  "suggestions": [
+    {
+      "id": "u567",
+      "name": "Mike Lee",
+      "avatar": "https://i.pravatar.cc/150?u=mike_l",
+      "mutualFriends": 2
+    },
+    {
+      "id": "u568",
+      "name": "Jordan K.",
+      "avatar": "https://i.pravatar.cc/150?u=jordan",
+      "mutualFriends": 3
+    },
+    {
+      "id": "u569",
+      "name": "Maya J.",
+      "avatar": "https://i.pravatar.cc/150?u=maya",
+      "mutualFriends": 1
+    }
+  ]
+}

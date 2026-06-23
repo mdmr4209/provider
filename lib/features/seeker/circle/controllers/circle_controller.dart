@@ -155,25 +155,8 @@ class CircleController extends ChangeNotifier {
     try {
       await Future.delayed(const Duration(milliseconds: 1000));
 
-      final Map<String, dynamic> rawSocial = {
-        "friends": [
-          { "id": "u1", "name": "Miles Esther", "avatar": "https://i.pravatar.cc/150?u=miles", "isOnline": true, "lastActive": "09:30 PM", "unreadCount": 2 },
-          { "id": "u2", "name": "Thomas stieve", "avatar": "https://i.pravatar.cc/150?u=thomas", "isOnline": false, "lastActive": "12 April, 1:30AM", "unreadCount": 0 },
-          { "id": "u3", "name": "Sarah Jenkins", "avatar": "https://i.pravatar.cc/150?u=sarah_j", "isOnline": true, "lastActive": "08:15 PM", "unreadCount": 0 }
-        ],
-        "requests": [
-          { "id": "req1", "userId": "u4", "userName": "Mike Lee", "avatar": "https://i.pravatar.cc/150?u=mike_l", "mutualFriends": 2 },
-          { "id": "req2", "userId": "u5", "userName": "Jordan K.", "avatar": "https://i.pravatar.cc/150?u=jordan", "mutualFriends": 3 }
-        ],
-        "followers": [
-          { "id": "u1", "name": "Miles Esther", "avatar": "https://i.pravatar.cc/150?u=miles" },
-          { "id": "u2", "name": "Thomas stieve", "avatar": "https://i.pravatar.cc/150?u=thomas" }
-        ],
-        "following": [
-          { "id": "u1", "name": "Miles Esther", "avatar": "https://i.pravatar.cc/150?u=miles", "isOnline": true },
-          { "id": "u3", "name": "Sarah Jenkins", "avatar": "https://i.pravatar.cc/150?u=sarah_j", "isOnline": true }
-        ]
-      };
+      final String jsonString = await rootBundle.loadString('assets/json/circle_social.json');
+      final Map<String, dynamic> rawSocial = jsonDecode(jsonString);
 
       _friends = List<Map<String, dynamic>>.from(rawSocial['friends']);
       _friendRequests = List<Map<String, dynamic>>.from(rawSocial['requests']);
@@ -199,13 +182,8 @@ class CircleController extends ChangeNotifier {
     try {
       await Future.delayed(const Duration(milliseconds: 800));
 
-      final Map<String, dynamic> rawSuggestions = {
-        "suggestions": [
-          { "id": "u567", "name": "Mike Lee", "avatar": "https://i.pravatar.cc/150?u=mike_l", "mutualFriends": 2 },
-          { "id": "u568", "name": "Jordan K.", "avatar": "https://i.pravatar.cc/150?u=jordan", "mutualFriends": 3 },
-          { "id": "u569", "name": "Maya J.", "avatar": "https://i.pravatar.cc/150?u=maya", "mutualFriends": 1 }
-        ]
-      };
+      final String jsonString = await rootBundle.loadString('assets/json/circle_suggestions.json');
+      final Map<String, dynamic> rawSuggestions = jsonDecode(jsonString);
 
       _discoverSuggestions = (rawSuggestions['suggestions'] as List).map((x) => SuggestionModel.fromJson(x)).toList();
     } catch (e) {

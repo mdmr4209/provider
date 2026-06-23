@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:newproject/core/constants/app_colors.dart';
 import 'package:provider/provider.dart';
-import '../../../../routes/app_router.dart';
+
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/input_text_widget.dart';
-import '../controllers/auth_controller.dart';
+import '../../../../routes/app_router.dart';
 import '../../localization/localization_extension.dart';
+import '../controllers/auth_controller.dart';
 import 'setup/setup_base_view.dart';
 
 class NameInputView extends StatelessWidget {
@@ -30,16 +30,16 @@ class NameInputView extends StatelessWidget {
               SizedBox(height: 20.h),
               Text(
                 "Hi There!👋",
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 8.h),
               Text(
                 "You selected: $role",
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
+                  color: Theme.of(context).colorScheme.primary,
+                ),
               ),
               SizedBox(height: 40.h),
               InputTextWidget(
@@ -55,11 +55,13 @@ class NameInputView extends StatelessWidget {
               ListenableBuilder(
                 listenable: auth.nameController,
                 builder: (context, _) {
-                  final bool isNameEntered = auth.nameController.text.trim().isNotEmpty;
+                  final bool isNameEntered = auth.nameController.text
+                      .trim()
+                      .isNotEmpty;
 
                   return CustomButton(
                     title: "Continue",
-                    linearGradient:isNameEntered? true:false,
+                    linearGradient: isNameEntered ? true : false,
                     onPress: isNameEntered
                         ? () async {
                             context.push(AppRoutes.setup1);

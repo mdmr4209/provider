@@ -22,10 +22,10 @@ class CoachFindFriendsView extends StatelessWidget {
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            icon: const Icon(Icons.arrow_back, color: AppColors.whiteColor),
             onPressed: () => Navigator.pop(context),
           ),
-          title: Text("Find Friends", style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
+          title: Text("Find Friends", style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontWeight: FontWeight.bold)),
           centerTitle: true,
         ),
         body: FutureBuilder(
@@ -48,14 +48,14 @@ class CoachFindFriendsView extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.search, color: Colors.white38),
+                    Icon(Icons.search, color: AppColors.white38Color),
                     SizedBox(width: 8),
                     Expanded(
                       child: TextField(
-                        style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white),
+                        style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor),
                         decoration: InputDecoration(
                           hintText: "Search Friends",
-                          hintStyle: theme.textTheme.bodyMedium?.copyWith(color: Colors.white38, fontSize: 14),
+                          hintStyle: theme.textTheme.bodyMedium?.copyWith(color: AppColors.white38Color, fontSize: 14),
                           border: InputBorder.none,
                         ),
                       ),
@@ -71,7 +71,7 @@ class CoachFindFriendsView extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 20.w),
               child: Align(
                 alignment: Alignment.centerLeft,
-                child: Text("Suggestions", style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white70, fontSize: 14)),
+                child: Text("Suggestions", style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.white70Color, fontSize: 14)),
               ),
             ),
 
@@ -107,7 +107,7 @@ class CoachFindFriendsView extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).extension<AppDesignSystem>()!.panelColor,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: AppColors.white10Color),
       ),
       child: Column(
         children: [
@@ -116,8 +116,8 @@ class CoachFindFriendsView extends StatelessWidget {
             backgroundImage: const NetworkImage('https://i.pravatar.cc/150?u=mike'),
           ),
           SizedBox(height: 12.h),
-          Text(name, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
-          Text(mutual, style: TextStyle(color: Colors.white38, fontSize: 11)),
+          Text(name, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontWeight: FontWeight.bold, fontSize: 16)),
+          Text(mutual, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white38Color, fontSize: 11)),
           const Spacer(),
           CustomButton(
             onPress: () async {},

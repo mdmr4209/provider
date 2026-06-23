@@ -89,8 +89,8 @@ class CoachHomeController extends ChangeNotifier {
             Text(
               'Hold On!!',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.whiteColor,
                 fontSize: 16,
                 fontFamily: 'Inter',
                 fontWeight: FontWeight.w500,
@@ -102,8 +102,8 @@ class CoachHomeController extends ChangeNotifier {
               child: Text(
                 'You cant disable account before taking decision about arranged Sessions',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.whiteColor,
                   fontSize: 12,
                   fontFamily: 'Inter',
                   fontWeight: FontWeight.w400,
@@ -137,15 +137,15 @@ class CoachHomeController extends ChangeNotifier {
             Align(
               alignment: Alignment.topRight,
               child: InkWell(
-                child: const Icon(Icons.close, color: Colors.white54, size: 20),
+                child: const Icon(Icons.close, color: AppColors.white54Color, size: 20),
                 onTap: () => Navigator.pop(context),
               ),
             ),
             Text(
               'Are you sure about Cancelling Session?',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.whiteColor,
                 fontSize: 16,
                 fontFamily: 'Inter',
                 fontWeight: FontWeight.w400,

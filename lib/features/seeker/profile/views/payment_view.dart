@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/constants/app_assets.dart';
+
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_input.dart';
@@ -15,13 +15,17 @@ class PaymentView extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.west, color: Color(0xFF5E7958), size: 24),
+          icon: const Icon(
+            Icons.west,
+            color: AppColors.coachColorFF5E7958,
+            size: 24,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           "Payment Details",
-          style: TextStyle(
-            color: Colors.white,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: AppColors.whiteColor,
             fontSize: 16,
             fontFamily: 'Georgia',
           ),
@@ -33,7 +37,7 @@ class PaymentView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildLabel("Card Holder Name"),
+            _buildLabel(context, "Card Holder Name"),
             CustomInput(
               height: 42,
               hintText: "Write Card Holder Name",
@@ -44,14 +48,14 @@ class PaymentView extends StatelessWidget {
                 fontSize: 12,
               ),
               shadow: true,
-              shadowColor: Color(0xFF2E4429),
-              backgroundColor: Color(0xFF21321E),
+              shadowColor: AppColors.coachColorFF2E4429,
+              backgroundColor: AppColors.coachColorFF21321E,
               borderRadius: 8,
               borderWidth: 0.50,
-              borderColor: Color(0xFF334B2F),
+              borderColor: AppColors.coachColorFF334B2F,
             ),
             SizedBox(height: 24.h),
-            _buildLabel("Card Number"),
+            _buildLabel(context, "Card Number"),
             CustomInput(
               height: 42,
               hintText: "Write Card Number",
@@ -62,11 +66,11 @@ class PaymentView extends StatelessWidget {
                 fontSize: 12,
               ),
               shadow: true,
-              shadowColor: Color(0xFF2E4429),
-              backgroundColor: Color(0xFF21321E),
+              shadowColor: AppColors.coachColorFF2E4429,
+              backgroundColor: AppColors.coachColorFF21321E,
               borderRadius: 8,
               borderWidth: 0.50,
-              borderColor: Color(0xFF334B2F),
+              borderColor: AppColors.coachColorFF334B2F,
             ),
             SizedBox(height: 24.h),
             Row(
@@ -75,22 +79,23 @@ class PaymentView extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildLabel("MM/YY"),
+                      _buildLabel(context, "MM/YY"),
                       CustomInput(
                         height: 42,
                         hintText: "exp. 12/24",
                         fontSize: 12,
                         hintColor: AppColors.greyColor,
-                        hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: AppColors.whiteColor.withAlpha(153),
-                          fontSize: 12,
-                        ),
+                        hintStyle: Theme.of(context).textTheme.bodyLarge
+                            ?.copyWith(
+                              color: AppColors.whiteColor.withAlpha(153),
+                              fontSize: 12,
+                            ),
                         shadow: true,
-                        shadowColor: Color(0xFF2E4429),
-                        backgroundColor: Color(0xFF21321E),
+                        shadowColor: AppColors.coachColorFF2E4429,
+                        backgroundColor: AppColors.coachColorFF21321E,
                         borderRadius: 8,
                         borderWidth: 0.50,
-                        borderColor: Color(0xFF334B2F),
+                        borderColor: AppColors.coachColorFF334B2F,
                       ),
                     ],
                   ),
@@ -100,22 +105,23 @@ class PaymentView extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildLabel("CVC"),
+                      _buildLabel(context, "CVC"),
                       CustomInput(
                         height: 42,
                         hintText: "*****",
                         fontSize: 12,
                         hintColor: AppColors.greyColor,
-                        hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: AppColors.whiteColor.withAlpha(153),
-                          fontSize: 12,
-                        ),
+                        hintStyle: Theme.of(context).textTheme.bodyLarge
+                            ?.copyWith(
+                              color: AppColors.whiteColor.withAlpha(153),
+                              fontSize: 12,
+                            ),
                         shadow: true,
-                        shadowColor: Color(0xFF2E4429),
-                        backgroundColor: Color(0xFF21321E),
+                        shadowColor: AppColors.coachColorFF2E4429,
+                        backgroundColor: AppColors.coachColorFF21321E,
                         borderRadius: 8,
                         borderWidth: 0.50,
-                        borderColor: Color(0xFF334B2F),
+                        borderColor: AppColors.coachColorFF334B2F,
                       ),
                     ],
                   ),
@@ -139,13 +145,13 @@ class PaymentView extends StatelessWidget {
     );
   }
 
-  Widget _buildLabel(String text) {
+  Widget _buildLabel(BuildContext context, String text) {
     return Padding(
       padding: EdgeInsets.only(bottom: 12.h, left: 4.w),
       child: Text(
         text,
-        style: TextStyle(
-          color: Colors.white,
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          color: AppColors.whiteColor,
           fontSize: 15.sp,
           fontWeight: FontWeight.w500,
         ),

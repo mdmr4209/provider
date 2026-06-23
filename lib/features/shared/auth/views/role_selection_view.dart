@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:newproject/core/constants/app_assets.dart';
 import 'package:newproject/core/constants/app_colors.dart';
 import 'package:provider/provider.dart';
-import '../controllers/auth_controller.dart';
-import '../../../../routes/app_router.dart';
-import '../../../../core/widgets/custom_button.dart';
+
 import '../../../../core/widgets/background_widget.dart';
+import '../../../../core/widgets/custom_button.dart';
+import '../../../../routes/app_router.dart';
+import '../controllers/auth_controller.dart';
 
 class RoleSelectionView extends StatelessWidget {
   const RoleSelectionView({super.key});
@@ -29,12 +29,12 @@ class RoleSelectionView extends StatelessWidget {
                   width: 130.r,
                   child: Image.asset(AppAssets.logo),
                 ),
-                SizedBox(height: 10.h,),
+                SizedBox(height: 10.h),
                 Text(
                   "\"You are not in this alone.\"",
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontStyle: FontStyle.italic
+                    fontStyle: FontStyle.italic,
                   ),
                 ),
                 SizedBox(height: 40.h),
@@ -42,7 +42,9 @@ class RoleSelectionView extends StatelessWidget {
                   linearGradient: true,
                   title: "I'm here for help",
                   onPress: () async {
-                    context.read<AuthController>().setSelectedRole("Help Seeker");
+                    context.read<AuthController>().setSelectedRole(
+                      "Help Seeker",
+                    );
                     context.push(AppRoutes.nameInput, extra: "Help Seeker");
                   },
                 ),
@@ -56,10 +58,11 @@ class RoleSelectionView extends StatelessWidget {
                   },
                 ),
                 SizedBox(height: 20.h),
-                Text("STRONGER BY ONE",
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppColors.borderColor
-                  ),
+                Text(
+                  "STRONGER BY ONE",
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: AppColors.borderColor),
                 ),
               ],
             ),

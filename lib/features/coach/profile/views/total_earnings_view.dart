@@ -83,7 +83,7 @@ class TotalEarningsView extends StatelessWidget {
                             Text(
                               'Balance',
                               style: theme.textTheme.bodyMedium?.copyWith(
-                                color: Colors.white,
+                                color: AppColors.whiteColor,
                                 fontSize: 14,
                                 fontFamily: 'Segoe UI',
                                 fontWeight: FontWeight.w400,
@@ -97,7 +97,7 @@ class TotalEarningsView extends StatelessWidget {
                                   .toStringAsFixed(0)
                                   .padLeft(3, '0'),
                               style: theme.textTheme.bodyMedium?.copyWith(
-                                color: Colors.white,
+                                color: AppColors.whiteColor,
                                 fontSize: 20,
                                 fontFamily: 'Segoe UI',
                                 fontWeight: FontWeight.w400,

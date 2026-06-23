@@ -108,4 +108,20 @@ class ChatMessageModel {
       'time': time,
     };
   }
+
+  ChatMessageModel copyWith({
+    String? sender,
+    String? avatar,
+    String? text,
+    bool? isMe,
+    String? time,
+  }) {
+    return ChatMessageModel(
+      sender: sender ?? this.sender,
+      avatar: avatar ?? this.avatar,
+      text: text ?? this.text,
+      isMe: isMe ?? this.isMe,
+      time: time ?? this.time,
+    );
+  }
 }

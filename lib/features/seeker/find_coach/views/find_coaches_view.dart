@@ -36,7 +36,8 @@ class FindCoachesView extends StatelessWidget {
             return Stack(
               children: [
                 RefreshIndicator(
-                  onRefresh: () => controller.fetchCoachesDiscover(isRefresh: true),
+                  onRefresh: () =>
+                      controller.fetchCoachesDiscover(isRefresh: true),
                   color: Colors.transparent,
                   backgroundColor: Colors.transparent,
                   strokeWidth: 0,
@@ -52,7 +53,7 @@ class FindCoachesView extends StatelessWidget {
                           child: CustomInput(
                             height: 48,
                             hintText: "Search Coach",
-                            backgroundColor: Colors.white.withAlpha(13),
+                            backgroundColor: AppColors.whiteColor.withAlpha(13),
                             borderRadius: 24,
                             shadow: false,
                           ),
@@ -61,13 +62,13 @@ class FindCoachesView extends StatelessWidget {
                         if (hero != null) _buildHeroCoach(context, hero),
                         SizedBox(height: 24.h),
                         // ── Book Again / Featured Sections ──────────────────────────
-                        _buildSectionHeader("BOOK AGAIN"),
+                        _buildSectionHeader(context, "BOOK AGAIN"),
                         _buildCoachList(context, topRated),
                         SizedBox(height: 24.h),
-                        _buildSectionHeader("FEATURED COACHES"),
+                        _buildSectionHeader(context, "FEATURED COACHES"),
                         _buildCoachList(context, featured),
                         SizedBox(height: 24.h),
-                        _buildSectionHeader("TOP RATED"),
+                        _buildSectionHeader(context, "TOP RATED"),
                         _buildCoachList(context, topRated),
                         SizedBox(height: 80.h), // Space for bottom nav
                       ],
@@ -98,7 +99,7 @@ class FindCoachesView extends StatelessWidget {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            const Color(0xFFC19E5F).withAlpha(51),
+            AppColors.coachColorFFC19E5F.withAlpha(51),
             Colors.transparent,
           ],
         ),
@@ -109,7 +110,12 @@ class FindCoachesView extends StatelessWidget {
             padding: EdgeInsets.all(3.r),
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
-              gradient: LinearGradient(colors: [Color(0xFFC19E5F), Color(0xFFE5CE8E)]),
+              gradient: LinearGradient(
+                colors: [
+                  AppColors.coachColorFFC19E5F,
+                  AppColors.coachColorFFE5CE8E,
+                ],
+              ),
             ),
             child: CircleAvatar(
               radius: 60.r,
@@ -117,14 +123,28 @@ class FindCoachesView extends StatelessWidget {
             ),
           ),
           SizedBox(height: 16.h),
-          Text(coach.name, style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.bold)),
-          Text(coach.title, style: TextStyle(color: Colors.white.withAlpha(128), fontSize: 12.sp)),
+          Text(
+            coach.name,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColors.whiteColor,
+              fontSize: 18.sp,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            coach.title,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColors.whiteColor.withAlpha(128),
+              fontSize: 12.sp,
+            ),
+          ),
           SizedBox(height: 8.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(
               coach.rating.round(),
-              (index) => Icon(Icons.star, color: Colors.amber, size: 14.r),
+              (index) =>
+                  Icon(Icons.star, color: AppColors.amberColor, size: 14.r),
             ),
           ),
           SizedBox(height: 12.h),
@@ -143,18 +163,26 @@ class FindCoachesView extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionHeader(String title) {
+  Widget _buildSectionHeader(BuildContext context, String title) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Expanded(child: Divider(color: Colors.white.withAlpha(26))),
+          Expanded(child: Divider(color: AppColors.whiteColor.withAlpha(26))),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 12.w),
-            child: Text(title, style: TextStyle(color: const Color(0xFFC19E5F), fontSize: 11.sp, fontWeight: FontWeight.bold, letterSpacing: 1.2)),
+            child: Text(
+              title,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.coachColorFFC19E5F,
+                fontSize: 11.sp,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1.2,
+              ),
+            ),
           ),
-          Expanded(child: Divider(color: Colors.white.withAlpha(26))),
+          Expanded(child: Divider(color: AppColors.whiteColor.withAlpha(26))),
         ],
       ),
     );
@@ -193,7 +221,7 @@ class _CoachCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.postCardColor,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: Colors.white.withAlpha(13)),
+        border: Border.all(color: AppColors.whiteColor.withAlpha(13)),
       ),
       child: Row(
         children: [
@@ -206,15 +234,31 @@ class _CoachCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(coach.name, style: TextStyle(color: Colors.white, fontSize: 14.sp, fontWeight: FontWeight.bold)),
-                Text(coach.title, style: TextStyle(color: Colors.white.withAlpha(128), fontSize: 11.sp)),
+                Text(
+                  coach.name,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.whiteColor,
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  coach.title,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.whiteColor.withAlpha(128),
+                    fontSize: 11.sp,
+                  ),
+                ),
                 Row(
                   children: [
-                    Icon(Icons.star, color: Colors.amber, size: 12.r),
+                    Icon(Icons.star, color: AppColors.amberColor, size: 12.r),
                     SizedBox(width: 4.w),
                     Text(
                       "${coach.rating} (${coach.reviews})",
-                      style: TextStyle(color: Colors.white.withAlpha(128), fontSize: 10.sp),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppColors.whiteColor.withAlpha(128),
+                        fontSize: 10.sp,
+                      ),
                     ),
                   ],
                 ),
@@ -248,7 +292,11 @@ class _FindCoachesShimmer extends StatelessWidget {
         children: [
           Padding(
             padding: EdgeInsets.all(16.w),
-            child: ShimmerLoader(width: double.infinity, height: 48.h, borderRadius: 24.r),
+            child: ShimmerLoader(
+              width: double.infinity,
+              height: 48.h,
+              borderRadius: 24.r,
+            ),
           ),
           // Hero shimmer
           Container(
@@ -279,7 +327,11 @@ class _FindCoachesShimmer extends StatelessWidget {
             itemCount: 2,
             itemBuilder: (context, index) => Padding(
               padding: EdgeInsets.only(bottom: 12.h),
-              child: ShimmerLoader(width: double.infinity, height: 72.h, borderRadius: 16.r),
+              child: ShimmerLoader(
+                width: double.infinity,
+                height: 72.h,
+                borderRadius: 16.r,
+              ),
             ),
           ),
         ],

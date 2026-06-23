@@ -139,7 +139,7 @@ class SignUpView extends StatelessWidget {
                                       SizedBox(height: 4.h),
                                       Text(
                                         form.emailError!,
-                                        style: TextStyle(
+                                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                           color: AppColors.redColor,
                                           fontSize: 11.sp,
                                         ),
@@ -177,7 +177,7 @@ class SignUpView extends StatelessWidget {
                                       SizedBox(height: 4.h),
                                       Text(
                                         form.passwordError!,
-                                        style: TextStyle(
+                                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                           color: AppColors.redColor,
                                           fontSize: 11.sp,
                                         ),
@@ -220,7 +220,7 @@ class SignUpView extends StatelessWidget {
                                       SizedBox(height: 4.h),
                                       Text(
                                         form.confirmPasswordError!,
-                                        style: TextStyle(
+                                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                           color: AppColors.redColor,
                                           fontSize: 11.sp,
                                         ),

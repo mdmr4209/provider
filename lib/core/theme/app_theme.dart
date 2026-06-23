@@ -9,28 +9,22 @@ class AppTheme {
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     colors: [
-      AppColors.primaryColor,   // #AC823A
-      AppColors.buttonColor1,   // #D0B47D
-      AppColors.primaryColor,   // #AC823A
+      AppColors.primaryColor, // #AC823A
+      AppColors.buttonColor1, // #D0B47D
+      AppColors.primaryColor, // #AC823A
     ],
   );
 
   static const _deepGoldGradient = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [
-      Color(0xFFD0B47D),
-      Color(0xFFAC823A),
-    ],
+    colors: [AppColors.buttonColor1, AppColors.buttonColor],
   );
 
   static const _progressBarGradient = LinearGradient(
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
-    colors: [
-      Color(0xFFAC823A),
-      Color(0xFFF3D194),
-    ],
+    colors: [AppColors.buttonColor, AppColors.borderColor],
   );
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -59,24 +53,24 @@ class AppTheme {
         glassBorderOpacity: 0.15,
 
         // Card / Container tokens  (from buttonColor4 / buttonBorderColor4)
-        cardFillColor: AppColors.buttonColor4,            // #BA384737
-        cardBorderColor: AppColors.buttonBorderColor4,    // #66EBEBEB
+        cardFillColor: AppColors.buttonColor4, // #BA384737
+        cardBorderColor: AppColors.buttonBorderColor4, // #66EBEBEB
         cardFillMuted: AppColors.buttonColor4.withAlpha(30),
         cardBorderMuted: AppColors.buttonBorderColor4.withAlpha(30),
 
         // Input
-        inputFillColor: AppColors.buttonColor4,
-        inputBorderColor: AppColors.inputBorderColor,     // #66EBEBEB
-        inputFocusBorderColor: AppColors.iconColor,       // #C9A84C
-
+        inputFillColor: AppColors.coachColorFF21321E,
+        inputBorderColor: AppColors.coachColorFF334B2F,
+        inputShadowColor: AppColors.coachColorFF2E4429,
+        inputFocusBorderColor: AppColors.iconColor, // #C9A84C
         // Tab Bar
-        tabActiveColor: AppColors.iconColor,
-        tabInactiveColor: AppColors.textColor.withAlpha(150),
+        tabactiveThumbColor: AppColors.iconColor,
+        tabInactiveThumbColor: AppColors.textColor.withAlpha(150),
         tabIndicatorColor: AppColors.iconColor,
 
         // Checkbox
-        checkboxActiveColor: AppColors.iconColor,
-        checkboxInactiveColor: AppColors.inputBorderColor,
+        checkboxactiveThumbColor: AppColors.iconColor,
+        checkboxInactiveThumbColor: AppColors.inputBorderColor,
         checkboxCheckColor: AppColors.backgroundColor,
 
         // Bottom Sheet
@@ -85,16 +79,16 @@ class AppTheme {
         bottomSheetSelectedItem: AppColors.iconColor,
 
         // Upload / Chip
-        uploadPillColor: AppColors.buttonColor3,           // #434928
+        uploadPillColor: AppColors.buttonColor3, // #434928
         addChipFillColor: AppColors.buttonColor4,
         addChipBorderColor: AppColors.buttonBorderColor4,
 
         // Celebration Badge
-        badgeGlowColor: const Color(0xFFC9A84C).withAlpha(30),
-        badgeSolidColor: const Color(0xFFC9A84C),
+        badgeGlowColor: AppColors.iconColor.withAlpha(30),
+        badgeSolidColor: AppColors.iconColor,
 
         // Status Bar
-        statusBarColor: const Color(0xFF111B10),
+        statusBarColor: AppColors.colorFF111B10,
       ),
     ],
 
@@ -102,13 +96,13 @@ class AppTheme {
     colorScheme: ColorScheme.fromSeed(
       seedColor: AppColors.primaryColor,
       brightness: Brightness.light,
-      primary: AppColors.primaryColor,         // #AC823A
-      onPrimary: AppColors.whiteColor,         // #FFFFFF
+      primary: AppColors.primaryColor, // #AC823A
+      onPrimary: AppColors.whiteColor, // #FFFFFF
       surface: AppColors.whiteColor,
-      onSurface: AppColors.textColor,          // #DAE0DA
-      secondary: AppColors.defaultColor,       // #22331F
-      outline: AppColors.borderColor,          // #F3D194
-      error: AppColors.redAlphaColor,          // #F44336
+      onSurface: AppColors.textColor, // #DAE0DA
+      secondary: AppColors.defaultColor, // #22331F
+      outline: AppColors.borderColor, // #F3D194
+      error: AppColors.redAlphaColor, // #F44336
     ),
 
     // ── AppBar ─────────────────────────────────────────────────────────────
@@ -118,7 +112,9 @@ class AppTheme {
       surfaceTintColor: AppColors.backgroundColor,
       elevation: 0,
       centerTitle: true,
-      iconTheme: IconThemeData(color: AppColors.textColor2), // #8CA08B muted icons
+      iconTheme: IconThemeData(
+        color: AppColors.textColor2,
+      ), // #8CA08B muted icons
       titleTextStyle: TextStyle(
         color: AppColors.whiteColor,
         fontSize: 18.sp,
@@ -206,12 +202,15 @@ class AppTheme {
 
     // ── Tab Bar ─────────────────────────────────────────────────────────────
     tabBarTheme: TabBarThemeData(
-      labelColor: AppColors.iconColor,                  // gold active
+      labelColor: AppColors.iconColor, // gold active
       unselectedLabelColor: AppColors.textColor.withAlpha(150),
       indicatorSize: TabBarIndicatorSize.label,
       indicatorColor: AppColors.iconColor,
       labelStyle: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
-      unselectedLabelStyle: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.normal),
+      unselectedLabelStyle: TextStyle(
+        fontSize: 16.sp,
+        fontWeight: FontWeight.normal,
+      ),
     ),
 
     // ── Chip ───────────────────────────────────────────────────────────────
@@ -222,7 +221,10 @@ class AppTheme {
       secondarySelectedColor: AppColors.primaryColor,
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
       labelStyle: TextStyle(color: AppColors.textColor, fontSize: 12.sp),
-      secondaryLabelStyle: TextStyle(color: AppColors.whiteColor, fontSize: 12.sp),
+      secondaryLabelStyle: TextStyle(
+        color: AppColors.whiteColor,
+        fontSize: 12.sp,
+      ),
       brightness: Brightness.light,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.r),
@@ -237,57 +239,57 @@ class AppTheme {
       thumbColor: AppColors.primaryColor,
       overlayColor: AppColors.primaryColor.withAlpha(32),
       valueIndicatorColor: AppColors.primaryColor,
-      valueIndicatorTextStyle: const TextStyle(color: Colors.white),
+      valueIndicatorTextStyle: TextStyle(color: AppColors.whiteColor),
     ),
 
     // ── Input Decoration ───────────────────────────────────────────────────
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: const Color(0xFF21321E),
+      fillColor: AppColors.coachColorFF21321E,
       contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12.r),
-        borderSide: const BorderSide(color: Color(0xFF334B2F)),
+        borderRadius: BorderRadius.circular(24.r),
+        borderSide: const BorderSide(color: AppColors.coachColorFF334B2F),
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12.r),
-        borderSide: const BorderSide(color: Color(0xFF334B2F)),
+        borderRadius: BorderRadius.circular(24.r),
+        borderSide: const BorderSide(color: AppColors.coachColorFF334B2F),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12.r),
-        borderSide: BorderSide(color: AppColors.iconColor, width: 1.5),  // gold on focus
+        borderRadius: BorderRadius.circular(24.r),
+        borderSide: BorderSide(
+          color: AppColors.iconColor,
+          width: 1.5,
+        ), // gold on focus
       ),
       errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(24.r),
         borderSide: BorderSide(color: AppColors.redAlphaColor),
       ),
       focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(24.r),
         borderSide: BorderSide(color: AppColors.redAlphaColor, width: 1.5),
       ),
       disabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(24.r),
         borderSide: BorderSide(color: AppColors.inputBorderColor.withAlpha(50)),
       ),
       hintStyle: TextStyle(
-        color: AppColors.hintTextColor,                           // #A9A8A8
+        color: AppColors.hintTextColor, // #A9A8A8
         fontSize: 14.sp,
       ),
-      labelStyle: TextStyle(
-        color: AppColors.textColor,
-        fontSize: 14.sp,
-      ),
+      labelStyle: TextStyle(color: AppColors.textColor, fontSize: 14.sp),
     ),
 
     // ── Elevated Button ────────────────────────────────────────────────────
     //   CustomButton resolves from this for default colors
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.buttonColor,    // #AC823A
-        foregroundColor: AppColors.whiteColor,      // #FFFFFF
+        backgroundColor: AppColors.buttonColor, // #AC823A
+        foregroundColor: AppColors.whiteColor, // #FFFFFF
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.r),
+          borderRadius: BorderRadius.circular(24.r),
         ),
         textStyle: TextStyle(
           fontSize: 14.sp,
@@ -304,7 +306,9 @@ class AppTheme {
         return AppColors.textColor;
       }),
       trackColor: WidgetStateProperty.resolveWith((states) {
-        if (states.contains(WidgetState.selected)) return AppColors.iconColor.withAlpha(80);
+        if (states.contains(WidgetState.selected)) {
+          return AppColors.iconColor.withAlpha(80);
+        }
         return AppColors.buttonColor4;
       }),
     ),
@@ -332,7 +336,7 @@ class AppTheme {
 
     // ── Bottom Sheet ───────────────────────────────────────────────────────
     bottomSheetTheme: BottomSheetThemeData(
-      backgroundColor: AppColors.popupBackgroundColor,   // #20341F
+      backgroundColor: AppColors.popupBackgroundColor, // #20341F
       surfaceTintColor: Colors.transparent,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
@@ -348,7 +352,7 @@ class AppTheme {
 
     // ── Progress Indicator ─────────────────────────────────────────────────
     progressIndicatorTheme: ProgressIndicatorThemeData(
-      color: AppColors.iconColor,                       // gold spinner
+      color: AppColors.iconColor, // gold spinner
       linearTrackColor: AppColors.iconColor.withAlpha(30),
     ),
   );
@@ -361,7 +365,7 @@ class AppTheme {
     fontFamily: 'Segoe UI',
     brightness: Brightness.dark,
     primaryColor: AppColors.primaryColor,
-    hintColor: Colors.white38,
+    hintColor: AppColors.white38Color,
     scaffoldBackgroundColor: Colors.transparent,
 
     // ── Design System Extension ────────────────────────────────────────────
@@ -384,23 +388,24 @@ class AppTheme {
         cardBorderMuted: AppColors.buttonBorderColor4.withAlpha(30),
 
         // Input
-        inputFillColor: AppColors.buttonColor4,
-        inputBorderColor: AppColors.inputBorderColor,
+        inputFillColor: AppColors.coachColorFF21321E,
+        inputBorderColor: AppColors.coachColorFF334B2F,
+        inputShadowColor: AppColors.coachColorFF2E4429,
         inputFocusBorderColor: AppColors.iconColor,
 
         // Tab Bar
-        tabActiveColor: AppColors.iconColor,
-        tabInactiveColor: Colors.white38,
+        tabactiveThumbColor: AppColors.iconColor,
+        tabInactiveThumbColor: AppColors.white38Color,
         tabIndicatorColor: AppColors.iconColor,
 
         // Checkbox
-        checkboxActiveColor: AppColors.iconColor,
-        checkboxInactiveColor: Colors.white24,
+        checkboxactiveThumbColor: AppColors.iconColor,
+        checkboxInactiveThumbColor: AppColors.white24Color,
         checkboxCheckColor: AppColors.backgroundColor,
 
         // Bottom Sheet
-        bottomSheetBackground: const Color(0xFF20341F),
-        bottomSheetDivider: Colors.white24,
+        bottomSheetBackground: AppColors.popupBackgroundColor,
+        bottomSheetDivider: AppColors.white24Color,
         bottomSheetSelectedItem: AppColors.iconColor,
 
         // Upload / Chip
@@ -409,11 +414,11 @@ class AppTheme {
         addChipBorderColor: AppColors.buttonBorderColor4,
 
         // Celebration Badge
-        badgeGlowColor: const Color(0xFFC9A84C).withAlpha(30),
-        badgeSolidColor: const Color(0xFFC9A84C),
+        badgeGlowColor: AppColors.iconColor.withAlpha(30),
+        badgeSolidColor: AppColors.iconColor,
 
         // Status Bar
-        statusBarColor: const Color(0xFF111B10),
+        statusBarColor: AppColors.colorFF111B10,
       ),
     ],
 
@@ -423,10 +428,10 @@ class AppTheme {
       brightness: Brightness.dark,
       primary: AppColors.primaryColor,
       onPrimary: AppColors.whiteColor,
-      surface: AppColors.defaultColor,           // #22331F
+      surface: AppColors.defaultColor, // #22331F
       onSurface: AppColors.whiteColor,
       secondary: AppColors.defaultColor,
-      outline: Colors.white24,
+      outline: AppColors.white24Color,
       error: AppColors.redAlphaColor,
     ),
 
@@ -437,9 +442,9 @@ class AppTheme {
       surfaceTintColor: AppColors.backgroundColor,
       elevation: 0,
       centerTitle: true,
-      iconTheme: const IconThemeData(color: Colors.white),
+      iconTheme: const IconThemeData(color: AppColors.whiteColor),
       titleTextStyle: TextStyle(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         fontSize: 18.sp,
         fontWeight: FontWeight.bold,
         fontFamily: 'Georgia',
@@ -449,36 +454,36 @@ class AppTheme {
     // ── Text Theme ─────────────────────────────────────────────────────────
     textTheme: TextTheme(
       displayLarge: TextStyle(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         fontSize: 36.sp,
         fontWeight: FontWeight.bold,
         fontFamily: 'Georgia',
       ),
       displayMedium: TextStyle(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         fontSize: 28.sp,
         fontWeight: FontWeight.bold,
         fontFamily: 'Georgia',
       ),
       headlineLarge: TextStyle(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         fontSize: 24.sp,
         fontWeight: FontWeight.bold,
         fontFamily: 'Georgia',
       ),
       titleLarge: TextStyle(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         fontSize: 22.sp,
         fontWeight: FontWeight.bold,
         fontFamily: 'Georgia',
       ),
       titleMedium: TextStyle(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         fontSize: 18.sp,
         fontWeight: FontWeight.w600,
       ),
       titleSmall: TextStyle(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         fontSize: 16.sp,
         fontWeight: FontWeight.w500,
       ),
@@ -508,7 +513,7 @@ class AppTheme {
         fontWeight: FontWeight.w500,
       ),
       labelSmall: TextStyle(
-        color: Colors.white38,
+        color: AppColors.white38Color,
         fontSize: 11.sp,
         fontWeight: FontWeight.w400,
       ),
@@ -517,22 +522,28 @@ class AppTheme {
     // ── Tab Bar ─────────────────────────────────────────────────────────────
     tabBarTheme: TabBarThemeData(
       labelColor: AppColors.iconColor,
-      unselectedLabelColor: Colors.white38,
+      unselectedLabelColor: AppColors.white38Color,
       indicatorSize: TabBarIndicatorSize.label,
       indicatorColor: AppColors.iconColor,
       labelStyle: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
-      unselectedLabelStyle: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.normal),
+      unselectedLabelStyle: TextStyle(
+        fontSize: 16.sp,
+        fontWeight: FontWeight.normal,
+      ),
     ),
 
     // ── Chip ───────────────────────────────────────────────────────────────
     chipTheme: ChipThemeData(
       backgroundColor: AppColors.buttonColor4,
-      disabledColor: Colors.white12,
+      disabledColor: AppColors.white12Color,
       selectedColor: AppColors.primaryColor.withAlpha(102),
       secondarySelectedColor: AppColors.primaryColor,
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-      labelStyle: TextStyle(color: Colors.white, fontSize: 12.sp),
-      secondaryLabelStyle: TextStyle(color: Colors.white, fontSize: 12.sp),
+      labelStyle: TextStyle(color: AppColors.whiteColor, fontSize: 12.sp),
+      secondaryLabelStyle: TextStyle(
+        color: AppColors.whiteColor,
+        fontSize: 12.sp,
+      ),
       brightness: Brightness.dark,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.r),
@@ -547,39 +558,39 @@ class AppTheme {
       thumbColor: AppColors.primaryColor,
       overlayColor: AppColors.primaryColor.withAlpha(32),
       valueIndicatorColor: AppColors.primaryColor,
-      valueIndicatorTextStyle: const TextStyle(color: Colors.white),
+      valueIndicatorTextStyle: TextStyle(color: AppColors.whiteColor),
     ),
 
     // ── Input Decoration ───────────────────────────────────────────────────
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: const Color(0xFF21321E),
+      fillColor: AppColors.coachColorFF21321E,
       contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12.r),
-        borderSide: const BorderSide(color: Color(0xFF334B2F)),
+        borderRadius: BorderRadius.circular(24.r),
+        borderSide: const BorderSide(color: AppColors.coachColorFF334B2F),
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12.r),
-        borderSide: const BorderSide(color: Color(0xFF334B2F)),
+        borderRadius: BorderRadius.circular(24.r),
+        borderSide: const BorderSide(color: AppColors.coachColorFF334B2F),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(24.r),
         borderSide: BorderSide(color: AppColors.iconColor, width: 1.5),
       ),
       errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(24.r),
         borderSide: BorderSide(color: AppColors.redAlphaColor),
       ),
       focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(24.r),
         borderSide: BorderSide(color: AppColors.redAlphaColor, width: 1.5),
       ),
       disabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(24.r),
         borderSide: BorderSide(color: AppColors.inputBorderColor.withAlpha(50)),
       ),
-      hintStyle: TextStyle(color: Colors.white38, fontSize: 14.sp),
+      hintStyle: TextStyle(color: AppColors.white38Color, fontSize: 14.sp),
       labelStyle: TextStyle(color: AppColors.textColor, fontSize: 14.sp),
     ),
 
@@ -590,7 +601,7 @@ class AppTheme {
         foregroundColor: AppColors.whiteColor,
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.r),
+          borderRadius: BorderRadius.circular(24.r),
         ),
         textStyle: TextStyle(
           fontSize: 14.sp,
@@ -607,27 +618,32 @@ class AppTheme {
         return AppColors.textColor;
       }),
       trackColor: WidgetStateProperty.resolveWith((states) {
-        if (states.contains(WidgetState.selected)) return AppColors.iconColor.withAlpha(80);
+        if (states.contains(WidgetState.selected)) {
+          return AppColors.iconColor.withAlpha(80);
+        }
         return AppColors.buttonColor4;
       }),
     ),
 
     // ── Dialog ─────────────────────────────────────────────────────────────
     dialogTheme: DialogThemeData(
-      backgroundColor: const Color(0xFF20341F),
+      backgroundColor: AppColors.popupBackgroundColor,
       surfaceTintColor: Colors.transparent,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(24.r),
-        side: BorderSide(color: AppColors.primaryColor.withAlpha(102), width: 1.5),
+        side: BorderSide(
+          color: AppColors.primaryColor.withAlpha(102),
+          width: 1.5,
+        ),
       ),
       titleTextStyle: TextStyle(
-        color: Colors.white,
+        color: AppColors.whiteColor,
         fontSize: 22.sp,
         fontWeight: FontWeight.bold,
         fontFamily: 'Georgia',
       ),
       contentTextStyle: TextStyle(
-        color: Colors.white.withAlpha(217),
+        color: AppColors.whiteColor.withAlpha(217),
         fontSize: 15.sp,
         fontFamily: 'Segoe UI',
       ),
@@ -635,7 +651,7 @@ class AppTheme {
 
     // ── Bottom Sheet ───────────────────────────────────────────────────────
     bottomSheetTheme: BottomSheetThemeData(
-      backgroundColor: const Color(0xFF20341F),
+      backgroundColor: AppColors.popupBackgroundColor,
       surfaceTintColor: Colors.transparent,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
@@ -644,7 +660,7 @@ class AppTheme {
 
     // ── Divider ────────────────────────────────────────────────────────────
     dividerTheme: const DividerThemeData(
-      color: Colors.white24,
+      color: AppColors.white24Color,
       thickness: 1,
       space: 1,
     ),

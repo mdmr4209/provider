@@ -61,18 +61,8 @@ class CoachController extends ChangeNotifier {
     try {
       await Future.delayed(const Duration(milliseconds: 600));
 
-      // Mock dynamic JSON based on 12.2
-      final Map<String, dynamic> rawSlots = {
-        "sessions": [
-          { "duration": "30 Min", "price": 75 },
-          { "duration": "60 Minutes", "price": 150 }
-        ],
-        "availableSlots": [
-          "09:00 AM - 09:30 AM",
-          "10:00 AM - 10:30 AM",
-          "11:30 AM - 12:00 PM"
-        ]
-      };
+      final String slotsJsonString = await rootBundle.loadString('assets/json/coach_slots.json');
+      final Map<String, dynamic> rawSlots = jsonDecode(slotsJsonString);
 
       _slots = (rawSlots['sessions'] as List).map((x) => CoachSlotModel.fromJson(x)).toList();
       _availableSlots = List<String>.from(rawSlots['availableSlots']);
@@ -96,22 +86,9 @@ class CoachController extends ChangeNotifier {
     try {
       await Future.delayed(const Duration(milliseconds: 500));
 
-      final List<Map<String, dynamic>> rawReviews = [
-        {
-          "reviewerName": "Monalisa gong",
-          "reviewerAvatar": "https://i.pravatar.cc/150?u=reviewer1",
-          "date": "25 July, 25",
-          "rating": 4.0,
-          "content": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s."
-        },
-        {
-          "reviewerName": "David Miller",
-          "reviewerAvatar": "https://i.pravatar.cc/150?u=reviewer2",
-          "date": "20 July, 25",
-          "rating": 5.0,
-          "content": "Great counseling session, helped me stay calm and stay strong during my breakup. Highly recommended."
-        }
-      ];
+      final String reviewsJsonString = await rootBundle.loadString('assets/json/coach_reviews.json');
+      final List<dynamic> rawReviewsList = jsonDecode(reviewsJsonString);
+      final List<Map<String, dynamic>> rawReviews = List<Map<String, dynamic>>.from(rawReviewsList);
 
       _reviews = rawReviews.map((x) => CoachReviewModel.fromJson(x)).toList();
     } catch (e) {

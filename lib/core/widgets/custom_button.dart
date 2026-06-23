@@ -198,7 +198,7 @@ class CustomButton extends StatelessWidget {
               Shadow(
                 offset: const Offset(0, 0),
                 blurRadius: 5,
-                color: const Color(0xFF000000).withAlpha(232),
+                color: AppColors.blackColor.withAlpha(232),
               ),
             ],
           ),

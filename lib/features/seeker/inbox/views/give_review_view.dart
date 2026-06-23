@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/widgets/custom_button.dart';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/custom_button.dart';
 
@@ -56,8 +52,8 @@ class GiveReviewView extends StatelessWidget {
               builder: (context, controller, _) {
                 return AnimatedSwitcher(
                   duration: const Duration(milliseconds: 300),
-                  child: controller.isSubmitted 
-                      ? _buildDoneState(context, controller) 
+                  child: controller.isSubmitted
+                      ? _buildDoneState(context, controller)
                       : _buildReviewState(context, controller),
                 );
               },
@@ -74,12 +70,15 @@ class GiveReviewView extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 24.w),
       padding: EdgeInsets.all(20.r),
       decoration: BoxDecoration(
-        color: const Color(0xFF20341F),
+        color: AppColors.popupBackgroundColor,
         borderRadius: BorderRadius.circular(20.r),
-        border: Border.all(color: AppColors.primaryColor.withAlpha(51), width: 1),
+        border: Border.all(
+          color: AppColors.primaryColor.withAlpha(51),
+          width: 1,
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withAlpha(102),
+            color: AppColors.blackColor.withAlpha(102),
             blurRadius: 30,
             offset: const Offset(0, 10),
           ),
@@ -94,44 +93,48 @@ class GiveReviewView extends StatelessWidget {
             alignment: Alignment.topRight,
             child: GestureDetector(
               onTap: () => Navigator.pop(context),
-              child: Icon(Icons.close, color: Colors.white.withAlpha(128), size: 20.r),
+              child: Icon(
+                Icons.close,
+                color: AppColors.whiteColor.withAlpha(128),
+                size: 20.r,
+              ),
             ),
           ),
-          
+
           Text(
             "Review",
-            style: TextStyle(
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               fontFamily: 'Georgia',
-              color: Colors.white,
+              color: AppColors.whiteColor,
               fontSize: 22.sp,
               fontWeight: FontWeight.bold,
             ),
           ),
-          
+
           SizedBox(height: 20.h),
-          
+
           // Coach Info Row
           Row(
             children: [
               CircleAvatar(
                 radius: 20.r,
                 backgroundImage: NetworkImage(coachAvatar),
-                backgroundColor: Colors.white.withAlpha(26),
+                backgroundColor: AppColors.whiteColor.withAlpha(26),
               ),
               SizedBox(width: 12.w),
               Text(
                 coachName,
-                style: TextStyle(
-                  color: Colors.white,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.whiteColor,
                   fontSize: 15.sp,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ],
           ),
-          
+
           SizedBox(height: 20.h),
-          
+
           // Star ratings input
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -142,34 +145,38 @@ class GiveReviewView extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.only(right: 12.w),
                   child: Icon(
-                    controller.rating >= starIndex ? Icons.star : Icons.star_border,
-                    color: Colors.amber,
+                    controller.rating >= starIndex
+                        ? Icons.star
+                        : Icons.star_border,
+                    color: AppColors.amberColor,
                     size: 32.r,
                   ),
                 ),
               );
             }),
           ),
-          
+
           SizedBox(height: 20.h),
-          
+
           // Comment box
           Container(
             decoration: BoxDecoration(
-              color: Colors.white.withAlpha(13),
+              color: AppColors.whiteColor.withAlpha(13),
               borderRadius: BorderRadius.circular(12.r),
-              border: Border.all(color: Colors.white.withAlpha(26)),
+              border: Border.all(color: AppColors.whiteColor.withAlpha(26)),
             ),
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
             child: TextField(
               controller: controller.commentController,
               maxLines: 4,
-              style: const TextStyle(color: Colors.white),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor),
               cursorColor: AppColors.secondaryColorLight,
               decoration: InputDecoration(
                 hintText: "Enter your Comment",
-                hintStyle: TextStyle(
-                  color: Colors.white.withAlpha(77),
+                hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.whiteColor.withAlpha(77),
                   fontSize: 14.sp,
                 ),
                 border: InputBorder.none,
@@ -178,9 +185,9 @@ class GiveReviewView extends StatelessWidget {
               ),
             ),
           ),
-          
+
           SizedBox(height: 24.h),
-          
+
           // Say it button
           CustomButton(
             onPress: () async {
@@ -208,12 +215,15 @@ class GiveReviewView extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 24.w),
       padding: EdgeInsets.all(24.r),
       decoration: BoxDecoration(
-        color: const Color(0xFF20341F),
+        color: AppColors.popupBackgroundColor,
         borderRadius: BorderRadius.circular(20.r),
-        border: Border.all(color: AppColors.primaryColor.withAlpha(51), width: 1),
+        border: Border.all(
+          color: AppColors.primaryColor.withAlpha(51),
+          width: 1,
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withAlpha(102),
+            color: AppColors.blackColor.withAlpha(102),
             blurRadius: 30,
             offset: const Offset(0, 10),
           ),
@@ -227,37 +237,40 @@ class GiveReviewView extends StatelessWidget {
             width: 48.r,
             height: 48.r,
             decoration: BoxDecoration(
-              color: Colors.white.withAlpha(13),
+              color: AppColors.whiteColor.withAlpha(13),
               shape: BoxShape.circle,
-              border: Border.all(color: Colors.white.withAlpha(26), width: 1.5.r),
+              border: Border.all(
+                color: AppColors.whiteColor.withAlpha(26),
+                width: 1.5.r,
+              ),
             ),
-            child: Icon(Icons.check, color: Colors.white, size: 24.r),
+            child: Icon(Icons.check, color: AppColors.whiteColor, size: 24.r),
           ),
-          
+
           SizedBox(height: 20.h),
-          
+
           Text(
             "Done!",
-            style: TextStyle(
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               fontFamily: 'Georgia',
-              color: Colors.white,
+              color: AppColors.whiteColor,
               fontSize: 22.sp,
               fontWeight: FontWeight.bold,
             ),
           ),
-          
+
           SizedBox(height: 8.h),
-          
+
           Text(
             "Thank you for your review",
-            style: TextStyle(
-              color: Colors.white.withAlpha(153),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColors.whiteColor.withAlpha(153),
               fontSize: 14.sp,
             ),
           ),
-          
+
           SizedBox(height: 24.h),
-          
+
           // Star ratings display
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -266,16 +279,18 @@ class GiveReviewView extends StatelessWidget {
               return Padding(
                 padding: EdgeInsets.symmetric(horizontal: 4.w),
                 child: Icon(
-                  controller.rating >= starIndex ? Icons.star : Icons.star_border,
-                  color: Colors.amber,
+                  controller.rating >= starIndex
+                      ? Icons.star
+                      : Icons.star_border,
+                  color: AppColors.amberColor,
                   size: 32.r,
                 ),
               );
             }),
           ),
-          
+
           SizedBox(height: 32.h),
-          
+
           // Close/Dismiss button
           CustomButton(
             onPress: () async {

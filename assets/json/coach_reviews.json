@@ -1,0 +1,16 @@
+[
+  {
+    "reviewerName": "Monalisa gong",
+    "reviewerAvatar": "https://i.pravatar.cc/150?u=reviewer1",
+    "date": "25 July, 25",
+    "rating": 4.0,
+    "content": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s."
+  },
+  {
+    "reviewerName": "David Miller",
+    "reviewerAvatar": "https://i.pravatar.cc/150?u=reviewer2",
+    "date": "20 July, 25",
+    "rating": 5.0,
+    "content": "Great counseling session, helped me stay calm and stay strong during my breakup. Highly recommended."
+  }
+]

@@ -43,7 +43,7 @@ elevation: 0,
               Text(
                 "StrongBack2",
                 style: theme.textTheme.titleMedium?.copyWith(
-                  color: Colors.white,
+                  color: AppColors.whiteColor,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -101,14 +101,14 @@ elevation: 0,
                                       "Md. Kamran",
                                       style: theme.textTheme.headlineSmall
                                           ?.copyWith(
-                                            color: Colors.white,
+                                            color: AppColors.whiteColor,
                                             fontWeight: FontWeight.bold,
                                           ),
                                     ),
                                     Text(
                                       "Coach",
                                       style: theme.textTheme.bodyMedium
-                                          ?.copyWith(color: Colors.white70),
+                                          ?.copyWith(color: AppColors.white70Color),
                                     ),
                                   ],
                                 ),
@@ -118,7 +118,7 @@ elevation: 0,
                                   Text(
                                     "Active",
                                     style: theme.textTheme.bodySmall?.copyWith(
-                                      color: Colors.white70,
+                                      color: AppColors.white70Color,
                                     ),
                                   ),
                                   Switch(
@@ -141,19 +141,19 @@ elevation: 0,
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              _buildStatBox(
+                              _buildStatBox(context, 
                                 "Call Back Requests",
                                 coachHome.stats!.callBackRequests,
                                 Icons.phone_callback,
                                 AppColors.coachColorFF64B5F6,
                               ),
-                              _buildStatBox(
+                              _buildStatBox(context, 
                                 "New Messages",
                                 coachHome.stats!.newMessages,
                                 Icons.chat_bubble_outline,
                                 AppColors.coachColorFF81C784,
                               ),
-                              _buildStatBox(
+                              _buildStatBox(context, 
                                 "Missed Calls",
                                 coachHome.stats!.missedCalls,
                                 Icons.phone_missed,
@@ -198,14 +198,14 @@ elevation: 0,
                                     Text(
                                       "Net Earnings",
                                       style: theme.textTheme.bodyMedium
-                                          ?.copyWith(color: Colors.white70),
+                                          ?.copyWith(color: AppColors.white70Color),
                                     ),
                                     SizedBox(height: 8.h),
                                     Text(
                                       coachHome.stats!.netEarnings,
                                       style: theme.textTheme.headlineMedium
                                           ?.copyWith(
-                                            color: Colors.white,
+                                            color: AppColors.whiteColor,
                                             fontWeight: FontWeight.bold,
                                           ),
                                     ),
@@ -213,7 +213,7 @@ elevation: 0,
                                     Text(
                                       coachHome.stats!.earningsPeriod,
                                       style: theme.textTheme.bodySmall
-                                          ?.copyWith(color: Colors.white38),
+                                          ?.copyWith(color: AppColors.white38Color),
                                     ),
                                   ],
                                 ),
@@ -249,7 +249,7 @@ elevation: 0,
                             Text(
                               "Upcoming Sessions",
                               style: theme.textTheme.bodyLarge?.copyWith(
-                                color: Colors.white,
+                                color: AppColors.whiteColor,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -257,7 +257,7 @@ elevation: 0,
                               onPressed: () => context.push('/coach-sessions'),
                               child: Text(
                                 "See All",
-                                style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white54),
+                                style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.white54Color),
                               ),
                             ),
                           ],
@@ -270,7 +270,7 @@ elevation: 0,
                             child: Center(
                               child: Text(
                                 "No upcoming sessions",
-                                style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white54),
+                                style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.white54Color),
                               ),
                             ),
                           )
@@ -338,7 +338,7 @@ elevation: 0,
                                           Text(
                                             "Add a BID to become a featured Coach",
                                             style: theme.textTheme.bodyMedium?.copyWith(
-                                              color: Colors.white,
+                                              color: AppColors.whiteColor,
                                               fontWeight: FontWeight.bold,
                                               fontSize: 13.r,
                                             ),
@@ -347,7 +347,7 @@ elevation: 0,
                                           Text(
                                             "Increase your visibility and get more bookings by bidding for a featured spot.",
                                             style: theme.textTheme.bodyMedium?.copyWith(
-                                              color: Colors.white70,
+                                              color: AppColors.white70Color,
                                               fontSize: 10.r,
                                             ),
                                           ),
@@ -428,7 +428,7 @@ elevation: 0,
                                     "New Text Messages",
                                     style: theme.textTheme.titleMedium
                                         ?.copyWith(
-                                          color: Colors.white,
+                                          color: AppColors.whiteColor,
                                           fontWeight: FontWeight.bold,
                                         ),
                                   ),
@@ -476,13 +476,13 @@ elevation: 0,
                                   child: Center(
                                     child: Text(
                                       "No new messages",
-                                      style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white54),
+                                      style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.white54Color),
                                     ),
                                   ),
                                 )
                               else
                                 ...coachHome.messages.map(
-                                  (msg) => _buildMessageCard(
+                                  (msg) => _buildMessageCard(context, 
                                     msg.senderName,
                                     msg.status,
                                     msg.time,
@@ -502,7 +502,7 @@ elevation: 0,
                 if (coachHome.isRefreshing)
                   Positioned.fill(
                     child: Container(
-                      color: Colors.black26,
+                      color: AppColors.black26Color,
                       child: const Center(child: CustomLoader()),
                     ),
                   ),
@@ -512,7 +512,7 @@ elevation: 0,
   }
 
   Widget _buildStatBox(
-    String label,
+    BuildContext context, String label,
     String value,
     IconData icon,
     Color iconColor,
@@ -533,7 +533,7 @@ elevation: 0,
         children: [
           Text(
             label,
-            style: TextStyle(color: Colors.white70, fontSize: 10.sp),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white70Color, fontSize: 10.sp),
           ),
           SizedBox(height: 8.h),
           Row(
@@ -553,8 +553,8 @@ elevation: 0,
               SizedBox(width: 8.w),
               Text(
                 value,
-                style: TextStyle(
-                  color: Colors.white,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.whiteColor,
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
                 ),
@@ -590,8 +590,8 @@ elevation: 0,
             children: [
               Text(
                 title,
-                style: TextStyle(
-                  color: Colors.white,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.whiteColor,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -620,7 +620,7 @@ elevation: 0,
                       SizedBox(width: 4.w),
                       Text(
                         "Cancel",
-                        style: TextStyle(
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppColors.coachColorFFE57373,
                           fontSize: 12,
                         ),
@@ -634,22 +634,22 @@ elevation: 0,
           SizedBox(height: 12.h),
           Row(
             children: [
-              const Icon(Icons.calendar_today, color: Colors.white54, size: 14),
+              const Icon(Icons.calendar_today, color: AppColors.white54Color, size: 14),
               SizedBox(width: 8.w),
               Text(
                 date,
-                style: TextStyle(color: Colors.white70, fontSize: 12),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white70Color, fontSize: 12),
               ),
             ],
           ),
           SizedBox(height: 4.h),
           Row(
             children: [
-              const Icon(Icons.access_time, color: Colors.white54, size: 14),
+              const Icon(Icons.access_time, color: AppColors.white54Color, size: 14),
               SizedBox(width: 8.w),
               Text(
                 time,
-                style: TextStyle(color: Colors.white70, fontSize: 12),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white70Color, fontSize: 12),
               ),
             ],
           ),
@@ -670,12 +670,12 @@ elevation: 0,
                   backgroundImage: NetworkImage(avatar),
                 ),
                 SizedBox(width: 12.w),
-                Text(name, style: TextStyle(color: Colors.white)),
+                Text(name, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor)),
                 const Spacer(),
                 Text(
                   rate,
-                  style: TextStyle(
-                    color: Colors.white,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.whiteColor,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -688,7 +688,7 @@ elevation: 0,
   }
 
   Widget _buildMessageCard(
-    String name,
+    BuildContext context, String name,
     String status,
     String time,
     String count,
@@ -716,14 +716,14 @@ elevation: 0,
               children: [
                 Text(
                   name,
-                  style: TextStyle(
-                    color: Colors.white,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.whiteColor,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
                   status,
-                  style: TextStyle(
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: AppColors.coachColorFF81C784,
                     fontSize: 12,
                   ),
@@ -736,7 +736,7 @@ elevation: 0,
             children: [
               Text(
                 time,
-                style: TextStyle(color: Colors.white38, fontSize: 10),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white38Color, fontSize: 10),
               ),
               SizedBox(height: 4.h),
               Container(
@@ -747,8 +747,8 @@ elevation: 0,
                 ),
                 child: Text(
                   count,
-                  style: TextStyle(
-                    color: Colors.white,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.whiteColor,
                     fontSize: 10,
                     fontWeight: FontWeight.bold,
                   ),

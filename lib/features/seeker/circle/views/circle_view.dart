@@ -194,7 +194,7 @@ class _PostsList extends StatelessWidget {
                     Center(
                       child: Text(
                         "No posts available",
-                        style: TextStyle(
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppColors.whiteColor.withAlpha(128),
                         ),
                       ),

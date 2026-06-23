@@ -1,15 +1,14 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../../core/constants/app_colors.dart';
 import '../../../../../../core/constants/app_assets.dart';
+import '../../../../../../core/constants/app_colors.dart';
+import '../../../../../../core/services/api_service.dart';
+import '../../../../../../core/widgets/background_widget.dart';
 import '../../../../../../core/widgets/custom_button.dart';
 import '../../../../../../core/widgets/input_text_widget.dart';
-import '../../../../../../core/widgets/background_widget.dart';
-import '../../../../../../core/services/api_service.dart';
 import '../../../../../../routes/app_router.dart';
 import '../../../../../coach/profile/controllers/coach_profile_controller.dart';
 import '../../../controllers/auth_controller.dart';
@@ -219,7 +218,7 @@ class CoachMatchView extends StatelessWidget {
                 padding: EdgeInsets.all(16.r),
                 child: Text(
                   "Years of Experience",
-                  style: TextStyle(
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: AppColors.whiteColor,
                     fontSize: 18.sp,
                     fontWeight: FontWeight.bold,
@@ -231,7 +230,7 @@ class CoachMatchView extends StatelessWidget {
                 (opt) => ListTile(
                   title: Text(
                     opt,
-                    style: TextStyle(
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: opt == controller.selectedExperience
                           ? AppColors.iconColor
                           : AppColors.textColor,
@@ -256,7 +255,7 @@ class CoachMatchView extends StatelessWidget {
     );
   }
 
-  Widget _buildCheckbox({
+  Widget _buildCheckbox(BuildContext context, {
     required String label,
     required bool isSelected,
     required VoidCallback onTap,
@@ -292,7 +291,7 @@ class CoachMatchView extends StatelessWidget {
             SizedBox(width: 12.w),
             Text(
               label,
-              style: TextStyle(
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: isSelected ? AppColors.iconColor : AppColors.textColor,
                 fontSize: 16.sp,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
@@ -304,7 +303,7 @@ class CoachMatchView extends StatelessWidget {
     );
   }
 
-  Widget _buildUploadedFile(String fileName, VoidCallback onDelete) {
+  Widget _buildUploadedFile(BuildContext context, String fileName, VoidCallback onDelete) {
     return Container(
       margin: EdgeInsets.only(top: 8.h),
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
@@ -331,7 +330,7 @@ class CoachMatchView extends StatelessWidget {
           Expanded(
             child: Text(
               fileName,
-              style: TextStyle(color: AppColors.textColor, fontSize: 14.sp),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textColor, fontSize: 14.sp),
             ),
           ),
           GestureDetector(
@@ -377,7 +376,7 @@ class CoachMatchView extends StatelessWidget {
               SizedBox(height: 24.h),
               Text(
                 "Primary Specialty (Select multiple)",
-                style: TextStyle(
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppColors.textColor.withAlpha(200),
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
@@ -385,7 +384,7 @@ class CoachMatchView extends StatelessWidget {
               ),
               SizedBox(height: 16.h),
               ...specialties.map(
-                (spec) => _buildCheckbox(
+                (spec) => _buildCheckbox(context,
                   label: spec,
                   isSelected: controller.selectedSpecialties.contains(spec),
                   onTap: () {
@@ -396,7 +395,7 @@ class CoachMatchView extends StatelessWidget {
               SizedBox(height: 20.h),
               Text(
                 "Year of Experience",
-                style: TextStyle(
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppColors.textColor.withAlpha(200),
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
@@ -419,7 +418,7 @@ class CoachMatchView extends StatelessWidget {
                     children: [
                       Text(
                         controller.selectedExperience,
-                        style: TextStyle(
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color:
                               controller.selectedExperience ==
                                   "Select Experience"
@@ -436,7 +435,7 @@ class CoachMatchView extends StatelessWidget {
               SizedBox(height: 24.h),
               Text(
                 "Certification/Education",
-                style: TextStyle(
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppColors.textColor.withAlpha(200),
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
@@ -475,11 +474,12 @@ class CoachMatchView extends StatelessWidget {
                               SizedBox(width: 4.w),
                               Text(
                                 "Upload",
-                                style: TextStyle(
-                                  color: AppColors.backgroundColor,
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                style: Theme.of(context).textTheme.bodyMedium
+                                    ?.copyWith(
+                                      color: AppColors.backgroundColor,
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                               ),
                             ],
                           ),
@@ -487,10 +487,11 @@ class CoachMatchView extends StatelessWidget {
                         SizedBox(width: 12.w),
                         Text(
                           "Click to upload files",
-                          style: TextStyle(
-                            color: AppColors.hintTextColor,
-                            fontSize: 14.sp,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: AppColors.hintTextColor,
+                                fontSize: 14.sp,
+                              ),
                         ),
                       ],
                     ),
@@ -515,7 +516,7 @@ class CoachMatchView extends StatelessWidget {
                 )
               else
                 ...controller.uploadedFiles.map(
-                  (file) => _buildUploadedFile(file, () {
+                  (file) => _buildUploadedFile(context, file, () {
                     controller.removeUploadedFile(file);
                   }),
                 ),
@@ -547,7 +548,7 @@ class CoachStyleView extends StatelessWidget {
     "Action-Oriented",
   ];
 
-  Widget _buildCheckbox({
+  Widget _buildCheckbox(BuildContext context, {
     required String label,
     required bool isSelected,
     required VoidCallback onTap,
@@ -583,7 +584,7 @@ class CoachStyleView extends StatelessWidget {
             SizedBox(width: 12.w),
             Text(
               label,
-              style: TextStyle(
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: isSelected ? AppColors.iconColor : AppColors.textColor,
                 fontSize: 16.sp,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
@@ -618,7 +619,7 @@ class CoachStyleView extends StatelessWidget {
             SizedBox(height: 24.h),
             Text(
               "My Coaching Style",
-              style: TextStyle(
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: AppColors.textColor.withAlpha(200),
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w600,
@@ -626,7 +627,7 @@ class CoachStyleView extends StatelessWidget {
             ),
             SizedBox(height: 16.h),
             ...styles.map(
-              (style) => _buildCheckbox(
+              (style) => _buildCheckbox(context,
                 label: style,
                 isSelected: controller.selectedCoachingStyles.contains(style),
                 onTap: () {
@@ -676,7 +677,7 @@ class CoachPitchBioView extends StatelessWidget {
             SizedBox(height: 32.h),
             Text(
               "Elevator Pitch (Max 250 characters)",
-              style: TextStyle(
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: AppColors.textColor.withAlpha(200),
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w600,
@@ -695,7 +696,7 @@ class CoachPitchBioView extends StatelessWidget {
             SizedBox(height: 24.h),
             Text(
               "Bio",
-              style: TextStyle(
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: AppColors.textColor.withAlpha(200),
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w600,
@@ -763,7 +764,9 @@ class CoachAvailabilityView extends StatelessWidget {
                   (d) => ListTile(
                     title: Text(
                       d,
-                      style: const TextStyle(color: AppColors.textColor),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppColors.textColor,
+                      ),
                     ),
                     onTap: () {
                       controller.updateAvailabilityField(day: d);
@@ -811,19 +814,23 @@ class CoachAvailabilityView extends StatelessWidget {
                   (t) => ListTile(
                     title: Text(
                       t,
-                      style: const TextStyle(color: AppColors.textColor),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppColors.textColor,
+                      ),
                     ),
                     onTap: () {
                       if (isOnTab) {
-                        if (isStart)
+                        if (isStart) {
                           controller.updateAvailabilityField(onStart: t);
-                        else
+                        } else {
                           controller.updateAvailabilityField(onEnd: t);
+                        }
                       } else {
-                        if (isStart)
+                        if (isStart) {
                           controller.updateAvailabilityField(offStart: t);
-                        else
+                        } else {
                           controller.updateAvailabilityField(offEnd: t);
+                        }
                       }
                       Navigator.pop(context);
                     },
@@ -837,10 +844,11 @@ class CoachAvailabilityView extends StatelessWidget {
   }
 
   void _showDatePicker(CoachProfileController controller, bool isFrom) {
-    if (isFrom)
+    if (isFrom) {
       controller.updateAvailabilityField(fromDate: "31/08/2026");
-    else
+    } else {
       controller.updateAvailabilityField(toDate: "31/08/2026");
+    }
   }
 
   @override
@@ -865,15 +873,16 @@ class CoachAvailabilityView extends StatelessWidget {
                       children: [
                         Text(
                           "On Days",
-                          style: TextStyle(
-                            color: controller.isOnDays
-                                ? AppColors.iconColor
-                                : AppColors.textColor.withAlpha(150),
-                            fontSize: 16.sp,
-                            fontWeight: controller.isOnDays
-                                ? FontWeight.bold
-                                : FontWeight.normal,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: controller.isOnDays
+                                    ? AppColors.iconColor
+                                    : AppColors.textColor.withAlpha(150),
+                                fontSize: 16.sp,
+                                fontWeight: controller.isOnDays
+                                    ? FontWeight.bold
+                                    : FontWeight.normal,
+                              ),
                         ),
                         SizedBox(height: 8.h),
                         Container(
@@ -893,15 +902,16 @@ class CoachAvailabilityView extends StatelessWidget {
                       children: [
                         Text(
                           "Off Days",
-                          style: TextStyle(
-                            color: !controller.isOnDays
-                                ? AppColors.iconColor
-                                : AppColors.textColor.withAlpha(150),
-                            fontSize: 16.sp,
-                            fontWeight: !controller.isOnDays
-                                ? FontWeight.bold
-                                : FontWeight.normal,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: !controller.isOnDays
+                                    ? AppColors.iconColor
+                                    : AppColors.textColor.withAlpha(150),
+                                fontSize: 16.sp,
+                                fontWeight: !controller.isOnDays
+                                    ? FontWeight.bold
+                                    : FontWeight.normal,
+                              ),
                         ),
                         SizedBox(height: 8.h),
                         Container(
@@ -961,7 +971,10 @@ class CoachAvailabilityView extends StatelessWidget {
             children: [
               Text(
                 "Days of Week",
-                style: TextStyle(color: AppColors.textColor, fontSize: 14.sp),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.textColor,
+                  fontSize: 14.sp,
+                ),
               ),
               SizedBox(height: 8.h),
               GestureDetector(
@@ -979,7 +992,7 @@ class CoachAvailabilityView extends StatelessWidget {
                     children: [
                       Text(
                         controller.setupSelectedDay,
-                        style: TextStyle(
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppColors.textColor,
                           fontSize: 14.sp,
                         ),
@@ -1002,10 +1015,11 @@ class CoachAvailabilityView extends StatelessWidget {
                       children: [
                         Text(
                           "Start Time",
-                          style: TextStyle(
-                            color: AppColors.textColor,
-                            fontSize: 14.sp,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: AppColors.textColor,
+                                fontSize: 14.sp,
+                              ),
                         ),
                         SizedBox(height: 8.h),
                         GestureDetector(
@@ -1031,10 +1045,11 @@ class CoachAvailabilityView extends StatelessWidget {
                                 ),
                                 Text(
                                   controller.onStartTime,
-                                  style: TextStyle(
-                                    color: AppColors.textColor,
-                                    fontSize: 14.sp,
-                                  ),
+                                  style: Theme.of(context).textTheme.bodyMedium
+                                      ?.copyWith(
+                                        color: AppColors.textColor,
+                                        fontSize: 14.sp,
+                                      ),
                                 ),
                               ],
                             ),
@@ -1050,10 +1065,11 @@ class CoachAvailabilityView extends StatelessWidget {
                       children: [
                         Text(
                           "End Time",
-                          style: TextStyle(
-                            color: AppColors.textColor,
-                            fontSize: 14.sp,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: AppColors.textColor,
+                                fontSize: 14.sp,
+                              ),
                         ),
                         SizedBox(height: 8.h),
                         GestureDetector(
@@ -1079,10 +1095,11 @@ class CoachAvailabilityView extends StatelessWidget {
                                 ),
                                 Text(
                                   controller.onEndTime,
-                                  style: TextStyle(
-                                    color: AppColors.textColor,
-                                    fontSize: 14.sp,
-                                  ),
+                                  style: Theme.of(context).textTheme.bodyMedium
+                                      ?.copyWith(
+                                        color: AppColors.textColor,
+                                        fontSize: 14.sp,
+                                      ),
                                 ),
                               ],
                             ),
@@ -1100,7 +1117,7 @@ class CoachAvailabilityView extends StatelessWidget {
                     ? AppColors.iconColor
                     : AppColors.buttonColor4,
                 textColor: canSave
-                    ? Colors.white
+                    ? AppColors.whiteColor
                     : AppColors.whiteColor.withAlpha(100),
                 onPress: canSave
                     ? () async {
@@ -1114,7 +1131,7 @@ class CoachAvailabilityView extends StatelessWidget {
         SizedBox(height: 24.h),
         Text(
           "Current Availability",
-          style: TextStyle(
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: AppColors.textColor,
             fontSize: 16.sp,
             fontWeight: FontWeight.bold,
@@ -1140,8 +1157,8 @@ class CoachAvailabilityView extends StatelessWidget {
                   children: [
                     Text(
                       item["day"]!,
-                      style: TextStyle(
-                        color: Colors.white,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppColors.whiteColor,
                         fontSize: 14.sp,
                         fontWeight: FontWeight.bold,
                       ),
@@ -1149,7 +1166,7 @@ class CoachAvailabilityView extends StatelessWidget {
                     SizedBox(height: 4.h),
                     Text(
                       item["time"]!,
-                      style: TextStyle(
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppColors.textColor,
                         fontSize: 14.sp,
                       ),
@@ -1160,7 +1177,7 @@ class CoachAvailabilityView extends StatelessWidget {
                   onTap: () => controller.removeSetupOnDay(item),
                   child: Icon(
                     Icons.cancel,
-                    color: Colors.redAccent.withAlpha(200),
+                    color: AppColors.redAccentColor.withAlpha(200),
                     size: 22.r,
                   ),
                 ),
@@ -1205,10 +1222,11 @@ class CoachAvailabilityView extends StatelessWidget {
                       children: [
                         Text(
                           "From",
-                          style: TextStyle(
-                            color: AppColors.textColor,
-                            fontSize: 14.sp,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: AppColors.textColor,
+                                fontSize: 14.sp,
+                              ),
                         ),
                         SizedBox(height: 8.h),
                         GestureDetector(
@@ -1233,10 +1251,11 @@ class CoachAvailabilityView extends StatelessWidget {
                                 ),
                                 Text(
                                   controller.selectedFromDate,
-                                  style: TextStyle(
-                                    color: AppColors.textColor,
-                                    fontSize: 12.sp,
-                                  ),
+                                  style: Theme.of(context).textTheme.bodyMedium
+                                      ?.copyWith(
+                                        color: AppColors.textColor,
+                                        fontSize: 12.sp,
+                                      ),
                                 ),
                               ],
                             ),
@@ -1252,10 +1271,11 @@ class CoachAvailabilityView extends StatelessWidget {
                       children: [
                         Text(
                           "Start Time",
-                          style: TextStyle(
-                            color: AppColors.textColor,
-                            fontSize: 14.sp,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: AppColors.textColor,
+                                fontSize: 14.sp,
+                              ),
                         ),
                         SizedBox(height: 8.h),
                         GestureDetector(
@@ -1281,10 +1301,11 @@ class CoachAvailabilityView extends StatelessWidget {
                                 ),
                                 Text(
                                   controller.offStartTime,
-                                  style: TextStyle(
-                                    color: AppColors.textColor,
-                                    fontSize: 12.sp,
-                                  ),
+                                  style: Theme.of(context).textTheme.bodyMedium
+                                      ?.copyWith(
+                                        color: AppColors.textColor,
+                                        fontSize: 12.sp,
+                                      ),
                                 ),
                               ],
                             ),
@@ -1304,10 +1325,11 @@ class CoachAvailabilityView extends StatelessWidget {
                       children: [
                         Text(
                           "To",
-                          style: TextStyle(
-                            color: AppColors.textColor,
-                            fontSize: 14.sp,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: AppColors.textColor,
+                                fontSize: 14.sp,
+                              ),
                         ),
                         SizedBox(height: 8.h),
                         GestureDetector(
@@ -1332,10 +1354,11 @@ class CoachAvailabilityView extends StatelessWidget {
                                 ),
                                 Text(
                                   controller.selectedToDate,
-                                  style: TextStyle(
-                                    color: AppColors.textColor,
-                                    fontSize: 12.sp,
-                                  ),
+                                  style: Theme.of(context).textTheme.bodyMedium
+                                      ?.copyWith(
+                                        color: AppColors.textColor,
+                                        fontSize: 12.sp,
+                                      ),
                                 ),
                               ],
                             ),
@@ -1351,10 +1374,11 @@ class CoachAvailabilityView extends StatelessWidget {
                       children: [
                         Text(
                           "End Time",
-                          style: TextStyle(
-                            color: AppColors.textColor,
-                            fontSize: 14.sp,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: AppColors.textColor,
+                                fontSize: 14.sp,
+                              ),
                         ),
                         SizedBox(height: 8.h),
                         GestureDetector(
@@ -1384,10 +1408,11 @@ class CoachAvailabilityView extends StatelessWidget {
                                 ),
                                 Text(
                                   controller.offEndTime,
-                                  style: TextStyle(
-                                    color: AppColors.textColor,
-                                    fontSize: 12.sp,
-                                  ),
+                                  style: Theme.of(context).textTheme.bodyMedium
+                                      ?.copyWith(
+                                        color: AppColors.textColor,
+                                        fontSize: 12.sp,
+                                      ),
                                 ),
                               ],
                             ),
@@ -1405,7 +1430,7 @@ class CoachAvailabilityView extends StatelessWidget {
                     ? AppColors.iconColor
                     : AppColors.buttonColor4,
                 textColor: canSave
-                    ? Colors.white
+                    ? AppColors.whiteColor
                     : AppColors.whiteColor.withAlpha(100),
                 onPress: canSave
                     ? () async {
@@ -1419,7 +1444,7 @@ class CoachAvailabilityView extends StatelessWidget {
         SizedBox(height: 24.h),
         Text(
           "Current Unavailability",
-          style: TextStyle(
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: AppColors.textColor,
             fontSize: 16.sp,
             fontWeight: FontWeight.bold,
@@ -1447,18 +1472,20 @@ class CoachAvailabilityView extends StatelessWidget {
                       children: [
                         Text(
                           "Starts  ",
-                          style: TextStyle(
-                            color: AppColors.textColor,
-                            fontSize: 12.sp,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: AppColors.textColor,
+                                fontSize: 12.sp,
+                              ),
                         ),
                         Text(
                           item["start"]!,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 13.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: AppColors.whiteColor,
+                                fontSize: 13.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
                         ),
                       ],
                     ),
@@ -1467,18 +1494,20 @@ class CoachAvailabilityView extends StatelessWidget {
                       children: [
                         Text(
                           "Ends    ",
-                          style: TextStyle(
-                            color: AppColors.textColor,
-                            fontSize: 12.sp,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: AppColors.textColor,
+                                fontSize: 12.sp,
+                              ),
                         ),
                         Text(
                           item["end"]!,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 13.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: AppColors.whiteColor,
+                                fontSize: 13.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
                         ),
                       ],
                     ),
@@ -1488,7 +1517,7 @@ class CoachAvailabilityView extends StatelessWidget {
                   onTap: () => controller.removeSetupOffDay(item),
                   child: Icon(
                     Icons.cancel,
-                    color: Colors.redAccent.withAlpha(200),
+                    color: AppColors.redAccentColor.withAlpha(200),
                     size: 22.r,
                   ),
                 ),
@@ -1531,7 +1560,7 @@ class CoachRatesServicesView extends StatelessWidget {
               SizedBox(height: 24.h),
               Text(
                 "Per Minute Rate",
-                style: TextStyle(
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppColors.textColor,
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w600,
@@ -1545,7 +1574,7 @@ class CoachRatesServicesView extends StatelessWidget {
               SizedBox(height: 16.h),
               Text(
                 "Per Text Rate",
-                style: TextStyle(
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppColors.textColor,
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w600,
@@ -1559,7 +1588,7 @@ class CoachRatesServicesView extends StatelessWidget {
               SizedBox(height: 16.h),
               Text(
                 "Cancellation Policy",
-                style: TextStyle(
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppColors.textColor,
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w600,
@@ -1574,7 +1603,7 @@ class CoachRatesServicesView extends StatelessWidget {
               SizedBox(height: 16.h),
               Text(
                 "Accept Cancellation Prior",
-                style: TextStyle(
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppColors.textColor,
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w600,
@@ -1591,7 +1620,7 @@ class CoachRatesServicesView extends StatelessWidget {
                 children: [
                   Text(
                     "Service List",
-                    style: TextStyle(
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: AppColors.textColor,
                       fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
@@ -1621,10 +1650,11 @@ class CoachRatesServicesView extends StatelessWidget {
                           SizedBox(width: 4.w),
                           Text(
                             "Add Option",
-                            style: TextStyle(
-                              color: AppColors.textColor,
-                              fontSize: 12.sp,
-                            ),
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(
+                                  color: AppColors.textColor,
+                                  fontSize: 12.sp,
+                                ),
                           ),
                         ],
                       ),
@@ -1679,8 +1709,8 @@ class CoachRatesServicesView extends StatelessWidget {
             children: [
               Text(
                 opt.title,
-                style: TextStyle(
-                  color: Colors.white,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.whiteColor,
                   fontSize: 16.sp,
                   fontWeight: FontWeight.bold,
                 ),
@@ -1689,7 +1719,7 @@ class CoachRatesServicesView extends StatelessWidget {
                 children: [
                   Text(
                     "Active",
-                    style: TextStyle(
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: AppColors.textColor,
                       fontSize: 12.sp,
                     ),
@@ -1699,7 +1729,7 @@ class CoachRatesServicesView extends StatelessWidget {
                     height: 20.h,
                     child: Switch(
                       value: opt.isActive,
-                      activeColor: AppColors.iconColor,
+                      activeThumbColor: AppColors.iconColor,
                       onChanged: (val) {
                         // Fixed by agent
                         controller.updateServiceOption(opt, isActive: val);
@@ -1711,7 +1741,7 @@ class CoachRatesServicesView extends StatelessWidget {
                     onTap: () => controller.removeServiceOption(index),
                     child: Icon(
                       Icons.delete,
-                      color: Colors.redAccent.withAlpha(200),
+                      color: AppColors.redAccentColor.withAlpha(200),
                       size: 20.r,
                     ),
                   ),
@@ -1722,7 +1752,10 @@ class CoachRatesServicesView extends StatelessWidget {
           SizedBox(height: 16.h),
           Text(
             "Duration",
-            style: TextStyle(color: AppColors.textColor, fontSize: 14.sp),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColors.textColor,
+              fontSize: 14.sp,
+            ),
           ),
           SizedBox(height: 6.h),
           InputTextWidget(
@@ -1742,7 +1775,10 @@ class CoachRatesServicesView extends StatelessWidget {
           SizedBox(height: 12.h),
           Text(
             "Price",
-            style: TextStyle(color: AppColors.textColor, fontSize: 14.sp),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColors.textColor,
+              fontSize: 14.sp,
+            ),
           ),
           SizedBox(height: 6.h),
           InputTextWidget(
@@ -1789,7 +1825,7 @@ class CoachSetupCompleteView extends StatelessWidget {
                     width: 160.r,
                     height: 160.r,
                     decoration: BoxDecoration(
-                      color: const Color(0xFFC9A84C).withAlpha(30),
+                      color: AppColors.iconColor.withAlpha(30),
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -1797,7 +1833,7 @@ class CoachSetupCompleteView extends StatelessWidget {
                     width: 130.r,
                     height: 130.r,
                     decoration: const BoxDecoration(
-                      color: Color(0xFFC9A84C),
+                      color: AppColors.iconColor,
                       shape: BoxShape.circle,
                     ),
                     alignment: Alignment.center,
@@ -1807,7 +1843,9 @@ class CoachSetupCompleteView extends StatelessWidget {
                     child: Center(
                       child: Text(
                         "✨ 🎉 🥳",
-                        style: TextStyle(fontSize: 100.sp),
+                        style: Theme.of(
+                          context,
+                        ).textTheme.bodyMedium?.copyWith(fontSize: 100.sp),
                       ),
                     ),
                   ),
@@ -1842,8 +1880,8 @@ class CoachSetupCompleteView extends StatelessWidget {
                   height: 56.h,
                   title: "Go to Home →",
                   linearGradient: true,
-                  buttonColor: const Color(0xFFC9A84C),
-                  textColor: Colors.white,
+                  buttonColor: AppColors.iconColor,
+                  textColor: AppColors.whiteColor,
                   onPress: () async {
                     final router = GoRouter.of(context);
                     await ApiService.store(

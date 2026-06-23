@@ -6,18 +6,17 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'bindings/provider_binding.dart';
+import 'core/services/api_service.dart';
+import 'core/services/navigation_service.dart';
+import 'core/services/notifications/firebase_options.dart';
 import 'core/theme/app_theme.dart';
+import 'core/utils/helpers/snack_bar_helper.dart';
+import 'core/widgets/background_widget.dart';
 import 'features/shared/auth/controllers/auth_controller.dart';
 import 'features/shared/localization/controllers/localization_controller.dart';
 import 'features/shared/onboarding/controllers/onboarding_controller.dart';
 import 'features/shared/theme/controllers/theme_controller.dart';
-import 'core/services/notifications/firebase_options.dart';
-import 'core/constants/app_colors.dart';
-import 'core/services/api_service.dart';
 import 'routes/app_router.dart';
-import 'core/utils/helpers/snack_bar_helper.dart';
-import 'core/widgets/background_widget.dart';
-import 'core/services/navigation_service.dart';
 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {

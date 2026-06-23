@@ -1,18 +1,16 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+
 import '../../../../../../core/widgets/custom_button.dart';
+import '../../../../../core/constants/app_assets.dart';
+import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/services/api_service.dart';
 import '../../../../../core/widgets/background_widget.dart';
-import '../../../../../routes/app_router.dart';
-import '../../../../../core/widgets/custom_button.dart';
-import '../../../../../core/widgets/input_text_widget.dart';
-import '../../../../../core/constants/app_colors.dart';
-import '../../../../../core/constants/app_assets.dart';
 import '../../../../../core/widgets/custom_dialog.dart';
+import '../../../../../core/widgets/input_text_widget.dart';
+import '../../../../../routes/app_router.dart';
 import '../../controllers/auth_controller.dart';
 import 'setup_base_view.dart';
 
@@ -57,7 +55,7 @@ Widget _buildContinueButton({
   );
 }
 
-Widget _buildLegalContent(String title, String content) {
+Widget _buildLegalContent(BuildContext context, String title, String content) {
   return Padding(
     padding: EdgeInsets.symmetric(horizontal: 24.w),
     child: Column(
@@ -67,7 +65,7 @@ Widget _buildLegalContent(String title, String content) {
         Text(
           title,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: AppColors.whiteColor,
             fontSize: 22.sp,
             fontFamily: 'Georgia',
@@ -79,7 +77,7 @@ Widget _buildLegalContent(String title, String content) {
           child: SingleChildScrollView(
             child: Text(
               content,
-              style: TextStyle(
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: AppColors.whiteColor.withAlpha(204),
                 fontSize: 16.sp,
                 fontFamily: 'Segoe UI',
@@ -143,7 +141,9 @@ class Setup1View extends StatelessWidget {
                 SizedBox(height: 8.h),
                 Text(
                   "We're here for you, no matter what.",
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
                 ),
                 SizedBox(height: 32.h),
                 ...options.map(
@@ -204,7 +204,9 @@ class Setup2View extends StatelessWidget {
                 SizedBox(height: 8.h),
                 Text(
                   "Every bond is significant, no matter how long or short you were together.",
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
                 ),
                 SizedBox(height: 32.h),
                 ...options.map(
@@ -266,7 +268,9 @@ class Setup3View extends StatelessWidget {
                 SizedBox(height: 8.h),
                 Text(
                   "Whether it’s been a day or over a year, your feelings are valid 🩹",
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
                 ),
                 SizedBox(height: 32.h),
                 ...options.map(
@@ -327,7 +331,9 @@ class Setup4View extends StatelessWidget {
                 SizedBox(height: 8.h),
                 Text(
                   "Breakups are a rollercoaster 🎢, we know....",
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
                 ),
                 SizedBox(height: 32.h),
                 ...options.map(
@@ -387,7 +393,9 @@ class Setup5View extends StatelessWidget {
                 SizedBox(height: 8.h),
                 Text(
                   "Let's understand what you're going through.",
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
                 ),
                 SizedBox(height: 32.h),
                 ...options.map(
@@ -447,7 +455,9 @@ class Setup6View extends StatelessWidget {
                 SizedBox(height: 8.h),
                 Text(
                   "Take a breath and check in.",
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
                 ),
                 SizedBox(height: 32.h),
                 ...options.map(
@@ -516,7 +526,9 @@ class Setup7View extends StatelessWidget {
                 SizedBox(height: 8.h),
                 Text(
                   "OK, so it’s time to lock in your progress 🔒",
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
                 ),
                 SizedBox(height: 32.h),
                 ...options.map(
@@ -570,7 +582,9 @@ class Setup8View extends StatelessWidget {
             SizedBox(height: 8.h),
             Text(
               "That’s amazing! You should be proud of yourself 🙂",
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
             ),
             SizedBox(height: 40.h),
             InputTextWidget(
@@ -626,7 +640,9 @@ class Setup9View extends StatelessWidget {
                 SizedBox(height: 8.h),
                 Text(
                   "This helps us match you with support",
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
                 ),
                 SizedBox(height: 32.h),
                 ...options.map(
@@ -681,7 +697,9 @@ class Setup10View extends StatelessWidget {
                 SizedBox(height: 8.h),
                 Text(
                   "Almost there!",
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
                 ),
                 SizedBox(height: 32.h),
                 ...options.map(
@@ -718,7 +736,7 @@ class Setup11View extends StatelessWidget {
       totalSteps: isCoach ? 10 : 15,
       child: Stack(
         children: [
-          _buildLegalContent("Privacy Policy", _dummyLegalText),
+          _buildLegalContent(context, "Privacy Policy", _dummyLegalText),
           Positioned(
             bottom: 40.h,
             left: 24.w,
@@ -746,7 +764,7 @@ class Setup12View extends StatelessWidget {
       totalSteps: isCoach ? 10 : 15,
       child: Stack(
         children: [
-          _buildLegalContent("Terms and Conditions", _dummyLegalText),
+          _buildLegalContent(context, "Terms and Conditions", _dummyLegalText),
           Positioned(
             bottom: 40.h,
             left: 24.w,
@@ -774,7 +792,7 @@ class Setup13View extends StatelessWidget {
       totalSteps: isCoach ? 10 : 15,
       child: Stack(
         children: [
-          _buildLegalContent("Medical/Legal Disclaimer", _dummyLegalText),
+          _buildLegalContent(context, "Medical/Legal Disclaimer", _dummyLegalText),
           Positioned(
             bottom: 40.h,
             left: 24.w,
@@ -820,7 +838,7 @@ class SetupCompleteView extends StatelessWidget {
                     width: 160.r,
                     height: 160.r,
                     decoration: BoxDecoration(
-                      color: const Color(0xFFC9A84C).withAlpha(30),
+                      color: AppColors.iconColor.withAlpha(30),
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -828,7 +846,7 @@ class SetupCompleteView extends StatelessWidget {
                     width: 130.r,
                     height: 130.r,
                     decoration: const BoxDecoration(
-                      color: Color(0xFFC9A84C),
+                      color: AppColors.iconColor,
                       shape: BoxShape.circle,
                     ),
                     alignment: Alignment.center,
@@ -838,7 +856,9 @@ class SetupCompleteView extends StatelessWidget {
                     child: Center(
                       child: Text(
                         "✨ 🎉 🥳",
-                        style: TextStyle(fontSize: 100.sp),
+                        style: Theme.of(
+                          context,
+                        ).textTheme.bodyMedium?.copyWith(fontSize: 100.sp),
                       ),
                     ),
                   ),
@@ -873,14 +893,15 @@ class SetupCompleteView extends StatelessWidget {
                   height: 56.h,
                   title: "Go to Home →",
                   linearGradient: true,
-                  buttonColor: const Color(0xFFC9A84C),
-                  textColor: Colors.white,
+                  buttonColor: AppColors.iconColor,
+                  textColor: AppColors.whiteColor,
                   onPress: () async {
                     // Set flag to show navigation guides in Navbar
                     await ApiService.store(
                       key: 'show_nav_guide',
                       value: 'true',
                     );
+                    if (!context.mounted) return;
                     context.go(AppRoutes.home);
                   },
                 ),

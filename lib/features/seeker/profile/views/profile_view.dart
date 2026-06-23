@@ -45,7 +45,8 @@ class ProfileView extends StatelessWidget {
               return Stack(
                 children: [
                   RefreshIndicator(
-                    onRefresh: () => controller.fetchProfileDetails(isRefresh: true),
+                    onRefresh: () =>
+                        controller.fetchProfileDetails(isRefresh: true),
                     color: Colors.transparent,
                     backgroundColor: Colors.transparent,
                     strokeWidth: 0,
@@ -53,237 +54,261 @@ class ProfileView extends StatelessWidget {
                     child: SingleChildScrollView(
                       physics: const AlwaysScrollableScrollPhysics(),
                       child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // ── Header: Name & Settings Icon ──────────────────────────────
-                      Padding(
-                        padding: EdgeInsets.all(20.r),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // ── Header: Name & Settings Icon ──────────────────────────────
+                          Padding(
+                            padding: EdgeInsets.all(20.r),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                GestureDetector(
-                                  onTap: () => context.push(AppRoutes.editProfile),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        user?.name ?? "Rahim Rehman",
-                                        style: theme.textTheme.headlineSmall?.copyWith(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      SizedBox(width: 8.w),
-                                      Icon(
-                                        Icons.edit_outlined,
-                                        color: Colors.white.withAlpha(128),
-                                        size: 18.r,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Text(
-                                  user?.bio ?? "Healing Journey Day 14",
-                                  style: TextStyle(
-                                    color: Colors.white.withAlpha(128),
-                                    fontSize: 13.sp,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            IconButton(
-                              icon: Icon(
-                                Icons.settings_outlined,
-                                color: const Color(0xFFC19E5F),
-                                size: 28.r,
-                              ),
-                              onPressed: () => context.push(AppRoutes.settings),
-                            ),
-                          ],
-                        ),
-                      ),
-                      // ── Stats Section ───────────────────────────────────────────────
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20.w),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            _buildStatItem(
-                              user != null ? user.stats.posts.toString().padLeft(2, '0') : "07",
-                              "Post",
-                            ),
-                            _buildStatDivider(),
-                            _buildStatItem(
-                              user != null ? user.stats.friends.toString() : "128",
-                              "Friends",
-                            ),
-                            _buildStatDivider(),
-                            _buildStatItem(
-                              user != null ? user.stats.followers.toString() : "220",
-                              "Followers",
-                            ),
-                            _buildStatDivider(),
-                            _buildStatItem(
-                              user != null ? user.stats.following.toString() : "14",
-                              "Following",
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 24.h),
-                      // ── Status Sharing ──────────────────────────────────────────────
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20.w),
-                        child: Row(
-                          children: [
-                            CircleAvatar(
-                              radius: 24.r,
-                              backgroundImage: NetworkImage(
-                                user?.avatar ?? 'https://i.pravatar.cc/150?u=me',
-                              ),
-                            ),
-                            SizedBox(width: 12.w),
-                            Expanded(
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 16.w,
-                                  vertical: 12.h,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withAlpha(13),
-                                  borderRadius: BorderRadius.circular(24.r),
-                                ),
-                                child: Row(
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    SvgPicture.asset(
-                                      AppAssets.feather,
-                                      width: 16.r,
-                                      colorFilter: const ColorFilter.mode(
-                                        AppColors.greyColor,
-                                        BlendMode.srcIn,
+                                    GestureDetector(
+                                      onTap: () =>
+                                          context.push(AppRoutes.editProfile),
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            user?.name ?? "Rahim Rehman",
+                                            style: theme.textTheme.headlineSmall
+                                                ?.copyWith(
+                                                  color: AppColors.whiteColor,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                          ),
+                                          SizedBox(width: 8.w),
+                                          Icon(
+                                            Icons.edit_outlined,
+                                            color: AppColors.whiteColor
+                                                .withAlpha(128),
+                                            size: 18.r,
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    SizedBox(width: 8.w),
                                     Text(
-                                      "Share Your Status.....",
-                                      style: TextStyle(
-                                        color: Colors.white.withAlpha(77),
+                                      user?.bio ?? "Healing Journey Day 14",
+                                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                        color: AppColors.whiteColor.withAlpha(
+                                          128,
+                                        ),
                                         fontSize: 13.sp,
                                       ),
                                     ),
                                   ],
                                 ),
-                              ),
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.settings_outlined,
+                                    color: AppColors.coachColorFFC19E5F,
+                                    size: 28.r,
+                                  ),
+                                  onPressed: () =>
+                                      context.push(AppRoutes.settings),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 24.h),
-                      // ── Stories / Media Preview ──────────────────────────────────────
-                      SizedBox(
-                        height: 100.h,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          padding: EdgeInsets.symmetric(horizontal: 16.w),
-                          itemCount: (user?.media.length ?? 0) + 1,
-                          itemBuilder: (context, index) {
-                            if (index == 0) {
-                              return _buildAddStoryButton(context);
-                            }
-                            final mediaUrl = user!.media[index - 1];
-                            return _buildMediaItem(mediaUrl);
-                          },
-                        ),
-                      ),
-                      SizedBox(height: 24.h),
-                      // ── Tabs: Post / Journal ────────────────────────────────────────
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20.w),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: TabBar(
-                                isScrollable: true,
-                                indicatorColor: AppColors.secondaryColorLight,
-                                labelColor: AppColors.secondaryColorLight,
-                                unselectedLabelColor: Colors.white.withAlpha(128),
-                                dividerColor: Colors.transparent,
-                                tabAlignment: TabAlignment.start,
-                                labelPadding: EdgeInsets.only(right: 24.w),
-                                tabs: [
-                                  const Tab(text: "Post"),
-                                  Tab(
+                          ),
+                          // ── Stats Section ───────────────────────────────────────────────
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20.w),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                _buildStatItem(context, 
+                                  user != null
+                                      ? user.stats.posts.toString().padLeft(
+                                          2,
+                                          '0',
+                                        )
+                                      : "07",
+                                  "Post",
+                                ),
+                                _buildStatDivider(),
+                                _buildStatItem(context, 
+                                  user != null
+                                      ? user.stats.friends.toString()
+                                      : "128",
+                                  "Friends",
+                                ),
+                                _buildStatDivider(),
+                                _buildStatItem(context, 
+                                  user != null
+                                      ? user.stats.followers.toString()
+                                      : "220",
+                                  "Followers",
+                                ),
+                                _buildStatDivider(),
+                                _buildStatItem(context, 
+                                  user != null
+                                      ? user.stats.following.toString()
+                                      : "14",
+                                  "Following",
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 24.h),
+                          // ── Status Sharing ──────────────────────────────────────────────
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20.w),
+                            child: Row(
+                              children: [
+                                CircleAvatar(
+                                  radius: 24.r,
+                                  backgroundImage: NetworkImage(
+                                    user?.avatar ??
+                                        'https://i.pravatar.cc/150?u=me',
+                                  ),
+                                ),
+                                SizedBox(width: 12.w),
+                                Expanded(
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 16.w,
+                                      vertical: 12.h,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.whiteColor.withAlpha(13),
+                                      borderRadius: BorderRadius.circular(24.r),
+                                    ),
                                     child: Row(
                                       children: [
-                                        const Icon(Icons.lock_outline, size: 14),
-                                        SizedBox(width: 4.w),
-                                        const Text("Journal"),
+                                        SvgPicture.asset(
+                                          AppAssets.feather,
+                                          width: 16.r,
+                                          colorFilter: const ColorFilter.mode(
+                                            AppColors.greyColor,
+                                            BlendMode.srcIn,
+                                          ),
+                                        ),
+                                        SizedBox(width: 8.w),
+                                        Text(
+                                          "Share Your Status.....",
+                                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                            color: AppColors.whiteColor
+                                                .withAlpha(77),
+                                            fontSize: 13.sp,
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                            GestureDetector(
-                              onTap: () => _showCreatePostSheet(context),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "Create",
-                                    style: TextStyle(
-                                      color: const Color(0xFFC19E5F),
-                                      fontSize: 13.sp,
-                                    ),
-                                  ),
-                                  Icon(
-                                    Icons.add,
-                                    color: const Color(0xFFC19E5F),
-                                    size: 18.r,
-                                  ),
-                                ],
-                              ),
+                          ),
+                          SizedBox(height: 24.h),
+                          // ── Stories / Media Preview ──────────────────────────────────────
+                          SizedBox(
+                            height: 100.h,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              padding: EdgeInsets.symmetric(horizontal: 16.w),
+                              itemCount: (user?.media.length ?? 0) + 1,
+                              itemBuilder: (context, index) {
+                                if (index == 0) {
+                                  return _buildAddStoryButton(context);
+                                }
+                                final mediaUrl = user!.media[index - 1];
+                                return _buildMediaItem(mediaUrl);
+                              },
                             ),
-                          ],
-                        ),
+                          ),
+                          SizedBox(height: 24.h),
+                          // ── Tabs: Post / Journal ────────────────────────────────────────
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20.w),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: TabBar(
+                                    isScrollable: true,
+                                    indicatorColor:
+                                        AppColors.secondaryColorLight,
+                                    labelColor: AppColors.secondaryColorLight,
+                                    unselectedLabelColor: AppColors.whiteColor
+                                        .withAlpha(128),
+                                    dividerColor: Colors.transparent,
+                                    tabAlignment: TabAlignment.start,
+                                    labelPadding: EdgeInsets.only(right: 24.w),
+                                    tabs: [
+                                      const Tab(text: "Post"),
+                                      Tab(
+                                        child: Row(
+                                          children: [
+                                            const Icon(
+                                              Icons.lock_outline,
+                                              size: 14,
+                                            ),
+                                            SizedBox(width: 4.w),
+                                            const Text("Journal"),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () => _showCreatePostSheet(context),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        "Create",
+                                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                          color: AppColors.coachColorFFC19E5F,
+                                          fontSize: 13.sp,
+                                        ),
+                                      ),
+                                      Icon(
+                                        Icons.add,
+                                        color: AppColors.coachColorFFC19E5F,
+                                        size: 18.r,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          // ── Tab View Content ───────────────────────────────────────────
+                          SizedBox(
+                            height: 500.h,
+                            child: TabBarView(
+                              children: [
+                                _buildPostList(),
+                                _buildJournalList(context, user?.journals ?? []),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                      // ── Tab View Content ───────────────────────────────────────────
-                      SizedBox(
-                        height: 500.h,
-                        child: TabBarView(
-                          children: [
-                            _buildPostList(),
-                            _buildJournalList(user?.journals ?? []),
-                          ],
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-              if (controller.isRefreshing)
-                Positioned(
-                  top: 16.h,
-                  left: 0,
-                  right: 0,
-                  child: const Center(child: CustomLoader(size: 150)),
-                ),
-            ],
-          );
-        },
+                  if (controller.isRefreshing)
+                    Positioned(
+                      top: 16.h,
+                      left: 0,
+                      right: 0,
+                      child: const Center(child: CustomLoader(size: 150)),
+                    ),
+                ],
+              );
+            },
           ),
         ),
       ),
     );
   }
 
-  Widget _buildStatItem(String count, String label) {
+  Widget _buildStatItem(BuildContext context, String count, String label) {
     return Column(
       children: [
         Text(
           count,
-          style: TextStyle(
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: AppColors.secondaryColorLight,
             fontSize: 18.sp,
             fontWeight: FontWeight.bold,
@@ -292,14 +317,21 @@ class ProfileView extends StatelessWidget {
         SizedBox(height: 4.h),
         Text(
           label,
-          style: TextStyle(color: Colors.white.withAlpha(128), fontSize: 12.sp),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: AppColors.whiteColor.withAlpha(128),
+            fontSize: 12.sp,
+          ),
         ),
       ],
     );
   }
 
   Widget _buildStatDivider() {
-    return Container(height: 30.h, width: 1, color: Colors.white.withAlpha(26));
+    return Container(
+      height: 30.h,
+      width: 1,
+      color: AppColors.whiteColor.withAlpha(26),
+    );
   }
 
   Widget _buildAddStoryButton(BuildContext context) {
@@ -312,14 +344,14 @@ class ProfileView extends StatelessWidget {
         width: 80.w,
         margin: EdgeInsets.only(right: 8.w),
         decoration: BoxDecoration(
-          color: Colors.white.withAlpha(13),
+          color: AppColors.whiteColor.withAlpha(13),
           borderRadius: BorderRadius.circular(12.r),
-          border: Border.all(color: Colors.white.withAlpha(26)),
+          border: Border.all(color: AppColors.whiteColor.withAlpha(26)),
         ),
         child: Center(
           child: Icon(
             Icons.add,
-            color: Colors.white.withAlpha(128),
+            color: AppColors.whiteColor.withAlpha(128),
             size: 30.r,
           ),
         ),
@@ -344,15 +376,21 @@ class ProfileView extends StatelessWidget {
       itemCount: 3,
       itemBuilder: (context, index) => Padding(
         padding: EdgeInsets.only(bottom: 16.h),
-        child: CirclePostCard(post: CirclePostModel.dummyPosts[index % CirclePostModel.dummyPosts.length]),
+        child: CirclePostCard(
+          post: CirclePostModel
+              .dummyPosts[index % CirclePostModel.dummyPosts.length],
+        ),
       ),
     );
   }
 
-  Widget _buildJournalList(List<ProfileJournal> journals) {
+  Widget _buildJournalList(BuildContext context, List<ProfileJournal> journals) {
     if (journals.isEmpty) {
       return Center(
-        child: Text("No journal entries yet.", style: TextStyle(color: Colors.white.withAlpha(128))),
+        child: Text(
+          "No journal entries yet.",
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(128)),
+        ),
       );
     }
     return ListView.builder(
@@ -372,7 +410,7 @@ class ProfileView extends StatelessWidget {
       builder: (context) => Container(
         padding: EdgeInsets.all(24.r),
         decoration: BoxDecoration(
-          color: const Color(0xFF20341F),
+          color: AppColors.popupBackgroundColor,
           borderRadius: BorderRadius.vertical(top: Radius.circular(30.r)),
         ),
         child: Column(
@@ -382,15 +420,15 @@ class ProfileView extends StatelessWidget {
               width: 40.w,
               height: 4.h,
               decoration: BoxDecoration(
-                color: Colors.white.withAlpha(51),
+                color: AppColors.whiteColor.withAlpha(51),
                 borderRadius: BorderRadius.circular(2.r),
               ),
             ),
             SizedBox(height: 24.h),
             Text(
               "Create Post",
-              style: TextStyle(
-                color: Colors.white,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.whiteColor,
                 fontSize: 20.sp,
                 fontWeight: FontWeight.bold,
               ),
@@ -399,8 +437,8 @@ class ProfileView extends StatelessWidget {
             Text(
               "Join unlimited groups, connect with more people, and access exclusive communities with Premium.",
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white.withAlpha(128),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.whiteColor.withAlpha(128),
                 fontSize: 13.sp,
               ),
             ),
@@ -414,8 +452,8 @@ class ProfileView extends StatelessWidget {
             CustomButton(
               onPress: () async => Navigator.pop(context),
               title: "Journal",
-              buttonColor: Colors.black.withAlpha(51),
-              borderColor: Colors.white.withAlpha(26),
+              buttonColor: AppColors.blackColor.withAlpha(51),
+              borderColor: AppColors.whiteColor.withAlpha(26),
             ),
             SizedBox(height: 20.h),
           ],
@@ -448,28 +486,31 @@ class _JournalCard extends StatelessWidget {
                 children: [
                   Icon(
                     Icons.edit_note,
-                    color: const Color(0xFFC19E5F),
+                    color: AppColors.coachColorFFC19E5F,
                     size: 24.r,
                   ),
                   SizedBox(width: 8.w),
                   Text(
                     journal.title,
-                    style: TextStyle(
-                      color: Colors.white,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.whiteColor,
                       fontSize: 15.sp,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
               ),
-              Icon(Icons.more_horiz, color: Colors.white.withAlpha(128)),
+              Icon(
+                Icons.more_horiz,
+                color: AppColors.whiteColor.withAlpha(128),
+              ),
             ],
           ),
           SizedBox(height: 12.h),
           Text(
             journal.content,
-            style: TextStyle(
-              color: Colors.white.withAlpha(204),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColors.whiteColor.withAlpha(204),
               fontSize: 14.sp,
               height: 1.4,
             ),
@@ -480,15 +521,15 @@ class _JournalCard extends StatelessWidget {
             children: [
               Text(
                 journal.date,
-                style: TextStyle(
-                  color: Colors.white.withAlpha(102),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.whiteColor.withAlpha(102),
                   fontSize: 11.sp,
                 ),
               ),
               Text(
                 journal.isPrivate ? "Private" : "Public",
-                style: TextStyle(
-                  color: Colors.white.withAlpha(102),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.whiteColor.withAlpha(102),
                   fontSize: 11.sp,
                 ),
               ),
@@ -518,9 +559,17 @@ class _ProfileShimmer extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ShimmerLoader(width: 150.w, height: 20.h, borderRadius: 4.r),
+                    ShimmerLoader(
+                      width: 150.w,
+                      height: 20.h,
+                      borderRadius: 4.r,
+                    ),
                     SizedBox(height: 6.h),
-                    ShimmerLoader(width: 100.w, height: 12.h, borderRadius: 4.r),
+                    ShimmerLoader(
+                      width: 100.w,
+                      height: 12.h,
+                      borderRadius: 4.r,
+                    ),
                   ],
                 ),
                 ShimmerLoader(width: 40.r, height: 40.r, borderRadius: 20.r),
@@ -531,13 +580,16 @@ class _ProfileShimmer extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: List.generate(4, (index) => Column(
-                children: [
-                  ShimmerLoader(width: 40.w, height: 18.h, borderRadius: 4.r),
-                  SizedBox(height: 6.h),
-                  ShimmerLoader(width: 50.w, height: 12.h, borderRadius: 4.r),
-                ],
-              )),
+              children: List.generate(
+                4,
+                (index) => Column(
+                  children: [
+                    ShimmerLoader(width: 40.w, height: 18.h, borderRadius: 4.r),
+                    SizedBox(height: 6.h),
+                    ShimmerLoader(width: 50.w, height: 12.h, borderRadius: 4.r),
+                  ],
+                ),
+              ),
             ),
           ),
           SizedBox(height: 24.h),
@@ -547,7 +599,9 @@ class _ProfileShimmer extends StatelessWidget {
               children: [
                 ShimmerLoader(width: 48.r, height: 48.r, borderRadius: 24.r),
                 SizedBox(width: 12.w),
-                Expanded(child: ShimmerLoader(height: 48.h, borderRadius: 24.r)),
+                Expanded(
+                  child: ShimmerLoader(height: 48.h, borderRadius: 24.r),
+                ),
               ],
             ),
           ),
@@ -561,7 +615,11 @@ class _ProfileShimmer extends StatelessWidget {
               itemBuilder: (context, index) => Container(
                 width: 80.w,
                 margin: EdgeInsets.only(right: 8.w),
-                child: ShimmerLoader(width: 80.w, height: 100.h, borderRadius: 12.r),
+                child: ShimmerLoader(
+                  width: 80.w,
+                  height: 100.h,
+                  borderRadius: 12.r,
+                ),
               ),
             ),
           ),

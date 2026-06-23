@@ -1,27 +1,28 @@
-import 'package:newproject/core/theme/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:newproject/core/constants/app_assets.dart';
+import 'package:newproject/core/theme/design_system.dart';
 import 'package:newproject/core/widgets/background_widget.dart';
 import 'package:newproject/core/widgets/custom_button.dart';
-import '../../../../core/widgets/custom_loader.dart';
+
+import '../../../../core/constants/app_colors.dart';
 import '../../../../core/utils/helpers/snack_bar_helper.dart';
+import '../../../../core/widgets/custom_loader.dart';
+import '../../../../routes/app_router.dart';
 import '../../../seeker/profile/views/logout.dart';
 import 'edit_coach_profile_wizard.dart';
-import 'manage_availability_view.dart';
 import 'follow_up_setup_view.dart';
+import 'manage_availability_view.dart';
 import 'total_earnings_view.dart';
-import '../../../../routes/app_router.dart';
-import '../../../../core/constants/app_colors.dart';
 
 class CoachSettingsView extends StatelessWidget {
   const CoachSettingsView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    Theme.of(context);
     final String referralLink = "thisisyourlink/au/invite/asjib00";
     bool notificationsEnabled = true;
 
@@ -43,8 +44,9 @@ class CoachSettingsView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: 20.h),
-                  _buildSectionHeader("Account"),
-                  _buildSettingsTile(context, 
+                  _buildSectionHeader(context, "Account"),
+                  _buildSettingsTile(
+                    context,
                     Icons.person_outline,
                     "Personal Information",
                     () {
@@ -56,35 +58,45 @@ class CoachSettingsView extends StatelessWidget {
                       );
                     },
                   ),
-                  _buildSettingsTile(context, 
+                  _buildSettingsTile(
+                    context,
                     Icons.account_balance_wallet_outlined,
                     "Payment Method",
                     () => context.push(AppRoutes.paymentMethod),
                   ),
-                  _buildSettingsTile(context, 
+                  _buildSettingsTile(
+                    context,
                     Icons.lock_outline,
                     "Change Password",
                     () => context.push(AppRoutes.resetPassword),
                   ),
-                  _buildSettingsTile(context, 
+                  _buildSettingsTile(
+                    context,
                     Icons.workspace_premium_outlined,
                     "Subscription Plan",
                     () => context.push(AppRoutes.subscriptionPlan),
                   ),
-                  _buildSettingsTile(context, Icons.access_time, "Set availability", () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const ManageAvailabilityView(),
-                      ),
-                    );
-                  }),
-                  _buildSettingsTile(context, 
+                  _buildSettingsTile(
+                    context,
+                    Icons.access_time,
+                    "Set availability",
+                    () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const ManageAvailabilityView(),
+                        ),
+                      );
+                    },
+                  ),
+                  _buildSettingsTile(
+                    context,
                     Icons.balance_outlined,
                     "Credits Balance",
                     () => context.push(AppRoutes.points),
                   ),
-                  _buildSettingsTile(context, 
+                  _buildSettingsTile(
+                    context,
                     Icons.connect_without_contact_outlined,
                     "Follow Up Set up",
                     () {
@@ -96,12 +108,14 @@ class CoachSettingsView extends StatelessWidget {
                       );
                     },
                   ),
-                  _buildSettingsTile(context, 
+                  _buildSettingsTile(
+                    context,
                     Icons.block_outlined,
                     "Block List",
                     () => context.push(AppRoutes.blockList),
                   ),
-                  _buildSettingsTile(context, 
+                  _buildSettingsTile(
+                    context,
                     Icons.history_outlined,
                     "Total Earnings",
                     () {
@@ -115,8 +129,9 @@ class CoachSettingsView extends StatelessWidget {
                   ),
 
                   SizedBox(height: 24.h),
-                  _buildSectionHeader("Preferences"),
-                  _buildSettingsTile(context, 
+                  _buildSectionHeader(context, "Preferences"),
+                  _buildSettingsTile(
+                    context,
                     Icons.palette_outlined,
                     "Theme & Appearance",
                     () => context.push(AppRoutes.theme),
@@ -124,8 +139,9 @@ class CoachSettingsView extends StatelessWidget {
                   _buildNotificationTile(notificationsEnabled),
 
                   SizedBox(height: 24.h),
-                  _buildSectionHeader("Support"),
-                  _buildSettingsTile(context, 
+                  _buildSectionHeader(context, "Support"),
+                  _buildSettingsTile(
+                    context,
                     Icons.help_outline,
                     "Help & Support",
                     () => context.push(AppRoutes.helpSupport),
@@ -138,7 +154,7 @@ class CoachSettingsView extends StatelessWidget {
                   }),
 
                   SizedBox(height: 24.h),
-                  _buildSectionHeader("Referral Link"),
+                  _buildSectionHeader(context, "Referral Link"),
                   _buildReferralCard(context, referralLink),
 
                   SizedBox(height: 100.h),
@@ -151,13 +167,13 @@ class CoachSettingsView extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionHeader(String title) {
+  Widget _buildSectionHeader(BuildContext context, String title) {
     return Padding(
       padding: EdgeInsets.only(bottom: 12.h, left: 4.w),
       child: Text(
         title,
-        style: TextStyle(
-          color: Colors.white,
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          color: AppColors.whiteColor,
           fontSize: 16.sp,
           fontWeight: FontWeight.bold,
         ),
@@ -165,7 +181,12 @@ class CoachSettingsView extends StatelessWidget {
     );
   }
 
-  Widget _buildSettingsTile(context, IconData icon, String title, VoidCallback onTap) {
+  Widget _buildSettingsTile(
+    BuildContext context,
+    IconData icon,
+    String title,
+    VoidCallback onTap,
+  ) {
     return Container(
       height: 49.h,
       margin: EdgeInsets.only(bottom: 12.h),
@@ -178,14 +199,17 @@ class CoachSettingsView extends StatelessWidget {
       ),
       child: ListTile(
         onTap: onTap,
-        leading: Icon(icon, color: Colors.white70, size: 22.r),
+        leading: Icon(icon, color: AppColors.white70Color, size: 22.r),
         title: Text(
           title,
-          style: TextStyle(color: Colors.white, fontSize: 14.sp),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: AppColors.whiteColor,
+            fontSize: 14.sp,
+          ),
         ),
         trailing: Icon(
           Icons.arrow_forward_ios,
-          color: Colors.white24,
+          color: AppColors.white24Color,
           size: 16.r,
         ),
       ),
@@ -204,12 +228,15 @@ class CoachSettingsView extends StatelessWidget {
           child: ListTile(
             leading: const Icon(
               Icons.notifications_none_outlined,
-              color: Colors.white70,
+              color: AppColors.white70Color,
               size: 22,
             ),
             title: Text(
               "Notifications",
-              style: TextStyle(color: Colors.white, fontSize: 14),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.whiteColor,
+                fontSize: 14,
+              ),
             ),
             trailing: Switch(
               value: notificationsEnabled,
@@ -235,27 +262,45 @@ class CoachSettingsView extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(Icons.help_outline, color: Colors.white38, size: 18),
+              const Icon(
+                Icons.help_outline,
+                color: AppColors.white38Color,
+                size: 18,
+              ),
               SizedBox(width: 12.w),
               Expanded(
                 child: Text(
                   "Personalized Profile Link",
-                  style: TextStyle(color: Colors.white, fontSize: 14),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.whiteColor,
+                    fontSize: 14,
+                  ),
                 ),
               ),
-              const Icon(Icons.keyboard_arrow_down, color: Colors.white38),
+              const Icon(
+                Icons.keyboard_arrow_down,
+                color: AppColors.white38Color,
+              ),
             ],
           ),
           SizedBox(height: 24.h),
           Text(
             referralLink,
-            style: TextStyle(color: Colors.white38, fontSize: 13.sp),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColors.white38Color,
+              fontSize: 13.sp,
+            ),
           ),
           SizedBox(height: 16.h),
-          CustomButton(onPress: ()async {
-            await Clipboard.setData(ClipboardData(text: referralLink));
-            showSuccessSnackBar(message: "Link copied to clipboard!");
-          }, title: "Copy your referral link",linearGradient: true,leadingIcon: AppAssets.copy,)
+          CustomButton(
+            onPress: () async {
+              await Clipboard.setData(ClipboardData(text: referralLink));
+              showSuccessSnackBar(message: "Link copied to clipboard!");
+            },
+            title: "Copy your referral link",
+            linearGradient: true,
+            leadingIcon: AppAssets.copy,
+          ),
         ],
       ),
     );

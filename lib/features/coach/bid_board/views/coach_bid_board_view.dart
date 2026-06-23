@@ -68,7 +68,7 @@ appBar: AppBar(
                         SizedBox(height: 20.h),
                         // ── Top Bidders List Banner ──────────────────────────────────
                         if (controller.topBiddersInfo != null)
-                          _buildTopBiddersBanner(
+                          _buildTopBiddersBanner(context,
                             controller.topBiddersInfo!['title'] ??
                                 'Top Bidders List',
                             controller.topBiddersInfo!['description'] ?? '',
@@ -94,13 +94,13 @@ appBar: AppBar(
                             child: Center(
                               child: Text(
                                 "No slots available",
-                                style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white54),
+                                style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.white54Color),
                               ),
                             ),
                           )
                         else
                           ...controller.slots.map(
-                            (slot) => _buildSlotItem(
+                            (slot) => _buildSlotItem(context,
                               slot.rank,
                               slot.title,
                               slot.startingBid,
@@ -149,7 +149,7 @@ appBar: AppBar(
     );
   }
 
-  Widget _buildTopBiddersBanner(String title, String description) {
+  Widget _buildTopBiddersBanner(BuildContext context, title, String description) {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.only(
@@ -177,8 +177,8 @@ appBar: AppBar(
               children: [
                 Text(
                   title,
-                  style: TextStyle(
-                    color: Colors.white,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.whiteColor,
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                   ),
@@ -186,8 +186,8 @@ appBar: AppBar(
                 const SizedBox(height: 8),
                 Text(
                   description,
-                  style: TextStyle(
-                    color: Colors.white54,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.white54Color,
                     fontSize: 11,
                     height: 1.4,
                   ),
@@ -207,6 +207,7 @@ appBar: AppBar(
   }
 
   Widget _buildSlotItem(
+    BuildContext context,
     String rank,
     String title,
     String starting,
@@ -229,14 +230,14 @@ appBar: AppBar(
               children: [
                 Text(
                   title,
-                  style: TextStyle(
-                    color: Colors.white,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.whiteColor,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
                 Text(
                   starting,
-                  style: TextStyle(color: Colors.white38, fontSize: 11),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white38Color, fontSize: 11),
                 ),
               ],
             ),
@@ -246,15 +247,15 @@ appBar: AppBar(
             children: [
               Text(
                 top,
-                style: TextStyle(
-                  color: Colors.white,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.whiteColor,
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
               ),
               Text(
                 "Top Bid",
-                style: TextStyle(color: Colors.white38, fontSize: 10),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white38Color, fontSize: 10),
               ),
             ],
           ),
@@ -287,7 +288,7 @@ appBar: AppBar(
         children: [
           Text(
             'Select Slot',
-            style: TextStyle(
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: AppColors.coachColorFFB9BBB0,
               fontSize: 14,
               fontFamily: 'Roboto',
@@ -300,20 +301,20 @@ appBar: AppBar(
             decoration: BoxDecoration(
               color: AppColors.coachColorFF21321E,
               borderRadius: BorderRadius.circular(8.r),
-              border: Border.all(color: Colors.white10),
+              border: Border.all(color: AppColors.white10Color),
             ),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<String>(
                 value: controller.selectedSlot,
                 hint: Text(
                   "Select one",
-                  style: TextStyle(color: Colors.white38, fontSize: 14),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white38Color, fontSize: 14),
                 ),
                 isExpanded: true,
                 dropdownColor: AppColors.coachColorFF21321E,
                 icon: const Icon(
                   Icons.keyboard_arrow_down,
-                  color: Colors.white54,
+                  color: AppColors.white54Color,
                 ),
                 items: ["Slot 1", "Slot 2", "Slot 3", "Slot 4", "Slot 5"].map((
                   String value,
@@ -322,7 +323,7 @@ appBar: AppBar(
                     value: value,
                     child: Text(
                       value,
-                      style: TextStyle(color: Colors.white),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor),
                     ),
                   );
                 }).toList(),
@@ -333,7 +334,7 @@ appBar: AppBar(
           SizedBox(height: 13.h),
           Text(
             'Amount',
-            style: TextStyle(
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: AppColors.coachColorFFB9BBB0,
               fontSize: 14,
               fontFamily: 'Roboto',
@@ -390,8 +391,8 @@ leadingIcon: AppAssets.search,
                 SizedBox(width: 12.w),
                 Text(
                   'Daily Raffle',
-                  style: TextStyle(
-                    color: Colors.white,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.whiteColor,
                     fontSize: 17,
                     fontFamily: 'Segoe UI',
                     fontWeight: FontWeight.w600,
@@ -404,7 +405,7 @@ leadingIcon: AppAssets.search,
              Text(
               'Day 14 of No Contact. It was really hard today today, I almost texted him when I saw his favorite song playing. But I stayed strong!',
               textAlign: TextAlign.justify,
-              style: TextStyle(
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: AppColors.coachColorFF868A85,
                 fontSize: 10,
                 fontFamily: 'Segoe UI',
@@ -446,22 +447,22 @@ leadingIcon: AppAssets.search,
                 children: [
                   Text(
                     "Congratulations's",
-                    style: TextStyle(
-                      color: Colors.white,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.whiteColor,
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
                     ),
                   ),
                   Text(
                     "You Win the Spot 5",
-                    style: TextStyle(color: Colors.white70, fontSize: 14),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white70Color, fontSize: 14),
                   ),
                 ],
               ),
             ),
             Text(
               "View →",
-              style: TextStyle(color: AppColors.coachColorFFC19E5F, fontSize: 12),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.coachColorFFC19E5F, fontSize: 12),
             ),
           ],
         ),

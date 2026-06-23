@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../models/point_transaction.dart';
 import '../models/profile_details_model.dart';
+import 'package:newproject/core/constants/app_colors.dart';
 
 /// Pure ChangeNotifier — zero BuildContext, zero Navigator.
 /// Navigation is done via GoRouter using the routerKey set in main.dart.
@@ -173,10 +174,18 @@ class ProfileController extends ChangeNotifier {
 
     try {
       await Future.delayed(const Duration(milliseconds: 1000));
-      final String jsonString = await rootBundle.loadString('assets/json/profile.json');
+      final String jsonString = await rootBundle.loadString(
+        'assets/json/profile.json',
+      );
       final Map<String, dynamic> rawProfile = jsonDecode(jsonString);
 
       _profileDetails = ProfileDetailsModel.fromJson(rawProfile);
+
+      final String extraJsonString = await rootBundle.loadString(
+        'assets/json/profile_extra.json',
+      );
+      final Map<String, dynamic> extraData = jsonDecode(extraJsonString);
+      milestones = List<Map<String, dynamic>>.from(extraData['milestones']);
     } catch (e) {
       debugPrint("Error loading profile: $e");
     } finally {
@@ -245,11 +254,7 @@ class ProfileController extends ChangeNotifier {
   }
 
   // Progress milestones
-  final List<Map<String, dynamic>> milestones = [
-    {'label': '\$3', 'pts': '100 pts', 'value': 100},
-    {'label': '\$6', 'pts': '200 pts', 'value': 200},
-    {'label': '\$8', 'pts': '250 pts', 'value': 250},
-  ];
+  List<Map<String, dynamic>> milestones = [];
 
   // Reward tiers
   final List<RewardTier> tiers = const [
@@ -331,7 +336,7 @@ class ProfileController extends ChangeNotifier {
       id: '1',
       company: 'Acme Co.',
       discount: '50% off',
-      discountColor: Color(0xFFD05278),
+      discountColor: AppColors.coachColorFFD05278,
       validUntil: 'Valid until Jan 30, 2023',
       code: 'DISCOUNT23',
       status: PromoStatus.current,
@@ -340,7 +345,7 @@ class ProfileController extends ChangeNotifier {
       id: '2',
       company: 'Barone LLC.',
       discount: '15% off',
-      discountColor: Color(0xFF2E7D32),
+      discountColor: AppColors.coachColorFF2E7D32,
       validUntil: 'Valid until Jan 30, 2023',
       code: 'DISCOUNT23',
       status: PromoStatus.current,
@@ -349,7 +354,7 @@ class ProfileController extends ChangeNotifier {
       id: '3',
       company: 'Abstergo Ltd.',
       discount: '30% off',
-      discountColor: Color(0xFFE65100),
+      discountColor: AppColors.coachColorFFE65100,
       validUntil: 'Valid until Jan 30, 2023',
       code: 'DISCOUNT23',
       status: PromoStatus.current,
@@ -358,7 +363,7 @@ class ProfileController extends ChangeNotifier {
       id: '4',
       company: 'Wayne Ent.',
       discount: '20% off',
-      discountColor: Color(0xFFD05278),
+      discountColor: AppColors.coachColorFFD05278,
       validUntil: 'Valid until Dec 31, 2022',
       code: 'WAYNE20',
       status: PromoStatus.used,
@@ -367,7 +372,7 @@ class ProfileController extends ChangeNotifier {
       id: '5',
       company: 'Stark Ind.',
       discount: '10% off',
-      discountColor: Color(0xFF2E7D32),
+      discountColor: AppColors.coachColorFF2E7D32,
       validUntil: 'Valid until Nov 15, 2022',
       code: 'STARK10',
       status: PromoStatus.used,
@@ -414,7 +419,7 @@ class ProfileController extends ChangeNotifier {
       SnackBar(
         content: Text('Code "$code" copied!'),
         duration: const Duration(seconds: 2),
-        backgroundColor: const Color(0xFFD05278),
+        backgroundColor: AppColors.coachColorFFD05278,
         behavior: SnackBarBehavior.floating,
       ),
     );
@@ -446,7 +451,7 @@ class ProfileController extends ChangeNotifier {
         company: 'MD MR',
         code: promoCodeCtrl.text.trim(),
         discount: '20% off',
-        discountColor: Colors.greenAccent,
+        discountColor: AppColors.greenAccentColor,
         validUntil: 'No expiry',
       );
       promoCodeCtrl.clear();
@@ -454,11 +459,7 @@ class ProfileController extends ChangeNotifier {
     }
   }
 
-  List<Map<String, dynamic>> _blockedUsers = [
-    {"id": "b1", "name": "Miles Esther", "avatar": "https://i.pravatar.cc/150?u=miles", "date": "12 April 2026"},
-    {"id": "b2", "name": "Thomas stieve", "avatar": "https://i.pravatar.cc/150?u=thomas", "date": "10 April 2026"},
-    {"id": "b3", "name": "Sarah Jenkins", "avatar": "https://i.pravatar.cc/150?u=sarah", "date": "08 April 2026"},
-  ];
+  List<Map<String, dynamic>> _blockedUsers = [];
   List<Map<String, dynamic>> get blockedUsers => _blockedUsers;
 
   Future<void> fetchBlockedUsers({bool isRefresh = false}) async {
@@ -468,10 +469,20 @@ class ProfileController extends ChangeNotifier {
       _isLoading = true;
     }
     notifyListeners();
-    await Future.delayed(const Duration(milliseconds: 600));
-    _isLoading = false;
-    _isRefreshing = false;
-    notifyListeners();
+    try {
+      await Future.delayed(const Duration(milliseconds: 600));
+      final String extraJsonString = await rootBundle.loadString(
+        'assets/json/profile_extra.json',
+      );
+      final Map<String, dynamic> extraData = jsonDecode(extraJsonString);
+      _blockedUsers = List<Map<String, dynamic>>.from(extraData['blockedUsers']);
+    } catch (e) {
+      debugPrint("Error loading blocked users: $e");
+    } finally {
+      _isLoading = false;
+      _isRefreshing = false;
+      notifyListeners();
+    }
   }
 
   void unblockUser(String id) {

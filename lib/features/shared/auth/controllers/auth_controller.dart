@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/constants/api_constants.dart';
 import '../../../../core/exceptions/app_exceptions.dart';
 import '../../../../core/exceptions/exception_handler.dart';
 import '../../../../core/services/api_service.dart';
 import '../../../../core/utils/helpers/snack_bar_helper.dart';
-import '../../../../core/constants/api_constants.dart';
 import '../../../../routes/app_router.dart';
 
 class AuthController extends ChangeNotifier {
@@ -17,11 +17,9 @@ class AuthController extends ChangeNotifier {
     checkLoginStatus();
   }
 
-
   // Social sign-in instances removed — will be configured later
   // final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   // final GoogleSignIn _googleSignIn = GoogleSignIn();
-
 
   bool _isOtpVerified = false;
   bool _isLoading = false;
@@ -53,7 +51,8 @@ class AuthController extends ChangeNotifier {
   final TextEditingController forgetEmailController = TextEditingController();
   final TextEditingController otpController = TextEditingController();
   final TextEditingController setupDaysController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
 
   // ── Getters ────────────────────────────────────────────────────────────────
   bool get isOtpVerified => _isOtpVerified;
@@ -70,10 +69,10 @@ class AuthController extends ChangeNotifier {
   int get secondsRemaining => _secondsRemaining;
   String get formattedTime => _formattedTime;
   String get selectedRole => _selectedRole;
-  
+
   // Exception handling getter
   AppException? get error => _error;
-  
+
   // Backwards compatibility getter (deprecated, will return error message if exists)
   String get errorMessage => _error?.message ?? '';
 
@@ -146,7 +145,8 @@ class AuthController extends ChangeNotifier {
         _accessToken = token;
         _isLoggedIn = verify == 'yes';
         _isSignedIn = true;
-        _selectedRole = await ApiService.getStored(key: 'selected_role') ?? 'Help Seeker';
+        _selectedRole =
+            await ApiService.getStored(key: 'selected_role') ?? 'Help Seeker';
       } else {
         _isLoggedIn = false;
       }
@@ -171,8 +171,10 @@ class AuthController extends ChangeNotifier {
 
       if (response != null && response.statusCode == 200) {
         final data = response.data;
-        _accessToken = data['access'] as String? ?? data['access_token'] as String;
-        _refreshToken = data['refresh'] as String? ?? data['refresh_token'] as String;
+        _accessToken =
+            data['access'] as String? ?? data['access_token'] as String;
+        _refreshToken =
+            data['refresh'] as String? ?? data['refresh_token'] as String;
         await ApiService.storeTokens(
           accessToken: _accessToken,
           refreshToken: _refreshToken,
@@ -190,7 +192,6 @@ class AuthController extends ChangeNotifier {
   }
 
   // ── Social sign-in (disabled — will configure later) ──────────────────────
-  // TODO: Re-enable when Firebase Auth & Facebook Auth are configured
   Future<void> signInWithFacebook() async {
     showWarningSnackBar(message: 'Facebook login will be configured later');
   }
@@ -216,14 +217,17 @@ class AuthController extends ChangeNotifier {
 
       if (response != null && response.statusCode == 200) {
         final data = response.data;
-        
+
         // Handle DummyJSON vs Real API response keys
         if (ApiConstants.useDummyJson) {
           _accessToken = data['token'] as String? ?? '';
           _refreshToken = data['refreshToken'] as String? ?? '';
           _id = data['id']?.toString() ?? '';
           const verify = 'yes'; // Dummy is always verified
-          await ApiService.storeTokens(accessToken: _accessToken, refreshToken: _refreshToken);
+          await ApiService.storeTokens(
+            accessToken: _accessToken,
+            refreshToken: _refreshToken,
+          );
           await ApiService.store(key: 'verify', value: verify);
           await ApiService.store(key: 'user_id', value: _id);
           _isLoggedIn = true;
@@ -233,7 +237,10 @@ class AuthController extends ChangeNotifier {
           _refreshToken = data['refresh_token'] as String? ?? '';
           _id = data['user_id']?.toString() ?? '';
           final verify = data['verify']?.toString() ?? 'no';
-          await ApiService.storeTokens(accessToken: _accessToken, refreshToken: _refreshToken);
+          await ApiService.storeTokens(
+            accessToken: _accessToken,
+            refreshToken: _refreshToken,
+          );
           await ApiService.store(key: 'verify', value: verify);
           await ApiService.store(key: 'user_id', value: _id);
           if (verify == 'yes') {
@@ -245,7 +252,7 @@ class AuthController extends ChangeNotifier {
             });
           }
         }
-        
+
         showSuccessSnackBar(message: data['message'] ?? 'Login successful');
         notifyListeners();
       } else if (response != null) {
@@ -273,13 +280,17 @@ class AuthController extends ChangeNotifier {
       );
 
       // DummyJSON returns 200 for user creation, Real API returns 201
-      final isSuccess = response != null && 
-          (response.statusCode == 201 || (ApiConstants.useDummyJson && response.statusCode == 200));
+      final isSuccess =
+          response != null &&
+          (response.statusCode == 201 ||
+              (ApiConstants.useDummyJson && response.statusCode == 200));
 
       if (isSuccess) {
         _signupEmail = email;
         notifyListeners();
-        showSuccessSnackBar(message: response!.data?['message'] ?? 'OTP sent to your email');
+        showSuccessSnackBar(
+          message: response.data?['message'] ?? 'OTP sent to your email',
+        );
         Future.microtask(() => _go(AppRoutes.otpVerify, extra: 'Signup'));
       } else if (response != null) {
         _error = ExceptionHandler.handleResponse(response);
@@ -304,7 +315,9 @@ class AuthController extends ChangeNotifier {
         await Future.delayed(const Duration(seconds: 1));
         _signupEmail = email;
         notifyListeners();
-        showSuccessSnackBar(message: 'Dummy: OTP sent to your email (use 1234)');
+        showSuccessSnackBar(
+          message: 'Dummy: OTP sent to your email (use 1234)',
+        );
         _go(AppRoutes.otpVerify, extra: 'Forget');
         return;
       }
@@ -317,7 +330,9 @@ class AuthController extends ChangeNotifier {
       if (response != null && response.statusCode == 201) {
         _signupEmail = email;
         notifyListeners();
-        showSuccessSnackBar(message: response.data?['message'] ?? 'OTP sent to your email');
+        showSuccessSnackBar(
+          message: response.data?['message'] ?? 'OTP sent to your email',
+        );
         Future.microtask(() => _go(AppRoutes.otpVerify, extra: 'Forget'));
       } else if (response != null) {
         _error = ExceptionHandler.handleResponse(response);
@@ -347,16 +362,20 @@ class AuthController extends ChangeNotifier {
           _isOtpVerified = true;
           notifyListeners();
           if (origin == 'Signup') {
-             await setPassword(origin: origin);
+            await setPassword(origin: origin);
           } else if (origin == 'Login') {
-             _isLoggedIn = true;
-             notifyListeners();
-             Future.microtask(() => _go(AppRoutes.goToHome, extra: origin));
+            _isLoggedIn = true;
+            notifyListeners();
+            Future.microtask(() => _go(AppRoutes.goToHome, extra: origin));
           } else {
-             Future.microtask(() => _go(AppRoutes.changePass, extra: origin ?? 'Forget'));
+            Future.microtask(
+              () => _go(AppRoutes.changePass, extra: origin ?? 'Forget'),
+            );
           }
         } else {
-          _error = BadRequestException(message: 'Invalid OTP (use any 4 digits)');
+          _error = BadRequestException(
+            message: 'Invalid OTP (use any 4 digits)',
+          );
           notifyListeners();
         }
         return;
@@ -371,15 +390,17 @@ class AuthController extends ChangeNotifier {
         showSuccessSnackBar(message: 'OTP Verified.');
         _isOtpVerified = true;
         notifyListeners();
-        
+
         if (origin == 'Signup') {
-           await setPassword(origin: origin);
+          await setPassword(origin: origin);
         } else if (origin == 'Login') {
-           _isLoggedIn = true;
-           notifyListeners();
-           Future.microtask(() => _go(AppRoutes.goToHome, extra: origin));
+          _isLoggedIn = true;
+          notifyListeners();
+          Future.microtask(() => _go(AppRoutes.goToHome, extra: origin));
         } else {
-           Future.microtask(() => _go(AppRoutes.changePass, extra: origin ?? 'Forget'));
+          Future.microtask(
+            () => _go(AppRoutes.changePass, extra: origin ?? 'Forget'),
+          );
         }
       } else if (response != null) {
         _error = ExceptionHandler.handleResponse(response);
@@ -418,7 +439,9 @@ class AuthController extends ChangeNotifier {
       );
 
       if (response != null && response.statusCode == 200) {
-        showSuccessSnackBar(message: response.data?['message'] ?? 'OTP resent successfully.');
+        showSuccessSnackBar(
+          message: response.data?['message'] ?? 'OTP resent successfully.',
+        );
         startTimer();
       } else if (response != null) {
         _error = ExceptionHandler.handleResponse(response);
@@ -442,7 +465,10 @@ class AuthController extends ChangeNotifier {
 
       if (ApiConstants.useDummyJson) {
         await Future.delayed(const Duration(seconds: 1));
-        await ApiService.storeTokens(accessToken: 'dummy_access', refreshToken: 'dummy_refresh');
+        await ApiService.storeTokens(
+          accessToken: 'dummy_access',
+          refreshToken: 'dummy_refresh',
+        );
         await ApiService.store(key: 'verify', value: 'yes');
         _accessToken = 'dummy_access';
         _refreshToken = 'dummy_refresh';
@@ -452,9 +478,9 @@ class AuthController extends ChangeNotifier {
         showSuccessSnackBar(message: 'Dummy: Password set successfully');
         Future.microtask(() {
           if (origin == 'Signup') {
-             _go(AppRoutes.roleSelection);
+            _go(AppRoutes.roleSelection);
           } else {
-             _go(AppRoutes.goToHome, extra: origin);
+            _go(AppRoutes.goToHome, extra: origin);
           }
         });
         return;
@@ -472,9 +498,14 @@ class AuthController extends ChangeNotifier {
         final verify = data['verify']?.toString() ?? 'no';
         final message = data['message'] ?? 'Password set successfully';
 
-        if (access == null || access.isEmpty) throw Exception('No access token received');
+        if (access == null || access.isEmpty) {
+          throw Exception('No access token received');
+        }
 
-        await ApiService.storeTokens(accessToken: access, refreshToken: refresh ?? '');
+        await ApiService.storeTokens(
+          accessToken: access,
+          refreshToken: refresh ?? '',
+        );
         await ApiService.store(key: 'verify', value: verify);
         _accessToken = access;
         _refreshToken = refresh ?? '';
@@ -486,9 +517,9 @@ class AuthController extends ChangeNotifier {
 
         Future.microtask(() {
           if (origin == 'Signup') {
-             _go(AppRoutes.roleSelection);
+            _go(AppRoutes.roleSelection);
           } else {
-             _go(AppRoutes.goToHome, extra: origin);
+            _go(AppRoutes.goToHome, extra: origin);
           }
         });
       } else if (response != null) {
@@ -516,7 +547,9 @@ class AuthController extends ChangeNotifier {
       return false;
     }
     if (newPass.length < 8) {
-      _error = ValidationException(message: 'Password must be at least 8 characters');
+      _error = ValidationException(
+        message: 'Password must be at least 8 characters',
+      );
       notifyListeners();
       return false;
     }

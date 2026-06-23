@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import '../constants/app_colors.dart';
+
 import '../theme/design_system.dart';
 
 class _InputState {
@@ -205,7 +207,7 @@ class CustomInput extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (showTitle && title != null) _buildTitle(theme),
-            _buildInputField(theme, design, fieldState, state),
+            _buildInputField(context, theme, design, fieldState, state),
             if (hasError) _buildErrorText(theme, state.errorText!),
           ],
         );
@@ -219,7 +221,7 @@ class CustomInput extends StatelessWidget {
       child: Text(
         title!,
         style:
-        titleStyle ??
+            titleStyle ??
             theme.textTheme.labelLarge?.copyWith(
               color: titleColor ?? theme.textTheme.labelLarge?.color,
               fontSize: (titleFontSize ?? 14).sp,
@@ -244,11 +246,12 @@ class CustomInput extends StatelessWidget {
   }
 
   Widget _buildInputField(
-      ThemeData theme,
-      AppDesignSystem? design,
-      FormFieldState<_InputState> fieldState,
-      _InputState state,
-      ) {
+    BuildContext context,
+    ThemeData theme,
+    AppDesignSystem? design,
+    FormFieldState<_InputState> fieldState,
+    _InputState state,
+  ) {
     final hasError = state.errorText != null;
     final isEnabled = enabled;
 
@@ -262,25 +265,33 @@ class CustomInput extends StatelessWidget {
       height: height?.h,
       clipBehavior: Clip.antiAlias,
       decoration: ShapeDecoration(
-        color: backgroundColor ?? design?.inputFillColor ?? const Color(0xFF21321E),
+        color:
+            backgroundColor ??
+            design?.inputFillColor ??
+            AppColors.colorFF21321E,
         shape: RoundedRectangleBorder(
           side: BorderSide(
             width: (borderWidth ?? 0.50).w,
             color: hasError
                 ? (errorBorderColor ?? theme.colorScheme.error)
-                : (borderColor ?? design?.inputBorderColor ?? const Color(0xFF334B2F)),
+                : (borderColor ??
+                      design?.inputBorderColor ??
+                      AppColors.colorFF334B2F),
           ),
           borderRadius: effectiveRadius,
         ),
         shadows: shadow
             ? [
-          BoxShadow(
-            color: shadowColor ?? design?.inputShadowColor ?? const Color(0xFF2E4429),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-            spreadRadius: 0,
-          ),
-        ]
+                BoxShadow(
+                  color:
+                      shadowColor ??
+                      design?.inputShadowColor ??
+                      AppColors.colorFF2E4429,
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                  spreadRadius: 0,
+                ),
+              ]
             : null,
       ),
       child: Center(
@@ -330,10 +341,10 @@ class CustomInput extends StatelessWidget {
               return null;
             },
             style:
-            textStyle ??
+                textStyle ??
                 theme.textTheme.bodyMedium?.copyWith(
                   color: isEnabled
-                      ? (textColor ?? Colors.white)
+                      ? (textColor ?? AppColors.whiteColor)
                       : theme.disabledColor,
                   fontSize: (fontSize ?? 14).sp,
                   fontWeight: fontWeight ?? FontWeight.w400,
@@ -342,16 +353,20 @@ class CustomInput extends StatelessWidget {
             decoration: InputDecoration(
               hintText: hintText,
               labelText: labelText,
-              hintStyle: hintStyle ??
-                  TextStyle(
-                    color: hintColor ?? design?.inputHintColor ?? const Color(0xFF828282),
+              hintStyle:
+                  hintStyle ??
+                  Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color:
+                        hintColor ??
+                        design?.inputHintColor ??
+                        AppColors.greyColor,
                     fontSize: fontSize?.sp ?? 14.sp,
                     fontWeight: FontWeight.w400,
                   ),
               labelStyle: hintStyle ?? theme.inputDecorationTheme.labelStyle,
               isDense: true,
               contentPadding:
-              contentPadding ??
+                  contentPadding ??
                   EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
               border: InputBorder.none,
               enabledBorder: InputBorder.none,
@@ -360,7 +375,9 @@ class CustomInput extends StatelessWidget {
               disabledBorder: InputBorder.none,
               prefixIcon: _buildLeading(theme, hasError),
               suffixIcon: _buildTrailing(theme, hasError, fieldState, state),
-              errorStyle: const TextStyle(height: 0, fontSize: 0),
+              errorStyle: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(height: 0, fontSize: 0),
               counterText: '',
               fillColor: backgroundColor,
             ),
@@ -377,16 +394,16 @@ class CustomInput extends StatelessWidget {
         : (leadingColor ?? theme.hintColor);
     final leading =
         leadingWidget ??
-            Padding(
-              padding: leadingPadding,
-              child: _buildAsset(
-                leadingIcon,
-                leadingIconWidth,
-                leadingIconHeight,
-                useLeadingColor,
-                color,
-              ),
-            );
+        Padding(
+          padding: leadingPadding,
+          child: _buildAsset(
+            leadingIcon,
+            leadingIconWidth,
+            leadingIconHeight,
+            useLeadingColor,
+            color,
+          ),
+        );
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -395,11 +412,11 @@ class CustomInput extends StatelessWidget {
   }
 
   Widget? _buildTrailing(
-      ThemeData theme,
-      bool hasError,
-      FormFieldState<_InputState> fieldState,
-      _InputState state,
-      ) {
+    ThemeData theme,
+    bool hasError,
+    FormFieldState<_InputState> fieldState,
+    _InputState state,
+  ) {
     final List<Widget> children = [];
     final color = hasError
         ? theme.colorScheme.error
@@ -418,16 +435,16 @@ class CustomInput extends StatelessWidget {
     if (trailingWidget != null || trailingIcon.isNotEmpty) {
       final trailing =
           trailingWidget ??
-              Padding(
-                padding: trailingPadding,
-                child: _buildAsset(
-                  trailingIcon,
-                  trailingIconWidth,
-                  trailingIconHeight,
-                  useTrailingColor,
-                  color,
-                ),
-              );
+          Padding(
+            padding: trailingPadding,
+            child: _buildAsset(
+              trailingIcon,
+              trailingIconWidth,
+              trailingIconHeight,
+              useTrailingColor,
+              color,
+            ),
+          );
       children.add(trailing);
     }
     if (children.isEmpty) return null;
@@ -476,12 +493,12 @@ class CustomInput extends StatelessWidget {
   }
 
   Widget _buildAsset(
-      String path,
-      double width,
-      double height,
-      bool useColor,
-      Color color,
-      ) {
+    String path,
+    double width,
+    double height,
+    bool useColor,
+    Color color,
+  ) {
     if (path.toLowerCase().endsWith('.svg')) {
       return SvgPicture.asset(
         path,

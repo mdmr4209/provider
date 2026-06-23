@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:newproject/core/constants/app_colors.dart';
-import '../../../../core/widgets/background_widget.dart';
-import '../../../../core/constants/app_assets.dart';
+
 import '../../../../core/widgets/custom_loader.dart';
 
 class EarningsView extends StatelessWidget {
@@ -13,7 +12,7 @@ class EarningsView extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
-appBar: AppBar(
+      appBar: AppBar(
         backgroundColor: AppColors.defaultColor,
         // These two lines prevent the color change / tinting when scrolling
         scrolledUnderElevation: 0,
@@ -25,7 +24,11 @@ appBar: AppBar(
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(24.r)),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.west, color: AppColors.coachColorFF5E7958, size: 24),
+          icon: const Icon(
+            Icons.west,
+            color: AppColors.coachColorFF5E7958,
+            size: 24,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -77,19 +80,23 @@ appBar: AppBar(
                     children: [
                       Text(
                         "Net Earnings",
-                        style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white70),
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: AppColors.white70Color,
+                        ),
                       ),
                       SizedBox(height: 8.h),
                       Text(
                         "\$2,847.50",
                         style: theme.textTheme.headlineLarge?.copyWith(
-                          color: Colors.white,
+                          color: AppColors.whiteColor,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
                         "This month",
-                        style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white38),
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: AppColors.white38Color,
+                        ),
                       ),
                     ],
                   ),
@@ -101,7 +108,7 @@ appBar: AppBar(
                 Row(
                   children: [
                     Expanded(
-                      child: _buildSmallStatBox(
+                      child: _buildSmallStatBox(context, 
                         "Total Minutes Coached",
                         "1200 min",
                         Icons.phone_in_talk,
@@ -110,7 +117,7 @@ appBar: AppBar(
                     ),
                     SizedBox(width: 16.w),
                     Expanded(
-                      child: _buildSmallStatBox(
+                      child: _buildSmallStatBox(context, 
                         "Avg. Client Rating",
                         "4.9 (187)",
                         Icons.star,
@@ -129,15 +136,15 @@ appBar: AppBar(
                     Text(
                       "Monthly Earning",
                       style: theme.textTheme.titleMedium?.copyWith(
-                        color: Colors.white,
+                        color: AppColors.whiteColor,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Row(
                       children: [
-                        _buildDropdown("April"),
+                        _buildDropdown(context, "April"),
                         SizedBox(width: 8.w),
-                        _buildDropdown("2024"),
+                        _buildDropdown(context, "2024"),
                       ],
                     ),
                   ],
@@ -156,31 +163,31 @@ appBar: AppBar(
                 SizedBox(height: 7.h),
 
                 // ── Earning List ────────────────────────────────────────────
-                _buildEarningItem(
+                _buildEarningItem(context, 
                   "Miles Esther",
                   "12 April (9:30AM - 10:00AM)",
                   "30 Minutes",
                   "400\$",
                 ),
-                _buildEarningItem(
+                _buildEarningItem(context, 
                   "Miles Esther",
                   "12 April (9:30AM - 10:00AM)",
                   "30 Minutes",
                   "400\$",
                 ),
-                _buildEarningItem(
+                _buildEarningItem(context, 
                   "Miles Esther",
                   "12 April (9:30AM - 10:00AM)",
                   "30 Minutes",
                   "400\$",
                 ),
-                _buildEarningItem(
+                _buildEarningItem(context, 
                   "Miles Esther",
                   "12 April (9:30AM - 10:00AM)",
                   "30 Minutes",
                   "400\$",
                 ),
-                _buildEarningItem(
+                _buildEarningItem(context, 
                   "Miles Esther",
                   "12 April (9:30AM - 10:00AM)",
                   "30 Minutes",
@@ -190,7 +197,10 @@ appBar: AppBar(
                 Divider(color: AppColors.defaultColor, height: 24.r),
 
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 7),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 7,
+                  ),
                   decoration: ShapeDecoration(
                     color: AppColors.coachColorFF243521,
                     shape: RoundedRectangleBorder(
@@ -212,7 +222,7 @@ appBar: AppBar(
                       Text(
                         "1400\$",
                         style: theme.textTheme.titleLarge?.copyWith(
-                          color: Colors.white,
+                          color: AppColors.whiteColor,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -237,7 +247,7 @@ appBar: AppBar(
                         blurRadius: 24.20,
                         offset: Offset(0, 13),
                         spreadRadius: 0,
-                      )
+                      ),
                     ],
                   ),
                   child: Column(
@@ -246,7 +256,7 @@ appBar: AppBar(
                       Text(
                         'BID to become a featured Coach',
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: Colors.white,
+                          color: AppColors.whiteColor,
                           fontSize: 13.34,
                           fontFamily: 'Segoe UI',
                           fontWeight: FontWeight.w400,
@@ -274,7 +284,9 @@ appBar: AppBar(
                         ),
                         child: Text(
                           "View all Bids",
-                          style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white70),
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: AppColors.white70Color,
+                          ),
                         ),
                       ),
                     ],
@@ -291,7 +303,7 @@ appBar: AppBar(
   }
 
   Widget _buildSmallStatBox(
-    String label,
+    BuildContext context, String label,
     String value,
     IconData icon,
     Color iconColor,
@@ -312,7 +324,7 @@ appBar: AppBar(
         children: [
           Text(
             label,
-            style: TextStyle(color: Colors.white70, fontSize: 10.r),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white70Color, fontSize: 10.r),
           ),
           Row(
             children: [
@@ -331,8 +343,8 @@ appBar: AppBar(
               SizedBox(width: 8.w),
               Text(
                 value,
-                style: TextStyle(
-                  color: Colors.white,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.whiteColor,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -343,7 +355,7 @@ appBar: AppBar(
     );
   }
 
-  Widget _buildDropdown(String text) {
+  Widget _buildDropdown(BuildContext context, String text) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
       decoration: ShapeDecoration(
@@ -355,10 +367,13 @@ appBar: AppBar(
       ),
       child: Row(
         children: [
-          Text(text, style: TextStyle(color: Colors.white, fontSize: 12)),
+          Text(
+            text,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 12),
+          ),
           const Icon(
             Icons.keyboard_arrow_down,
-            color: Colors.white54,
+            color: AppColors.white54Color,
             size: 16,
           ),
         ],
@@ -367,7 +382,7 @@ appBar: AppBar(
   }
 
   Widget _buildEarningItem(
-    String name,
+    BuildContext context, String name,
     String dateTime,
     String duration,
     String amount,
@@ -399,14 +414,17 @@ appBar: AppBar(
                 children: [
                   Text(
                     name,
-                    style: TextStyle(
-                      color: Colors.white,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.whiteColor,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     dateTime,
-                    style: TextStyle(color: Colors.white38, fontSize: 10),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.white38Color,
+                      fontSize: 10,
+                    ),
                   ),
                 ],
               ),
@@ -417,12 +435,12 @@ appBar: AppBar(
               children: [
                 Text(
                   duration,
-                  style: TextStyle(color: Colors.white38, fontSize: 10),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white38Color, fontSize: 10),
                 ),
                 Text(
                   amount,
-                  style: TextStyle(
-                    color: Colors.white,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.whiteColor,
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
                   ),

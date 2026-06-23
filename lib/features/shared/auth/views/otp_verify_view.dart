@@ -85,7 +85,7 @@ class OtpVerifyView extends StatelessWidget {
                                     PinCodeTextField(
                                       appContext: context,
                                       length: 4, // Set to 4 digits
-                                      textStyle: TextStyle(
+                                      textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                         fontSize: 18.sp,
                                         color: AppColors.whiteColor,
                                       ),

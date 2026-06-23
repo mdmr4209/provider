@@ -13,12 +13,12 @@ class HelpSupportView extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: AppColors.whiteColor),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           "Help and Support",
-          style: TextStyle(color: Colors.white, fontSize: 18.sp),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 18.sp),
         ),
         centerTitle: true,
       ),
@@ -29,8 +29,8 @@ class HelpSupportView extends StatelessWidget {
           children: [
             Text(
               "Instructions",
-              style: TextStyle(
-                color: Colors.white,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.whiteColor,
                 fontSize: 18.sp,
                 fontWeight: FontWeight.bold,
               ),
@@ -38,8 +38,8 @@ class HelpSupportView extends StatelessWidget {
             SizedBox(height: 20.h),
             Text(
               "1. Welcome to Ai. By using our services, you agree to abide by the terms and conditions outlined below. These terms govern your access to and\n2. use of Ai tools and services, so please review them carefully before proceeding.\n3. Ai provides innovative tools designed to enhance how you capture and manage voice recordings. Our services include voice-to-text transcription and AI-driven summarization, which are intended\n4. for lawful, ethical purposes only. You must ensure compliance with applicable laws, including obtaining consent from all participants when recording conversations. CleverTalk disclaims liability for any misuse of its tools.",
-              style: TextStyle(
-                color: Colors.white.withAlpha(179),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.whiteColor.withAlpha(179),
                 fontSize: 14.sp,
                 height: 2.0,
               ),
@@ -47,8 +47,8 @@ class HelpSupportView extends StatelessWidget {
             SizedBox(height: 40.h),
             Text(
               "Admin Email for support",
-              style: TextStyle(
-                color: Colors.white,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.whiteColor,
                 fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
               ),
@@ -56,8 +56,8 @@ class HelpSupportView extends StatelessWidget {
             SizedBox(height: 8.h),
             Text(
               "sajibahhamed@gmail.com",
-              style: TextStyle(
-                color: Colors.white.withAlpha(179),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.whiteColor.withAlpha(179),
                 fontSize: 14.sp,
               ),
             ),
@@ -70,17 +70,17 @@ class HelpSupportView extends StatelessWidget {
               trailingWidget: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.arrow_forward, color: Colors.white, size: 16.r),
-                  const VerticalDivider(color: Colors.white24, width: 20),
+                  Icon(Icons.arrow_forward, color: AppColors.whiteColor, size: 16.r),
+                  const VerticalDivider(color: AppColors.white24Color, width: 20),
                 ],
               ),
               leadingWidget: Icon(
                 Icons.email_outlined,
-                color: Colors.white,
+                color: AppColors.whiteColor,
                 size: 20.r,
               ),
-              buttonColor: Colors.white.withAlpha(13),
-              borderColor: Colors.white.withAlpha(26),
+              buttonColor: AppColors.whiteColor.withAlpha(13),
+              borderColor: AppColors.whiteColor.withAlpha(26),
               radius: 12.r,
             ),
           ],

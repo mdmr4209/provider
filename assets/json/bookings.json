@@ -1,0 +1,38 @@
+{
+  "current": [
+    {
+      "id": "b_1",
+      "sessionName": "Session 1",
+      "coachName": "Coach Pearl",
+      "date": "Mon, Mar 27",
+      "time": "01:00 PM- 01:03PM (30Min)",
+      "amount": "20$"
+    },
+    {
+      "id": "b_3",
+      "sessionName": "Session 3",
+      "coachName": "Coach Emma",
+      "date": "Wed, Mar 29",
+      "time": "09:00 AM- 09:30AM (30Min)",
+      "amount": "20$"
+    }
+  ],
+  "history": [
+    {
+      "id": "b_2",
+      "sessionName": "Session 2",
+      "coachName": "Miles Esther",
+      "date": "Completed",
+      "time": "12 April, 1:30AM",
+      "amount": "20$"
+    },
+    {
+      "id": "b_4",
+      "sessionName": "Session 4",
+      "coachName": "Thomas stieve",
+      "date": "Completed",
+      "time": "10 April, 3:00PM",
+      "amount": "20$"
+    }
+  ]
+}

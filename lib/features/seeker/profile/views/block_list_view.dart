@@ -25,13 +25,17 @@ class BlockListView extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.west, color: Color(0xFF5E7958), size: 24),
+          icon: const Icon(
+            Icons.west,
+            color: AppColors.coachColorFF5E7958,
+            size: 24,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           'Block List',
-          style: TextStyle(
-            color: const Color(0xFFF5F0E8),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: AppColors.coachColorFFF5F0E8,
             fontSize: 16,
             fontFamily: 'Georgia',
             fontWeight: FontWeight.w400,
@@ -52,17 +56,16 @@ class BlockListView extends StatelessWidget {
                   hintText: "Search By Name",
                   fontSize: 14,
                   hintColor: AppColors.greyColor,
-                  hintStyle: Theme.of(context).textTheme.bodyLarge
-                      ?.copyWith(
+                  hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: AppColors.whiteColor.withAlpha(153),
                     fontSize: 14.sp,
                   ),
                   shadow: true,
-                  shadowColor: Color(0xFF2E4429),
-                  backgroundColor: Color(0xFF21321E),
+                  shadowColor: AppColors.coachColorFF2E4429,
+                  backgroundColor: AppColors.coachColorFF21321E,
                   borderRadius: 24,
                   borderWidth: 0.50,
-                  borderColor: Color(0xFF334B2F),
+                  borderColor: AppColors.coachColorFF334B2F,
                   leadingIcon: AppAssets.search,
                   leadingPadding: EdgeInsets.only(left: 16.w, right: 8.w),
                 ),
@@ -99,8 +102,10 @@ class BlockListView extends StatelessWidget {
                                   child: Center(
                                     child: Text(
                                       "No blocked users.",
-                                      style: TextStyle(
-                                        color: Colors.white.withAlpha(128),
+                                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                        color: AppColors.whiteColor.withAlpha(
+                                          128,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -163,7 +168,7 @@ class _BlockTile extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 12.h),
       padding: EdgeInsets.all(12.r),
       decoration: BoxDecoration(
-        color: Color(0xFF22331F),
+        color: AppColors.defaultColor,
         borderRadius: BorderRadius.circular(4.r),
       ),
       child: Row(
@@ -176,16 +181,16 @@ class _BlockTile extends StatelessWidget {
               children: [
                 Text(
                   name,
-                  style: TextStyle(
-                    color: Colors.white,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.whiteColor,
                     fontSize: 14.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
                   date,
-                  style: TextStyle(
-                    color: Colors.white.withAlpha(128),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.whiteColor.withAlpha(128),
                     fontSize: 11.sp,
                   ),
                 ),
@@ -198,7 +203,7 @@ class _BlockTile extends StatelessWidget {
             width: 105,
             height: 32,
             fontSize: 12,
-            buttonColor: Colors.white.withAlpha(13),
+            buttonColor: AppColors.whiteColor.withAlpha(13),
             borderColor: Colors.transparent,
             radius: 8,
           ),

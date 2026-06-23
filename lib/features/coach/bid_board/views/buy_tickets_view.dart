@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_assets.dart';
 import '../../../../core/constants/app_colors.dart';
-import '../../../../core/widgets/background_widget.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_loader.dart';
 import '../controllers/coach_bid_controller.dart';
@@ -91,7 +90,7 @@ appBar: AppBar(
                               Text(
                                 '\$5.00',
                                 style: theme.textTheme.bodyMedium?.copyWith(
-                                  color: Colors.white,
+                                  color: AppColors.whiteColor,
                                   fontSize: 32,
                                   fontFamily: 'Segoe UI',
                                   fontWeight: FontWeight.w700,
@@ -102,7 +101,7 @@ appBar: AppBar(
                               Text(
                                 '/Ticket',
                                 style: theme.textTheme.bodyMedium?.copyWith(
-                                  color: Colors.white,
+                                  color: AppColors.whiteColor,
                                   fontSize: 12.07,
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w400,

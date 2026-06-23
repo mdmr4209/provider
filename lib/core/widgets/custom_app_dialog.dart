@@ -37,12 +37,12 @@ class CustomAppDialog extends StatelessWidget {
           color: AppColors.defaultColor,
           borderRadius: BorderRadius.circular(24.r),
           border: Border.all(
-            color: const Color(0xFFD4AF37).withAlpha(102),
+            color: AppColors.colorFFD4AF37.withAlpha(102),
             width: 1.5,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withAlpha(128),
+              color: AppColors.blackColor.withAlpha(128),
               blurRadius: 40,
               offset: const Offset(0, 15),
             ),
@@ -66,8 +66,8 @@ class CustomAppDialog extends StatelessWidget {
             Text(
               title,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.whiteColor,
                 fontSize: 22.sp,
                 fontWeight: FontWeight.bold,
                 fontFamily: 'Georgia',
@@ -81,8 +81,8 @@ class CustomAppDialog extends StatelessWidget {
             Text(
               description,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white.withAlpha(217),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.whiteColor.withAlpha(217),
                 fontSize: 15.sp,
                 height: 1.5,
                 fontFamily: 'Proxima Nova',
@@ -122,8 +122,8 @@ class CustomAppDialog extends StatelessWidget {
                   child: Text(
                     secondaryText!,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white.withAlpha(242),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.whiteColor.withAlpha(242),
                       fontSize: 15.sp,
                       fontWeight: FontWeight.w600,
                     ),

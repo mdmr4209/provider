@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
-import '../../../core/services/api_service.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/services/api_service.dart';
 import '../../seeker/home/controllers/home_controller.dart';
 import '../auth/controllers/auth_controller.dart';
 import '../localization/localization_extension.dart';
@@ -43,24 +43,36 @@ class _NavbarState extends State<Navbar> {
   int _branchToTab(int branchIndex, bool isCoach) {
     if (!isCoach) return branchIndex;
     switch (branchIndex) {
-      case 0: return 0; // Home
-      case 1: return 2; // Circle
-      case 2: return 3; // Bid Board (maps to branch 2)
-      case 3: return 1; // Inbox
-      case 4: return 4; // Settings / Profile
-      default: return branchIndex;
+      case 0:
+        return 0; // Home
+      case 1:
+        return 2; // Circle
+      case 2:
+        return 3; // Bid Board (maps to branch 2)
+      case 3:
+        return 1; // Inbox
+      case 4:
+        return 4; // Settings / Profile
+      default:
+        return branchIndex;
     }
   }
 
   int _tabToBranch(int tabIndex, bool isCoach) {
     if (!isCoach) return tabIndex;
     switch (tabIndex) {
-      case 0: return 0; // Home -> Branch 0
-      case 1: return 3; // Inbox -> Branch 3
-      case 2: return 1; // Circle -> Branch 1
-      case 3: return 2; // Bid Board -> Branch 2
-      case 4: return 4; // Settings -> Branch 4
-      default: return tabIndex;
+      case 0:
+        return 0; // Home -> Branch 0
+      case 1:
+        return 3; // Inbox -> Branch 3
+      case 2:
+        return 1; // Circle -> Branch 1
+      case 3:
+        return 2; // Bid Board -> Branch 2
+      case 4:
+        return 4; // Settings -> Branch 4
+      default:
+        return tabIndex;
     }
   }
 
@@ -71,9 +83,21 @@ class _NavbarState extends State<Navbar> {
       return const [
         {"index": 0, "title": "Home", "message": "Explore your dashboard."},
         {"index": 1, "title": "Inbox", "message": "Manage your client chats."},
-        {"index": 2, "title": "The Circle", "message": "Connect with the community."},
-        {"index": 3, "title": "Bid Board", "message": "Find and bid on client requests."},
-        {"index": 4, "title": "Settings", "message": "Manage your coaching profile."},
+        {
+          "index": 2,
+          "title": "The Circle",
+          "message": "Connect with the community.",
+        },
+        {
+          "index": 3,
+          "title": "Bid Board",
+          "message": "Find and bid on client requests.",
+        },
+        {
+          "index": 4,
+          "title": "Settings",
+          "message": "Manage your coaching profile.",
+        },
       ];
     } else {
       return context.read<HomeController>().guideData;
@@ -128,7 +152,7 @@ class _NavbarState extends State<Navbar> {
 
   @override
   Widget build(BuildContext context) {
-    final home = context.watch<HomeController>();
+    final _ = context.watch<HomeController>();
     final auth = context.watch<AuthController>();
     final isCoach = auth.selectedRole == 'Coach';
     final double screenWidth = MediaQuery.of(context).size.width;
@@ -172,21 +196,37 @@ class _NavbarState extends State<Navbar> {
                           AppAssets.inbox,
                           badge: "2",
                         ),
-                        _navItem(2, context.watchTr('the_circle'), AppAssets.circle),
+                        _navItem(
+                          2,
+                          context.watchTr('the_circle'),
+                          AppAssets.circle,
+                        ),
                         _navItem(3, "Bid Board", AppAssets.board),
                         _navItem(4, "Settings", AppAssets.settings),
                       ]
                     : [
                         _navItem(0, context.watchTr('home'), AppAssets.home),
-                        _navItem(1, context.watchTr('the_circle'), AppAssets.circle),
-                        _navItem(2, context.watchTr('find_coaches'), AppAssets.coach),
+                        _navItem(
+                          1,
+                          context.watchTr('the_circle'),
+                          AppAssets.circle,
+                        ),
+                        _navItem(
+                          2,
+                          context.watchTr('find_coaches'),
+                          AppAssets.coach,
+                        ),
                         _navItem(
                           3,
                           context.watchTr('inbox'),
                           AppAssets.inbox,
                           badge: "2",
                         ),
-                        _navItem(4, context.watchTr('profile'), AppAssets.profile),
+                        _navItem(
+                          4,
+                          context.watchTr('profile'),
+                          AppAssets.profile,
+                        ),
                       ],
               ),
             ),
@@ -201,7 +241,7 @@ class _NavbarState extends State<Navbar> {
             child: Material(
               color: Colors.transparent,
               child: Container(
-                color: Colors.black.withAlpha(153),
+                color: AppColors.blackColor.withAlpha(153),
                 child: Stack(
                   children: [
                     // Dismiss by tapping background
@@ -229,13 +269,14 @@ class _NavbarState extends State<Navbar> {
                                 child: Text(
                                   _guideData[_guideIndex]['message'] ?? "",
                                   key: ValueKey(_guideIndex),
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14.sp,
-                                    height: 1.5,
-                                    fontFamily: 'Segoe UI',
-                                    decoration: TextDecoration.none,
-                                  ),
+                                  style: Theme.of(context).textTheme.bodyMedium
+                                      ?.copyWith(
+                                        color: AppColors.whiteColor,
+                                        fontSize: 14.sp,
+                                        height: 1.5,
+                                        fontFamily: 'Segoe UI',
+                                        decoration: TextDecoration.none,
+                                      ),
                                   textAlign: TextAlign.start,
                                 ),
                               ),
@@ -258,18 +299,18 @@ class _NavbarState extends State<Navbar> {
                                           margin: EdgeInsets.only(right: 12.w),
                                           decoration: BoxDecoration(
                                             border: Border.all(
-                                              color: Colors.white38,
+                                              color: AppColors.white38Color,
                                               width: 1.5,
                                             ),
                                             borderRadius: BorderRadius.circular(
                                               24.r,
                                             ),
                                           ),
-                                          child: const Center(
+                                          child: Center(
                                             child: Text(
                                               "Previous",
-                                              style: TextStyle(
-                                                color: Colors.white,
+                                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                                color: AppColors.whiteColor,
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w600,
                                                 decoration: TextDecoration.none,
@@ -297,8 +338,8 @@ class _NavbarState extends State<Navbar> {
                                         decoration: BoxDecoration(
                                           gradient: const LinearGradient(
                                             colors: [
-                                              Color(0xFFAC823A),
-                                              Color(0xFFF3D194),
+                                              AppColors.buttonColor,
+                                              AppColors.borderColor,
                                             ],
                                             begin: Alignment.centerLeft,
                                             end: Alignment.centerRight,
@@ -308,7 +349,7 @@ class _NavbarState extends State<Navbar> {
                                           ),
                                           boxShadow: const [
                                             BoxShadow(
-                                              color: Colors.black26,
+                                              color: AppColors.black26Color,
                                               blurRadius: 4,
                                               offset: Offset(0, 2),
                                             ),
@@ -317,12 +358,16 @@ class _NavbarState extends State<Navbar> {
                                         child: Center(
                                           child: Text(
                                             isLastStep ? "Done" : "Next",
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                              decoration: TextDecoration.none,
-                                            ),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                  color: AppColors.whiteColor,
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.bold,
+                                                  decoration:
+                                                      TextDecoration.none,
+                                                ),
                                           ),
                                         ),
                                       ),
@@ -352,8 +397,8 @@ class _NavbarState extends State<Navbar> {
         ? (_guideIndex == index)
         : (_branchToTab(widget.navigationShell.currentIndex, isCoach) == index);
 
-    final Color activeColor = const Color(0xFFD4AF37);
-    final Color inactiveColor = Colors.white70;
+    final Color activeThumbColor = AppColors.coachColorFFD4AF37;
+    final Color inactiveThumbColor = AppColors.white70Color;
 
     return GestureDetector(
       onTap: () {
@@ -378,7 +423,7 @@ class _NavbarState extends State<Navbar> {
                   icon,
                   colorFilter: isActive
                       ? null
-                      : ColorFilter.mode(inactiveColor, BlendMode.srcIn),
+                      : ColorFilter.mode(inactiveThumbColor, BlendMode.srcIn),
                   width: 24.r,
                   height: 24.r,
                 ),
@@ -389,7 +434,7 @@ class _NavbarState extends State<Navbar> {
                     child: Container(
                       padding: EdgeInsets.all(2.r),
                       decoration: const BoxDecoration(
-                        color: Color(0xFFD44637),
+                        color: AppColors.coachColorFFD44637,
                         shape: BoxShape.circle,
                       ),
                       constraints: BoxConstraints(
@@ -398,8 +443,8 @@ class _NavbarState extends State<Navbar> {
                       ),
                       child: Text(
                         badge,
-                        style: TextStyle(
-                          color: Colors.white,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.whiteColor,
                           fontSize: 8.sp,
                           fontWeight: FontWeight.bold,
                         ),
@@ -415,9 +460,9 @@ class _NavbarState extends State<Navbar> {
               children: [
                 Text(
                   label,
-                  style: TextStyle(
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontSize: 10.sp,
-                    color: isActive ? activeColor : inactiveColor,
+                    color: isActive ? activeThumbColor : inactiveThumbColor,
                     fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
                     decoration: TextDecoration.none,
                   ),
@@ -434,9 +479,9 @@ class _NavbarState extends State<Navbar> {
                         begin: Alignment.topLeft,
                         end: Alignment.topRight,
                         colors: [
-                          Color(0xFFB18406),
-                          Color(0xFFFFD258),
-                          Color(0xFFB28406),
+                          AppColors.coachColorFFB18406,
+                          AppColors.secondaryColorLight,
+                          AppColors.coachColorFFB28406,
                         ],
                       ),
                       shape: RoundedRectangleBorder(
@@ -465,8 +510,8 @@ class BubblePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color =
-          const Color(0xFF20341F) // Exact color from image
+      ..color = AppColors
+          .popupBackgroundColor // Exact color from image
       ..style = PaintingStyle.fill;
 
     final double radius = 16.r;
@@ -484,7 +529,7 @@ class BubblePainter extends CustomPainter {
       ..close();
 
     // Shadow as requested
-    canvas.drawShadow(path, const Color(0x0A1E1E01), 10, false);
+    canvas.drawShadow(path, AppColors.coachColor0A1E1E01, 10, false);
 
     // Draw the bubble and pointer
     canvas.drawPath(path, paint);

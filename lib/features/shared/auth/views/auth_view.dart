@@ -160,7 +160,7 @@ class AuthView extends StatelessWidget {
                                                 child: Icon(
                                                   Icons.check,
                                                   color: auth.isRemembered
-                                                      ? Colors.white
+                                                      ? AppColors.whiteColor
                                                       : Colors.transparent,
                                                   size: 14.r,
                                                 ),

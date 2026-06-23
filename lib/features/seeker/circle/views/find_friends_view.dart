@@ -28,13 +28,13 @@ class FindFriendsView extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: AppColors.whiteColor),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           "Find Friends",
           style: theme.textTheme.titleLarge?.copyWith(
-            color: Colors.white,
+            color: AppColors.whiteColor,
             fontFamily: 'Georgia',
             fontSize: 20.sp,
           ),
@@ -51,7 +51,7 @@ class FindFriendsView extends StatelessWidget {
                 child: CustomInput(
                   height: 48,
                   hintText: "Search Friends",
-                  backgroundColor: Colors.white.withAlpha(13),
+                  backgroundColor: AppColors.whiteColor.withAlpha(13),
                   borderRadius: 24,
                   shadow: false,
                 ),
@@ -60,8 +60,8 @@ class FindFriendsView extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                 child: Text(
                   "Suggestions",
-                  style: TextStyle(
-                    color: Colors.white.withAlpha(128),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.whiteColor.withAlpha(128),
                     fontSize: 14.sp,
                   ),
                 ),
@@ -99,7 +99,7 @@ class FindFriendsView extends StatelessWidget {
                                       Center(
                                         child: Text(
                                           "No suggestions available.",
-                                          style: TextStyle(color: Colors.white.withAlpha(128)),
+                                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(128)),
                                         ),
                                       ),
                                     ],
@@ -150,7 +150,7 @@ class _UserDiscoveryCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.postCardColor,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: Colors.white.withAlpha(13)),
+        border: Border.all(color: AppColors.whiteColor.withAlpha(13)),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -158,13 +158,13 @@ class _UserDiscoveryCard extends StatelessWidget {
           CircleAvatar(
             radius: 40.r,
             backgroundImage: NetworkImage(suggestion.avatar),
-            backgroundColor: Colors.white.withAlpha(26),
+            backgroundColor: AppColors.whiteColor.withAlpha(26),
           ),
           SizedBox(height: 12.h),
           Text(
             suggestion.name,
-            style: TextStyle(
-              color: Colors.white,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColors.whiteColor,
               fontSize: 15.sp,
               fontWeight: FontWeight.bold,
             ),
@@ -172,8 +172,8 @@ class _UserDiscoveryCard extends StatelessWidget {
           SizedBox(height: 4.h),
           Text(
             "${suggestion.mutualFriends} mutual Friend",
-            style: TextStyle(
-              color: Colors.white.withAlpha(128),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColors.whiteColor.withAlpha(128),
               fontSize: 12.sp,
             ),
           ),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:newproject/core/constants/app_colors.dart';
 import 'package:newproject/core/widgets/background_widget.dart';
 import 'package:provider/provider.dart';
+
 import '../../../../core/constants/app_assets.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../controllers/home_controller.dart';
@@ -27,7 +27,7 @@ class WriteJournalView extends StatelessWidget {
             leading: IconButton(
               icon: Icon(
                 Icons.arrow_back,
-                color: const Color(0xFF4A6741),
+                color: AppColors.defaultColorLight,
                 size: 26.r,
               ),
               onPressed: () => Navigator.pop(context),
@@ -56,23 +56,25 @@ class WriteJournalView extends StatelessWidget {
                     height: 245.h,
                     padding: EdgeInsets.all(20.r),
                     decoration: BoxDecoration(
-                      color: Colors.black.withAlpha(77),
+                      color: AppColors.blackColor.withAlpha(77),
                       borderRadius: BorderRadius.circular(20.r),
-                      border: Border.all(color: Colors.white.withAlpha(13)),
+                      border: Border.all(
+                        color: AppColors.whiteColor.withAlpha(13),
+                      ),
                     ),
                     child: TextField(
                       controller: homeController.journalController,
                       maxLines: null,
                       autofocus: true,
-                      style: TextStyle(
-                        color: Colors.white,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppColors.whiteColor,
                         fontSize: 13.sp,
                         fontFamily: 'Georgia',
                       ),
                       decoration: InputDecoration(
                         hintText: " 🪶  Share Your Thoughts",
-                        hintStyle: TextStyle(
-                          color: Colors.white.withAlpha(77),
+                        hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.whiteColor.withAlpha(77),
                           fontSize: 13.sp,
                         ),
                         border: InputBorder.none,

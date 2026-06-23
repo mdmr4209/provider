@@ -3,10 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../core/widgets/custom_button.dart';
-import '../../../../core/widgets/background_widget.dart';
-import '../../../../routes/app_router.dart';
 import '../../../../core/services/api_service.dart';
+import '../../../../core/widgets/background_widget.dart';
+import '../../../../core/widgets/custom_button.dart';
+import '../../../../routes/app_router.dart';
 import '../../localization/localization_extension.dart';
 import '../controllers/auth_controller.dart';
 
@@ -91,6 +91,7 @@ class GoToHome extends StatelessWidget {
                                 );
                               }
                               // Navigate to home and clear navigation stack
+                              if (!context.mounted) return;
                               context.go(AppRoutes.home);
                             },
                       loading: auth.isLoading,

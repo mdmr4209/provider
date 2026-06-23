@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/widgets/background_widget.dart';
 import '../../../../core/constants/app_assets.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_loader.dart';
@@ -32,7 +31,7 @@ body: FutureBuilder(
 
             Text(
               "Payment Successful",
-              style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+              style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 24, fontWeight: FontWeight.bold),
             ),
 
             SizedBox(height: 16.h),
@@ -40,7 +39,7 @@ body: FutureBuilder(
             Text(
               "Please Check Your Notification, We Just Sent You A Message.",
               textAlign: TextAlign.center,
-              style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white54, fontSize: 15, height: 1.5),
+              style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.white54Color, fontSize: 15, height: 1.5),
             ),
 
             const Spacer(),

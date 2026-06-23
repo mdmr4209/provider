@@ -60,41 +60,21 @@ class InboxController extends ChangeNotifier {
     try {
       await Future.delayed(const Duration(milliseconds: 600));
 
-      // Mock response based on 14.2
-      final Map<String, dynamic> rawMessages = {
-        "messages": [
-          {
-            "sender": chatId == "chat_002" ? "Thomas stieve" : "Miles Esther",
-            "avatar": chatId == "chat_002" ? "https://i.pravatar.cc/150?u=thomas" : "https://i.pravatar.cc/150?u=miles",
-            "text": "ype and scrambled it to  scrsgfd",
-            "isMe": false,
-            "time": "Wednesday"
-          },
-          {
-            "sender": chatId == "chat_002" ? "Thomas stieve" : "Miles Esther",
-            "avatar": chatId == "chat_002" ? "https://i.pravatar.cc/150?u=thomas" : "https://i.pravatar.cc/150?u=miles",
-            "text": "ype and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-            "isMe": false,
-            "time": "Wednesday"
-          },
-          {
-            "sender": "Me",
-            "avatar": "",
-            "text": "ype and scrambled it to",
-            "isMe": true,
-            "time": "Wednesday"
-          },
-          {
-            "sender": "Me",
-            "avatar": "",
-            "text": "ype and scrambled it to make a type specimen book. It has survived not only five centuries.",
-            "isMe": true,
-            "time": "Wednesday"
-          }
-        ]
-      };
+      final String messagesJsonString = await rootBundle.loadString('assets/json/chat_messages.json');
+      final Map<String, dynamic> rawMessages = jsonDecode(messagesJsonString);
 
-      _messages = (rawMessages['messages'] as List).map((x) => ChatMessageModel.fromJson(x)).toList();
+      _messages = (rawMessages['messages'] as List).map((x) {
+        // We override the sender/avatar dynamically based on chatId like the mock did
+        // In a real app, this comes from the backend per chat.
+        var msg = ChatMessageModel.fromJson(x);
+        if (!msg.isMe) {
+          return msg.copyWith(
+            sender: chatId == "chat_002" ? "Thomas stieve" : "Miles Esther",
+            avatar: chatId == "chat_002" ? "https://i.pravatar.cc/150?u=thomas" : "https://i.pravatar.cc/150?u=miles",
+          );
+        }
+        return msg;
+      }).toList();
     } catch (e) {
       showErrorSnackBar(message: "Failed to load messages: $e");
     } finally {
@@ -115,45 +95,8 @@ class InboxController extends ChangeNotifier {
     try {
       await Future.delayed(const Duration(milliseconds: 800));
 
-      // Mock dynamic JSON based on 15.1
-      final Map<String, dynamic> rawBookings = {
-        "current": [
-          {
-            "id": "b_1",
-            "sessionName": "Session 1",
-            "coachName": "Coach Pearl",
-            "date": "Mon, Mar 27",
-            "time": "01:00 PM- 01:03PM (30Min)",
-            "amount": "20\$"
-          },
-          {
-            "id": "b_3",
-            "sessionName": "Session 3",
-            "coachName": "Coach Emma",
-            "date": "Wed, Mar 29",
-            "time": "09:00 AM- 09:30AM (30Min)",
-            "amount": "20\$"
-          }
-        ],
-        "history": [
-          {
-            "id": "b_2",
-            "sessionName": "Session 2",
-            "coachName": "Miles Esther",
-            "date": "Completed",
-            "time": "12 April, 1:30AM",
-            "amount": "20\$"
-          },
-          {
-            "id": "b_4",
-            "sessionName": "Session 4",
-            "coachName": "Thomas stieve",
-            "date": "Completed",
-            "time": "10 April, 3:00PM",
-            "amount": "20\$"
-          }
-        ]
-      };
+      final String bookingsJsonString = await rootBundle.loadString('assets/json/bookings.json');
+      final Map<String, dynamic> rawBookings = jsonDecode(bookingsJsonString);
 
       _currentBookings = (rawBookings['current'] as List).map((x) => BookingModel.fromJson(x)).toList();
       _historyBookings = (rawBookings['history'] as List).map((x) => BookingModel.fromJson(x)).toList();

@@ -28,10 +28,13 @@ class ScheduleMeetView extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: AppColors.whiteColor),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text("Schedule Meet", style: TextStyle(color: Colors.white, fontSize: 18.sp)),
+        title: Text(
+          "Schedule Meet",
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 18.sp),
+        ),
         centerTitle: true,
       ),
       body: Consumer<CoachController>(
@@ -44,7 +47,10 @@ class ScheduleMeetView extends StatelessWidget {
             return Stack(
               children: [
                 RefreshIndicator(
-                  onRefresh: () => controller.fetchCoachSlots(coach?.id ?? 'c1', isRefresh: true),
+                  onRefresh: () => controller.fetchCoachSlots(
+                    coach?.id ?? 'c1',
+                    isRefresh: true,
+                  ),
                   color: Colors.transparent,
                   backgroundColor: Colors.transparent,
                   strokeWidth: 0,
@@ -54,7 +60,12 @@ class ScheduleMeetView extends StatelessWidget {
                     children: [
                       SizedBox(height: 100.h),
                       Center(
-                        child: Text("No schedule slots available.", style: TextStyle(color: Colors.white.withAlpha(128))),
+                        child: Text(
+                          "No schedule slots available.",
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppColors.whiteColor.withAlpha(128),
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -71,14 +82,18 @@ class ScheduleMeetView extends StatelessWidget {
           }
 
           // If selected time slot is not in available slots and available slots are not empty, default it
-          if (selectedTimeSlot.value == null && controller.availableSlots.isNotEmpty) {
+          if (selectedTimeSlot.value == null &&
+              controller.availableSlots.isNotEmpty) {
             selectedTimeSlot.value = controller.availableSlots[0];
           }
 
           return Stack(
             children: [
               RefreshIndicator(
-                onRefresh: () => controller.fetchCoachSlots(coach?.id ?? 'c1', isRefresh: true),
+                onRefresh: () => controller.fetchCoachSlots(
+                  coach?.id ?? 'c1',
+                  isRefresh: true,
+                ),
                 color: Colors.transparent,
                 backgroundColor: Colors.transparent,
                 strokeWidth: 0,
@@ -88,97 +103,119 @@ class ScheduleMeetView extends StatelessWidget {
                   padding: EdgeInsets.all(20.r),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildLabel("Choose Date"),
-                _buildPickerContainer("Mon, Mar 27", Icons.calendar_today_outlined),
-                SizedBox(height: 24.h),
-                _buildLabel("Suggestions"),
-                ValueListenableBuilder<int>(
-                  valueListenable: selectedSlotIndex,
-                  builder: (context, currentIdx, _) {
-                    return GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 2.2,
-                        crossAxisSpacing: 12.w,
-                        mainAxisSpacing: 12.h,
-                      ),
-                      itemCount: controller.slots.length,
-                      itemBuilder: (context, index) {
-                        final slot = controller.slots[index];
-                        final isSelected = currentIdx == index;
-                        return GestureDetector(
-                          onTap: () => selectedSlotIndex.value = index,
-                          child: _buildDurationCard(
-                            slot.duration,
-                            "\$${slot.price.toStringAsFixed(0)}",
-                            isSelected: isSelected,
-                          ),
-                        );
-                      },
-                    );
-                  },
-                ),
-                SizedBox(height: 24.h),
-                _buildLabel("Select slot"),
-                GestureDetector(
-                  onTap: () {
-                    // Show slot selection dialog/bottomsheet
-                    if (controller.availableSlots.isNotEmpty) {
-                      _showSlotPicker(context, controller.availableSlots, selectedTimeSlot);
-                    }
-                  },
-                  child: ValueListenableBuilder<String?>(
-                    valueListenable: selectedTimeSlot,
-                    builder: (context, time, _) {
-                      return _buildPickerContainer(
-                        time ?? "Choose from here",
-                        Icons.access_time,
-                      );
-                    },
-                  ),
-                ),
-                SizedBox(height: 16.h),
-                ValueListenableBuilder<String?>(
-                  valueListenable: selectedTimeSlot,
-                  builder: (context, time, _) {
-                    if (time == null) return const SizedBox.shrink();
-                    return _buildSelectedSlot(time, selectedTimeSlot);
-                  },
-                ),
-                SizedBox(height: 24.h),
-                Container(
-                  padding: EdgeInsets.all(16.r),
-                  decoration: BoxDecoration(color: Colors.white.withAlpha(13), borderRadius: BorderRadius.circular(12.r)),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Cancellation Policy", style: TextStyle(color: Colors.green, fontSize: 14.sp, fontWeight: FontWeight.bold)),
-                      SizedBox(height: 8.h),
-                      Text(
-                        "Amazon Alexa Shopping is seeking a talented, experienced, and self-directed UX Designer to define and drive the future of shopping at Amazon. The ideal candidate is an end-to-end UX Designer with strong visual design skills. They are passionate and have experience designing for new and ambiguous technologies. They have proven ability to motivate through vision and a desire to inspire",
-                        style: TextStyle(color: Colors.white.withAlpha(179), fontSize: 12.sp, height: 1.5),
+                      _buildLabel(context, "Choose Date"),
+                      _buildPickerContainer(context, 
+                        "Mon, Mar 27",
+                        Icons.calendar_today_outlined,
                       ),
+                      SizedBox(height: 24.h),
+                      _buildLabel(context, "Suggestions"),
+                      ValueListenableBuilder<int>(
+                        valueListenable: selectedSlotIndex,
+                        builder: (context, currentIdx, _) {
+                          return GridView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  childAspectRatio: 2.2,
+                                  crossAxisSpacing: 12.w,
+                                  mainAxisSpacing: 12.h,
+                                ),
+                            itemCount: controller.slots.length,
+                            itemBuilder: (context, index) {
+                              final slot = controller.slots[index];
+                              final isSelected = currentIdx == index;
+                              return GestureDetector(
+                                onTap: () => selectedSlotIndex.value = index,
+                                child: _buildDurationCard(context, 
+                                  slot.duration,
+                                  "\$${slot.price.toStringAsFixed(0)}",
+                                  isSelected: isSelected,
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                      SizedBox(height: 24.h),
+                      _buildLabel(context, "Select slot"),
+                      GestureDetector(
+                        onTap: () {
+                          // Show slot selection dialog/bottomsheet
+                          if (controller.availableSlots.isNotEmpty) {
+                            _showSlotPicker(
+                              context,
+                              controller.availableSlots,
+                              selectedTimeSlot,
+                            );
+                          }
+                        },
+                        child: ValueListenableBuilder<String?>(
+                          valueListenable: selectedTimeSlot,
+                          builder: (context, time, _) {
+                            return _buildPickerContainer(context, 
+                              time ?? "Choose from here",
+                              Icons.access_time,
+                            );
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 16.h),
+                      ValueListenableBuilder<String?>(
+                        valueListenable: selectedTimeSlot,
+                        builder: (context, time, _) {
+                          if (time == null) return const SizedBox.shrink();
+                          return _buildSelectedSlot(context, time, selectedTimeSlot);
+                        },
+                      ),
+                      SizedBox(height: 24.h),
+                      Container(
+                        padding: EdgeInsets.all(16.r),
+                        decoration: BoxDecoration(
+                          color: AppColors.whiteColor.withAlpha(13),
+                          borderRadius: BorderRadius.circular(12.r),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Cancellation Policy",
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                color: AppColors.greenColor,
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 8.h),
+                            Text(
+                              "Amazon Alexa Shopping is seeking a talented, experienced, and self-directed UX Designer to define and drive the future of shopping at Amazon. The ideal candidate is an end-to-end UX Designer with strong visual design skills. They are passionate and have experience designing for new and ambiguous technologies. They have proven ability to motivate through vision and a desire to inspire",
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                color: AppColors.whiteColor.withAlpha(179),
+                                fontSize: 12.sp,
+                                height: 1.5,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 40.h),
                     ],
                   ),
                 ),
-                SizedBox(height: 40.h),
-              ],
-            ),
-          ),
-        ),
-        if (controller.isRefreshing)
-          Positioned(
-            top: 16.h,
-            left: 0,
-            right: 0,
-            child: const Center(child: CustomLoader(size: 150)),
-          ),
-      ],
-    );
-  },
+              ),
+              if (controller.isRefreshing)
+                Positioned(
+                  top: 16.h,
+                  left: 0,
+                  right: 0,
+                  child: const Center(child: CustomLoader(size: 150)),
+                ),
+            ],
+          );
+        },
       ),
       bottomNavigationBar: Consumer<CoachController>(
         builder: (context, controller, child) {
@@ -190,35 +227,59 @@ class ScheduleMeetView extends StatelessWidget {
               return ValueListenableBuilder<String?>(
                 valueListenable: selectedTimeSlot,
                 builder: (context, timeSlot, _) {
-                  final activeSlotIndex = currentSlotIdx < controller.slots.length ? currentSlotIdx : 0;
+                  final activeSlotIndex =
+                      currentSlotIdx < controller.slots.length
+                      ? currentSlotIdx
+                      : 0;
                   final slot = controller.slots[activeSlotIndex];
                   final totalAmount = slot.price;
 
                   return Container(
                     padding: EdgeInsets.all(20.r),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF1B2B1B),
-                      border: Border(top: BorderSide(color: Colors.white.withAlpha(13))),
+                      color: AppColors.coachColorFF1B2B1B,
+                      border: Border(
+                        top: BorderSide(
+                          color: AppColors.whiteColor.withAlpha(13),
+                        ),
+                      ),
                     ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Summary", style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.bold)),
+                        Text(
+                          "Summary",
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppColors.whiteColor,
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                         SizedBox(height: 16.h),
-                        _buildSummaryRow("Duration", slot.duration),
-                        _buildSummaryRow("Date", "Mon, Mar 27"),
-                        _buildSummaryRow("Time", timeSlot ?? "Not selected"),
-                        const Divider(color: Colors.white10),
-                        _buildSummaryRow("Total", "\$${totalAmount.toStringAsFixed(0)}", isTotal: true),
+                        _buildSummaryRow(context, "Duration", slot.duration),
+                        _buildSummaryRow(context, "Date", "Mon, Mar 27"),
+                        _buildSummaryRow(context, "Time", timeSlot ?? "Not selected"),
+                        const Divider(color: AppColors.white10Color),
+                        _buildSummaryRow(context, 
+                          "Total",
+                          "\$${totalAmount.toStringAsFixed(0)}",
+                          isTotal: true,
+                        ),
                         SizedBox(height: 20.h),
                         CustomButton(
                           onPress: timeSlot != null
-                              ? () async => _showPaymentTerms(context, controller, timeSlot)
+                              ? () async => _showPaymentTerms(
+                                  context,
+                                  controller,
+                                  timeSlot,
+                                )
                               : null,
                           title: "Pay Now",
                           linearGradient: timeSlot != null,
-                          buttonColor: timeSlot != null ? AppColors.buttonColor : Colors.white10,
+                          buttonColor: timeSlot != null
+                              ? AppColors.buttonColor
+                              : AppColors.white10Color,
                         ),
                       ],
                     ),
@@ -232,34 +293,54 @@ class ScheduleMeetView extends StatelessWidget {
     );
   }
 
-  Widget _buildLabel(String text) {
+  Widget _buildLabel(BuildContext context, String text) {
     return Padding(
       padding: EdgeInsets.only(bottom: 12.h),
-      child: Text(text, style: TextStyle(color: Colors.white, fontSize: 15.sp, fontWeight: FontWeight.w500)),
+      child: Text(
+        text,
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          color: AppColors.whiteColor,
+          fontSize: 15.sp,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
     );
   }
 
-  Widget _buildPickerContainer(String text, IconData icon) {
+  Widget _buildPickerContainer(BuildContext context, String text, IconData icon) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
-      decoration: BoxDecoration(color: Colors.white.withAlpha(13), borderRadius: BorderRadius.circular(12.r), border: Border.all(color: Colors.white.withAlpha(26))),
+      decoration: BoxDecoration(
+        color: AppColors.whiteColor.withAlpha(13),
+        borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(color: AppColors.whiteColor.withAlpha(26)),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(text, style: TextStyle(color: Colors.white, fontSize: 14.sp)),
-          Icon(icon, color: Colors.white.withAlpha(128), size: 20.r),
+          Text(
+            text,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 14.sp),
+          ),
+          Icon(icon, color: AppColors.whiteColor.withAlpha(128), size: 20.r),
         ],
       ),
     );
   }
 
-  Widget _buildDurationCard(String title, String price, {bool isSelected = true}) {
+  Widget _buildDurationCard(
+    BuildContext context, String title,
+    String price, {
+    bool isSelected = true,
+  }) {
     return Container(
       padding: EdgeInsets.all(12.r),
       decoration: BoxDecoration(
-        color: Colors.white.withAlpha(isSelected ? 26 : 13),
+        color: AppColors.whiteColor.withAlpha(isSelected ? 26 : 13),
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: isSelected ? Colors.green : Colors.transparent),
+        border: Border.all(
+          color: isSelected ? AppColors.greenColor : Colors.transparent,
+        ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -268,48 +349,95 @@ class ScheduleMeetView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(title, style: TextStyle(color: Colors.white, fontSize: 14.sp, fontWeight: FontWeight.w500)),
-              Text(price, style: TextStyle(color: Colors.white.withAlpha(128), fontSize: 12.sp)),
+              Text(
+                title,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.whiteColor,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              Text(
+                price,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.whiteColor.withAlpha(128),
+                  fontSize: 12.sp,
+                ),
+              ),
             ],
           ),
-          Icon(Icons.access_time, color: Colors.white.withAlpha(128), size: 18.r),
+          Icon(
+            Icons.access_time,
+            color: AppColors.whiteColor.withAlpha(128),
+            size: 18.r,
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildSelectedSlot(String slot, ValueNotifier<String?> selectedTimeSlot) {
+  Widget _buildSelectedSlot(
+    BuildContext context, String slot,
+    ValueNotifier<String?> selectedTimeSlot,
+  ) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-      decoration: BoxDecoration(color: Colors.white.withAlpha(13), borderRadius: BorderRadius.circular(8.r)),
+      decoration: BoxDecoration(
+        color: AppColors.whiteColor.withAlpha(13),
+        borderRadius: BorderRadius.circular(8.r),
+      ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(slot, style: TextStyle(color: Colors.white, fontSize: 13.sp)),
+          Text(
+            slot,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 13.sp),
+          ),
           SizedBox(width: 8.w),
           GestureDetector(
             onTap: () => selectedTimeSlot.value = null,
-            child: Icon(Icons.cancel, color: Colors.red.withAlpha(128), size: 16.r),
+            child: Icon(
+              Icons.cancel,
+              color: AppColors.redColor.withAlpha(128),
+              size: 16.r,
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildSummaryRow(String label, String value, {bool isTotal = false}) {
+  Widget _buildSummaryRow(BuildContext context, String label, String value, {bool isTotal = false}) {
     return Padding(
       padding: EdgeInsets.only(bottom: 8.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: TextStyle(color: Colors.white.withAlpha(128), fontSize: 14.sp)),
-          Text(value, style: TextStyle(color: Colors.white, fontSize: 14.sp, fontWeight: isTotal ? FontWeight.bold : FontWeight.normal)),
+          Text(
+            label,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColors.whiteColor.withAlpha(128),
+              fontSize: 14.sp,
+            ),
+          ),
+          Text(
+            value,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColors.whiteColor,
+              fontSize: 14.sp,
+              fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
         ],
       ),
     );
   }
 
-  void _showSlotPicker(BuildContext context, List<String> slots, ValueNotifier<String?> selectedTimeSlot) {
+  void _showSlotPicker(
+    BuildContext context,
+    List<String> slots,
+    ValueNotifier<String?> selectedTimeSlot,
+  ) {
     showModalBottomSheet(
       context: context,
       backgroundColor: AppColors.backgroundColor,
@@ -325,10 +453,14 @@ class ScheduleMeetView extends StatelessWidget {
                 padding: EdgeInsets.all(16.r),
                 child: Text(
                   "Select Time Slot",
-                  style: TextStyle(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.bold),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.whiteColor,
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-              const Divider(color: Colors.white10),
+              const Divider(color: AppColors.white10Color),
               Flexible(
                 child: ListView.builder(
                   shrinkWrap: true,
@@ -336,7 +468,10 @@ class ScheduleMeetView extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final slot = slots[index];
                     return ListTile(
-                      title: Text(slot, style: const TextStyle(color: Colors.white)),
+                      title: Text(
+                        slot,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor),
+                      ),
                       onTap: () {
                         selectedTimeSlot.value = slot;
                         Navigator.pop(context);
@@ -352,7 +487,11 @@ class ScheduleMeetView extends StatelessWidget {
     );
   }
 
-  void _showPaymentTerms(BuildContext context, CoachController controller, String slot) {
+  void _showPaymentTerms(
+    BuildContext context,
+    CoachController controller,
+    String slot,
+  ) {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -366,7 +505,11 @@ class PaymentTermsView extends StatelessWidget {
   final CoachController controller;
   final String slot;
 
-  const PaymentTermsView({super.key, required this.controller, required this.slot});
+  const PaymentTermsView({
+    super.key,
+    required this.controller,
+    required this.slot,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -375,8 +518,14 @@ class PaymentTermsView extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(icon: const Icon(Icons.arrow_back, color: Colors.white), onPressed: () => Navigator.pop(context)),
-        title: Text("Payment terms", style: TextStyle(color: Colors.white, fontSize: 18.sp)),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppColors.whiteColor),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          "Payment terms",
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 18.sp),
+        ),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -385,7 +534,11 @@ class PaymentTermsView extends StatelessWidget {
           children: [
             Text(
               "1. Welcome to Ai. By using our services, you agree to abide by the terms and conditions outlined below. These terms govern your access to and\n2. use of Ai tools and services, so please review them carefully before proceeding.\n3. Ai provides innovative tools designed to enhance how you capture and manage voice recordings. Our services include voice-to-text transcription and AI-driven summarization, which are intended\n4. for lawful, ethical purposes only. You must ensure compliance with applicable laws, including obtaining consent from all participants when recording conversations. CleverTalk disclaims liability for any misuse of its tools.",
-              style: TextStyle(color: Colors.white.withAlpha(179), fontSize: 14.sp, height: 2.0),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.whiteColor.withAlpha(179),
+                fontSize: 14.sp,
+                height: 2.0,
+              ),
             ),
             SizedBox(height: 60.h),
           ],
@@ -401,12 +554,29 @@ class PaymentTermsView extends StatelessWidget {
               children: [
                 Container(
                   padding: EdgeInsets.all(20.r),
-                  decoration: BoxDecoration(color: Colors.white.withAlpha(13), borderRadius: BorderRadius.circular(12.r)),
+                  decoration: BoxDecoration(
+                    color: AppColors.whiteColor.withAlpha(13),
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
                   child: Column(
                     children: [
-                      Text("Willing To Pay Now?", style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.bold)),
+                      Text(
+                        "Willing To Pay Now?",
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.whiteColor,
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       SizedBox(height: 8.h),
-                      Text("Please Check Your Terms, Before Moving Forward to payment.", textAlign: TextAlign.center, style: TextStyle(color: Colors.white.withAlpha(128), fontSize: 12.sp)),
+                      Text(
+                        "Please Check Your Terms, Before Moving Forward to payment.",
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.whiteColor.withAlpha(128),
+                          fontSize: 12.sp,
+                        ),
+                      ),
                       SizedBox(height: 16.h),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -414,13 +584,25 @@ class PaymentTermsView extends StatelessWidget {
                           Checkbox(
                             value: currentAgreed,
                             onChanged: (v) => agreed.value = v!,
-                            activeColor: Colors.amber,
-                            checkColor: Colors.black,
+                            activeColor: AppColors.amberColor,
+                            checkColor: AppColors.blackColor,
                           ),
-                          Text.rich(TextSpan(children: [
-                            TextSpan(text: "Agree to ", style: TextStyle(color: Colors.white.withAlpha(179))),
-                            const TextSpan(text: "Payment Terms", style: TextStyle(color: Colors.amber)),
-                          ])),
+                          Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: "Agree to ",
+                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: AppColors.whiteColor.withAlpha(179),
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: "Payment Terms",
+                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.amberColor),
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ],
@@ -434,14 +616,18 @@ class PaymentTermsView extends StatelessWidget {
                           if (success && context.mounted) {
                             Navigator.pushReplacement(
                               context,
-                              MaterialPageRoute(builder: (_) => const PaymentSuccessView()),
+                              MaterialPageRoute(
+                                builder: (_) => const PaymentSuccessView(),
+                              ),
                             );
                           }
                         }
                       : null,
                   title: "Continue to Pay",
                   linearGradient: currentAgreed,
-                  buttonColor: currentAgreed ? AppColors.buttonColor : Colors.white10,
+                  buttonColor: currentAgreed
+                      ? AppColors.buttonColor
+                      : AppColors.white10Color,
                 ),
               ],
             ),
@@ -468,15 +654,39 @@ class PaymentSuccessView extends StatelessWidget {
                 height: 250.h,
                 width: double.infinity,
                 decoration: const BoxDecoration(
-                  image: DecorationImage(image: NetworkImage('https://ouch-cdn2.icons8.com/6Uq6X_xX_8_Rz_Yq_X_X_X_X_X_X_X_X_X_X_X_X_X_X_X_X.png'), fit: BoxFit.contain),
+                  image: DecorationImage(
+                    image: NetworkImage(
+                      'https://ouch-cdn2.icons8.com/6Uq6X_xX_8_Rz_Yq_X_X_X_X_X_X_X_X_X_X_X_X_X_X_X_X.png',
+                    ),
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
               SizedBox(height: 40.h),
-              Text("Payment Successful", style: TextStyle(color: Colors.white, fontSize: 20.sp, fontWeight: FontWeight.bold)),
+              Text(
+                "Payment Successful",
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.whiteColor,
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               SizedBox(height: 12.h),
-              Text("Please Check Your Notification, We Just Sent You A Message.", textAlign: TextAlign.center, style: TextStyle(color: Colors.white.withAlpha(128), fontSize: 14.sp)),
+              Text(
+                "Please Check Your Notification, We Just Sent You A Message.",
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.whiteColor.withAlpha(128),
+                  fontSize: 14.sp,
+                ),
+              ),
               const Spacer(),
-              CustomButton(onPress: () async => Navigator.of(context).popUntil((route) => route.isFirst), title: "Got it", linearGradient: true),
+              CustomButton(
+                onPress: () async =>
+                    Navigator.of(context).popUntil((route) => route.isFirst),
+                title: "Got it",
+                linearGradient: true,
+              ),
             ],
           ),
         ),
@@ -498,7 +708,11 @@ class _ScheduleMeetShimmer extends StatelessWidget {
         children: [
           ShimmerLoader(width: 100.w, height: 16.h, borderRadius: 4.r),
           SizedBox(height: 12.h),
-          ShimmerLoader(width: double.infinity, height: 50.h, borderRadius: 12.r),
+          ShimmerLoader(
+            width: double.infinity,
+            height: 50.h,
+            borderRadius: 12.r,
+          ),
           SizedBox(height: 24.h),
           ShimmerLoader(width: 100.w, height: 16.h, borderRadius: 4.r),
           SizedBox(height: 12.h),
@@ -521,9 +735,17 @@ class _ScheduleMeetShimmer extends StatelessWidget {
           SizedBox(height: 24.h),
           ShimmerLoader(width: 100.w, height: 16.h, borderRadius: 4.r),
           SizedBox(height: 12.h),
-          ShimmerLoader(width: double.infinity, height: 50.h, borderRadius: 12.r),
+          ShimmerLoader(
+            width: double.infinity,
+            height: 50.h,
+            borderRadius: 12.r,
+          ),
           SizedBox(height: 24.h),
-          ShimmerLoader(width: double.infinity, height: 100.h, borderRadius: 12.r),
+          ShimmerLoader(
+            width: double.infinity,
+            height: 100.h,
+            borderRadius: 12.r,
+          ),
         ],
       ),
     );

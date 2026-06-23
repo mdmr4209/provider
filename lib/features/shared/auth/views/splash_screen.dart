@@ -1,9 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:http/http.dart';
 import 'package:newproject/core/constants/app_assets.dart';
 import 'package:provider/provider.dart';
 
@@ -11,8 +9,6 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/background_widget.dart';
 import '../../../../routes/app_router.dart';
 import '../controllers/auth_controller.dart';
-
-import 'package:flutter/scheduler.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -36,7 +32,9 @@ class SplashScreen extends StatelessWidget {
                       child: FadeTransition(
                         opacity: anim.logoFadeAnimation,
                         child: Container(
-                          decoration: const BoxDecoration(shape: BoxShape.circle),
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                          ),
                           child: Image.asset(AppAssets.sb1Logo, height: 200.h),
                         ),
                       ),
@@ -51,10 +49,11 @@ class SplashScreen extends StatelessWidget {
                         child: Text(
                           'STRONGER BY TWO',
                           textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                            fontStyle: FontStyle.italic,
-                            color: AppColors.textColor,
-                          ),
+                          style: Theme.of(context).textTheme.headlineMedium!
+                              .copyWith(
+                                fontStyle: FontStyle.italic,
+                                color: AppColors.textColor,
+                              ),
                         ),
                       ),
                     ),
@@ -67,12 +66,13 @@ class SplashScreen extends StatelessWidget {
                       child: FadeTransition(
                         opacity: anim.subtitleFadeAnimation,
                         child: Text(
-                          '\"You are not in this alone.\"',
+                          '"You are not in this alone."',
                           textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                            fontStyle: FontStyle.italic,
-                            color: AppColors.textColor,
-                          ),
+                          style: Theme.of(context).textTheme.titleSmall!
+                              .copyWith(
+                                fontStyle: FontStyle.italic,
+                                color: AppColors.textColor,
+                              ),
                         ),
                       ),
                     ),
@@ -87,7 +87,8 @@ class SplashScreen extends StatelessWidget {
   }
 }
 
-class SplashAnimationController extends ChangeNotifier implements TickerProvider {
+class SplashAnimationController extends ChangeNotifier
+    implements TickerProvider {
   final BuildContext context;
   late AnimationController controller;
 
@@ -119,11 +120,11 @@ class SplashAnimationController extends ChangeNotifier implements TickerProvider
 
     titleSlideAnimation =
         Tween<Offset>(begin: const Offset(0, 0.5), end: Offset.zero).animate(
-      CurvedAnimation(
-        parent: controller,
-        curve: const Interval(0.3, 0.6, curve: Curves.easeOutCubic),
-      ),
-    );
+          CurvedAnimation(
+            parent: controller,
+            curve: const Interval(0.3, 0.6, curve: Curves.easeOutCubic),
+          ),
+        );
     titleFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: controller,
@@ -133,11 +134,11 @@ class SplashAnimationController extends ChangeNotifier implements TickerProvider
 
     subtitleSlideAnimation =
         Tween<Offset>(begin: const Offset(0, 0.5), end: Offset.zero).animate(
-      CurvedAnimation(
-        parent: controller,
-        curve: const Interval(0.5, 0.8, curve: Curves.easeOutCubic),
-      ),
-    );
+          CurvedAnimation(
+            parent: controller,
+            curve: const Interval(0.5, 0.8, curve: Curves.easeOutCubic),
+          ),
+        );
     subtitleFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: controller,
@@ -151,6 +152,7 @@ class SplashAnimationController extends ChangeNotifier implements TickerProvider
 
   Future<void> _navigateBasedOnAuth() async {
     await Future.delayed(const Duration(seconds: 3));
+    if (!context.mounted) return;
     final authController = context.read<AuthController>();
     if (authController.isLoggedIn) {
       context.go(AppRoutes.home);

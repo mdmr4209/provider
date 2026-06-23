@@ -31,7 +31,7 @@ class CoachProfileView extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          title: Text("Coach Profile", style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
+          title: Text("Coach Profile", style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontWeight: FontWeight.bold)),
           centerTitle: true,
           actions: [
             IconButton(
@@ -72,7 +72,7 @@ class CoachProfileView extends StatelessWidget {
                                       child: Container(
                                         padding: const EdgeInsets.all(4),
                                         decoration: const BoxDecoration(color: AppColors.coachColorFFC19E5F, shape: BoxShape.circle),
-                                        child: const Icon(Icons.camera_alt, color: Colors.white, size: 18),
+                                        child: const Icon(Icons.camera_alt, color: AppColors.whiteColor, size: 18),
                                       ),
                                     ),
                                   ],
@@ -80,7 +80,7 @@ class CoachProfileView extends StatelessWidget {
                                 SizedBox(height: 16.h),
                                 Text(
                                   "Md. Kamran",
-                                  style: theme.textTheme.headlineSmall?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                                  style: theme.textTheme.headlineSmall?.copyWith(color: AppColors.whiteColor, fontWeight: FontWeight.bold),
                                 ),
                                 Text(
                                   "Relationship Specialist",
@@ -96,9 +96,9 @@ class CoachProfileView extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              _buildStat("5.0", "Rating", Icons.star),
-                              _buildStat("310", "Reviews", Icons.reviews_outlined),
-                              _buildStat("8+", "Exp. Years", Icons.work_outline),
+                              _buildStat(context, "5.0", "Rating", Icons.star),
+                              _buildStat(context, "310", "Reviews", Icons.reviews_outlined),
+                              _buildStat(context, "8+", "Exp. Years", Icons.work_outline),
                             ],
                           ),
 
@@ -130,8 +130,8 @@ class CoachProfileView extends StatelessWidget {
                           CustomButton(
                             onPress: () async {},
                             title: "Logout",
-                            buttonColor: Colors.black.withAlpha(51),
-                            borderColor: Colors.white10,
+                            buttonColor: AppColors.blackColor.withAlpha(51),
+                            borderColor: AppColors.white10Color,
                           ),
 
                           SizedBox(height: 100.h),
@@ -152,13 +152,13 @@ class CoachProfileView extends StatelessWidget {
     );
   }
 
-  Widget _buildStat(String value, String label, IconData icon) {
+  Widget _buildStat(BuildContext context, String value, String label, IconData icon) {
     return Column(
       children: [
         Icon(icon, color: AppColors.coachColorFFC19E5F, size: 24),
         SizedBox(height: 8.h),
-        Text(value, style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-        Text(label, style: TextStyle(color: Colors.white54, fontSize: 12)),
+        Text(value, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 18, fontWeight: FontWeight.bold)),
+        Text(label, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white54Color, fontSize: 12)),
       ],
     );
   }
@@ -174,9 +174,9 @@ class CoachProfileView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
+          Text(title, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontWeight: FontWeight.bold, fontSize: 16)),
           SizedBox(height: 12.h),
-          Text(content, style: TextStyle(color: Colors.white70, fontSize: 14, height: 1.5)),
+          Text(content, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white70Color, fontSize: 14, height: 1.5)),
         ],
       ),
     );

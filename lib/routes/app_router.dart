@@ -52,7 +52,7 @@ import '../features/coach/home/views/session_list_view.dart';
 import '../features/coach/circle/views/coach_circle_view.dart';
 import '../features/coach/bid_board/views/coach_bid_board_view.dart';
 import '../features/coach/inbox/views/coach_inbox_view.dart';
-import '../features/coach/profile/views/coach_profile_view.dart';
+
 
 enum TransitionType {
   fadeThrough,
@@ -922,22 +922,7 @@ class _DirectionalBranchContainer extends StatefulWidget {
 
 class _DirectionalBranchContainerState
     extends State<_DirectionalBranchContainer> {
-  int _previousIndex = 0;
 
-  @override
-  void initState() {
-    super.initState();
-    _previousIndex = widget.navigationShell.currentIndex;
-  }
-
-  @override
-  void didUpdateWidget(_DirectionalBranchContainer oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.navigationShell.currentIndex !=
-        widget.navigationShell.currentIndex) {
-      _previousIndex = oldWidget.navigationShell.currentIndex;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

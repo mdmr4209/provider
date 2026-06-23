@@ -46,7 +46,7 @@ class InboxView extends StatelessWidget {
                           final filteredChats = allChats.where((chat) {
                             // Filter by Coach vs Friend
                             if (isCoachContext != chat.isCoach) return false;
-                            
+
                             // Filter by Tabs
                             if (tabController.index == 1) {
                               return chat.unreadCount > 0;
@@ -58,36 +58,56 @@ class InboxView extends StatelessWidget {
                             children: [
                               // ── Header: Title, Toggle, Calendar ──────────────────────────
                               Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 16.w,
+                                  vertical: 10.h,
+                                ),
                                 child: Row(
                                   children: [
                                     Text(
                                       "Inbox",
-                                      style: theme.textTheme.headlineSmall?.copyWith(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'Georgia',
-                                      ),
+                                      style: theme.textTheme.headlineSmall
+                                          ?.copyWith(
+                                            color: AppColors.whiteColor,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'Georgia',
+                                          ),
                                     ),
                                     const Spacer(),
-                                    _buildContextToggle(selectedContextIndex, currentContextIndex),
+                                    _buildContextToggle(
+                                      context,
+                                      selectedContextIndex,
+                                      currentContextIndex,
+                                    ),
                                     const Spacer(),
                                     currentContextIndex == 1
                                         ? GestureDetector(
-                                            onTap: () => context.push(AppRoutes.findFriends),
+                                            onTap: () => context.push(
+                                              AppRoutes.findFriends,
+                                            ),
                                             child: Padding(
-                                              padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 8.w,
+                                                vertical: 4.h,
+                                              ),
                                               child: Row(
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
-                                                  Icon(Icons.add, color: AppColors.secondaryColorLight, size: 20.r),
+                                                  Icon(
+                                                    Icons.add,
+                                                    color: AppColors
+                                                        .secondaryColorLight,
+                                                    size: 20.r,
+                                                  ),
                                                   SizedBox(width: 4.w),
                                                   Text(
                                                     "Add",
-                                                    style: TextStyle(
-                                                      color: AppColors.secondaryColorLight,
+                                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                                      color: AppColors
+                                                          .secondaryColorLight,
                                                       fontSize: 15.sp,
-                                                      fontWeight: FontWeight.bold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                     ),
                                                   ),
                                                 ],
@@ -95,7 +115,11 @@ class InboxView extends StatelessWidget {
                                             ),
                                           )
                                         : IconButton(
-                                            icon: Icon(Icons.calendar_today_outlined, color: Colors.amber, size: 24.r),
+                                            icon: Icon(
+                                              Icons.calendar_today_outlined,
+                                              color: AppColors.amberColor,
+                                              size: 24.r,
+                                            ),
                                             onPressed: () {
                                               context.push(AppRoutes.bookings);
                                             },
@@ -108,55 +132,97 @@ class InboxView extends StatelessWidget {
                                 child: Stack(
                                   children: [
                                     RefreshIndicator(
-                                      onRefresh: () => controller.fetchInboxData(isRefresh: true),
+                                      onRefresh: () => controller
+                                          .fetchInboxData(isRefresh: true),
                                       color: Colors.transparent,
                                       backgroundColor: Colors.transparent,
                                       strokeWidth: 0,
                                       elevation: 0,
                                       child: SingleChildScrollView(
-                                        physics: const AlwaysScrollableScrollPhysics(),
+                                        physics:
+                                            const AlwaysScrollableScrollPhysics(),
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             // ── Stories Section ──────────────────────────────────────────
                                             Padding(
-                                              padding: EdgeInsets.only(left: 16.w, top: 10.h, bottom: 8.h),
+                                              padding: EdgeInsets.only(
+                                                left: 16.w,
+                                                top: 10.h,
+                                                bottom: 8.h,
+                                              ),
                                               child: Text(
                                                 "Stories",
-                                                style: TextStyle(color: Colors.white.withAlpha(128), fontSize: 14.sp),
+                                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                                  color: AppColors.whiteColor
+                                                      .withAlpha(128),
+                                                  fontSize: 14.sp,
+                                                ),
                                               ),
                                             ),
-                                            if (controller.isLoading && controller.stories.isEmpty)
+                                            if (controller.isLoading &&
+                                                controller.stories.isEmpty)
                                               SizedBox(
                                                 height: 100.h,
                                                 child: ListView.builder(
-                                                  scrollDirection: Axis.horizontal,
-                                                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                                                  itemCount: 4,
-                                                  itemBuilder: (context, index) => Container(
-                                                    width: 70.w,
-                                                    margin: EdgeInsets.only(right: 12.w),
-                                                    child: Column(
-                                                      children: [
-                                                        ShimmerLoader(width: 56.r, height: 56.r, borderRadius: 28.r),
-                                                        SizedBox(height: 8.h),
-                                                        ShimmerLoader(width: 40.w, height: 10.h, borderRadius: 4.r),
-                                                      ],
-                                                    ),
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal: 16.w,
                                                   ),
+                                                  itemCount: 4,
+                                                  itemBuilder:
+                                                      (
+                                                        context,
+                                                        index,
+                                                      ) => Container(
+                                                        width: 70.w,
+                                                        margin: EdgeInsets.only(
+                                                          right: 12.w,
+                                                        ),
+                                                        child: Column(
+                                                          children: [
+                                                            ShimmerLoader(
+                                                              width: 56.r,
+                                                              height: 56.r,
+                                                              borderRadius:
+                                                                  28.r,
+                                                            ),
+                                                            SizedBox(
+                                                              height: 8.h,
+                                                            ),
+                                                            ShimmerLoader(
+                                                              width: 40.w,
+                                                              height: 10.h,
+                                                              borderRadius: 4.r,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
                                                 ),
                                               )
                                             else
                                               SizedBox(
                                                 height: 100.h,
                                                 child: ListView.builder(
-                                                  scrollDirection: Axis.horizontal,
-                                                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                                                  itemCount: controller.stories.length,
-                                                  itemBuilder: (context, index) {
-                                                    final story = controller.stories[index];
-                                                    return _buildStoryItem(story.name, story.avatar, isMine: story.isMine);
-                                                  },
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal: 16.w,
+                                                  ),
+                                                  itemCount:
+                                                      controller.stories.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                        final story = controller
+                                                            .stories[index];
+                                                        return _buildStoryItem(context, 
+                                                          story.name,
+                                                          story.avatar,
+                                                          isMine: story.isMine,
+                                                        );
+                                                      },
                                                 ),
                                               ),
 
@@ -164,11 +230,15 @@ class InboxView extends StatelessWidget {
 
                                             // ── Search Bar ──────────────────────────────────────────────
                                             Padding(
-                                              padding: EdgeInsets.symmetric(horizontal: 16.w),
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 16.w,
+                                              ),
                                               child: CustomInput(
                                                 height: 48,
                                                 hintText: "Search name",
-                                                backgroundColor: Colors.white.withAlpha(13),
+                                                backgroundColor: AppColors
+                                                    .whiteColor
+                                                    .withAlpha(13),
                                                 borderRadius: 24,
                                                 shadow: false,
                                                 leadingIcon: AppAssets.search,
@@ -180,55 +250,94 @@ class InboxView extends StatelessWidget {
                                             // ── Tabs ───────────────────────────────────────────────────
                                             TabBar(
                                               isScrollable: true,
-                                              indicatorColor: Colors.transparent,
+                                              indicatorColor:
+                                                  Colors.transparent,
                                               dividerColor: Colors.transparent,
                                               tabAlignment: TabAlignment.start,
-                                              padding: EdgeInsets.symmetric(horizontal: 16.w),
-                                              labelPadding: EdgeInsets.only(right: 12.w),
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 16.w,
+                                              ),
+                                              labelPadding: EdgeInsets.only(
+                                                right: 12.w,
+                                              ),
                                               tabs: [
-                                                _buildTab("Messages", 0, tabController.index),
-                                                _buildTab("Unread Messages", 1, tabController.index),
-                                                _buildTab("Missed calls", 2, tabController.index),
-                                                _buildTab("Call Back", 3, tabController.index),
+                                                _buildTab(context, 
+                                                  "Messages",
+                                                  0,
+                                                  tabController.index,
+                                                ),
+                                                _buildTab(context, 
+                                                  "Unread Messages",
+                                                  1,
+                                                  tabController.index,
+                                                ),
+                                                _buildTab(context, 
+                                                  "Missed calls",
+                                                  2,
+                                                  tabController.index,
+                                                ),
+                                                _buildTab(context, 
+                                                  "Call Back",
+                                                  3,
+                                                  tabController.index,
+                                                ),
                                               ],
                                             ),
 
                                             SizedBox(height: 16.h),
 
                                             // ── Message List ────────────────────────────────────────────
-                                            if (controller.isLoading && controller.chats.isEmpty)
+                                            if (controller.isLoading &&
+                                                controller.chats.isEmpty)
                                               ListView.builder(
                                                 shrinkWrap: true,
-                                                physics: const NeverScrollableScrollPhysics(),
-                                                padding: EdgeInsets.symmetric(horizontal: 16.w),
-                                                itemCount: 3,
-                                                itemBuilder: (context, index) => Padding(
-                                                  padding: EdgeInsets.only(bottom: 12.h),
-                                                  child: ShimmerLoader(
-                                                    width: double.infinity,
-                                                    height: 72.h,
-                                                    borderRadius: 12.r,
-                                                  ),
+                                                physics:
+                                                    const NeverScrollableScrollPhysics(),
+                                                padding: EdgeInsets.symmetric(
+                                                  horizontal: 16.w,
                                                 ),
+                                                itemCount: 3,
+                                                itemBuilder: (context, index) =>
+                                                    Padding(
+                                                      padding: EdgeInsets.only(
+                                                        bottom: 12.h,
+                                                      ),
+                                                      child: ShimmerLoader(
+                                                        width: double.infinity,
+                                                        height: 72.h,
+                                                        borderRadius: 12.r,
+                                                      ),
+                                                    ),
                                               )
                                             else if (filteredChats.isEmpty)
                                               Padding(
-                                                padding: EdgeInsets.symmetric(vertical: 40.h, horizontal: 20.w),
+                                                padding: EdgeInsets.symmetric(
+                                                  vertical: 40.h,
+                                                  horizontal: 20.w,
+                                                ),
                                                 child: Center(
                                                   child: Text(
                                                     "No chats available in this section.",
-                                                    style: TextStyle(color: Colors.white.withAlpha(128)),
+                                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                                      color: AppColors
+                                                          .whiteColor
+                                                          .withAlpha(128),
+                                                    ),
                                                   ),
                                                 ),
                                               )
                                             else
                                               ListView.builder(
                                                 shrinkWrap: true,
-                                                physics: const NeverScrollableScrollPhysics(),
-                                                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                                                physics:
+                                                    const NeverScrollableScrollPhysics(),
+                                                padding: EdgeInsets.symmetric(
+                                                  horizontal: 16.w,
+                                                ),
                                                 itemCount: filteredChats.length,
                                                 itemBuilder: (context, idx) {
-                                                  final chat = filteredChats[idx];
+                                                  final chat =
+                                                      filteredChats[idx];
                                                   return _buildInboxTile(
                                                     context,
                                                     chat,
@@ -247,7 +356,9 @@ class InboxView extends StatelessWidget {
                                         top: 16.h,
                                         left: 0,
                                         right: 0,
-                                        child: const Center(child: CustomLoader(size: 150)),
+                                        child: const Center(
+                                          child: CustomLoader(size: 150),
+                                        ),
                                       ),
                                   ],
                                 ),
@@ -267,37 +378,48 @@ class InboxView extends StatelessWidget {
     );
   }
 
-  Widget _buildContextToggle(ValueNotifier<int> selectedNotifier, int selectedIndex) {
+  Widget _buildContextToggle(
+    BuildContext context,
+    ValueNotifier<int> selectedNotifier,
+    int selectedIndex,
+  ) {
     return Container(
       padding: EdgeInsets.all(4.r),
       decoration: BoxDecoration(
-        color: Colors.white.withAlpha(26),
+        color: AppColors.whiteColor.withAlpha(26),
         borderRadius: BorderRadius.circular(20.r),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _buildToggleItem("Coach", 0, selectedNotifier, selectedIndex),
-          _buildToggleItem("Friends", 1, selectedNotifier, selectedIndex),
+          _buildToggleItem(context, "Coach", 0, selectedNotifier, selectedIndex),
+          _buildToggleItem(context, "Friends", 1, selectedNotifier, selectedIndex),
         ],
       ),
     );
   }
 
-  Widget _buildToggleItem(String label, int index, ValueNotifier<int> selectedNotifier, int selectedIndex) {
+  Widget _buildToggleItem(
+    BuildContext context, String label,
+    int index,
+    ValueNotifier<int> selectedNotifier,
+    int selectedIndex,
+  ) {
     final isSelected = selectedIndex == index;
     return GestureDetector(
       onTap: () => selectedNotifier.value = index,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 6.h),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF334B2F) : Colors.transparent,
+          color: isSelected ? AppColors.coachColorFF334B2F : Colors.transparent,
           borderRadius: BorderRadius.circular(20.r),
         ),
         child: Text(
           label,
-          style: TextStyle(
-            color: isSelected ? Colors.white : Colors.white.withAlpha(128),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: isSelected
+                ? AppColors.whiteColor
+                : AppColors.whiteColor.withAlpha(128),
             fontSize: 13.sp,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           ),
@@ -306,7 +428,7 @@ class InboxView extends StatelessWidget {
     );
   }
 
-  Widget _buildStoryItem(String name, String avatar, {bool isMine = false}) {
+  Widget _buildStoryItem(BuildContext context, String name, String avatar, {bool isMine = false}) {
     return Container(
       width: 70.w,
       margin: EdgeInsets.only(right: 12.w),
@@ -319,7 +441,9 @@ class InboxView extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: isMine ? Colors.white.withAlpha(51) : Colors.green,
+                    color: isMine
+                        ? AppColors.whiteColor.withAlpha(51)
+                        : AppColors.greenColor,
                     width: 2.r,
                   ),
                 ),
@@ -334,8 +458,15 @@ class InboxView extends StatelessWidget {
                   right: 0,
                   child: Container(
                     padding: EdgeInsets.all(2.r),
-                    decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-                    child: Icon(Icons.add, size: 14.r, color: Colors.black),
+                    decoration: const BoxDecoration(
+                      color: AppColors.whiteColor,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.add,
+                      size: 14.r,
+                      color: AppColors.blackColor,
+                    ),
                   ),
                 )
               else
@@ -346,9 +477,12 @@ class InboxView extends StatelessWidget {
                     width: 12.r,
                     height: 12.r,
                     decoration: BoxDecoration(
-                      color: Colors.green,
+                      color: AppColors.greenColor,
                       shape: BoxShape.circle,
-                      border: Border.all(color: Colors.black, width: 2.r),
+                      border: Border.all(
+                        color: AppColors.blackColor,
+                        width: 2.r,
+                      ),
                     ),
                   ),
                 ),
@@ -357,7 +491,7 @@ class InboxView extends StatelessWidget {
           SizedBox(height: 4.h),
           Text(
             name,
-            style: TextStyle(color: Colors.white, fontSize: 11.sp),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 11.sp),
             overflow: TextOverflow.ellipsis,
           ),
         ],
@@ -365,26 +499,37 @@ class InboxView extends StatelessWidget {
     );
   }
 
-  Widget _buildTab(String label, int index, int selectedIndex) {
+  Widget _buildTab(BuildContext context, String label, int index, int selectedIndex) {
     final isSelected = selectedIndex == index;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       decoration: BoxDecoration(
         color: Colors.transparent,
-        border: Border.all(color: isSelected ? Colors.green : Colors.white.withAlpha(26)),
+        border: Border.all(
+          color: isSelected
+              ? AppColors.greenColor
+              : AppColors.whiteColor.withAlpha(26),
+        ),
         borderRadius: BorderRadius.circular(20.r),
       ),
       child: Text(
         label,
-        style: TextStyle(
-          color: isSelected ? Colors.white : Colors.white.withAlpha(128),
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          color: isSelected
+              ? AppColors.whiteColor
+              : AppColors.whiteColor.withAlpha(128),
           fontSize: 12.sp,
         ),
       ),
     );
   }
 
-  Widget _buildInboxTile(BuildContext context, ChatSummaryModel chat, int filterIndex, bool isCoachContext) {
+  Widget _buildInboxTile(
+    BuildContext context,
+    ChatSummaryModel chat,
+    int filterIndex,
+    bool isCoachContext,
+  ) {
     return GestureDetector(
       onTap: () {
         context.push(
@@ -402,7 +547,7 @@ class InboxView extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.postCardColor,
           borderRadius: BorderRadius.circular(12.r),
-          border: Border.all(color: Colors.white.withAlpha(13)),
+          border: Border.all(color: AppColors.whiteColor.withAlpha(13)),
         ),
         child: Column(
           children: [
@@ -422,9 +567,12 @@ class InboxView extends StatelessWidget {
                           width: 10.r,
                           height: 10.r,
                           decoration: BoxDecoration(
-                            color: Colors.green,
+                            color: AppColors.greenColor,
                             shape: BoxShape.circle,
-                            border: Border.all(color: Colors.black, width: 1.5.r),
+                            border: Border.all(
+                              color: AppColors.blackColor,
+                              width: 1.5.r,
+                            ),
                           ),
                         ),
                       ),
@@ -437,18 +585,24 @@ class InboxView extends StatelessWidget {
                     children: [
                       Text(
                         chat.name,
-                        style: TextStyle(color: Colors.white, fontSize: 15.sp, fontWeight: FontWeight.bold),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.whiteColor,
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       Text(
                         filterIndex == 2
                             ? "12 April, 1:30AM"
                             : filterIndex == 3
-                                ? "Requested: Today at 3:00 PM"
-                                : chat.lastMessage.isNotEmpty
-                                    ? chat.lastMessage
-                                    : (chat.isOnline ? "Online" : "Offline"),
-                        style: TextStyle(
-                          color: filterIndex == 2 ? Colors.red.withAlpha(204) : Colors.white.withAlpha(128),
+                            ? "Requested: Today at 3:00 PM"
+                            : chat.lastMessage.isNotEmpty
+                            ? chat.lastMessage
+                            : (chat.isOnline ? "Online" : "Offline"),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: filterIndex == 2
+                              ? AppColors.redColor.withAlpha(204)
+                              : AppColors.whiteColor.withAlpha(128),
                           fontSize: 12.sp,
                         ),
                         maxLines: 1,
@@ -458,7 +612,13 @@ class InboxView extends StatelessWidget {
                   ),
                 ),
                 if (filterIndex < 2)
-                  Text(chat.time, style: TextStyle(color: Colors.white.withAlpha(102), fontSize: 11.sp)),
+                  Text(
+                    chat.time,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.whiteColor.withAlpha(102),
+                      fontSize: 11.sp,
+                    ),
+                  ),
               ],
             ),
             if (filterIndex == 2) ...[
@@ -471,11 +631,15 @@ class InboxView extends StatelessWidget {
                   width: 160,
                   height: 28,
                   fontSize: 10,
-                  buttonColor: Colors.white.withAlpha(13),
+                  buttonColor: AppColors.whiteColor.withAlpha(13),
                   borderColor: Colors.transparent,
                   radius: 8,
                   horizontalPadding: 0,
-                  leadingWidget: Icon(Icons.notifications_none, color: Colors.amber, size: 16.r),
+                  leadingWidget: Icon(
+                    Icons.notifications_none,
+                    color: AppColors.amberColor,
+                    size: 16.r,
+                  ),
                 ),
               ),
             ],
@@ -490,10 +654,14 @@ class InboxView extends StatelessWidget {
                     width: 154,
                     height: 28,
                     fontSize: 10,
-                    buttonColor: Colors.white.withAlpha(13),
+                    buttonColor: AppColors.whiteColor.withAlpha(13),
                     borderColor: Colors.transparent,
                     radius: 4,
-                    leadingWidget: Icon(Icons.notifications_none, color: Colors.amber, size: 16.r),
+                    leadingWidget: Icon(
+                      Icons.notifications_none,
+                      color: AppColors.amberColor,
+                      size: 16.r,
+                    ),
                   ),
                   SizedBox(width: 8.w),
                   CustomButton(
@@ -513,7 +681,11 @@ class InboxView extends StatelessWidget {
                     fontSize: 10,
                     linearGradient: true,
                     radius: 4,
-                    leadingWidget: Icon(Icons.call_outlined, color: Colors.white, size: 16.r),
+                    leadingWidget: Icon(
+                      Icons.call_outlined,
+                      color: AppColors.whiteColor,
+                      size: 16.r,
+                    ),
                   ),
                 ],
               ),

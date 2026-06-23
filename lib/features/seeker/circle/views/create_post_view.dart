@@ -20,13 +20,13 @@ class CreatePostView extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: AppColors.whiteColor),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           "Create Public Post",
           style: theme.textTheme.titleLarge?.copyWith(
-            color: Colors.white,
+            color: AppColors.whiteColor,
             fontFamily: 'Georgia',
             fontSize: 20.sp,
           ),
@@ -58,14 +58,14 @@ class CreatePostView extends StatelessWidget {
                             backgroundImage: const NetworkImage(
                               "https://xsgames.co/randomusers/assets/avatars/male/5.jpg",
                             ),
-                            backgroundColor: Colors.white.withAlpha(26),
+                            backgroundColor: AppColors.whiteColor.withAlpha(26),
                           ),
                         ),
                         SizedBox(width: 12.w),
                         Text(
                           "joshua_l",
                           style: theme.textTheme.titleMedium?.copyWith(
-                            color: Colors.white,
+                            color: AppColors.whiteColor,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -76,9 +76,9 @@ class CreatePostView extends StatelessWidget {
                     Container(
                       padding: EdgeInsets.all(16.r),
                       decoration: BoxDecoration(
-                        color: Colors.white.withAlpha(13),
+                        color: AppColors.whiteColor.withAlpha(13),
                         borderRadius: BorderRadius.circular(16.r),
-                        border: Border.all(color: Colors.white.withAlpha(20)),
+                        border: Border.all(color: AppColors.whiteColor.withAlpha(20)),
                       ),
                       child: Column(
                         children: [
@@ -98,11 +98,11 @@ class CreatePostView extends StatelessWidget {
                                 child: TextField(
                                   controller: controller.postTextController,
                                   maxLines: 8,
-                                  style: const TextStyle(color: Colors.white),
+                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor),
                                   decoration: InputDecoration(
                                     hintText: "Share Your Thoughts",
-                                    hintStyle: TextStyle(
-                                      color: Colors.white.withAlpha(128),
+                                    hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                      color: AppColors.whiteColor.withAlpha(128),
                                     ),
                                     border: InputBorder.none,
                                     enabledBorder: InputBorder.none,
@@ -182,7 +182,7 @@ class CreatePostView extends StatelessWidget {
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(12.r),
                                       border: Border.all(
-                                        color: Colors.white.withAlpha(26),
+                                        color: AppColors.whiteColor.withAlpha(26),
                                       ),
                                       image: isVideo
                                           ? null
@@ -190,7 +190,7 @@ class CreatePostView extends StatelessWidget {
                                               image: FileImage(File(file.path)),
                                               fit: BoxFit.cover,
                                             ),
-                                      color: Colors.black26,
+                                      color: AppColors.black26Color,
                                     ),
                                     child: isVideo
                                         ? Center(
@@ -212,16 +212,16 @@ class CreatePostView extends StatelessWidget {
                                   child: Container(
                                     padding: EdgeInsets.all(4.r),
                                     decoration: BoxDecoration(
-                                      color: Colors.black.withAlpha(153),
+                                      color: AppColors.blackColor.withAlpha(153),
                                       shape: BoxShape.circle,
                                       border: Border.all(
-                                        color: Colors.white.withAlpha(51),
+                                        color: AppColors.whiteColor.withAlpha(51),
                                       ),
                                     ),
                                     child: Icon(
                                       Icons.close,
                                       size: 16.r,
-                                      color: Colors.white,
+                                      color: AppColors.whiteColor,
                                     ),
                                   ),
                                 ),
@@ -234,13 +234,13 @@ class CreatePostView extends StatelessWidget {
                                   child: Container(
                                     padding: EdgeInsets.all(4.r),
                                     decoration: BoxDecoration(
-                                      color: Colors.black.withAlpha(128),
+                                      color: AppColors.blackColor.withAlpha(128),
                                       borderRadius: BorderRadius.circular(4.r),
                                     ),
                                     child: Icon(
                                       Icons.fullscreen_rounded,
                                       size: 16.r,
-                                      color: Colors.white.withAlpha(204),
+                                      color: AppColors.whiteColor.withAlpha(204),
                                     ),
                                   ),
                                 ),

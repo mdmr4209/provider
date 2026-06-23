@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_loader.dart';
-import '../controllers/circle_controller.dart';
-import '../models/circle_post_model.dart';
-import '../widgets/circle_post_card.dart';
-import 'package:go_router/go_router.dart';
 import '../../../../routes/app_router.dart';
+import '../controllers/circle_controller.dart';
+import '../widgets/circle_post_card.dart';
 
 enum RelationshipStatus { none, friend, requestSent, requestReceived }
 
@@ -41,13 +41,13 @@ class UserProfileView extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: AppColors.whiteColor),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           "User Profile",
           style: theme.textTheme.titleLarge?.copyWith(
-            color: Colors.white,
+            color: AppColors.whiteColor,
             fontFamily: 'Georgia',
             fontSize: 20.sp,
           ),
@@ -105,7 +105,7 @@ class UserProfileView extends StatelessWidget {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(
-                              color: Colors.white.withAlpha(26),
+                              color: AppColors.whiteColor.withAlpha(26),
                             ),
                           ),
                           child: CircleAvatar(
@@ -116,7 +116,7 @@ class UserProfileView extends StatelessWidget {
                                   : (userAvatar ??
                                         'https://i.pravatar.cc/150?u=$userId'),
                             ),
-                            backgroundColor: Colors.white.withAlpha(26),
+                            backgroundColor: AppColors.whiteColor.withAlpha(26),
                           ),
                         ),
                         SizedBox(width: 20.w),
@@ -129,7 +129,7 @@ class UserProfileView extends StatelessWidget {
                                     ? profile.name
                                     : (userName ?? "Mike Tyson"),
                                 style: theme.textTheme.headlineSmall?.copyWith(
-                                  color: Colors.white,
+                                  color: AppColors.whiteColor,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -161,7 +161,7 @@ class UserProfileView extends StatelessWidget {
                                         );
                                       },
                                       title: "Message",
-                                      buttonColor: Colors.white.withAlpha(13),
+                                      buttonColor: AppColors.whiteColor.withAlpha(13),
                                       borderColor: Colors.transparent,
                                       height: 36,
                                       fontSize: 13,
@@ -183,22 +183,22 @@ class UserProfileView extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        _buildStatItem(
+                        _buildStatItem(context, 
                           profile.postsCount.toString().padLeft(2, '0'),
                           "Post",
                         ),
                         _buildStatDivider(),
-                        _buildStatItem(
+                        _buildStatItem(context, 
                           profile.friendsCount.toString(),
                           "Friends",
                         ),
                         _buildStatDivider(),
-                        _buildStatItem(
+                        _buildStatItem(context, 
                           profile.followersCount.toString(),
                           "Followers",
                         ),
                         _buildStatDivider(),
-                        _buildStatItem(
+                        _buildStatItem(context, 
                           profile.followingCount.toString(),
                           "Following",
                         ),
@@ -215,7 +215,7 @@ class UserProfileView extends StatelessWidget {
                         Text(
                           "Bio",
                           style: theme.textTheme.titleMedium?.copyWith(
-                            color: Colors.white,
+                            color: AppColors.whiteColor,
                             fontWeight: FontWeight.bold,
                             fontSize: 16.sp,
                           ),
@@ -224,7 +224,7 @@ class UserProfileView extends StatelessWidget {
                         Text(
                           profile.bio,
                           style: theme.textTheme.bodyMedium?.copyWith(
-                            color: Colors.white.withAlpha(179),
+                            color: AppColors.whiteColor.withAlpha(179),
                             height: 1.5,
                             fontSize: 13.sp,
                           ),
@@ -284,12 +284,12 @@ class UserProfileView extends StatelessWidget {
 );
 }
 
-  Widget _buildStatItem(String count, String label) {
+  Widget _buildStatItem(BuildContext context, String count, String label) {
     return Column(
       children: [
         Text(
           count,
-          style: TextStyle(
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: AppColors.secondaryColorLight,
             fontSize: 18.sp,
             fontWeight: FontWeight.bold,
@@ -298,14 +298,14 @@ class UserProfileView extends StatelessWidget {
         SizedBox(height: 4.h),
         Text(
           label,
-          style: TextStyle(color: Colors.white.withAlpha(128), fontSize: 12.sp),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(128), fontSize: 12.sp),
         ),
       ],
     );
   }
 
   Widget _buildStatDivider() {
-    return Container(height: 30.h, width: 1, color: Colors.white.withAlpha(26));
+    return Container(height: 30.h, width: 1, color: AppColors.whiteColor.withAlpha(26));
   }
 
   Widget _buildRelationshipButton(
@@ -349,7 +349,7 @@ class UserProfileView extends StatelessWidget {
       linearGradient: gradient,
       buttonColor: gradient
           ? AppColors.buttonColor
-          : Colors.white.withAlpha(13),
+          : AppColors.whiteColor.withAlpha(13),
       borderColor: Colors.transparent,
       height: 36,
       fontSize: 13,
@@ -359,7 +359,7 @@ class UserProfileView extends StatelessWidget {
 
   Widget _buildMoreMenu(BuildContext context) {
     return PopupMenuButton<String>(
-      icon: const Icon(Icons.more_horiz, color: Colors.white),
+      icon: const Icon(Icons.more_horiz, color: AppColors.whiteColor),
       color: AppColors.postCardColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
       offset: const Offset(0, 45),
@@ -373,24 +373,24 @@ class UserProfileView extends StatelessWidget {
         }
       },
       itemBuilder: (context) => [
-        _buildPopupItem("Remove Follower", Icons.person_remove_outlined),
-        _buildPopupItem("Report", Icons.report_gmailerrorred_outlined),
-        _buildPopupItem("Block", Icons.block_outlined),
-        _buildPopupItem("Unfollow", Icons.person_off_outlined),
+        _buildPopupItem(context, "Remove Follower", Icons.person_remove_outlined),
+        _buildPopupItem(context, "Report", Icons.report_gmailerrorred_outlined),
+        _buildPopupItem(context, "Block", Icons.block_outlined),
+        _buildPopupItem(context, "Unfollow", Icons.person_off_outlined),
       ],
     );
   }
 
-  PopupMenuItem<String> _buildPopupItem(String title, IconData icon) {
+  PopupMenuItem<String> _buildPopupItem(BuildContext context, String title, IconData icon) {
     return PopupMenuItem(
       value: title,
       child: Row(
         children: [
-          Icon(icon, color: Colors.white.withAlpha(128), size: 20.r),
+          Icon(icon, color: AppColors.whiteColor.withAlpha(128), size: 20.r),
           SizedBox(width: 12.w),
           Text(
             title,
-            style: TextStyle(color: Colors.white, fontSize: 14.sp),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 14.sp),
           ),
         ],
       ),

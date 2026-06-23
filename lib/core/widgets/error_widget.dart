@@ -10,11 +10,11 @@ class ErrorDisplayWidget extends StatelessWidget {
   final bool isFullScreen;
 
   const ErrorDisplayWidget({
-    Key? key,
+    super.key,
     required this.exception,
     this.onRetry,
     this.isFullScreen = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,7 @@ class ErrorDisplayWidget extends StatelessWidget {
               SizedBox(height: 24.h),
               Text(
                 exception.title,
-                style: TextStyle(
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).textTheme.titleLarge?.color ?? AppColors.textColor,
@@ -50,7 +50,7 @@ class ErrorDisplayWidget extends StatelessWidget {
               SizedBox(height: 12.h),
               Text(
                 exception.message,
-                style: TextStyle(
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   fontSize: 14.sp,
                   color: Theme.of(context).textTheme.bodyMedium?.color ?? AppColors.textColor2,
                 ),
@@ -65,8 +65,8 @@ class ErrorDisplayWidget extends StatelessWidget {
                   ),
                   child: Text(
                     'Retry',
-                    style: TextStyle(
-                      color: Colors.white,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.whiteColor,
                       fontSize: 14.sp,
                     ),
                   ),
@@ -103,7 +103,7 @@ class ErrorDisplayWidget extends StatelessWidget {
                 children: [
                   Text(
                     exception.title,
-                    style: TextStyle(
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontSize: 13.sp,
                       fontWeight: FontWeight.w600,
                       color: _getErrorColor(),
@@ -112,7 +112,7 @@ class ErrorDisplayWidget extends StatelessWidget {
                   SizedBox(height: 4.h),
                   Text(
                     exception.message,
-                    style: TextStyle(
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontSize: 12.sp,
                       color: Theme.of(context).textTheme.bodyMedium?.color ?? AppColors.textColor2,
                     ),
@@ -149,10 +149,10 @@ class ErrorDisplayWidget extends StatelessWidget {
   }
 
   Color _getErrorColor() {
-    if (exception is InternetException) return Colors.orange;
-    if (exception is TimeoutException) return Colors.amber;
-    if (exception is UnauthorizedException) return Colors.red;
-    if (exception is ValidationException) return Colors.orangeAccent;
-    return Colors.red;
+    if (exception is InternetException) return AppColors.orangeColor;
+    if (exception is TimeoutException) return AppColors.amberColor;
+    if (exception is UnauthorizedException) return AppColors.redColor;
+    if (exception is ValidationException) return AppColors.orangeAccentColor;
+    return AppColors.redColor;
   }
 }

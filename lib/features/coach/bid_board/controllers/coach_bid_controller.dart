@@ -80,20 +80,20 @@ class CoachBidController extends ChangeNotifier {
              Align(
               alignment: Alignment.topRight,
               child: IconButton(
-                icon: const Icon(Icons.close, color: Colors.white54, size: 20),
+                icon: const Icon(Icons.close, color: AppColors.white54Color, size: 20),
                 onPressed: () => Navigator.pop(context),
               ),
             ),
             Text(
               'Are you sure about Bidding amount?',
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 18, fontWeight: FontWeight.w500),
             ),
             const SizedBox(height: 8),
             Text(
               'You will be charged, if you win the Slot',
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white54, fontSize: 13),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white54Color, fontSize: 13),
             ),
             const SizedBox(height: 24),
             Row(
@@ -105,7 +105,7 @@ class CoachBidController extends ChangeNotifier {
                       backgroundColor: AppColors.coachColorFF4A5D4A,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     ),
-                    child: Text('No', style: TextStyle(color: Colors.white)),
+                    child: Text('No', style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor)),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -122,7 +122,7 @@ class CoachBidController extends ChangeNotifier {
                       backgroundColor: AppColors.coachColorFFC19E5F,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     ),
-                    child: Text('Yes', style: TextStyle(color: Colors.white)),
+                    child: Text('Yes', style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor)),
                   ),
                 ),
               ],
