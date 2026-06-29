@@ -18,16 +18,16 @@ abstract class AppException implements Exception {
   String toString() => '$title: $message';
 
   /// Helper to check if the error is network related
-  bool get isNetworkError => 
-    this is InternetException || 
-    this is TimeoutException || 
-    this is NetworkException;
+  bool get isNetworkError =>
+      this is InternetException ||
+      this is TimeoutException ||
+      this is NetworkException;
 
   /// Helper to check if the error is auth related
-  bool get isAuthError => 
-    this is UnauthorizedException || 
-    this is ForbiddenException || 
-    this is AuthException;
+  bool get isAuthError =>
+      this is UnauthorizedException ||
+      this is ForbiddenException ||
+      this is AuthException;
 }
 
 // ── Network Exceptions ─────────────────────────────────────────────────
@@ -38,10 +38,7 @@ class InternetException extends AppException {
     super.message = 'No internet connection',
     super.code,
     super.originalException,
-  }) : super(
-          title: 'Connectivity Issue',
-          isCritical: true,
-        );
+  }) : super(title: 'Connectivity Issue', isCritical: true);
 }
 
 /// Request timeout exception
@@ -50,10 +47,7 @@ class TimeoutException extends AppException {
     super.message = 'Request timeout',
     super.code,
     super.originalException,
-  }) : super(
-          title: 'Timeout',
-          isCritical: true,
-        );
+  }) : super(title: 'Timeout', isCritical: true);
 }
 
 /// Bad request exception (400)
@@ -62,11 +56,7 @@ class BadRequestException extends AppException {
     required super.message,
     String? code,
     super.originalException,
-  }) : super(
-          title: 'Invalid Request',
-          isCritical: false,
-          code: code ?? '400',
-        );
+  }) : super(title: 'Invalid Request', isCritical: false, code: code ?? '400');
 }
 
 /// Unauthorized exception (401)
@@ -75,11 +65,7 @@ class UnauthorizedException extends AppException {
     super.message = 'Unauthorized access',
     String? code,
     super.originalException,
-  }) : super(
-          title: 'Unauthorized',
-          isCritical: false,
-          code: code ?? '401',
-        );
+  }) : super(title: 'Unauthorized', isCritical: false, code: code ?? '401');
 }
 
 /// Forbidden exception (403)
@@ -88,11 +74,7 @@ class ForbiddenException extends AppException {
     super.message = 'Access forbidden',
     String? code,
     super.originalException,
-  }) : super(
-          title: 'Forbidden',
-          isCritical: false,
-          code: code ?? '403',
-        );
+  }) : super(title: 'Forbidden', isCritical: false, code: code ?? '403');
 }
 
 /// Not found exception (404)
@@ -101,11 +83,7 @@ class NotFoundException extends AppException {
     required super.message,
     String? code,
     super.originalException,
-  }) : super(
-          title: 'Not Found',
-          isCritical: false,
-          code: code ?? '404',
-        );
+  }) : super(title: 'Not Found', isCritical: false, code: code ?? '404');
 }
 
 /// Server exception (500, 502, 503, 504)
@@ -114,11 +92,7 @@ class ServerException extends AppException {
     super.message = 'Server error',
     String? code,
     super.originalException,
-  }) : super(
-          title: 'Server Error',
-          isCritical: true,
-          code: code ?? '500',
-        );
+  }) : super(title: 'Server Error', isCritical: true, code: code ?? '500');
 }
 
 /// Validation exception (422)
@@ -131,10 +105,10 @@ class ValidationException extends AppException {
     super.originalException,
     this.errors,
   }) : super(
-          title: 'Validation Failed',
-          isCritical: false,
-          code: code ?? '422',
-        );
+         title: 'Validation Failed',
+         isCritical: false,
+         code: code ?? '422',
+       );
 }
 
 /// Generic network exception
@@ -143,10 +117,7 @@ class NetworkException extends AppException {
     required super.message,
     super.code,
     super.originalException,
-  }) : super(
-          title: 'Network Error',
-          isCritical: false,
-        );
+  }) : super(title: 'Network Error', isCritical: false);
 }
 
 // ── App-Level Exceptions ───────────────────────────────────────────────
@@ -157,22 +128,13 @@ class GenericException extends AppException {
     super.message = 'Something went wrong',
     super.code,
     super.originalException,
-  }) : super(
-          title: 'Error',
-          isCritical: false,
-        );
+  }) : super(title: 'Error', isCritical: false);
 }
 
 /// Authentication exception
 class AuthException extends AppException {
-  AuthException({
-    required super.message,
-    super.code,
-    super.originalException,
-  }) : super(
-          title: 'Authentication Error',
-          isCritical: false,
-        );
+  AuthException({required super.message, super.code, super.originalException})
+    : super(title: 'Authentication Error', isCritical: false);
 }
 
 /// Data parsing exception
@@ -181,10 +143,7 @@ class DataParsingException extends AppException {
     super.message = 'Failed to parse data',
     super.code,
     super.originalException,
-  }) : super(
-          title: 'Parsing Error',
-          isCritical: true,
-        );
+  }) : super(title: 'Parsing Error', isCritical: true);
 }
 
 /// Cache exception
@@ -193,8 +152,5 @@ class CacheException extends AppException {
     super.message = 'Cache error',
     super.code,
     super.originalException,
-  }) : super(
-          title: 'Cache Error',
-          isCritical: false,
-        );
+  }) : super(title: 'Cache Error', isCritical: false);
 }

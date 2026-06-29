@@ -16,7 +16,8 @@ class CoachModel {
     required this.reviews,
     required this.avatar,
     this.experience = '5 Year Experience',
-    this.bio = 'Amazon Alexa Shopping is seeking a talented, experienced, and self-directed UX Designer...',
+    this.bio =
+        'Amazon Alexa Shopping is seeking a talented, experienced, and self-directed UX Designer...',
   });
 
   factory CoachModel.fromJson(Map<String, dynamic> json) {
@@ -28,7 +29,9 @@ class CoachModel {
       reviews: json['reviews'] ?? 0,
       avatar: json['avatar'] ?? 'https://i.pravatar.cc/150?u=coach',
       experience: json['experience'] ?? '5 Year Experience',
-      bio: json['bio'] ?? 'Amazon Alexa Shopping is seeking a talented, experienced, and self-directed UX Designer...',
+      bio:
+          json['bio'] ??
+          'Amazon Alexa Shopping is seeking a talented, experienced, and self-directed UX Designer...',
     );
   }
 
@@ -50,10 +53,7 @@ class CoachSlotModel {
   final String duration;
   final double price;
 
-  CoachSlotModel({
-    required this.duration,
-    required this.price,
-  });
+  CoachSlotModel({required this.duration, required this.price});
 
   factory CoachSlotModel.fromJson(Map<String, dynamic> json) {
     return CoachSlotModel(
@@ -63,10 +63,7 @@ class CoachSlotModel {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'duration': duration,
-      'price': price,
-    };
+    return {'duration': duration, 'price': price};
   }
 }
 
@@ -88,7 +85,8 @@ class CoachReviewModel {
   factory CoachReviewModel.fromJson(Map<String, dynamic> json) {
     return CoachReviewModel(
       reviewerName: json['reviewerName'] ?? '',
-      reviewerAvatar: json['reviewerAvatar'] ?? 'https://i.pravatar.cc/150?u=reviewer',
+      reviewerAvatar:
+          json['reviewerAvatar'] ?? 'https://i.pravatar.cc/150?u=reviewer',
       date: json['date'] ?? '',
       rating: (json['rating'] ?? 5.0).toDouble(),
       content: json['content'] ?? '',

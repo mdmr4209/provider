@@ -34,10 +34,14 @@ class CoachCircleController extends ChangeNotifier {
 
     try {
       await Future.delayed(const Duration(milliseconds: 1000));
-      final String jsonString = await rootBundle.loadString('assets/json/coach_circle.json');
+      final String jsonString = await rootBundle.loadString(
+        'assets/json/coach_circle.json',
+      );
       final Map<String, dynamic> data = jsonDecode(jsonString);
 
-      _circles = (data['circles'] as List).map((x) => GroupModel.fromJson(x)).toList();
+      _circles = (data['circles'] as List)
+          .map((x) => GroupModel.fromJson(x))
+          .toList();
     } catch (e) {
       showErrorSnackBar(message: "Failed to load coach circles: $e");
     } finally {
@@ -54,7 +58,9 @@ class CoachCircleController extends ChangeNotifier {
     if (!_isPremium && joinedCount >= 1) {
       _showUpgradeSheet(context);
     } else {
-      final index = _circles.indexWhere((c) => c.id == groupId || c.name == groupId);
+      final index = _circles.indexWhere(
+        (c) => c.id == groupId || c.name == groupId,
+      );
       if (index != -1 && !_circles[index].isJoined) {
         // Mock update
         final current = _circles[index];
@@ -81,7 +87,9 @@ class CoachCircleController extends ChangeNotifier {
       builder: (context) => Container(
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: Theme.of(context).extension<AppDesignSystem>()!.accentPanelColor,
+          color: Theme.of(
+            context,
+          ).extension<AppDesignSystem>()!.accentPanelColor,
           borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
         ),
         child: Column(
@@ -98,17 +106,17 @@ class CoachCircleController extends ChangeNotifier {
             const SizedBox(height: 32),
             SvgPicture.asset(AppAssets.lock),
             const SizedBox(height: 12),
-          Text(
-            'Unlock More Groups',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AppColors.whiteColor,
-              fontSize: 20,
-              fontFamily: 'Segoe UI',
-              fontWeight: FontWeight.w600,
-              height: 1.50,
+            Text(
+              'Unlock More Groups',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.whiteColor,
+                fontSize: 20,
+                fontFamily: 'Segoe UI',
+                fontWeight: FontWeight.w600,
+                height: 1.50,
+              ),
             ),
-          ),
             const SizedBox(height: 20),
             Text(
               'You can only one free circle at a time, to join more upgrade now.',
@@ -124,13 +132,15 @@ class CoachCircleController extends ChangeNotifier {
             const SizedBox(height: 20),
             CustomButton(
               linearGradient: true,
-                height: 48,
-                onPress: () async{
-              _isPremium = true;
-              Navigator.pop(context);
-              showSuccessSnackBar(message: "Premium unlocked! (Mock)");
-              notifyListeners();
-            }, title: "Upgrade Now"),
+              height: 48,
+              onPress: () async {
+                _isPremium = true;
+                Navigator.pop(context);
+                showSuccessSnackBar(message: "Premium unlocked! (Mock)");
+                notifyListeners();
+              },
+              title: "Upgrade Now",
+            ),
             const SizedBox(height: 12),
             CustomButton(
               height: 44,

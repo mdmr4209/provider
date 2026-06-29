@@ -1,3 +1,5 @@
+import 'package:newproject/core/widgets/background_widget.dart';
+
 import 'find_friends_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -34,141 +36,163 @@ class FriendsView extends StatelessWidget {
           return AnimatedBuilder(
             animation: tabController,
             builder: (context, _) {
-              return Scaffold(
-                appBar: AppBar(
-                  backgroundColor: Colors.transparent,
-                  elevation: 0,
-                  leading: IconButton(
-                    icon: const Icon(Icons.arrow_back, color: AppColors.whiteColor),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                  title: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SvgPicture.asset(
-                        AppAssets.group,
-                        width: 28.r,
-                        colorFilter: const ColorFilter.mode(
-                          AppColors.secondaryColorLight,
-                          BlendMode.srcIn,
-                        ),
+              return BackgroundWidget(
+                imagePath: AppAssets.bgMain,
+                child: Scaffold(
+                  appBar: AppBar(
+                    backgroundColor: Colors.transparent,
+                    elevation: 0,
+                    leading: IconButton(
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        color: AppColors.whiteColor,
                       ),
-                      SizedBox(width: 10.w),
-                      Text(
-                        "Friends",
-                        style: theme.textTheme.titleLarge?.copyWith(
-                          color: AppColors.whiteColor,
-                          fontWeight: FontWeight.bold,
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                    title: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SvgPicture.asset(
+                          AppAssets.clap,
+                          width: 28.r,
+                          colorFilter: const ColorFilter.mode(
+                            AppColors.iconColor,
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                        SizedBox(width: 10.w),
+                        Text(
+                          "Friends",
+                          style: theme.textTheme.titleLarge?.copyWith(
+                            color: AppColors.whiteColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    centerTitle: true,
+                    actions: [
+                      Padding(
+                        padding: EdgeInsets.only(right: 16.w),
+                        child: Center(
+                          child: GestureDetector(
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const FindFriendsView(),
+                              ),
+                            ),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 12.w,
+                                vertical: 4.h,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.whiteColor.withAlpha(13),
+                                borderRadius: BorderRadius.circular(20.r),
+                              ),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Add",
+                                    style: Theme.of(context).textTheme.bodyMedium
+                                        ?.copyWith(
+                                          color: AppColors.whiteColor.withAlpha(
+                                            204,
+                                          ),
+                                          fontSize: 13.sp,
+                                        ),
+                                  ),
+                                  SizedBox(width: 4.w),
+                                  Icon(
+                                    Icons.add,
+                                    color: AppColors.secondaryColorLight,
+                                    size: 16.r,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  centerTitle: true,
-                  actions: [
-                    Padding(
-                      padding: EdgeInsets.only(right: 16.w),
-                      child: Center(
-                        child: GestureDetector(
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => const FindFriendsView()),
-                          ),
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 12.w,
-                              vertical: 4.h,
-                            ),
-                            decoration: BoxDecoration(
-                              color: AppColors.whiteColor.withAlpha(13),
-                              borderRadius: BorderRadius.circular(20.r),
-                            ),
-                            child: Row(
-                              children: [
-                                Text(
-                                  "Add",
-                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: AppColors.whiteColor.withAlpha(204),
-                                    fontSize: 13.sp,
+                  body: Consumer<CircleController>(
+                    builder: (context, controller, child) {
+                      return Column(
+                        children: [
+                          SizedBox(height: 16.h),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16.w),
+                            child: CustomInput(
+                              height: 44,
+                              hintText: _getSearchHint(tabController.index),
+                              fontSize: 14,
+                              hintColor: AppColors.greyColor,
+                              hintStyle: Theme.of(context).textTheme.bodyLarge
+                                  ?.copyWith(
+                                    color: AppColors.whiteColor.withAlpha(153),
+                                    fontSize: 14.sp,
                                   ),
-                                ),
-                                SizedBox(width: 4.w),
-                                Icon(
-                                  Icons.add,
-                                  color: AppColors.secondaryColorLight,
-                                  size: 16.r,
-                                ),
-                              ],
+                              shadow: true,
+                              leadingIcon: AppAssets.search,
+                              leadingPadding: EdgeInsets.only(
+                                left: 16.w,
+                                right: 8.w,
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                body: Consumer<CircleController>(
-                  builder: (context, controller, child) {
-                    return Column(
-                      children: [
-                        SizedBox(height: 16.h),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16.w),
-                          child: CustomInput(
-                            height: 48,
-                            hintText: _getSearchHint(tabController.index),
-                            leadingIcon: '',
-                            backgroundColor: AppColors.whiteColor.withAlpha(13),
-                            borderRadius: 24,
-                            shadow: false,
+                          SizedBox(height: 16.h),
+                          TabBar(
+                            isScrollable: true,
+                            indicatorColor: AppColors.secondaryColorLight,
+                            labelColor: AppColors.secondaryColorLight,
+                            unselectedLabelColor: AppColors.whiteColor.withAlpha(
+                              128,
+                            ),
+                            dividerColor: AppColors.whiteColor.withAlpha(13),
+                            tabAlignment: TabAlignment.start,
+                            padding: EdgeInsets.symmetric(horizontal: 16.w),
+                            labelPadding: EdgeInsets.only(right: 24.w),
+                            tabs: const [
+                              Tab(text: "Friends"),
+                              Tab(text: "Friend Request"),
+                              Tab(text: "Followers"),
+                              Tab(text: "Following"),
+                            ],
                           ),
-                        ),
-                        SizedBox(height: 16.h),
-                        TabBar(
-                          isScrollable: true,
-                          indicatorColor: AppColors.secondaryColorLight,
-                          labelColor: AppColors.secondaryColorLight,
-                          unselectedLabelColor: AppColors.whiteColor.withAlpha(128),
-                          dividerColor: AppColors.whiteColor.withAlpha(13),
-                          tabAlignment: TabAlignment.start,
-                          padding: EdgeInsets.symmetric(horizontal: 16.w),
-                          labelPadding: EdgeInsets.only(right: 24.w),
-                          tabs: const [
-                            Tab(text: "Friends"),
-                            Tab(text: "Friend Request"),
-                            Tab(text: "Followers"),
-                            Tab(text: "Following"),
-                          ],
-                        ),
-                        Expanded(
-                          child: controller.isLoading
-                              ? ListView.builder(
-                                  padding: EdgeInsets.all(16.w),
-                                  itemCount: 4,
-                                  itemBuilder: (context, index) => Padding(
-                                    padding: EdgeInsets.only(bottom: 12.h),
-                                    child: ShimmerLoader(
-                                      width: double.infinity,
-                                      height: 72.h,
-                                      borderRadius: 12.r,
+                          Expanded(
+                            child: controller.isLoading
+                                ? ListView.builder(
+                                    padding: EdgeInsets.all(16.w),
+                                    itemCount: 4,
+                                    itemBuilder: (context, index) => Padding(
+                                      padding: EdgeInsets.only(bottom: 12.h),
+                                      child: ShimmerLoader(
+                                        width: double.infinity,
+                                        height: 72.h,
+                                        borderRadius: 12.r,
+                                      ),
                                     ),
+                                  )
+                                : TabBarView(
+                                    children: [
+                                      _buildFriendsList(context, controller),
+                                      _buildRequestsList(context, controller),
+                                      _buildFollowersList(context, controller),
+                                      _buildFollowingList(context, controller),
+                                    ],
                                   ),
-                                )
-                              : TabBarView(
-                                  children: [
-                                    _buildFriendsList(context, controller),
-                                    _buildRequestsList(context, controller),
-                                    _buildFollowersList(context, controller),
-                                    _buildFollowingList(context, controller),
-                                  ],
-                                ),
-                        ),
-                      ],
-                    );
-                  },
+                          ),
+                        ],
+                      );
+                    },
+                  ),
                 ),
               );
             },
           );
-        }
+        },
       ),
     );
   }
@@ -203,7 +227,9 @@ class FriendsView extends StatelessWidget {
                     Center(
                       child: Text(
                         "No friends found",
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(128)),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.whiteColor.withAlpha(128),
+                        ),
                       ),
                     ),
                   ],
@@ -246,7 +272,9 @@ class FriendsView extends StatelessWidget {
                     Center(
                       child: Text(
                         "No friend requests",
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(128)),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.whiteColor.withAlpha(128),
+                        ),
                       ),
                     ),
                   ],
@@ -272,7 +300,10 @@ class FriendsView extends StatelessWidget {
     );
   }
 
-  Widget _buildFollowersList(BuildContext context, CircleController controller) {
+  Widget _buildFollowersList(
+    BuildContext context,
+    CircleController controller,
+  ) {
     return Stack(
       children: [
         RefreshIndicator(
@@ -289,7 +320,9 @@ class FriendsView extends StatelessWidget {
                     Center(
                       child: Text(
                         "No followers yet",
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(128)),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.whiteColor.withAlpha(128),
+                        ),
                       ),
                     ),
                   ],
@@ -315,7 +348,10 @@ class FriendsView extends StatelessWidget {
     );
   }
 
-  Widget _buildFollowingList(BuildContext context, CircleController controller) {
+  Widget _buildFollowingList(
+    BuildContext context,
+    CircleController controller,
+  ) {
     return Stack(
       children: [
         RefreshIndicator(
@@ -332,7 +368,9 @@ class FriendsView extends StatelessWidget {
                     Center(
                       child: Text(
                         "Not following anyone",
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(128)),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.whiteColor.withAlpha(128),
+                        ),
                       ),
                     ),
                   ],
@@ -369,7 +407,9 @@ class _SocialTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final name = type == SocialTileType.request ? (data['userName'] ?? '') : (data['name'] ?? '');
+    final name = type == SocialTileType.request
+        ? (data['userName'] ?? '')
+        : (data['name'] ?? '');
     final avatar = data['avatar'] ?? '';
     final userId = data['userId'] ?? data['id'] ?? '';
 
@@ -377,17 +417,14 @@ class _SocialTile extends StatelessWidget {
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) => UserProfileView(
-            userId: userId,
-            userName: name,
-          ),
+          builder: (_) => UserProfileView(userId: userId, userName: name),
         ),
       ),
       child: Container(
         margin: EdgeInsets.only(bottom: 12.h),
         padding: EdgeInsets.all(12.r),
         decoration: BoxDecoration(
-          color: AppColors.postCardColor,
+          color: AppColors.defaultColor,
           borderRadius: BorderRadius.circular(12.r),
           border: Border.all(color: AppColors.whiteColor.withAlpha(13)),
         ),
@@ -395,7 +432,11 @@ class _SocialTile extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 24.r,
-              backgroundImage: NetworkImage(avatar.isNotEmpty ? avatar : 'https://i.pravatar.cc/150?u=$userId'),
+              backgroundImage: NetworkImage(
+                avatar.isNotEmpty
+                    ? avatar
+                    : 'https://i.pravatar.cc/150?u=$userId',
+              ),
             ),
             SizedBox(width: 12.w),
             Expanded(
@@ -459,7 +500,10 @@ class _SocialTile extends StatelessWidget {
                 backgroundColor: AppColors.greenColor,
                 child: Text(
                   unread.toString(),
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 10.sp),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.whiteColor,
+                    fontSize: 10.sp,
+                  ),
                 ),
               ),
             ],
@@ -473,9 +517,9 @@ class _SocialTile extends StatelessWidget {
               title: "Accept",
               width: 80,
               height: 32,
-              fontSize: 12,
+              fontSize: 10,
               linearGradient: true,
-              radius: 8,
+              radius: 4,
             ),
             SizedBox(width: 8.w),
             CustomButton(
@@ -483,10 +527,10 @@ class _SocialTile extends StatelessWidget {
               title: "Decline",
               width: 80,
               height: 32,
-              fontSize: 12,
-              buttonColor: AppColors.whiteColor.withAlpha(13),
-              borderColor: Colors.transparent,
-              radius: 8,
+              fontSize: 10,
+              buttonColor: AppColors.coachColorA5354C30,
+              borderColor: AppColors.coachColorA5354C30,
+              radius: 4,
             ),
           ],
         );
@@ -496,10 +540,11 @@ class _SocialTile extends StatelessWidget {
           title: "Remove Follower",
           width: 120,
           height: 32,
-          fontSize: 12,
-          buttonColor: AppColors.whiteColor.withAlpha(13),
-          borderColor: Colors.transparent,
-          radius: 8,
+          fontSize: 10,
+          horizontalPadding: 0,
+          buttonColor: AppColors.coachColorA5354C30,
+          borderColor: AppColors.coachColorA5354C30,
+          radius: 4,
         );
       case SocialTileType.following:
         return CustomButton(
@@ -507,12 +552,11 @@ class _SocialTile extends StatelessWidget {
           title: "Unfollow",
           width: 100,
           height: 32,
-          fontSize: 12,
-          buttonColor: AppColors.whiteColor.withAlpha(13),
-          borderColor: Colors.transparent,
-          radius: 8,
+          fontSize: 10,
+          buttonColor: AppColors.coachColorA5354C30,
+          borderColor: AppColors.coachColorA5354C30,
+          radius: 4,
         );
     }
   }
 }
-

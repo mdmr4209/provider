@@ -148,9 +148,7 @@ class ThemeView extends StatelessWidget {
         subtitle: Text(
           subtitle,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            color: Theme.of(
-              context,
-            ).textTheme.bodySmall?.color?.withAlpha(153),
+            color: Theme.of(context).textTheme.bodySmall?.color?.withAlpha(153),
           ),
         ),
         trailing: trailing,

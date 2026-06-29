@@ -157,7 +157,7 @@ class SplashAnimationController extends ChangeNotifier
     if (authController.isLoggedIn) {
       context.go(AppRoutes.home);
     } else {
-      context.go(AppRoutes.login);
+      context.go(AppRoutes.signup);
     }
   }
 

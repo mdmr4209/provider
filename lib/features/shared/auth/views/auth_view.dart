@@ -6,10 +6,10 @@ import 'package:newproject/core/constants/app_assets.dart';
 import 'package:newproject/core/constants/app_colors.dart';
 import 'package:provider/provider.dart';
 
-
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_loader.dart';
 import '../../../../core/widgets/error_widget.dart';
+import '../../../../core/widgets/glass_widget.dart';
 import '../../../../core/widgets/input_text_widget.dart';
 import '../../../../core/widgets/background_widget.dart';
 import '../../../../routes/app_router.dart';
@@ -106,14 +106,24 @@ class AuthView extends StatelessWidget {
                                         ?.copyWith(fontFamily: 'Segoe UI'),
                                   ),
                                   SizedBox(height: 8.h),
-                                  InputTextWidget(
-                                    hintText: context.watchTr('enter_your_email'),
-                                    controller: auth.emailController,
-                                    onChanged: (_) => auth.clearError(),
-                                    keyboardType: TextInputType.emailAddress,
-                                    leadingIcon: AppAssets.email,
-                                    leadingColor: AppColors.iconColor,
-                                    leadingPadding: EdgeInsets.only(left: 10.w, right: 5.w),
+                                  GlassWidget(
+                                    color: Color(0xFF394C38),
+                                    height: 48.h,
+                                    child: InputTextWidget(
+                                      backgroundColor: Color(0xFF394C38),
+                                      hintText: context.watchTr(
+                                        'enter_your_email',
+                                      ),
+                                      controller: auth.emailController,
+                                      onChanged: (_) => auth.clearError(),
+                                      keyboardType: TextInputType.emailAddress,
+                                      leadingIcon: AppAssets.email,
+                                      leadingColor: AppColors.iconColor,
+                                      leadingPadding: EdgeInsets.only(
+                                        left: 10.w,
+                                        right: 5.w,
+                                      ),
+                                    ),
                                   ),
                                   SizedBox(height: 20.h),
 
@@ -125,15 +135,25 @@ class AuthView extends StatelessWidget {
                                         ?.copyWith(fontFamily: 'Segoe UI'),
                                   ),
                                   SizedBox(height: 8.h),
-                                  InputTextWidget(
-                                    hintText: context.watchTr('enter_your_password'),
-                                    obscureText: true,
-                                    controller: auth.passwordController,
-                                    onChanged: (_) => auth.clearError(),
-                                    showObscureToggle: true,
-                                    leadingIcon: AppAssets.pass,
-                                    leadingColor: AppColors.iconColor,
-                                    leadingPadding: EdgeInsets.only(left: 10.w, right: 5.w),
+                                  GlassWidget(
+                                    color: Color(0xFF394C38),
+                                    height: 48.h,
+                                    child: InputTextWidget(
+                                      backgroundColor: Color(0xFF394C38),
+                                      hintText: context.watchTr(
+                                        'enter_your_password',
+                                      ),
+                                      obscureText: true,
+                                      controller: auth.passwordController,
+                                      onChanged: (_) => auth.clearError(),
+                                      showObscureToggle: true,
+                                      leadingIcon: AppAssets.pass,
+                                      leadingColor: AppColors.iconColor,
+                                      leadingPadding: EdgeInsets.only(
+                                        left: 10.w,
+                                        right: 5.w,
+                                      ),
+                                    ),
                                   ),
                                   SizedBox(height: 16.h),
 
@@ -149,12 +169,17 @@ class AuthView extends StatelessWidget {
                                               height: 18.r,
                                               decoration: BoxDecoration(
                                                 color: auth.isRemembered
-                                                    ? Theme.of(context).colorScheme.primary
+                                                    ? Theme.of(
+                                                        context,
+                                                      ).colorScheme.primary
                                                     : Colors.transparent,
                                                 border: Border.all(
-                                                  color: Theme.of(context).dividerColor,
+                                                  color: Theme.of(
+                                                    context,
+                                                  ).dividerColor,
                                                 ),
-                                                borderRadius: BorderRadius.circular(4.r),
+                                                borderRadius:
+                                                    BorderRadius.circular(4.r),
                                               ),
                                               child: Center(
                                                 child: Icon(
@@ -169,14 +194,17 @@ class AuthView extends StatelessWidget {
                                             SizedBox(width: 10.w),
                                             Text(
                                               context.watchTr('remember_me'),
-                                              style: Theme.of(context).textTheme.bodyMedium,
+                                              style: Theme.of(
+                                                context,
+                                              ).textTheme.bodyMedium,
                                             ),
                                           ],
                                         ),
                                       ),
                                       const Spacer(),
                                       InkWell(
-                                        onTap: () => context.push(AppRoutes.forgetPass),
+                                        onTap: () =>
+                                            context.push(AppRoutes.forgetPass),
                                         child: Text(
                                           context.watchTr('forget_password'),
                                           style: Theme.of(context)
@@ -205,18 +233,37 @@ class AuthView extends StatelessWidget {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Expanded(child: Divider(color: AppColors.defaultLightColor, thickness: 1.h)),
+                                      Expanded(
+                                        child: Divider(
+                                          color: AppColors.defaultLightColor,
+                                          thickness: 1.h,
+                                        ),
+                                      ),
                                       Container(
                                         width: 50.w,
                                         height: 22.h,
                                         alignment: Alignment.center,
                                         decoration: ShapeDecoration(
                                           color: AppColors.defaultLightColor,
-                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(44.r)),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              44.r,
+                                            ),
+                                          ),
                                         ),
-                                        child: Text('or', style: Theme.of(context).textTheme.bodyLarge),
+                                        child: Text(
+                                          'or',
+                                          style: Theme.of(
+                                            context,
+                                          ).textTheme.bodyLarge,
+                                        ),
                                       ),
-                                      Expanded(child: Divider(color: AppColors.defaultLightColor, thickness: 1.h)),
+                                      Expanded(
+                                        child: Divider(
+                                          color: AppColors.defaultLightColor,
+                                          thickness: 1.h,
+                                        ),
+                                      ),
                                     ],
                                   ),
                                   SizedBox(height: 20.h),
@@ -227,12 +274,21 @@ class AuthView extends StatelessWidget {
                                     height: 48.h,
                                     decoration: ShapeDecoration(
                                       color: AppColors.defaultColorAlpha,
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                          8.r,
+                                        ),
+                                      ),
                                     ),
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
-                                        SvgPicture.asset(AppAssets.google, width: 20.r, height: 20.r),
+                                        SvgPicture.asset(
+                                          AppAssets.google,
+                                          width: 20.r,
+                                          height: 20.r,
+                                        ),
                                         SizedBox(width: 14.w),
                                         Text(
                                           'Log in with Google',
@@ -240,7 +296,9 @@ class AuthView extends StatelessWidget {
                                           style: Theme.of(context)
                                               .textTheme
                                               .titleSmall
-                                              ?.copyWith(color: AppColors.whiteColor),
+                                              ?.copyWith(
+                                                color: AppColors.whiteColor,
+                                              ),
                                         ),
                                       ],
                                     ),
@@ -253,17 +311,22 @@ class AuthView extends StatelessWidget {
                                     children: [
                                       Text(
                                         "${context.watchTr('no_account')} ",
-                                        style: Theme.of(context).textTheme.bodyMedium,
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.bodyMedium,
                                       ),
                                       GestureDetector(
-                                        onTap: () => context.push(AppRoutes.signup),
+                                        onTap: () =>
+                                            context.push(AppRoutes.signup),
                                         child: Text(
                                           context.watchTr('sign_up_caps'),
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyMedium
                                               ?.copyWith(
-                                                color: Theme.of(context).colorScheme.primary,
+                                                color: Theme.of(
+                                                  context,
+                                                ).colorScheme.primary,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                         ),

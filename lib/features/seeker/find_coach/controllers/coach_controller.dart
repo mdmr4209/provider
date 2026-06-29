@@ -35,12 +35,18 @@ class CoachController extends ChangeNotifier {
 
     try {
       await Future.delayed(const Duration(milliseconds: 1000));
-      final String jsonString = await rootBundle.loadString('assets/json/coach.json');
+      final String jsonString = await rootBundle.loadString(
+        'assets/json/coach.json',
+      );
       final Map<String, dynamic> rawDiscover = jsonDecode(jsonString);
 
       _heroCoach = CoachModel.fromJson(rawDiscover['heroCoach']);
-      _featuredCoaches = (rawDiscover['featured'] as List).map((x) => CoachModel.fromJson(x)).toList();
-      _topRatedCoaches = (rawDiscover['topRated'] as List).map((x) => CoachModel.fromJson(x)).toList();
+      _featuredCoaches = (rawDiscover['featured'] as List)
+          .map((x) => CoachModel.fromJson(x))
+          .toList();
+      _topRatedCoaches = (rawDiscover['topRated'] as List)
+          .map((x) => CoachModel.fromJson(x))
+          .toList();
     } catch (e) {
       debugPrint("Error loading coaches: $e");
     } finally {
@@ -61,10 +67,14 @@ class CoachController extends ChangeNotifier {
     try {
       await Future.delayed(const Duration(milliseconds: 600));
 
-      final String slotsJsonString = await rootBundle.loadString('assets/json/coach_slots.json');
+      final String slotsJsonString = await rootBundle.loadString(
+        'assets/json/coach_slots.json',
+      );
       final Map<String, dynamic> rawSlots = jsonDecode(slotsJsonString);
 
-      _slots = (rawSlots['sessions'] as List).map((x) => CoachSlotModel.fromJson(x)).toList();
+      _slots = (rawSlots['sessions'] as List)
+          .map((x) => CoachSlotModel.fromJson(x))
+          .toList();
       _availableSlots = List<String>.from(rawSlots['availableSlots']);
     } catch (e) {
       showErrorSnackBar(message: "Failed to fetch slots: $e");
@@ -75,7 +85,10 @@ class CoachController extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchCoachReviews(String coachId, {bool isRefresh = false}) async {
+  Future<void> fetchCoachReviews(
+    String coachId, {
+    bool isRefresh = false,
+  }) async {
     if (isRefresh) {
       _isRefreshing = true;
     } else {
@@ -86,9 +99,12 @@ class CoachController extends ChangeNotifier {
     try {
       await Future.delayed(const Duration(milliseconds: 500));
 
-      final String reviewsJsonString = await rootBundle.loadString('assets/json/coach_reviews.json');
+      final String reviewsJsonString = await rootBundle.loadString(
+        'assets/json/coach_reviews.json',
+      );
       final List<dynamic> rawReviewsList = jsonDecode(reviewsJsonString);
-      final List<Map<String, dynamic>> rawReviews = List<Map<String, dynamic>>.from(rawReviewsList);
+      final List<Map<String, dynamic>> rawReviews =
+          List<Map<String, dynamic>>.from(rawReviewsList);
 
       _reviews = rawReviews.map((x) => CoachReviewModel.fromJson(x)).toList();
     } catch (e) {

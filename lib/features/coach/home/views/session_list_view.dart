@@ -203,17 +203,37 @@ class SessionListView extends StatelessWidget {
           SizedBox(height: 12.h),
           Row(
             children: [
-              const Icon(Icons.calendar_today, color: AppColors.white54Color, size: 14),
+              const Icon(
+                Icons.calendar_today,
+                color: AppColors.white54Color,
+                size: 14,
+              ),
               SizedBox(width: 8.w),
-              Text(date, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white70Color, fontSize: 12)),
+              Text(
+                date,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.white70Color,
+                  fontSize: 12,
+                ),
+              ),
             ],
           ),
           SizedBox(height: 4.h),
           Row(
             children: [
-              const Icon(Icons.access_time, color: AppColors.white54Color, size: 14),
+              const Icon(
+                Icons.access_time,
+                color: AppColors.white54Color,
+                size: 14,
+              ),
               SizedBox(width: 8.w),
-              Text(time, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white70Color, fontSize: 12)),
+              Text(
+                time,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.white70Color,
+                  fontSize: 12,
+                ),
+              ),
             ],
           ),
           SizedBox(height: 16.h),
@@ -235,7 +255,12 @@ class SessionListView extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: 12.w),
-                Text(name, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor)),
+                Text(
+                  name,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor),
+                ),
                 const Spacer(),
                 Text(
                   rate,

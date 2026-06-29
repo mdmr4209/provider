@@ -62,13 +62,18 @@ class CoachInboxView extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const CoachFindFriendsView(),
+                                builder: (context) =>
+                                    const CoachFindFriendsView(),
                               ),
                             );
                           },
                           child: Row(
                             children: [
-                              Icon(Icons.add, color: AppColors.coachColorFFC19E5F, size: 20),
+                              Icon(
+                                Icons.add,
+                                color: AppColors.coachColorFFC19E5F,
+                                size: 20,
+                              ),
                               SizedBox(width: 4.w),
                               Text(
                                 "Add",
@@ -112,13 +117,15 @@ class CoachInboxView extends StatelessWidget {
                                       ),
                                       child: Text(
                                         'Stories',
-                                        style: theme.textTheme.bodyMedium?.copyWith(
-                                          color: AppColors.coachColorFFB9BBB0,
-                                          fontSize: 12.03,
-                                          fontFamily: 'Poppins',
-                                          fontWeight: FontWeight.w500,
-                                          height: 1.50,
-                                        ),
+                                        style: theme.textTheme.bodyMedium
+                                            ?.copyWith(
+                                              color:
+                                                  AppColors.coachColorFFB9BBB0,
+                                              fontSize: 12.03,
+                                              fontFamily: 'Poppins',
+                                              fontWeight: FontWeight.w500,
+                                              height: 1.50,
+                                            ),
                                       ),
                                     ),
                                     _buildStoriesRow(controller),
@@ -133,7 +140,7 @@ class CoachInboxView extends StatelessWidget {
                                           height: 50,
                                           hintText: "Search by Client name",
                                           fontSize: 14,
-hintStyle: Theme.of(context)
+                                          hintStyle: Theme.of(context)
                                               .textTheme
                                               .bodyLarge
                                               ?.copyWith(
@@ -142,9 +149,9 @@ hintStyle: Theme.of(context)
                                                 fontSize: 14.sp,
                                               ),
                                           shadow: true,
-borderRadius: 24,
+                                          borderRadius: 24,
                                           borderWidth: 0.50,
-leadingIcon: AppAssets.search,
+                                          leadingIcon: AppAssets.search,
                                           leadingPadding: EdgeInsets.only(
                                             left: 16.w,
                                             right: 8.w,
@@ -171,10 +178,30 @@ leadingIcon: AppAssets.search,
                                         onTap: (index) =>
                                             controller.setSelectedTab(index),
                                         tabs: [
-                                          _buildTab(context, "Messages", 0, controller),
-                                          _buildTab(context, "Missed call", 1, controller),
-                                          _buildTab(context, "Call Back", 2, controller),
-                                          _buildTab(context, "Clients", 3, controller),
+                                          _buildTab(
+                                            context,
+                                            "Messages",
+                                            0,
+                                            controller,
+                                          ),
+                                          _buildTab(
+                                            context,
+                                            "Missed call",
+                                            1,
+                                            controller,
+                                          ),
+                                          _buildTab(
+                                            context,
+                                            "Call Back",
+                                            2,
+                                            controller,
+                                          ),
+                                          _buildTab(
+                                            context,
+                                            "Clients",
+                                            3,
+                                            controller,
+                                          ),
                                         ],
                                       ),
 
@@ -228,7 +255,10 @@ leadingIcon: AppAssets.search,
     );
   }
 
-  Widget _buildContextToggle(BuildContext context, CoachInboxController controller) {
+  Widget _buildContextToggle(
+    BuildContext context,
+    CoachInboxController controller,
+  ) {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.coachColorFF182617,
@@ -245,7 +275,8 @@ leadingIcon: AppAssets.search,
   }
 
   Widget _buildToggleItem(
-    BuildContext context, String label,
+    BuildContext context,
+    String label,
     int index,
     CoachInboxController controller,
   ) {
@@ -255,7 +286,9 @@ leadingIcon: AppAssets.search,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 6.h),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.coachColorFF3E5E39 : AppColors.coachColorFF182617,
+          color: isSelected
+              ? AppColors.coachColorFF3E5E39
+              : AppColors.coachColorFF182617,
           borderRadius: BorderRadius.circular(20.r),
         ),
         child: Text(
@@ -295,7 +328,10 @@ leadingIcon: AppAssets.search,
           SizedBox(width: 4.w),
           Text(
             "Credits",
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white70Color, fontSize: 11),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColors.white70Color,
+              fontSize: 11,
+            ),
           ),
         ],
       ),
@@ -329,7 +365,11 @@ leadingIcon: AppAssets.search,
               CircleAvatar(
                 radius: 28.r,
                 backgroundColor: AppColors.whiteColor.withAlpha(13),
-                child: const Icon(Icons.add, color: AppColors.whiteColor, size: 24),
+                child: const Icon(
+                  Icons.add,
+                  color: AppColors.whiteColor,
+                  size: 24,
+                ),
               ),
               Positioned(
                 bottom: 0,
@@ -340,13 +380,23 @@ leadingIcon: AppAssets.search,
                     color: AppColors.whiteColor,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.add, size: 12, color: AppColors.blackColor),
+                  child: const Icon(
+                    Icons.add,
+                    size: 12,
+                    color: AppColors.blackColor,
+                  ),
                 ),
               ),
             ],
           ),
           SizedBox(height: 4.h),
-          Text(name, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 10)),
+          Text(
+            name,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColors.whiteColor,
+              fontSize: 10,
+            ),
+          ),
         ],
       ),
     );
@@ -362,7 +412,10 @@ leadingIcon: AppAssets.search,
             padding: const EdgeInsets.all(2),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(color: AppColors.coachColorFFC19E5F, width: 1.5),
+              border: Border.all(
+                color: AppColors.coachColorFFC19E5F,
+                width: 1.5,
+              ),
             ),
             child: CircleAvatar(
               radius: 26.r,
@@ -372,7 +425,10 @@ leadingIcon: AppAssets.search,
           SizedBox(height: 4.h),
           Text(
             name,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 10),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColors.whiteColor,
+              fontSize: 10,
+            ),
             overflow: TextOverflow.ellipsis,
           ),
         ],
@@ -380,7 +436,12 @@ leadingIcon: AppAssets.search,
     );
   }
 
-  Widget _buildTab(BuildContext context, String label, int index, CoachInboxController controller) {
+  Widget _buildTab(
+    BuildContext context,
+    String label,
+    int index,
+    CoachInboxController controller,
+  ) {
     final isSelected = controller.selectedTabIndex == index;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
@@ -389,7 +450,9 @@ leadingIcon: AppAssets.search,
         shape: RoundedRectangleBorder(
           side: BorderSide(
             width: 1.r,
-            color: !isSelected ? Colors.transparent : AppColors.coachColorFF4F9445,
+            color: !isSelected
+                ? Colors.transparent
+                : AppColors.coachColorFF4F9445,
           ),
           borderRadius: BorderRadius.circular(12.r),
         ),
@@ -441,7 +504,12 @@ leadingIcon: AppAssets.search,
         if (controller.messages.isEmpty)
           Padding(
             padding: EdgeInsets.only(top: 20),
-            child: Text("No messages", style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white54Color)),
+            child: Text(
+              "No messages",
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: AppColors.white54Color),
+            ),
           )
         else
           ...controller.messages.map(
@@ -523,7 +591,12 @@ leadingIcon: AppAssets.search,
         if (controller.clients.isEmpty)
           Padding(
             padding: EdgeInsets.only(top: 20),
-            child: Text("No clients", style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white54Color)),
+            child: Text(
+              "No clients",
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: AppColors.white54Color),
+            ),
           )
         else
           ...controller.clients.map(
@@ -591,7 +664,10 @@ leadingIcon: AppAssets.search,
               children: [
                 Text(
                   time,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white38Color, fontSize: 10),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.white38Color,
+                    fontSize: 10,
+                  ),
                 ),
                 SizedBox(height: 4.h),
                 if (count != "0")
@@ -618,7 +694,10 @@ leadingIcon: AppAssets.search,
     );
   }
 
-  Widget _buildMissedCallsList(BuildContext context, CoachInboxController controller) {
+  Widget _buildMissedCallsList(
+    BuildContext context,
+    CoachInboxController controller,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -636,18 +715,30 @@ leadingIcon: AppAssets.search,
             padding: EdgeInsets.only(top: 20),
             child: Text(
               "No missed calls",
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white54Color),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: AppColors.white54Color),
             ),
           )
         else
           ...controller.missedCalls.map(
-            (m) => _buildMissedCallTile(context, m.name, m.timeRequested, m.avatar),
+            (m) => _buildMissedCallTile(
+              context,
+              m.name,
+              m.timeRequested,
+              m.avatar,
+            ),
           ),
       ],
     );
   }
 
-  Widget _buildMissedCallTile(BuildContext context, String name, String time, String avatar) {
+  Widget _buildMissedCallTile(
+    BuildContext context,
+    String name,
+    String time,
+    String avatar,
+  ) {
     return Container(
       margin: EdgeInsets.only(bottom: 12.h),
       padding: EdgeInsets.all(12.r),
@@ -725,7 +816,9 @@ leadingIcon: AppAssets.search,
             padding: EdgeInsets.only(top: 20),
             child: Text(
               "No call back requests",
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white54Color),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: AppColors.white54Color),
             ),
           )
         else

@@ -30,7 +30,7 @@ class CoachCircleView extends StatelessWidget {
     return GestureDetector(
       onTap: FocusScope.of(context).unfocus,
       child: Scaffold(
-appBar: AppBar(
+        appBar: AppBar(
           backgroundColor: AppColors.defaultColor,
           scrolledUnderElevation: 0,
           surfaceTintColor: AppColors.defaultColor,
@@ -75,15 +75,15 @@ appBar: AppBar(
                             height: 50,
                             hintText: "Search groups",
                             fontSize: 14,
-hintStyle: Theme.of(context).textTheme.bodyLarge
+                            hintStyle: Theme.of(context).textTheme.bodyLarge
                                 ?.copyWith(
                                   color: AppColors.whiteColor.withAlpha(153),
                                   fontSize: 14.sp,
                                 ),
                             shadow: true,
-borderRadius: 24,
+                            borderRadius: 24,
                             borderWidth: 0.50,
-leadingIcon: AppAssets.search,
+                            leadingIcon: AppAssets.search,
                             leadingPadding: EdgeInsets.only(
                               left: 16.w,
                               right: 8.w,
@@ -102,9 +102,10 @@ leadingIcon: AppAssets.search,
                                       child: Center(
                                         child: Text(
                                           "No circles found",
-                                          style: theme.textTheme.bodyMedium?.copyWith(
-                                            color: AppColors.white54Color,
-                                          ),
+                                          style: theme.textTheme.bodyMedium
+                                              ?.copyWith(
+                                                color: AppColors.white54Color,
+                                              ),
                                         ),
                                       ),
                                     ),
@@ -197,8 +198,10 @@ leadingIcon: AppAssets.search,
                     child: icon.startsWith('http')
                         ? Image.network(
                             icon,
-                            errorBuilder: (c, e, s) =>
-                                const Icon(Icons.group, color: AppColors.greyColor),
+                            errorBuilder: (c, e, s) => const Icon(
+                              Icons.group,
+                              color: AppColors.greyColor,
+                            ),
                           )
                         : Image.asset(icon),
                   ),
@@ -290,7 +293,9 @@ leadingIcon: AppAssets.search,
                 margin: EdgeInsets.only(bottom: 16.h),
                 padding: EdgeInsets.all(20.r),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).extension<AppDesignSystem>()!.panelColor,
+                  color: Theme.of(
+                    context,
+                  ).extension<AppDesignSystem>()!.panelColor,
                   borderRadius: BorderRadius.circular(16.r),
                 ),
                 child: Column(

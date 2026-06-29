@@ -137,7 +137,11 @@ class CoachHomeController extends ChangeNotifier {
             Align(
               alignment: Alignment.topRight,
               child: InkWell(
-                child: const Icon(Icons.close, color: AppColors.white54Color, size: 20),
+                child: const Icon(
+                  Icons.close,
+                  color: AppColors.white54Color,
+                  size: 20,
+                ),
                 onTap: () => Navigator.pop(context),
               ),
             ),

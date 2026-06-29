@@ -103,22 +103,23 @@ class HomeController extends ChangeNotifier {
     context,
     title: "Take A Breath, ${dashboardModel?.data?.user?.name ?? '[Name]'}",
     description:
-        "Stop. Don't press send. You are feeling a temporary wave of emotion. Before you do anything, let's take a quick 30 seconds, and breathe. Do it with me 4 seconds breath in, 4 seconds hold, 4 seconds breathe out. Do it 3 times.",
-    primaryButtonText: "Start Breathing",
+        "\"Stop. Don't press send. You are feeling a temporary wave of emotion. Before you do anything, let's take a quick 30 seconds, and breathe. DO it with me 4 seconds breath in, 4 seconds hold, 4 seconds breathe out. DO it 3 times, and a timer appears on screen counting down 4-3-2-1, and then beeps to signal the transition, and on top it directs them. It will say either Breath in, Hold or Breathe out. It should last a total of 30 seconds,\"",
+    primaryButtonText: "\"Start Breathing\"",
     onPrimaryTap: () {
       NavigationService.goToBreathing(
-        title: "Stop. Don't press send. 🔴",
-        subtitle: "You are feeling a temporary wave of emotion.",
+        title: "\"Stop. Don't press send. 🔴\"",
+        subtitle: "\"You are feeling a temporary wave of emotion.\"",
       );
     },
   );
 
   void handleRelapsePrevention(BuildContext context) => showBreathingDialog(
     context,
-    title: "How do you feel, ${dashboardModel?.data?.user?.name ?? '[Name]'}?",
+    title:
+        "How do you feel now ${dashboardModel?.data?.user?.name ?? '[Name]'}?",
     description:
-        "Take a breath. This happens. Breaking No Contact doesn't mean you've failed; it just means you're human.",
-    primaryButtonText: "I need to speak to someone 📞",
+        "\"Take a breath, ${dashboardModel?.data?.user?.name ?? '[Name]'}. This happens. Breaking No Contact doesn't mean you've failed; it just means you're human. The important thing is what you do next. We are going to reset your tracker together, but first: Do you want to talk to a Coach about what happened? They can help you figure out your next move.\"",
+    primaryButtonText: "\"I need to speak to someone. 📞\"",
     onPrimaryTap: () {
       // Logic for contacting someone
     },

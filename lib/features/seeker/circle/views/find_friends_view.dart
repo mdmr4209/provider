@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import '../../../../core/constants/app_assets.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/custom_input.dart';
 import '../../../../core/widgets/custom_button.dart';
@@ -49,11 +50,18 @@ class FindFriendsView extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.all(16.w),
                 child: CustomInput(
-                  height: 48,
+                  height: 44,
                   hintText: "Search Friends",
-                  backgroundColor: AppColors.whiteColor.withAlpha(13),
-                  borderRadius: 24,
-                  shadow: false,
+                  fontSize: 14,
+                  hintColor: AppColors.greyColor,
+                  hintStyle: Theme.of(context).textTheme.bodyLarge
+                      ?.copyWith(
+                    color: AppColors.whiteColor.withAlpha(153),
+                    fontSize: 14.sp,
+                  ),
+                  shadow: true,
+                  leadingIcon: AppAssets.search,
+                  leadingPadding: EdgeInsets.only(left: 16.w, right: 8.w),
                 ),
               ),
               Padding(
@@ -86,37 +94,51 @@ class FindFriendsView extends StatelessWidget {
                     : Stack(
                         children: [
                           RefreshIndicator(
-                            onRefresh: () => controller.fetchDiscoverSuggestions(isRefresh: true),
+                            onRefresh: () => controller
+                                .fetchDiscoverSuggestions(isRefresh: true),
                             color: Colors.transparent,
                             backgroundColor: Colors.transparent,
                             strokeWidth: 0,
                             elevation: 0,
                             child: controller.discoverSuggestions.isEmpty
                                 ? ListView(
-                                    physics: const AlwaysScrollableScrollPhysics(),
+                                    physics:
+                                        const AlwaysScrollableScrollPhysics(),
                                     children: [
                                       SizedBox(height: 100.h),
                                       Center(
                                         child: Text(
                                           "No suggestions available.",
-                                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(128)),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.copyWith(
+                                                color: AppColors.whiteColor
+                                                    .withAlpha(128),
+                                              ),
                                         ),
                                       ),
                                     ],
                                   )
                                 : GridView.builder(
-                                    physics: const AlwaysScrollableScrollPhysics(),
+                                    physics:
+                                        const AlwaysScrollableScrollPhysics(),
                                     padding: EdgeInsets.all(16.w),
-                                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      crossAxisSpacing: 16.w,
-                                      mainAxisSpacing: 16.h,
-                                      childAspectRatio: 0.75,
-                                    ),
-                                    itemCount: controller.discoverSuggestions.length,
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 2,
+                                          crossAxisSpacing: 16.w,
+                                          mainAxisSpacing: 16.h,
+                                          childAspectRatio: 0.75,
+                                        ),
+                                    itemCount:
+                                        controller.discoverSuggestions.length,
                                     itemBuilder: (context, index) {
-                                      final suggestion = controller.discoverSuggestions[index];
-                                      return _UserDiscoveryCard(suggestion: suggestion);
+                                      final suggestion =
+                                          controller.discoverSuggestions[index];
+                                      return _UserDiscoveryCard(
+                                        suggestion: suggestion,
+                                      );
                                     },
                                   ),
                           ),
@@ -125,7 +147,9 @@ class FindFriendsView extends StatelessWidget {
                               top: 16.h,
                               left: 0,
                               right: 0,
-                              child: const Center(child: CustomLoader(size: 150)),
+                              child: const Center(
+                                child: CustomLoader(size: 150),
+                              ),
                             ),
                         ],
                       ),
@@ -148,7 +172,7 @@ class _UserDiscoveryCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(12.r),
       decoration: BoxDecoration(
-        color: AppColors.postCardColor,
+        color: AppColors.coachColorFF253922,
         borderRadius: BorderRadius.circular(16.r),
         border: Border.all(color: AppColors.whiteColor.withAlpha(13)),
       ),
@@ -191,4 +215,3 @@ class _UserDiscoveryCard extends StatelessWidget {
     );
   }
 }
-

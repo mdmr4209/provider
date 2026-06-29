@@ -33,11 +33,18 @@ class CoachProfileController extends ChangeNotifier {
   // Step 4: Rates & Policies
   final TextEditingController perMinuteRateController = TextEditingController();
   final TextEditingController perTextRateController = TextEditingController();
-  final TextEditingController cancellationPolicyController = TextEditingController();
-  final TextEditingController cancellationPriorController = TextEditingController();
-  
+  final TextEditingController cancellationPolicyController =
+      TextEditingController();
+  final TextEditingController cancellationPriorController =
+      TextEditingController();
+
   List<CoachServiceOption> services = [
-    CoachServiceOption(title: 'Option 1', duration: 'Enter here', price: 'Enter here', isActive: true),
+    CoachServiceOption(
+      title: 'Option 1',
+      duration: 'Enter here',
+      price: 'Enter here',
+      isActive: true,
+    ),
   ];
 
   // --- NEW: Setup Flow Specifics ---
@@ -95,8 +102,13 @@ class CoachProfileController extends ChangeNotifier {
   ];
 
   void updateAvailabilityField({
-    String? day, String? onStart, String? onEnd,
-    String? fromDate, String? toDate, String? offStart, String? offEnd
+    String? day,
+    String? onStart,
+    String? onEnd,
+    String? fromDate,
+    String? toDate,
+    String? offStart,
+    String? offEnd,
   }) {
     if (day != null) setupSelectedDay = day;
     if (onStart != null) onStartTime = onStart;
@@ -111,7 +123,7 @@ class CoachProfileController extends ChangeNotifier {
   void saveSetupOnDay() {
     onDaysList.add({
       "day": setupSelectedDay,
-      "time": "$onStartTime - $onEndTime"
+      "time": "$onStartTime - $onEndTime",
     });
     setupSelectedDay = "Enter here";
     onStartTime = "Enter here";
@@ -122,7 +134,7 @@ class CoachProfileController extends ChangeNotifier {
   void saveSetupOffDay() {
     offDaysList.add({
       "start": "$selectedFromDate; $offStartTime",
-      "end": "$selectedToDate; $offEndTime"
+      "end": "$selectedToDate; $offEndTime",
     });
     selectedFromDate = "Select one";
     selectedToDate = "Select one";
@@ -130,7 +142,7 @@ class CoachProfileController extends ChangeNotifier {
     offEndTime = "Enter here";
     notifyListeners();
   }
-  
+
   void removeSetupOnDay(Map<String, String> item) {
     onDaysList.remove(item);
     notifyListeners();
@@ -154,8 +166,10 @@ class CoachProfileController extends ChangeNotifier {
 
   // --- NEW: Total Earnings & Withdrawal ---
   double balance = 0.0;
-  final TextEditingController withdrawalAmountController = TextEditingController();
-  final TextEditingController cardHolderNameController = TextEditingController();
+  final TextEditingController withdrawalAmountController =
+      TextEditingController();
+  final TextEditingController cardHolderNameController =
+      TextEditingController();
   final TextEditingController cardNumberController = TextEditingController();
   final TextEditingController expiryDateController = TextEditingController();
   final TextEditingController cvcController = TextEditingController();
@@ -171,13 +185,19 @@ class CoachProfileController extends ChangeNotifier {
 
     try {
       await Future.delayed(const Duration(milliseconds: 1000));
-      final String jsonString = await rootBundle.loadString('assets/json/coach_profile.json');
+      final String jsonString = await rootBundle.loadString(
+        'assets/json/coach_profile.json',
+      );
       final Map<String, dynamic> data = jsonDecode(jsonString);
 
       balance = data['balance'] ?? 0.0;
-      
-      currentAvailability = (data['availability'] as List).map((x) => CoachAvailability.fromJson(x)).toList();
-      services = (data['services'] as List).map((x) => CoachServiceOption.fromJson(x)).toList();
+
+      currentAvailability = (data['availability'] as List)
+          .map((x) => CoachAvailability.fromJson(x))
+          .toList();
+      services = (data['services'] as List)
+          .map((x) => CoachServiceOption.fromJson(x))
+          .toList();
     } catch (e) {
       showErrorSnackBar(message: "Failed to load profile data: $e");
     } finally {
@@ -203,11 +223,15 @@ class CoachProfileController extends ChangeNotifier {
   }
 
   void saveAvailability() {
-    if (selectedDay != null && selectedStartTime != null && selectedEndTime != null) {
-      currentAvailability.add(CoachAvailability(
-        day: selectedDay!,
-        timeRange: "$selectedStartTime - $selectedEndTime",
-      ));
+    if (selectedDay != null &&
+        selectedStartTime != null &&
+        selectedEndTime != null) {
+      currentAvailability.add(
+        CoachAvailability(
+          day: selectedDay!,
+          timeRange: "$selectedStartTime - $selectedEndTime",
+        ),
+      );
       // Reset selections
       selectedDay = null;
       selectedStartTime = null;
@@ -227,7 +251,14 @@ class CoachProfileController extends ChangeNotifier {
   }
 
   void addServiceOption() {
-    services.add(CoachServiceOption(title: 'Option ${services.length + 1}', duration: 'Enter here', price: 'Enter here', isActive: true));
+    services.add(
+      CoachServiceOption(
+        title: 'Option ${services.length + 1}',
+        duration: 'Enter here',
+        price: 'Enter here',
+        isActive: true,
+      ),
+    );
     notifyListeners();
   }
 
@@ -238,7 +269,12 @@ class CoachProfileController extends ChangeNotifier {
     }
   }
 
-  void updateServiceOption(CoachServiceOption option, {String? duration, String? price, bool? isActive}) {
+  void updateServiceOption(
+    CoachServiceOption option, {
+    String? duration,
+    String? price,
+    bool? isActive,
+  }) {
     if (duration != null) option.duration = duration;
     if (price != null) option.price = price;
     if (isActive != null) option.isActive = isActive;

@@ -28,7 +28,10 @@ class FullScreenImageViewer extends StatelessWidget {
         ),
         title: Text(
           "Back",
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 16.sp),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: AppColors.whiteColor,
+            fontSize: 16.sp,
+          ),
         ),
       ),
       body: Center(
@@ -55,9 +58,7 @@ class FullScreenImageViewer extends StatelessWidget {
                       height: double.infinity,
                       loadingBuilder: (context, child, loadingProgress) {
                         if (loadingProgress == null) return child;
-                        return Center(
-                          child: CustomLoader(size: 150.r),
-                        );
+                        return Center(child: CustomLoader(size: 150.r));
                       },
                     ),
             );

@@ -24,7 +24,7 @@ class GlassWidget extends StatelessWidget {
     this.blur,
     this.opacity,
     this.borderOpacity,
-    this.color = AppColors.backgroundColor,
+    this.color =AppColors.backgroundColor,
   });
 
   @override
@@ -45,9 +45,9 @@ class GlassWidget extends StatelessWidget {
           transform: const GradientRotation(360 * 3),
           end: Alignment.bottomLeft,
           colors: [
-            AppColors.backgroundColor,
+            ?color,
             AppColors.whiteLiteColor,
-            AppColors.backgroundColor,
+            ?color ,
           ],
         ),
         borderRadius: BorderRadius.circular(
@@ -56,8 +56,7 @@ class GlassWidget extends StatelessWidget {
       ),
       child: Container(
         margin: EdgeInsets.all(0.7.r),
-        height: height
-            ?.h, // Changed from height! to height? to safely allow null double.infinity handling
+
         width: width == double.infinity ? double.infinity : width?.w,
         padding: EdgeInsets.all(.5.w),
         decoration: BoxDecoration(
@@ -65,7 +64,7 @@ class GlassWidget extends StatelessWidget {
             begin: Alignment.center,
             end: Alignment.center,
             colors: [
-              AppColors.backgroundColor,
+              ?color,
               AppColors.whiteLiteColor,
               AppColors.blackColor,
               AppColors.whiteLiteColor,

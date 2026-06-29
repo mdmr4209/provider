@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/constants/app_assets.dart';
 import '../../../../core/constants/app_colors.dart';
@@ -85,42 +86,39 @@ class InboxView extends StatelessWidget {
                                             onTap: () => context.push(
                                               AppRoutes.findFriends,
                                             ),
-                                            child: Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                horizontal: 8.w,
-                                                vertical: 4.h,
-                                              ),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Icon(
-                                                    Icons.add,
-                                                    color: AppColors
-                                                        .secondaryColorLight,
-                                                    size: 20.r,
-                                                  ),
-                                                  SizedBox(width: 4.w),
-                                                  Text(
-                                                    "Add",
-                                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                                      color: AppColors
-                                                          .secondaryColorLight,
-                                                      fontSize: 15.sp,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Icon(
+                                                  Icons.add,
+                                                  color: AppColors
+                                                      .secondaryColorLight,
+                                                  size: 20.r,
+                                                ),
+                                                SizedBox(width: 4.w),
+                                                Text(
+                                                  "Add",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium
+                                                      ?.copyWith(
+                                                        color: AppColors
+                                                            .secondaryColorLight,
+                                                        fontSize: 15.sp,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                ),
+                                              ],
                                             ),
                                           )
-                                        : IconButton(
-                                            icon: Icon(
+                                        : InkWell(
+                                            child: Icon(
                                               Icons.calendar_today_outlined,
                                               color: AppColors.amberColor,
-                                              size: 24.r,
+                                              size: 20.r,
                                             ),
-                                            onPressed: () {
+                                            onTap: () {
                                               context.push(AppRoutes.bookings);
                                             },
                                           ),
@@ -154,11 +152,15 @@ class InboxView extends StatelessWidget {
                                               ),
                                               child: Text(
                                                 "Stories",
-                                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                                  color: AppColors.whiteColor
-                                                      .withAlpha(128),
-                                                  fontSize: 14.sp,
-                                                ),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium
+                                                    ?.copyWith(
+                                                      color: AppColors
+                                                          .whiteColor
+                                                          .withAlpha(128),
+                                                      fontSize: 12.sp,
+                                                    ),
                                               ),
                                             ),
                                             if (controller.isLoading &&
@@ -217,7 +219,8 @@ class InboxView extends StatelessWidget {
                                                       (context, index) {
                                                         final story = controller
                                                             .stories[index];
-                                                        return _buildStoryItem(context, 
+                                                        return _buildStoryItem(
+                                                          context,
                                                           story.name,
                                                           story.avatar,
                                                           isMine: story.isMine,
@@ -226,7 +229,7 @@ class InboxView extends StatelessWidget {
                                                 ),
                                               ),
 
-                                            SizedBox(height: 20.h),
+                                            SizedBox(height: 5.h),
 
                                             // ── Search Bar ──────────────────────────────────────────────
                                             Padding(
@@ -234,18 +237,29 @@ class InboxView extends StatelessWidget {
                                                 horizontal: 16.w,
                                               ),
                                               child: CustomInput(
-                                                height: 48,
+                                                height: 44,
                                                 hintText: "Search name",
-                                                backgroundColor: AppColors
-                                                    .whiteColor
-                                                    .withAlpha(13),
-                                                borderRadius: 24,
-                                                shadow: false,
+                                                fontSize: 14,
+                                                hintColor: AppColors.greyColor,
+                                                hintStyle: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyLarge
+                                                    ?.copyWith(
+                                                      color: AppColors
+                                                          .whiteColor
+                                                          .withAlpha(153),
+                                                      fontSize: 14.sp,
+                                                    ),
+                                                shadow: true,
                                                 leadingIcon: AppAssets.search,
+                                                leadingPadding: EdgeInsets.only(
+                                                  left: 16.w,
+                                                  right: 8.w,
+                                                ),
                                               ),
                                             ),
 
-                                            SizedBox(height: 20.h),
+                                            SizedBox(height: 15.h),
 
                                             // ── Tabs ───────────────────────────────────────────────────
                                             TabBar(
@@ -261,22 +275,26 @@ class InboxView extends StatelessWidget {
                                                 right: 12.w,
                                               ),
                                               tabs: [
-                                                _buildTab(context, 
+                                                _buildTab(
+                                                  context,
                                                   "Messages",
                                                   0,
                                                   tabController.index,
                                                 ),
-                                                _buildTab(context, 
+                                                _buildTab(
+                                                  context,
                                                   "Unread Messages",
                                                   1,
                                                   tabController.index,
                                                 ),
-                                                _buildTab(context, 
+                                                _buildTab(
+                                                  context,
                                                   "Missed calls",
                                                   2,
                                                   tabController.index,
                                                 ),
-                                                _buildTab(context, 
+                                                _buildTab(
+                                                  context,
                                                   "Call Back",
                                                   3,
                                                   tabController.index,
@@ -318,11 +336,14 @@ class InboxView extends StatelessWidget {
                                                 child: Center(
                                                   child: Text(
                                                     "No chats available in this section.",
-                                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                                      color: AppColors
-                                                          .whiteColor
-                                                          .withAlpha(128),
-                                                    ),
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyMedium
+                                                        ?.copyWith(
+                                                          color: AppColors
+                                                              .whiteColor
+                                                              .withAlpha(128),
+                                                        ),
                                                   ),
                                                 ),
                                               )
@@ -384,23 +405,35 @@ class InboxView extends StatelessWidget {
     int selectedIndex,
   ) {
     return Container(
-      padding: EdgeInsets.all(4.r),
       decoration: BoxDecoration(
-        color: AppColors.whiteColor.withAlpha(26),
+        color: AppColors.coachColorFF182617,
         borderRadius: BorderRadius.circular(20.r),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _buildToggleItem(context, "Coach", 0, selectedNotifier, selectedIndex),
-          _buildToggleItem(context, "Friends", 1, selectedNotifier, selectedIndex),
+          _buildToggleItem(
+            context,
+            "Coach",
+            0,
+            selectedNotifier,
+            selectedIndex,
+          ),
+          _buildToggleItem(
+            context,
+            "Friends",
+            1,
+            selectedNotifier,
+            selectedIndex,
+          ),
         ],
       ),
     );
   }
 
   Widget _buildToggleItem(
-    BuildContext context, String label,
+    BuildContext context,
+    String label,
     int index,
     ValueNotifier<int> selectedNotifier,
     int selectedIndex,
@@ -411,15 +444,15 @@ class InboxView extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 6.h),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.coachColorFF334B2F : Colors.transparent,
+          color: isSelected
+              ? AppColors.coachColorFF3E5E39
+              : AppColors.coachColorFF182617,
           borderRadius: BorderRadius.circular(20.r),
         ),
         child: Text(
           label,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: isSelected
-                ? AppColors.whiteColor
-                : AppColors.whiteColor.withAlpha(128),
+            color: isSelected ? AppColors.whiteColor : AppColors.white54Color,
             fontSize: 13.sp,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           ),
@@ -428,7 +461,12 @@ class InboxView extends StatelessWidget {
     );
   }
 
-  Widget _buildStoryItem(BuildContext context, String name, String avatar, {bool isMine = false}) {
+  Widget _buildStoryItem(
+    BuildContext context,
+    String name,
+    String avatar, {
+    bool isMine = false,
+  }) {
     return Container(
       width: 70.w,
       margin: EdgeInsets.only(right: 12.w),
@@ -491,7 +529,10 @@ class InboxView extends StatelessWidget {
           SizedBox(height: 4.h),
           Text(
             name,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 11.sp),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColors.whiteColor,
+              fontSize: 9.sp,
+            ),
             overflow: TextOverflow.ellipsis,
           ),
         ],
@@ -499,7 +540,12 @@ class InboxView extends StatelessWidget {
     );
   }
 
-  Widget _buildTab(BuildContext context, String label, int index, int selectedIndex) {
+  Widget _buildTab(
+    BuildContext context,
+    String label,
+    int index,
+    int selectedIndex,
+  ) {
     final isSelected = selectedIndex == index;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
@@ -545,13 +591,14 @@ class InboxView extends StatelessWidget {
         margin: EdgeInsets.only(bottom: 12.h),
         padding: EdgeInsets.all(12.r),
         decoration: BoxDecoration(
-          color: AppColors.postCardColor,
+          color: AppColors.coachColorFF253722,
           borderRadius: BorderRadius.circular(12.r),
           border: Border.all(color: AppColors.whiteColor.withAlpha(13)),
         ),
         child: Column(
           children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Stack(
                   children: [
@@ -591,22 +638,48 @@ class InboxView extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Text(
-                        filterIndex == 2
-                            ? "12 April, 1:30AM"
-                            : filterIndex == 3
-                            ? "Requested: Today at 3:00 PM"
-                            : chat.lastMessage.isNotEmpty
-                            ? chat.lastMessage
-                            : (chat.isOnline ? "Online" : "Offline"),
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: filterIndex == 2
-                              ? AppColors.redColor.withAlpha(204)
-                              : AppColors.whiteColor.withAlpha(128),
-                          fontSize: 12.sp,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                      Row(
+                        spacing: filterIndex == 2 ? 4 : 0,
+                        children: [
+                          if (filterIndex == 2)
+                            SvgPicture.asset(AppAssets.missedCall),
+                          Text(
+                            filterIndex == 2
+                                ? "12 April, 1:30AM"
+                                : filterIndex == 3
+                                ? "Requested: Today at 3:00 PM"
+                                : chat.lastMessage.isNotEmpty
+                                ? chat.lastMessage
+                                : (chat.isOnline ? "Online" : "Offline"),
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(
+                                  color: AppColors.whiteColor.withAlpha(128),
+                                  fontSize: 12.sp,
+                                ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          if (filterIndex == 2) ...[
+                            SizedBox(width: 8.w),
+                            CustomButton(
+                              onPress: () async {},
+                              title: "Notify I'm Available",
+                              width: 125,
+                              height: 28,
+                              fontSize: 10,
+                              buttonColor: AppColors.whiteColor.withAlpha(13),
+                              borderColor: Colors.transparent,
+                              radius: 8,
+                              horizontalPadding: 0,
+                              leadingWidget: Icon(
+                                Icons.notifications_none,
+                                color: AppColors.amberColor,
+                                size: 16.r,
+                              ),
+                              leadingPadding: EdgeInsets.all(0),
+                            ),
+                          ],
+                        ],
                       ),
                     ],
                   ),
@@ -621,28 +694,6 @@ class InboxView extends StatelessWidget {
                   ),
               ],
             ),
-            if (filterIndex == 2) ...[
-              SizedBox(height: 12.h),
-              Align(
-                alignment: Alignment.centerRight,
-                child: CustomButton(
-                  onPress: () async {},
-                  title: "Notify I'm Available",
-                  width: 160,
-                  height: 28,
-                  fontSize: 10,
-                  buttonColor: AppColors.whiteColor.withAlpha(13),
-                  borderColor: Colors.transparent,
-                  radius: 8,
-                  horizontalPadding: 0,
-                  leadingWidget: Icon(
-                    Icons.notifications_none,
-                    color: AppColors.amberColor,
-                    size: 16.r,
-                  ),
-                ),
-              ),
-            ],
             if (filterIndex == 3) ...[
               SizedBox(height: 12.h),
               Row(
@@ -662,6 +713,7 @@ class InboxView extends StatelessWidget {
                       color: AppColors.amberColor,
                       size: 16.r,
                     ),
+                    horizontalPadding: 0,
                   ),
                   SizedBox(width: 8.w),
                   CustomButton(

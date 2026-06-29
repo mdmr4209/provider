@@ -53,16 +53,13 @@ class CustomAppDialog extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             if (showLogo) ...[
-              Image.asset(
-                AppAssets.sb1Logo,
-                height: 60.h,
-              ),
+              Image.asset(AppAssets.sb1Logo, height: 60.h),
               SizedBox(height: 20.h),
             ] else if (icon != null) ...[
               icon!,
               SizedBox(height: 20.h),
             ],
-            
+
             Text(
               title,
               textAlign: TextAlign.center,
@@ -75,9 +72,9 @@ class CustomAppDialog extends StatelessWidget {
                 height: 1.2,
               ),
             ),
-            
+
             SizedBox(height: 12.h),
-            
+
             Text(
               description,
               textAlign: TextAlign.center,
@@ -88,9 +85,9 @@ class CustomAppDialog extends StatelessWidget {
                 fontFamily: 'Proxima Nova',
               ),
             ),
-            
+
             SizedBox(height: 32.h),
-            
+
             CustomButton(
               onPress: () async {
                 Navigator.pop(context);
@@ -101,7 +98,7 @@ class CustomAppDialog extends StatelessWidget {
               height: 52,
               fontSize: 16,
             ),
-            
+
             if (secondaryText != null) ...[
               SizedBox(height: 12.h),
               GestureDetector(
@@ -153,7 +150,7 @@ void showAppCustomDialog(
   showDialog(
     context: context,
     // Solid barrier color using exact color from AppColors
-    barrierColor: AppColors.defaultColor,
+    barrierColor: AppColors.defaultColor.withAlpha(177),
     builder: (context) => CustomAppDialog(
       title: title,
       description: description,

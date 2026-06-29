@@ -4,15 +4,11 @@ class ProfileDetailsModel {
   ProfileDetailsModel({required this.user});
 
   factory ProfileDetailsModel.fromJson(Map<String, dynamic> json) {
-    return ProfileDetailsModel(
-      user: ProfileUser.fromJson(json['user'] ?? {}),
-    );
+    return ProfileDetailsModel(user: ProfileUser.fromJson(json['user'] ?? {}));
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'user': user.toJson(),
-    };
+    return {'user': user.toJson()};
   }
 }
 
@@ -43,7 +39,9 @@ class ProfileUser {
       bio: json['bio'] ?? '',
       stats: ProfileStats.fromJson(json['stats'] ?? {}),
       journals: json['journals'] != null
-          ? (json['journals'] as List).map((i) => ProfileJournal.fromJson(i)).toList()
+          ? (json['journals'] as List)
+                .map((i) => ProfileJournal.fromJson(i))
+                .toList()
           : [],
       media: json['media'] != null ? List<String>.from(json['media']) : [],
     );

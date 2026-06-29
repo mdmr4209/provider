@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 void main(List<String> args) async {
@@ -8,36 +9,80 @@ void main(List<String> args) async {
 
   final command = args[0];
 
-  if (command == 'init') {
-    await initProject();
-  } else if (command == 'generate' || command == 'g') {
-    if (args.length < 3) {
-      print("[ERROR] Missing arguments for generate.");
-      print("Usage: dart scripts/config.dart generate <role> <feature_name>");
+  switch (command) {
+    case 'init':
+      await initProject();
+      break;
+    case 'r':
+      if (args.length < 2) return _missingArgs('r <role>');
+      createRole(args[1]);
+      break;
+    case 'p':
+      if (args.length < 2) return _missingArgs('p <page>');
+      createPage(args[1]);
+      break;
+    case 'c':
+      if (args.length < 3) return _missingArgs('c <name> <folder>');
+      createController(args[1], args[2]);
+      break;
+    case 'v':
+      if (args.length < 3) return _missingArgs('v <name> <folder>');
+      createView(args[1], args[2]);
+      break;
+    case 'pr':
+      if (args.length < 3) return _missingArgs('pr <name> <folder>');
+      createProvider(args[1], args[2]);
+      break;
+    case 'l':
+      if (args.length < 2) return _missingArgs('l <assets/locales>');
+      generateLocales(args[1]);
+      break;
+    case 'm':
+      if (args.length < 3) return _missingArgs('m <folder> <jsonPath>');
+      generateModel(args[1], args[2]);
+      break;
+    case 'generate':
+    case 'g':
+      if (args.length < 3)
+        return _missingArgs('generate <role> <feature_name>');
+      scaffoldFeature(args[1], args[2]);
+      break;
+    default:
+      print("[ERROR] Unknown command: $command");
+      printUsage();
       exit(1);
-    }
-    final role = args[1];
-    final featureName = args[2];
-    scaffoldFeature(role, featureName);
-  } else {
-    print("[ERROR] Unknown command: $command");
-    printUsage();
-    exit(1);
   }
 }
 
+void _missingArgs(String usage) {
+  print("[ERROR] Missing arguments.");
+  print("Usage: dart scripts/config.dart $usage");
+  exit(1);
+}
+
 void printUsage() {
-  print("""
+  print('''
 🚀 Flutter Boilerplate CLI (config.dart)
 
 Available Commands:
-  init                           Initializes the project with core folders, dependencies, and routing.
-                                 Usage: dart scripts/config.dart init
+  init                           Initialize project
+  r <role>                       Create role folder
+  p <page>                       Create page (feature)
+  c <name> <folder>              Create controller in a specific folder
+  v <name> <folder>              Create view in a specific folder
+  pr <name> <folder>             Create provider in a specific folder
+  l <assets/locales>             Generate locales from JSON
+  m <folder> <jsonPath>          Generate model from JSON
 
-  generate <role> <feature>      Generates a new feature (View, Model, Controller) and adds the route.
-                                 Aliases: g
-                                 Usage: dart scripts/config.dart generate shared auth
-""");
+Examples:
+  dart scripts/config.dart r coach
+  dart scripts/config.dart p home
+  dart scripts/config.dart c dialog home
+  dart scripts/config.dart v dialog home
+  dart scripts/config.dart pr user home
+  dart scripts/config.dart l assets/locales/en.json
+  dart scripts/config.dart m home assets/models/user.json
+''');
 }
 
 // ==========================================
@@ -1344,90 +1389,7 @@ class NavigationService {
     return navigatorKey.currentState?.canPop() ?? false;
   }
 
-  // ── Auth Navigation ────────────────────────────────────────────────────
-
-  static void goToLogin() => go(AppRoutes.login);
-
-  static void goToHome() => go(AppRoutes.home);
-
-  static void goToOnboarding() => go(AppRoutes.onboarding);
-
-  static void goToSignUp() => push(AppRoutes.signup);
-
-  static void goToForgetPassword() => push(AppRoutes.forgetPass);
-
-  static void goToOtpVerify({required String origin}) =>
-      push(AppRoutes.otpVerify, extra: origin);
-
-  static void goToChangePassword({required String origin}) =>
-      push(AppRoutes.changePass, extra: origin);
-
-  // ── Product Navigation ─────────────────────────────────────────────────
-
-  static void goToSearch() => go(AppRoutes.search);
-
-  static void goToFilter() => push(AppRoutes.filter);
-
-  static void goToWishlist() => go(AppRoutes.wishlist);
-
-  static void goToReview(String productId) =>
-      push(AppRoutes.review, extra: productId);
-
-  // ── Cart & Checkout Navigation ─────────────────────────────────────────
-
-  static void goToCart() => go(AppRoutes.order);
-
-  static void goToCheckout() => push(AppRoutes.checkout);
-
-  static void goToShipping() => push(AppRoutes.shipping);
-
-  static void goToPayment() => push(AppRoutes.payment);
-
-  static void goToConfirmOrder({required bool fromCheckout}) =>
-      push(AppRoutes.confirm, extra: fromCheckout);
-
-  // ── Profile Navigation ─────────────────────────────────────────────────
-
-  static void goToProfile() => go(AppRoutes.profile);
-
-  static void goToTheme() => go(AppRoutes.theme);
-
-  static void goToEditProfile() => push(AppRoutes.editProfile);
-
-  static void goToMyAddress() => push(AppRoutes.address);
-
-  static void goToAddAddress() => push(AppRoutes.addAddress);
-
-  static void goToPaymentMethods() => push(AppRoutes.paymentMethod);
-
-  static void goToAddCard() => push(AppRoutes.addCard);
-
-  static void goToPromoCode() => push(AppRoutes.promoCode);
-
-  static void goToOrderHistory() => push(AppRoutes.orderHistory);
-
-  static void goToTrackOrder() => push(AppRoutes.trackOrder);
-
-  static void goToPoints() => push(AppRoutes.points);
-
-  static void goToSettings() => push(AppRoutes.settings);
-
-  // ── Home Features Navigation ───────────────────────────────────────────
-
-  static void goToBreathing({
-    required String title,
-    required String subtitle,
-  }) =>
-      push(AppRoutes.breathing, extra: {'title': title, 'subtitle': subtitle});
-
-  static void goToWriteJournal() => push(AppRoutes.writeJournal);
-
   // ── Utility Methods ────────────────────────────────────────────────────
-
-  /// Clear all analytics/tracking when logging out
-  static void logout() {
-    go(AppRoutes.login);
-  }
 
   /// Get current route
   static String? getCurrentRoute() {
@@ -6875,6 +6837,131 @@ class GlassWidget extends StatelessWidget {
 }
 """);
 
+  File('${corePath.path}/widgets/gradient_timer_painter.dart')
+    ..createSync(recursive: true)
+    ..writeAsStringSync(r"""import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:syncfusion_flutter_gauges/gauges.dart';
+
+/// A Stateless circular gauge that displays progress with a premium gradient.
+/// Designed for high-frequency updates (e.g., a 4s breathing cycle).
+class GradientTimerGauge extends StatelessWidget {
+  final double progress; // Expects 1.0 (full) down to 0.0 (empty)
+  final double size;
+
+  const GradientTimerGauge({
+    super.key,
+    required this.progress,
+    this.size = 245,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          // ── Outer Decorative Ring (Thin Gold Line matching the picture) ──
+          Container(
+            width: size.r,
+            height: size.r,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: const Color(0xFFC4B65D).withAlpha(230),
+                width: 1.2.r, // Sharp thin line like the mockup
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFFC4B65D).withAlpha(128),
+                  blurRadius: 80,
+                  spreadRadius: 10,
+                ),
+              ],
+            ),
+          ),
+
+          // ── Syncfusion Radial Gauge ──────────────────────────────────────────
+          SizedBox(
+            width: size.r - 2.r, // Sitting perfectly inside the gold border
+            height: size.r - 2.r,
+            child: SfRadialGauge(
+              enableLoadingAnimation: false,
+              axes: [
+                RadialAxis(
+                  minimum: 0,
+                  maximum: 1, // Normalized progress range
+                  startAngle: 270, // Start from the top (12 o'clock)
+                  endAngle: 270,
+                  showLabels: false,
+                  showTicks: false,
+                  radiusFactor: 1.0,
+                  // ── Recessed Track Style (Updated to match the picture's depth) ──
+                  axisLineStyle: AxisLineStyle(
+                    thickness: 14.r,
+                    color: const Color(
+                      0xFF384636,
+                    ), // Dark green recessed shadow color
+                    thicknessUnit: GaugeSizeUnit.logicalPixel,
+                  ),
+                  annotations: [
+                    // Center fill area with shadow to create depth shown in the picture
+                    GaugeAnnotation(
+                      positionFactor: 0.0,
+                      angle: 90,
+                      widget: Container(
+                        width: size.r - 31.r, // Proportional to center area
+                        height: size.r - 31.r,
+                        decoration: BoxDecoration(
+                          color: const Color(
+                            0xFF5C6F59,
+                          ), // Main green background
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withAlpha(128),
+                              blurRadius: 10,
+                              offset: const Offset(
+                                -2,
+                                -2,
+                              ), // Inner shadow effect
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                  pointers: [
+                    // The actual progress indicator (drains from 1.0 to 0.0)
+                    RangePointer(
+                      value: progress,
+                      width: 14.r,
+                      sizeUnit: GaugeSizeUnit.logicalPixel,
+                      cornerStyle: CornerStyle.bothCurve,
+                      enableAnimation: false,
+                      gradient: const SweepGradient(
+                        colors: [
+                          Color(0x00AF935B), // transparent tail
+                          Color(0x55AF935B),
+                          Color(0xAAAF935B),
+                          Color(0xFFAF935B),
+                          Color(0xFFE9D19E), // bright leading head
+                        ],
+                        stops: [0.0, 0.2, 0.5, 0.8, 1.0],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+""");
+
   File('${corePath.path}/widgets/input_text_widget.dart')
     ..createSync(recursive: true)
     ..writeAsStringSync(r"""import 'package:flutter/material.dart';
@@ -7328,7 +7415,6 @@ class InputTextWidget extends StatelessWidget {
     ..createSync(recursive: true)
     ..writeAsStringSync(r"""import 'package:flutter/material.dart';
 
-import '../../features/shared/localization/localization_extension.dart';
 import '../constants/app_colors.dart';
 
 class InternetExceptionsWidget extends StatelessWidget {
@@ -7348,7 +7434,7 @@ class InternetExceptionsWidget extends StatelessWidget {
             padding: const EdgeInsets.only(top: 30.0),
             child: Center(
               child: Text(
-                context.watchTr('internet_exception'),
+                'Internet exception',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppColors.textColor,
                   fontSize: 20,
@@ -7384,12 +7470,450 @@ class InternetExceptionsWidget extends StatelessWidget {
 }
 """);
 
+  File('${corePath.path}/widgets/show_breathing_dialog.dart')
+    ..createSync(recursive: true)
+    ..writeAsStringSync(r"""import 'package:flutter/material.dart';
+import 'custom_dialog.dart';
+
+/// Shows a beautiful breathing dialog using the unified CustomDialog.
+void showBreathingDialog(
+  BuildContext context, {
+  bool isBreathing = false,
+  required String title,
+  required String? description,
+  required String primaryButtonText,
+  required VoidCallback onPrimaryTap,
+}) {
+  showAppCustomDialog(
+    context,
+    title: title,
+    description: description ?? '',
+    primaryText: primaryButtonText,
+    onPrimaryTap: onPrimaryTap,
+    secondaryText: '"No, I\'m okay for now."',
+    showLogo: isBreathing,
+  );
+}
+""");
+
+  print("Other's language support?\n1. localization\n2. not");
+  stdout.write("Enter choice (1/2): ");
+  final langChoice = stdin.readLineSync();
+  if (langChoice == '1') {
+    print("📂 Creating localization directories...");
+
+    File(
+        '${libPath.path}/core/localization/controllers/localization_controller.dart',
+      )
+      ..createSync(recursive: true)
+      ..writeAsStringSync(r"""import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../languages/languages.dart';
+
+
+class LocalizationController with ChangeNotifier {
+  static const String _localeKey = "app_locale";
+  Locale _locale = const Locale('en', 'US');
+
+  Locale get locale => _locale;
+
+  LocalizationController() {
+    _loadLocale();
+  }
+
+  Future<void> _loadLocale() async {
+    final prefs = await SharedPreferences.getInstance();
+    final languageCode = prefs.getString(_localeKey);
+    if (languageCode != null) {
+      // Simple parsing: 'en_US' -> 'en', 'US'
+      if (languageCode.contains('_')) {
+        final parts = languageCode.split('_');
+        _locale = Locale(parts[0], parts[1]);
+      } else {
+        _locale = Locale(languageCode);
+      }
+      notifyListeners();
+    }
+  }
+
+  Future<void> setLocale(Locale locale) async {
+    if (_locale == locale) return;
+    _locale = locale;
+    notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_localeKey, locale.toString());
+  }
+
+  String translate(String key) {
+    final String localeKey = _locale.toString(); // e.g. 'en_US'
+
+    // Try exact match (e.g. 'en_US')
+    if (Languages.keys.containsKey(localeKey) &&
+        Languages.keys[localeKey]!.containsKey(key)) {
+      return Languages.keys[localeKey]![key]!;
+    }
+
+    // Try language code only (e.g. 'en')
+    final String langCode = _locale.languageCode;
+    if (Languages.keys.containsKey(langCode) &&
+        Languages.keys[langCode]!.containsKey(key)) {
+      return Languages.keys[langCode]![key]!;
+    }
+
+    // Default to 'en_US' if not found
+    if (Languages.keys.containsKey('en_US') &&
+        Languages.keys['en_US']!.containsKey(key)) {
+      return Languages.keys['en_US']![key]!;
+    }
+
+    return key; // Return key if no translation found
+  }
+}
+""");
+
+    File('${libPath.path}/core/localization/localization_extension.dart')
+      ..createSync(recursive: true)
+      ..writeAsStringSync(r"""import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'controllers/localization_controller.dart';
+
+extension LocalizationExtension on BuildContext {
+  String tr(String key) {
+    return read<LocalizationController>().translate(key);
+  }
+
+  // If we want it to react to changes, we can use watch, but usually
+  // we use a Consumer or Provider.of(context) in the build method.
+  // For convenience in some places, we might want a 'watch' version.
+  String watchTr(String key) {
+    return watch<LocalizationController>().translate(key);
+  }
+}
+
+// Global function if preferred
+String tr(BuildContext context, String key) {
+  return context.read<LocalizationController>().translate(key);
+}
+""");
+
+    File('${libPath.path}/core/languages/languages.dart')
+      ..createSync(recursive: true)
+      ..writeAsStringSync(r"""class Languages {
+  static Map<String, Map<String, String>> get keys => {
+    'en_US': {
+      // Common
+      'shop_now': 'SHOP NOW',
+      'continue': 'CONTINUE',
+      'done': 'DONE',
+      'cancel': 'CANCEL',
+      'delete': 'DELETE',
+      'add': 'ADD',
+      'save': 'SAVE',
+      'apply': 'APPLY',
+      'success': 'Success',
+      'error': 'Error',
+      'warning': 'Warning',
+
+      // Home
+      'beauty_and_care': 'Beauty & Care',
+      'trending_products': 'Trending Products',
+      'new_arrivals': 'New Arrivals',
+      'search_hint': 'Search products...',
+      'get_your': 'Get Your',
+      'discount_percent': ' 50% ',
+      'off_banner': 'Off!',
+
+      // Auth
+      'login': 'Login',
+      'sign_up': 'Sign Up',
+      'account_created': 'Account Created!',
+      'password_reset': 'Your password has been reset!',
+      'email': 'Email',
+      'password': 'Password',
+
+      // Cart
+      'order': 'Order',
+      'your_cart_is_empty': 'Your Cart Is Empty',
+      'proceed_to_checkout': 'PROCEED TO CHECKOUT',
+      'shipping_details': 'Shipping Details',
+      'payment_method': 'Payment Method',
+      'subtotal': 'Subtotal',
+      'total': 'Total',
+      'thank_you_order': 'Thank You For Your Order!',
+
+      // Profile
+      'my_profile': 'My profile',
+      'order_history': 'Order history',
+      'my_address': 'My address',
+      'my_promocodes': 'My promocodes',
+      'track_my_order': 'Track my order',
+      'my_points': 'My Points',
+      'sign_out': 'Sign out',
+      'edit_profile': 'Edit Profile',
+      'welcome': 'Welcome',
+      'welcome_back': 'Welcome Back',
+      'auth_subtitle': 'Sign in to continue your healing journey',
+      'enter_your_email': 'Enter your email',
+      'enter_your_password': 'Enter your password',
+      'confirm_password': 'Confirm password',
+      'confirm_your_password': 'Confirm your password',
+      'enter_your_name': 'Enter your name',
+      'remember_me': 'Remember me',
+      'forget_password': 'Forget Password?',
+      'sign_in': 'Sign in',
+      'sign_in_caps': 'SIGN IN',
+      'sign_in_dot': 'Sign In.',
+      'sign_up_caps': 'Sign Up',
+      'sign_up_button': 'SIGN UP',
+      'no_account': 'Don’t have an account?',
+      'register_now': 'Register now',
+      'already_have_account': 'Already have an account?',
+      'forgot_password': 'Forgot password',
+      'forget_pass_msg':
+          'Please enter your email address. You will receive a link to create a new password via email.',
+      'continue_button': 'Continue',
+      'reset_pass_msg': 'Enter new password and confirm.',
+      'change_password_caps': 'CHANGE PASSWORD',
+      'otp_verification': 'OTP Verification',
+      'enter_otp_msg': 'Enter your OTP code here.',
+      'sms_sent_msg': 'An SMS has been sent to',
+      'containing_code_msg': 'containing a code to activate your account',
+      'did_not_receive_code': "Didn't receive a code?",
+      'resend': 'Resend',
+      'resend_available_in': 'Resend available in',
+      'verify_caps': 'VERIFY',
+      'enter_valid_otp': 'Please enter a valid 5-digit OTP',
+      'account_created_msg': 'Your account had beed created\nsuccessfully.',
+      'password_reset_success': 'Your password has\nbeen reset!',
+      'password_reset_msg':
+          'Qui ex aute ipsum duis. Incididunt\nadipisicing voluptate laborum',
+      'order_failed': 'Sorry! Your Order Has Failed!',
+      'congrats_points': 'Congratulations! You get ',
+      'points': 'Points',
+      'thank_you': 'Thank you!',
+      'something_went_wrong':
+          'Something went wrong. Please try again\nto continue your order.',
+      'view_orders': 'VIEW ORDERS',
+      'continue_shopping': 'CONTINUE SHOPPING',
+      'try_again': 'TRY AGAIN',
+      'go_to_profile': 'GO TO MY PROFILE',
+      'my_order': 'My order',
+      'delivery': 'Delivery',
+      'free': 'Free',
+      'enter_your_comment': 'Enter your comment',
+      'confirm_order': 'CONFIRM ORDER',
+      'use_current_location': 'Use current location',
+      'credit_cards': 'Credit Cards',
+      'repeat_order': 'Repeat order',
+      'leave_review': 'Leave a review',
+      'cart_empty_msg': 'Looks like you haven\'t made\nyour order yet.',
+      'onboarding_title_1': 'Welcome to\nElixir-369 !',
+      'onboarding_desc_1':
+          'Labore sunt culpa excepteur culpa ipsum. Labore occaecat ex nisi mollit.',
+      'onboarding_title_2': 'Easy Track\nOrder!',
+      'onboarding_desc_2':
+          'Labore sunt culpa excepteur culpa ipsum. Labore occaecat ex nisi mollit.',
+      'onboarding_title_3': 'Door to Door\nDelivery!',
+      'onboarding_desc_3':
+          'Labore sunt culpa excepteur culpa ipsum. Labore occaecat ex nisi mollit.',
+      'next': 'NEXT',
+      'skip': 'Skip',
+      'view_all': 'View all',
+      'luxury_fashion': 'LUXURY\nFASHION',
+      'explore': 'EXPLORE',
+      'in_stock': 'IN STOCK',
+      'description': 'Description',
+      'add_to_cart': 'ADD TO CART',
+      'reviews': 'Reviews',
+      'search': 'Search',
+      'filter': 'Filter',
+      'sort_by': 'Sort by',
+      'color': 'Color',
+      'price': 'Price',
+      'conditions': 'Conditions',
+      'gender': 'Gender',
+      'tags': 'Tags',
+      'apply_filters': 'APPLY FILTERS',
+      'sale': 'SALE',
+      'new': 'NEW',
+      'man': 'MAN',
+      'woman': 'WOMAN',
+      'wishlist': 'Wishlist',
+      'sign_out_confirm': 'Are you sure you want to sign out?',
+      'sure': 'SURE',
+      'home': 'Home',
+      'the_circle': 'The Circle',
+      'find_coaches': 'Find Coaches',
+      'inbox': 'Inbox',
+      'profile': 'Profile',
+      'settings': 'Settings',
+      'appearance': 'Appearance',
+      'dark_mode': 'Dark Mode',
+      'language': 'Language',
+      'on': 'On',
+      'off': 'Off',
+    },
+    'ar_AE': {
+      // Common
+      'shop_now': 'تسوق الآن',
+      'continue': 'استمرار',
+      'done': 'تم',
+      'cancel': 'إلغاء',
+      'delete': 'حذف',
+      'add': 'إضافة',
+      'save': 'حفظ',
+      'apply': 'تطبيق',
+      'success': 'نجاح',
+      'error': 'خطأ',
+      'warning': 'تحذير',
+
+      // Home
+      'beauty_and_care': 'الجمال والعناية',
+      'trending_products': 'المنتجات الرائجة',
+      'new_arrivals': 'وصل حديثاً',
+      'search_hint': 'البحث عن المنتجات...',
+      'get_your': 'احصل على',
+      'discount_percent': ' خصم 50% ',
+      'off_banner': 'من السعر!',
+
+      // Auth
+      'login': 'تسجيل الدخول',
+      'sign_up': 'إنشاء حساب',
+      'account_created': 'تم إنشاء الحساب!',
+      'password_reset': 'تم إعادة تعيين كلمة المرور الخاصة بك!',
+      'email': 'البريد الإلكتروني',
+      'password': 'كلمة المرور',
+
+      // Cart
+      'order': 'الطلب',
+      'your_cart_is_empty': 'سلة التسوق فارغة',
+      'proceed_to_checkout': 'المتابعة لإتمام الطلب',
+      'shipping_details': 'تفاصيل الشحن',
+      'payment_method': 'طريقة الدفع',
+      'subtotal': 'المجموع الفرعي',
+      'total': 'المجموع',
+      'thank_you_order': 'شكراً لطلبك!',
+
+      // Profile
+      'my_profile': 'ملفي الشخصي',
+      'order_history': 'سجل الطلبات',
+      'my_address': 'عنواني',
+      'my_promocodes': 'أكواد الخصم',
+      'track_my_order': 'تتبع طلبي',
+      'my_points': 'نقاطي',
+      'sign_out': 'تسجيل الخروج',
+      'edit_profile': 'تعديل الملف الشخصي',
+      'welcome_back': 'مرحباً بعودتك!',
+      'auth_subtitle': 'استخدم الشبكات الاجتماعية أو بريدك الإلكتروني',
+      'enter_your_email': 'أدخل بريدك الإلكتروني',
+      'enter_your_password': 'أدخل كلمة المرور',
+      'confirm_your_password': 'تأكيد كلمة المرور',
+      'enter_your_name': 'أدخل اسمك',
+      'remember_me': 'تذكرني',
+      'lost_your_password': 'نسيت كلمة المرور؟',
+      'sign_in': 'تسجيل الدخول',
+      'sign_in_caps': 'تسجيل الدخول',
+      'sign_in_dot': 'تسجيل الدخول.',
+      'sign_up_caps': 'إنشاء حساب',
+      'sign_up_button': 'إنشاء حساب',
+      'no_account': 'ليس لديك حساب؟',
+      'register_now': 'سجل الآن',
+      'already_have_account': 'لديك حساب بالفعل؟',
+      'forgot_password': 'نسيت كلمة المرور',
+      'forget_pass_msg':
+          'يرجى إدخال عنوان بريدك الإلكتروني. ستتلقى رابطاً لإنشاء كلمة مرور جديدة عبر البريد الإلكتروني.',
+      'continue_button': 'استمرار',
+      'reset_pass_msg': 'أدخل كلمة المرور الجديدة وقم بتأكيدها.',
+      'change_password_caps': 'تغيير كلمة المرور',
+      'otp_verification': 'التحقق من رمز OTP',
+      'enter_otp_msg': 'أدخل رمز OTP الخاص بك هنا.',
+      'sms_sent_msg': 'تم إرسال رسالة نصية قصيرة إلى',
+      'containing_code_msg': 'تحتوي على رمز لتنشيط حسابك',
+      'did_not_receive_code': 'لم تستلم الرمز؟',
+      'resend': 'إعادة الإرسال',
+      'resend_available_in': 'إعادة الإرسال متاحة خلال',
+      'verify_caps': 'تحقق',
+      'enter_valid_otp': 'يرجى إدخال رمز OTP صحيح مكون من 5 أرقام',
+      'account_created_msg': 'تم إنشاء حسابك بنجاح.',
+      'password_reset_success': 'تم إعادة تعيين كلمة المرور الخاصة بك بنجاح!',
+      'password_reset_msg':
+          'تمت العملية بنجاح. يمكنك الآن تسجيل الدخول بكلمة المرور الجديدة.',
+      'order_failed': 'عذراً! لقد فشل طلبك!',
+      'congrats_points': 'تهانينا! لقد حصلت على ',
+      'points': 'نقاط',
+      'thank_you': 'شكراً لك!',
+      'something_went_wrong':
+          'حدث خطأ ما. يرجى المحاولة مرة أخرى لمواصلة طلبك.',
+      'view_orders': 'عرض الطلبات',
+      'continue_shopping': 'مواصلة التسوق',
+      'try_again': 'المحاولة مرة أخرى',
+      'go_to_profile': 'الذهاب إلى ملفي الشخصي',
+      'my_order': 'طلبي',
+      'delivery': 'التوصيل',
+      'free': 'مجاني',
+      'enter_your_comment': 'أدخل تعليقك',
+      'confirm_order': 'تأكيد الطلب',
+      'use_current_location': 'استخدام الموقع الحالي',
+      'credit_cards': 'بطاقات الائتمان',
+      'repeat_order': 'إعادة الطلب',
+      'leave_review': 'ترك تقييم',
+      'cart_empty_msg': 'يبدو أنك لم تقم بإجراء طلبك بعد.',
+      'onboarding_title_1': 'مرحباً بكم في\nElixir-369 !',
+      'onboarding_desc_1':
+          'هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة.',
+      'onboarding_title_2': 'تتبع سهل\nللطلبات!',
+      'onboarding_desc_2':
+          'هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة.',
+      'onboarding_title_3': 'توصيل من الباب\nإلى الباب!',
+      'onboarding_desc_3':
+          'هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة.',
+      'next': 'التالي',
+      'skip': 'تخطي',
+      'view_all': 'عرض الكل',
+      'luxury_fashion': 'أزياء\nفاخرة',
+      'explore': 'استكشاف',
+      'in_stock': 'متوفر',
+      'description': 'الوصف',
+      'add_to_cart': 'إضافة إلى السلة',
+      'reviews': 'المراجعات',
+      'search': 'بحث',
+      'filter': 'تصفية',
+      'sort_by': 'ترتيب حسب',
+      'color': 'اللون',
+      'price': 'السعر',
+      'conditions': 'الحالات',
+      'gender': 'الجنس',
+      'tags': 'الوسوم',
+      'apply_filters': 'تطبيق الفلاتر',
+      'sale': 'تخفيض',
+      'new': 'جديد',
+      'man': 'رجال',
+      'woman': 'نساء',
+      'wishlist': 'قائمة الأمنيات',
+      'sign_out_confirm': 'هل أنت متأكد أنك تريد تسجيل الخروج؟',
+      'sure': 'بالتأكيد',
+      'home': 'الرئيسية',
+      'profile': 'الملف الشخصي',
+      'settings': 'الإعدادات',
+      'appearance': 'المظهر',
+      'dark_mode': 'الوضع الداكن',
+      'language': 'اللغة',
+      'on': 'مفعل',
+      'off': 'معطل',
+    },
+  };
+}
+""");
+    print("✅ Localization files created.");
+  }
   print("🛣️ Creating app_router.dart...");
   final routesPath = Directory('${libPath.path}/routes');
   routesPath.createSync(recursive: true);
 
   File('${routesPath.path}/app_router.dart').writeAsStringSync('''
 
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 abstract class AppRoutes {
@@ -7432,6 +7956,7 @@ class AppRouter {
   print("⚙️ Setting up main.dart...");
   File('${libPath.path}/main.dart').writeAsStringSync('''
 
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'routes/app_router.dart';
@@ -7471,6 +7996,78 @@ class MyApp extends StatelessWidget {
   }
 }
 ''');
+
+  print("Do have multiple role [1/2]?");
+  print("1. Yes");
+  print("2. No");
+  stdout.write("Enter choice: ");
+  final roleChoice = stdin.readLineSync();
+  final isMultiRole = roleChoice == '1';
+  final featuresBase = isMultiRole
+      ? '${libPath.path}/features/shared'
+      : '${libPath.path}/features';
+  final corePrefix = isMultiRole ? '../../../../core/' : '../../../core/';
+  final sharedPrefix = isMultiRole ? '../../' : '../';
+
+  print("Do you want onboarding [1/2]?");
+  print("1. Yes");
+  print("2. No");
+  stdout.write("Enter choice: ");
+  final onbChoice = stdin.readLineSync();
+  final wantOnboarding = onbChoice == '1';
+
+  print("Do you want setup [1/2]?");
+  print("1. Yes");
+  print("2. No");
+  stdout.write("Enter choice: ");
+  final setupChoice = stdin.readLineSync();
+  final wantSetup = setupChoice == '1';
+
+  bool setupBeforeAuth = false;
+  if (wantSetup) {
+    print("📂 Creating generic setup view... (Before Auth: $setupBeforeAuth)");
+    final setupDir = Directory('$featuresBase/auth/views/setup');
+    setupDir.createSync(recursive: true);
+
+    String genericSetupContent = r'''import 'package:flutter/material.dart';
+
+class SetupView extends StatelessWidget {
+  const SetupView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Setup Complete')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.check_circle_outline, size: 100, color: Colors.green),
+            const SizedBox(height: 20),
+            const Text(
+              'Your Generic Setup is Ready!',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                // Navigate to next screen based on setupBeforeAuth logic
+                Navigator.of(context).pop();
+              },
+              child: const Text('Continue'),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+''';
+
+    File('${setupDir.path}/setup_view.dart')
+      ..createSync(recursive: true)
+      ..writeAsStringSync(genericSetupContent);
+  }
 
   print("✅ Boilerplate initialized successfully!");
   print(
@@ -7648,3 +8245,259 @@ void injectRoute(String role, String featureName, String pascalView) {
   routerFile.writeAsStringSync(content);
   print("[SUCCESS] Injected $pascalView into app_router.dart");
 }
+
+// ==========================================
+// CLI COMMAND HANDLERS
+// ==========================================
+
+String? findFolder(String folderName) {
+  final featuresDir = Directory('${Directory.current.path}/lib/features');
+  if (!featuresDir.existsSync()) return null;
+
+  String? foundPath;
+  void search(Directory dir) {
+    if (foundPath != null) return;
+    for (var entity in dir.listSync(followLinks: false)) {
+      if (entity is Directory) {
+        if (entity.path.split(Platform.pathSeparator).last == folderName ||
+            entity.path.split('/').last == folderName) {
+          foundPath = entity.path;
+          return;
+        }
+        search(entity);
+      }
+    }
+  }
+
+  search(featuresDir);
+  return foundPath;
+}
+
+void createRole(String role) {
+  final path = '${Directory.current.path}/lib/features/$role';
+  Directory(path).createSync(recursive: true);
+  print('✅ Created role folder at: lib/features/$role');
+}
+
+void createPage(String page) {
+  final path = '${Directory.current.path}/lib/features/$page';
+  Directory('$path/views').createSync(recursive: true);
+  Directory('$path/controllers').createSync(recursive: true);
+  Directory('$path/models').createSync(recursive: true);
+  Directory('$path/widgets').createSync(recursive: true);
+
+  createController(page, page, forcePath: '$path/controllers');
+  createView(page, page, forcePath: '$path/views');
+
+  print('✅ Created page structure at: lib/features/$page');
+}
+
+void createController(String name, String folder, {String? forcePath}) {
+  final targetPath = forcePath ?? findFolder(folder);
+  if (targetPath == null) {
+    print('❌ Could not find folder "$folder" in lib/features/');
+    return;
+  }
+
+  final controllersPath = forcePath != null
+      ? forcePath
+      : '$targetPath/controllers';
+  Directory(controllersPath).createSync(recursive: true);
+
+  final camelName = toCamelCase(name);
+  final pascalName = toPascalCase(name);
+
+  final file = File('$controllersPath/${name}_controller.dart');
+  if (!file.existsSync()) {
+    file.writeAsStringSync('''import 'package:flutter/material.dart';
+
+class ${pascalName}Controller with ChangeNotifier {
+  // Add state variables here
+  
+  void init() {
+    // Initialization logic
+  }
+}
+''');
+    print('✅ Created ${name}_controller.dart in $controllersPath');
+  } else {
+    print('⚠️ Controller already exists at $controllersPath');
+  }
+}
+
+void createView(String name, String folder, {String? forcePath}) {
+  final targetPath = forcePath ?? findFolder(folder);
+  if (targetPath == null) {
+    print('❌ Could not find folder "$folder" in lib/features/');
+    return;
+  }
+
+  final viewsPath = forcePath != null ? forcePath : '$targetPath/views';
+  Directory(viewsPath).createSync(recursive: true);
+
+  final pascalName = toPascalCase(name);
+
+  final file = File('$viewsPath/${name}_view.dart');
+  if (!file.existsSync()) {
+    file.writeAsStringSync('''import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+class ${pascalName}View extends StatelessWidget {
+  const ${pascalName}View({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('${pascalName}View')),
+      body: const Center(child: Text('${pascalName}View is working!')),
+    );
+  }
+}
+''');
+    print('✅ Created ${name}_view.dart in $viewsPath');
+  } else {
+    print('⚠️ View already exists at $viewsPath');
+  }
+}
+
+void createProvider(String name, String folder) {
+  final targetPath = findFolder(folder);
+  if (targetPath == null) {
+    print('❌ Could not find folder "$folder" in lib/features/');
+    return;
+  }
+
+  final providerPath = '$targetPath/providers';
+  Directory(providerPath).createSync(recursive: true);
+
+  final pascalName = toPascalCase(name);
+
+  final file = File('$providerPath/${name}_provider.dart');
+  if (!file.existsSync()) {
+    file.writeAsStringSync('''import 'package:flutter/material.dart';
+
+class ${pascalName}Provider with ChangeNotifier {
+  // Add logic here
+}
+''');
+    print('✅ Created ${name}_provider.dart in $providerPath');
+  } else {
+    print('⚠️ Provider already exists at $providerPath');
+  }
+}
+
+void generateLocales(String jsonPath) {
+  final file = File('${Directory.current.path}/$jsonPath');
+  if (!file.existsSync()) {
+    print('❌ Cannot find locale file at $jsonPath');
+    return;
+  }
+
+  try {
+    final content = file.readAsStringSync();
+    final Map<String, dynamic> jsonMap = jsonDecode(content);
+
+    final langDir = Directory('${Directory.current.path}/lib/core/languages');
+    langDir.createSync(recursive: true);
+
+    final dartFile = File('${langDir.path}/generated_locales.dart');
+
+    StringBuffer keys = StringBuffer();
+    jsonMap.forEach((key, value) {
+      // Escape quotes in value
+      final escapedValue = value.toString().replaceAll("'", "\'");
+      keys.writeln("      '$key': '$escapedValue',");
+    });
+
+    dartFile.writeAsStringSync('''class GeneratedLocales {
+  static const Map<String, String> keys = {
+${keys.toString()}  };
+}
+''');
+    print(
+      '✅ Generated Locales from $jsonPath into lib/core/languages/generated_locales.dart',
+    );
+  } catch (e) {
+    print('❌ Error parsing JSON: $e');
+  }
+}
+
+void generateModel(String folder, String jsonPath) {
+  final targetPath = findFolder(folder);
+  if (targetPath == null) {
+    print('❌ Could not find folder "$folder" in lib/features/');
+    return;
+  }
+
+  final jsonFile = File('${Directory.current.path}/$jsonPath');
+  if (!jsonFile.existsSync()) {
+    print('❌ Cannot find json file at $jsonPath');
+    return;
+  }
+
+  final modelsPath = '$targetPath/models';
+  Directory(modelsPath).createSync(recursive: true);
+
+  // Example path: assets/models/user.json -> user
+  final name = jsonPath.split('/').last.split('.').first;
+  final pascalName = toPascalCase(name);
+
+  try {
+    final content = jsonFile.readAsStringSync();
+    final Map<String, dynamic> jsonMap = jsonDecode(content);
+
+    StringBuffer fields = StringBuffer();
+    StringBuffer constructor = StringBuffer();
+    StringBuffer fromJson = StringBuffer();
+    StringBuffer toJson = StringBuffer();
+
+    jsonMap.forEach((key, value) {
+      String type = 'dynamic';
+      if (value is String)
+        type = 'String';
+      else if (value is int)
+        type = 'int';
+      else if (value is double)
+        type = 'double';
+      else if (value is bool)
+        type = 'bool';
+      else if (value is List)
+        type = 'List<dynamic>';
+      else if (value is Map)
+        type = 'Map<String, dynamic>';
+
+      fields.writeln('  final $type? $key;');
+      constructor.writeln('    this.$key,');
+
+      if (type == 'double' && value is int) {
+        fromJson.writeln("      $key: (json['$key'] as num?)?.toDouble(),");
+      } else {
+        fromJson.writeln("      $key: json['$key'] as $type?,");
+      }
+      toJson.writeln("      '$key': this.$key,");
+    });
+
+    final file = File('$modelsPath/${name}_model.dart');
+    file.writeAsStringSync('''class ${pascalName}Model {
+${fields.toString()}
+
+  ${pascalName}Model({
+${constructor.toString()}  });
+
+  factory ${pascalName}Model.fromJson(Map<String, dynamic> json) {
+    return ${pascalName}Model(
+${fromJson.toString()}    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+${toJson.toString()}    };
+  }
+}
+''');
+    print('✅ Created ${name}_model.dart in $modelsPath');
+  } catch (e) {
+    print('❌ Error generating model: $e');
+  }
+}
+

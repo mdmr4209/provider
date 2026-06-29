@@ -30,13 +30,21 @@ class NotificationsView extends StatelessWidget {
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.groups, color: Theme.of(context).extension<AppDesignSystem>()?.badgeSolidColor ?? AppColors.coachColorFFC19E5F, size: 24.r),
+            Icon(
+              Icons.groups,
+              color:
+                  Theme.of(
+                    context,
+                  ).extension<AppDesignSystem>()?.badgeSolidColor ??
+                  AppColors.coachColorFFC19E5F,
+              size: 24.r,
+            ),
             SizedBox(width: 8.w),
             Text(
               "Notification",
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -78,8 +86,13 @@ class NotificationsView extends StatelessWidget {
                             child: Center(
                               child: Text(
                                 "No notifications yet.",
-                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                      color: Theme.of(context).textTheme.bodyMedium?.color?.withAlpha(128),
+                                style: Theme.of(context).textTheme.bodyMedium
+                                    ?.copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.color
+                                          ?.withAlpha(128),
                                     ),
                               ),
                             ),
@@ -127,10 +140,11 @@ class NotificationsView extends StatelessWidget {
       ),
     );
   }
+
   Widget _buildInvitationTile(BuildContext context, String message) {
     final theme = Theme.of(context);
     final design = theme.extension<AppDesignSystem>();
-    
+
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),

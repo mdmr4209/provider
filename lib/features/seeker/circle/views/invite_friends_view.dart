@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import '../../../../core/constants/app_assets.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/custom_input.dart';
 import '../../../../core/widgets/custom_button.dart';
@@ -29,7 +30,11 @@ class InviteFriendsView extends StatelessWidget {
         ),
         title: Text(
           "Invite to Group",
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 18.sp, fontWeight: FontWeight.bold),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: AppColors.whiteColor,
+            fontSize: 18.sp,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         centerTitle: true,
       ),
@@ -41,19 +46,27 @@ class InviteFriendsView extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.all(16.w),
                 child: CustomInput(
-                  height: 48,
-                  hintText: "Search Friends",
-                  leadingIcon: '',
-                  backgroundColor: AppColors.whiteColor.withAlpha(13),
-                  borderRadius: 24,
-                  shadow: false,
+                  height: 44,
+                  hintText: "Search groups",
+                  fontSize: 14,
+                  hintColor: AppColors.greyColor,
+                  hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: AppColors.whiteColor.withAlpha(153),
+                    fontSize: 14.sp,
+                  ),
+                  shadow: true,
+                  leadingIcon: AppAssets.search,
+                  leadingPadding: EdgeInsets.only(left: 16.w, right: 8.w),
                 ),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                 child: Text(
                   "Suggestions",
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(128), fontSize: 13.sp),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.whiteColor.withAlpha(128),
+                    fontSize: 13.sp,
+                  ),
                 ),
               ),
               Expanded(
@@ -73,30 +86,44 @@ class InviteFriendsView extends StatelessWidget {
                     : Stack(
                         children: [
                           RefreshIndicator(
-                            onRefresh: () => controller.fetchFriendsToInvite(isRefresh: true),
+                            onRefresh: () => controller.fetchFriendsToInvite(
+                              isRefresh: true,
+                            ),
                             color: Colors.transparent,
                             backgroundColor: Colors.transparent,
                             strokeWidth: 0,
                             elevation: 0,
                             child: controller.friendsToInvite.isEmpty
                                 ? ListView(
-                                    physics: const AlwaysScrollableScrollPhysics(),
+                                    physics:
+                                        const AlwaysScrollableScrollPhysics(),
                                     children: [
                                       SizedBox(height: 100.h),
                                       Center(
                                         child: Text(
                                           "No friends available to invite.",
-                                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(128)),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.copyWith(
+                                                color: AppColors.whiteColor
+                                                    .withAlpha(128),
+                                              ),
                                         ),
                                       ),
                                     ],
                                   )
                                 : ListView.builder(
-                                    physics: const AlwaysScrollableScrollPhysics(),
-                                    padding: EdgeInsets.symmetric(horizontal: 16.w),
-                                    itemCount: controller.friendsToInvite.length,
+                                    physics:
+                                        const AlwaysScrollableScrollPhysics(),
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 16.w,
+                                    ),
+                                    itemCount:
+                                        controller.friendsToInvite.length,
                                     itemBuilder: (context, index) {
-                                      final friend = controller.friendsToInvite[index];
+                                      final friend =
+                                          controller.friendsToInvite[index];
                                       return _InviteTile(friend: friend);
                                     },
                                   ),
@@ -106,7 +133,9 @@ class InviteFriendsView extends StatelessWidget {
                               top: 16.h,
                               left: 0,
                               right: 0,
-                              child: const Center(child: CustomLoader(size: 150)),
+                              child: const Center(
+                                child: CustomLoader(size: 150),
+                              ),
                             ),
                         ],
                       ),
@@ -134,35 +163,40 @@ class _InviteTile extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 12.h),
       padding: EdgeInsets.all(12.r),
       decoration: BoxDecoration(
-        color: AppColors.postCardColor,
-        borderRadius: BorderRadius.circular(12.r),
+        color: AppColors.defaultColor,
+        borderRadius: BorderRadius.circular(4.r),
       ),
       child: Row(
         children: [
           CircleAvatar(
             radius: 20.r,
-            backgroundImage: NetworkImage(avatar.isNotEmpty ? avatar : 'https://i.pravatar.cc/150?u=$id'),
+            backgroundImage: NetworkImage(
+              avatar.isNotEmpty ? avatar : 'https://i.pravatar.cc/150?u=$id',
+            ),
           ),
           SizedBox(width: 12.w),
           Expanded(
             child: Text(
               name,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 14.sp, fontWeight: FontWeight.w500),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.whiteColor,
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
           CustomButton(
             onPress: () async {},
             title: "Invite",
             width: 80,
-            height: 32,
-            fontSize: 12,
-            buttonColor: AppColors.whiteColor.withAlpha(13),
-            borderColor: Colors.transparent,
-            radius: 8,
+            buttonColor: AppColors.coachColorA5354C30,
+            borderColor: AppColors.coachColorA5354C30,
+            height: 28,
+            fontSize: 10,
+            radius: 4,
           ),
         ],
       ),
     );
   }
 }
-

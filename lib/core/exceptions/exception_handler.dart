@@ -28,11 +28,7 @@ class ExceptionHandler {
 
   /// Handles manual response checks when Dio validateStatus allows error codes
   static AppException handleResponse(Response response) {
-    return _handleStatusCode(
-      response.statusCode ?? 0,
-      response.data,
-      null,
-    );
+    return _handleStatusCode(response.statusCode ?? 0, response.data, null);
   }
 
   static AppException _handleDioException(DioException error) {
@@ -40,14 +36,10 @@ class ExceptionHandler {
       case DioExceptionType.connectionTimeout:
       case DioExceptionType.sendTimeout:
       case DioExceptionType.receiveTimeout:
-        return TimeoutException(
-          originalException: error,
-        );
+        return TimeoutException(originalException: error);
 
       case DioExceptionType.connectionError:
-        return InternetException(
-          originalException: error,
-        );
+        return InternetException(originalException: error);
 
       case DioExceptionType.unknown:
         if (error.error is SocketException) {
@@ -82,7 +74,11 @@ class ExceptionHandler {
     }
   }
 
-  static AppException _handleStatusCode(int statusCode, dynamic data, dynamic original) {
+  static AppException _handleStatusCode(
+    int statusCode,
+    dynamic data,
+    dynamic original,
+  ) {
     final message = _extractErrorMessage(data);
 
     switch (statusCode) {
@@ -102,10 +98,7 @@ class ExceptionHandler {
           originalException: original,
         );
       case 404:
-        return NotFoundException(
-          message: message,
-          originalException: original,
-        );
+        return NotFoundException(message: message, originalException: original);
       case 422:
         return ValidationException(
           message: message,
@@ -136,7 +129,9 @@ class ExceptionHandler {
           data['error']?.toString() ??
           data['detail']?.toString() ??
           data['msg']?.toString() ??
-          (data['errors'] is Map ? (data['errors'] as Map).values.first.toString() : null) ??
+          (data['errors'] is Map
+              ? (data['errors'] as Map).values.first.toString()
+              : null) ??
           'An error occurred';
     }
     return 'An error occurred';

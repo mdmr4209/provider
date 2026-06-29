@@ -79,9 +79,7 @@ class BottomSheetAction extends StatelessWidget {
       leading: Icon(icon, color: color ?? theme.iconTheme.color),
       title: Text(
         title,
-        style: theme.textTheme.bodyLarge?.copyWith(
-          color: color,
-        ),
+        style: theme.textTheme.bodyLarge?.copyWith(color: color),
       ),
       contentPadding: EdgeInsets.zero,
     );
@@ -96,9 +94,6 @@ void showAppBottomSheet(
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    builder: (context) => CustomBottomSheet(
-      title: title,
-      children: children,
-    ),
+    builder: (context) => CustomBottomSheet(title: title, children: children),
   );
 }

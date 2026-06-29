@@ -13,7 +13,8 @@ class CoachBidController extends ChangeNotifier {
 
   String? _selectedSlot;
   final TextEditingController amountController = TextEditingController();
-  final TextEditingController ticketQuantityController = TextEditingController();
+  final TextEditingController ticketQuantityController =
+      TextEditingController();
 
   int _myTickets = 5;
   final int _totalCoaches = 128;
@@ -29,7 +30,7 @@ class CoachBidController extends ChangeNotifier {
   int get myTickets => _myTickets;
   int get totalCoaches => _totalCoaches;
   bool get hasWon => _hasWon;
-  
+
   List<CoachBidSlotModel> get slots => _slots;
   Map<String, dynamic>? get topBiddersInfo => _topBiddersInfo;
 
@@ -44,11 +45,15 @@ class CoachBidController extends ChangeNotifier {
 
     try {
       await Future.delayed(const Duration(milliseconds: 1000));
-      final String jsonString = await rootBundle.loadString('assets/json/coach_bid.json');
+      final String jsonString = await rootBundle.loadString(
+        'assets/json/coach_bid.json',
+      );
       final Map<String, dynamic> data = jsonDecode(jsonString);
 
       _topBiddersInfo = data['topBidders'];
-      _slots = (data['slots'] as List).map((x) => CoachBidSlotModel.fromJson(x)).toList();
+      _slots = (data['slots'] as List)
+          .map((x) => CoachBidSlotModel.fromJson(x))
+          .toList();
     } catch (e) {
       showErrorSnackBar(message: "Failed to load bid data: $e");
     } finally {
@@ -72,28 +77,41 @@ class CoachBidController extends ChangeNotifier {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: Theme.of(context).extension<AppDesignSystem>()!.accentPanelColor,
+        backgroundColor: Theme.of(
+          context,
+        ).extension<AppDesignSystem>()!.accentPanelColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-             Align(
+            Align(
               alignment: Alignment.topRight,
               child: IconButton(
-                icon: const Icon(Icons.close, color: AppColors.white54Color, size: 20),
+                icon: const Icon(
+                  Icons.close,
+                  color: AppColors.white54Color,
+                  size: 20,
+                ),
                 onPressed: () => Navigator.pop(context),
               ),
             ),
             Text(
               'Are you sure about Bidding amount?',
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 18, fontWeight: FontWeight.w500),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.whiteColor,
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+              ),
             ),
             const SizedBox(height: 8),
             Text(
               'You will be charged, if you win the Slot',
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white54Color, fontSize: 13),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.white54Color,
+                fontSize: 13,
+              ),
             ),
             const SizedBox(height: 24),
             Row(
@@ -103,9 +121,16 @@ class CoachBidController extends ChangeNotifier {
                     onPressed: () => Navigator.pop(context),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.coachColorFF4A5D4A,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                     ),
-                    child: Text('No', style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor)),
+                    child: Text(
+                      'No',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppColors.whiteColor,
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -120,9 +145,16 @@ class CoachBidController extends ChangeNotifier {
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.coachColorFFC19E5F,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                     ),
-                    child: Text('Yes', style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor)),
+                    child: Text(
+                      'Yes',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppColors.whiteColor,
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -138,7 +170,7 @@ class CoachBidController extends ChangeNotifier {
       showErrorSnackBar(message: "Please enter ticket quantity.");
       return;
     }
-    
+
     // Mock purchase
     final int qty = int.tryParse(ticketQuantityController.text) ?? 0;
     _myTickets += qty;

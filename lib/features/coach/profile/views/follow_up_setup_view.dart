@@ -36,7 +36,11 @@ class FollowUpSetupView extends StatelessWidget {
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.west, color: AppColors.coachColorFF5E7958, size: 24),
+            icon: const Icon(
+              Icons.west,
+              color: AppColors.coachColorFF5E7958,
+              size: 24,
+            ),
             onPressed: () => Navigator.pop(context),
           ),
           title: Text(
@@ -86,15 +90,15 @@ class FollowUpSetupView extends StatelessWidget {
                     height: 180,
                     hintText: "Enter here",
                     fontSize: 12,
-hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: AppColors.whiteColor.withAlpha(153),
                       fontSize: 12.sp,
                     ),
                     maxLines: 10,
                     shadow: true,
-borderRadius: 8,
+                    borderRadius: 8,
                     borderWidth: 0.50,
-),
+                  ),
                   SizedBox(height: 32.h),
 
                   Text(
@@ -112,7 +116,10 @@ borderRadius: 8,
                     spacing: 24.w,
                     runSpacing: 16.h,
                     children: intervals
-                        .map((interval) => _buildCheckbox(context, controller, interval))
+                        .map(
+                          (interval) =>
+                              _buildCheckbox(context, controller, interval),
+                        )
                         .toList(),
                   ),
 
@@ -134,7 +141,11 @@ borderRadius: 8,
     );
   }
 
-  Widget _buildCheckbox(BuildContext context, CoachProfileController controller, String title) {
+  Widget _buildCheckbox(
+    BuildContext context,
+    CoachProfileController controller,
+    String title,
+  ) {
     final bool isSelected = controller.selectedFollowUpInterval == title;
 
     return InkWell(
@@ -147,11 +158,15 @@ borderRadius: 8,
             height: 18.r,
             decoration: BoxDecoration(
               border: Border.all(
-                color: isSelected ? AppColors.coachColorFFC19E5F : AppColors.white38Color,
+                color: isSelected
+                    ? AppColors.coachColorFFC19E5F
+                    : AppColors.white38Color,
                 width: 1.5,
               ),
               borderRadius: BorderRadius.circular(4.r),
-              color: isSelected ? AppColors.coachColorFFC19E5F : Colors.transparent,
+              color: isSelected
+                  ? AppColors.coachColorFFC19E5F
+                  : Colors.transparent,
             ),
             child: isSelected
                 ? const Icon(Icons.check, color: AppColors.whiteColor, size: 12)
@@ -161,7 +176,9 @@ borderRadius: 8,
           Text(
             title,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: isSelected ? AppColors.coachColorFFC19E5F : AppColors.white70Color,
+              color: isSelected
+                  ? AppColors.coachColorFFC19E5F
+                  : AppColors.white70Color,
               fontSize: 14,
             ),
           ),

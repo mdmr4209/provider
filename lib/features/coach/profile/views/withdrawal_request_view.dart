@@ -29,7 +29,13 @@ class WithdrawalRequestView extends StatelessWidget {
             icon: const Icon(Icons.arrow_back, color: AppColors.white70Color),
             onPressed: () => Navigator.pop(context),
           ),
-          title: Text("Request Withdrawal", style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontWeight: FontWeight.bold)),
+          title: Text(
+            "Request Withdrawal",
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: AppColors.whiteColor,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           centerTitle: true,
         ),
         body: FutureBuilder(
@@ -40,51 +46,71 @@ class WithdrawalRequestView extends StatelessWidget {
             }
             return SingleChildScrollView(
               padding: EdgeInsets.all(24.r),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildLabel(context, "Card Holder Name"),
-              _buildTextField(context, controller.cardHolderNameController, "Prabal Pratap Singh"),
-              
-              SizedBox(height: 24.h),
-              
-              _buildLabel(context, "Card Number"),
-              _buildTextField(context, controller.cardNumberController, "5296 7820 4820 9637"),
-              
-              SizedBox(height: 24.h),
-              
-              Row(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildLabel(context, "MM/YY"),
-                        _buildTextField(context, controller.expiryDateController, "12/24"),
-                      ],
-                    ),
+                  _buildLabel(context, "Card Holder Name"),
+                  _buildTextField(
+                    context,
+                    controller.cardHolderNameController,
+                    "Prabal Pratap Singh",
                   ),
-                  SizedBox(width: 16.w),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildLabel(context, "CVC"),
-                        _buildTextField(context, controller.cvcController, "****"),
-                      ],
-                    ),
+
+                  SizedBox(height: 24.h),
+
+                  _buildLabel(context, "Card Number"),
+                  _buildTextField(
+                    context,
+                    controller.cardNumberController,
+                    "5296 7820 4820 9637",
                   ),
+
+                  SizedBox(height: 24.h),
+
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildLabel(context, "MM/YY"),
+                            _buildTextField(
+                              context,
+                              controller.expiryDateController,
+                              "12/24",
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(width: 16.w),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildLabel(context, "CVC"),
+                            _buildTextField(
+                              context,
+                              controller.cvcController,
+                              "****",
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(height: 24.h),
+
+                  _buildLabel(context, "Request Amount"),
+                  _buildTextField(
+                    context,
+                    controller.withdrawalAmountController,
+                    "Enter here",
+                  ),
+
+                  SizedBox(height: 100.h),
                 ],
               ),
-              
-              SizedBox(height: 24.h),
-              
-              _buildLabel(context, "Request Amount"),
-              _buildTextField(context, controller.withdrawalAmountController, "Enter here"),
-              
-              SizedBox(height: 100.h),
-            ],
-          ),
             );
           },
         ),
@@ -107,23 +133,40 @@ class WithdrawalRequestView extends StatelessWidget {
   Widget _buildLabel(BuildContext context, String text) {
     return Padding(
       padding: EdgeInsets.only(bottom: 12.h, left: 4.w),
-      child: Text(text, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white70Color, fontSize: 14.sp)),
+      child: Text(
+        text,
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          color: AppColors.white70Color,
+          fontSize: 14.sp,
+        ),
+      ),
     );
   }
 
-  Widget _buildTextField(BuildContext context, TextEditingController controller, String hint) {
+  Widget _buildTextField(
+    BuildContext context,
+    TextEditingController controller,
+    String hint,
+  ) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16.w),
       decoration: BoxDecoration(
-        color: Theme.of(context).extension<AppDesignSystem>()!.panelColor.withAlpha(150),
+        color: Theme.of(
+          context,
+        ).extension<AppDesignSystem>()!.panelColor.withAlpha(150),
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: TextField(
         controller: controller,
-        style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor),
+        style: Theme.of(
+          context,
+        ).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor),
         decoration: InputDecoration(
           hintText: hint,
-          hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white24Color, fontSize: 14),
+          hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: AppColors.white24Color,
+            fontSize: 14,
+          ),
           border: InputBorder.none,
         ),
       ),
@@ -139,11 +182,19 @@ class WithdrawalRequestView extends StatelessWidget {
         children: [
           ShimmerLoader(width: 120.w, height: 16.h),
           SizedBox(height: 12.h),
-          ShimmerLoader(width: double.infinity, height: 50.h, borderRadius: 12.r),
+          ShimmerLoader(
+            width: double.infinity,
+            height: 50.h,
+            borderRadius: 12.r,
+          ),
           SizedBox(height: 24.h),
           ShimmerLoader(width: 100.w, height: 16.h),
           SizedBox(height: 12.h),
-          ShimmerLoader(width: double.infinity, height: 50.h, borderRadius: 12.r),
+          ShimmerLoader(
+            width: double.infinity,
+            height: 50.h,
+            borderRadius: 12.r,
+          ),
           SizedBox(height: 24.h),
           Row(
             children: [
@@ -153,7 +204,11 @@ class WithdrawalRequestView extends StatelessWidget {
                   children: [
                     ShimmerLoader(width: 60.w, height: 16.h),
                     SizedBox(height: 12.h),
-                    ShimmerLoader(width: double.infinity, height: 50.h, borderRadius: 12.r),
+                    ShimmerLoader(
+                      width: double.infinity,
+                      height: 50.h,
+                      borderRadius: 12.r,
+                    ),
                   ],
                 ),
               ),
@@ -164,7 +219,11 @@ class WithdrawalRequestView extends StatelessWidget {
                   children: [
                     ShimmerLoader(width: 40.w, height: 16.h),
                     SizedBox(height: 12.h),
-                    ShimmerLoader(width: double.infinity, height: 50.h, borderRadius: 12.r),
+                    ShimmerLoader(
+                      width: double.infinity,
+                      height: 50.h,
+                      borderRadius: 12.r,
+                    ),
                   ],
                 ),
               ),
@@ -173,7 +232,11 @@ class WithdrawalRequestView extends StatelessWidget {
           SizedBox(height: 24.h),
           ShimmerLoader(width: 120.w, height: 16.h),
           SizedBox(height: 12.h),
-          ShimmerLoader(width: double.infinity, height: 50.h, borderRadius: 12.r),
+          ShimmerLoader(
+            width: double.infinity,
+            height: 50.h,
+            borderRadius: 12.r,
+          ),
         ],
       ),
     );

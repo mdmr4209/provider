@@ -8,7 +8,6 @@ import '../features/seeker/find_coach/controllers/coach_controller.dart';
 import '../features/seeker/home/controllers/home_controller.dart';
 import '../features/seeker/inbox/controllers/inbox_controller.dart';
 import '../features/shared/localization/controllers/localization_controller.dart';
-import '../features/shared/onboarding/controllers/onboarding_controller.dart';
 import '../features/seeker/profile/controllers/profile_controller.dart';
 import '../features/shared/theme/controllers/theme_controller.dart';
 import '../features/coach/home/controllers/coach_home_controller.dart';
@@ -20,7 +19,6 @@ import '../features/coach/profile/controllers/coach_profile_controller.dart';
 Widget appProviders({required Widget child}) {
   return MultiProvider(
     providers: [
-      ChangeNotifierProvider(create: (_) => OnboardingController()),
       ChangeNotifierProvider(create: (_) => AuthController()),
       ChangeNotifierProvider(create: (_) => HomeController()),
       ChangeNotifierProvider(create: (_) => CoachHomeController()),

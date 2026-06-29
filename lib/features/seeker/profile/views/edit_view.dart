@@ -37,10 +37,10 @@ class EditView extends StatelessWidget {
                     right: 0,
                     child: CircleAvatar(
                       radius: 18.r,
-                      backgroundColor: AppColors.coachColorFFC19E5F,
+                      backgroundColor: AppColors.defaultColorLight,
                       child: Icon(
                         Icons.camera_alt_outlined,
-                        color: AppColors.blackColor,
+                        color: AppColors.whiteColor,
                         size: 20.r,
                       ),
                     ),
@@ -68,15 +68,13 @@ class EditView extends StatelessWidget {
             _buildLabel(context, "Full Name"),
             const CustomInput(
               hintText: "Rahim Rehman",
-              backgroundColor: AppColors.white10Color,
               borderRadius: 12,
               shadow: false,
             ),
-            SizedBox(height: 24.h),
+            SizedBox(height: 14.h),
             _buildLabel(context, "Bio"),
             const CustomInput(
               hintText: "Healing Journey Day 14",
-              backgroundColor: AppColors.white10Color,
               borderRadius: 12,
               shadow: false,
               height: 120,

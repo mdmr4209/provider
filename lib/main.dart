@@ -14,7 +14,6 @@ import 'core/utils/helpers/snack_bar_helper.dart';
 import 'core/widgets/background_widget.dart';
 import 'features/shared/auth/controllers/auth_controller.dart';
 import 'features/shared/localization/controllers/localization_controller.dart';
-import 'features/shared/onboarding/controllers/onboarding_controller.dart';
 import 'features/shared/theme/controllers/theme_controller.dart';
 import 'routes/app_router.dart';
 
@@ -61,14 +60,13 @@ class MyApp extends StatelessWidget {
     if (_router != null) return _router!;
 
     final auth = context.read<AuthController>();
-    final onboard = context.read<OnboardingController>();
 
     AuthController.routerKey = navigatorKey;
     ApiService.onUnauthorized = () {
       navigatorKey.currentContext?.go(AppRoutes.login);
     };
 
-    _router = AppRouter.create(auth, onboard, navigatorKey);
+    _router = AppRouter.create(auth, navigatorKey);
     // Initialize NavigationService with the router instance
     NavigationService.initRouter(_router!);
     return _router!;

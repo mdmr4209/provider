@@ -792,7 +792,11 @@ class Setup13View extends StatelessWidget {
       totalSteps: isCoach ? 10 : 15,
       child: Stack(
         children: [
-          _buildLegalContent(context, "Medical/Legal Disclaimer", _dummyLegalText),
+          _buildLegalContent(
+            context,
+            "Medical/Legal Disclaimer",
+            _dummyLegalText,
+          ),
           Positioned(
             bottom: 40.h,
             left: 24.w,

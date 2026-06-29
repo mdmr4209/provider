@@ -46,32 +46,38 @@ class SettingsView extends StatelessWidget {
               children: [
                 SizedBox(height: 20.h),
                 _buildSectionHeader(context, "Account"),
-                _buildSettingsTile(context, 
+                _buildSettingsTile(
+                  context,
                   icon: Icons.person_outline,
                   title: "Personal Information",
                   onTap: () => context.push(AppRoutes.editProfile),
                 ),
-                _buildSettingsTile(context, 
+                _buildSettingsTile(
+                  context,
                   icon: Icons.payment_outlined,
                   title: "Payment Method",
                   onTap: () => context.push(AppRoutes.paymentMethod),
                 ),
-                _buildSettingsTile(context, 
+                _buildSettingsTile(
+                  context,
                   icon: Icons.lock_outline,
                   title: "Change Password",
                   onTap: () => context.push(AppRoutes.resetPassword),
                 ),
-                _buildSettingsTile(context, 
+                _buildSettingsTile(
+                  context,
                   icon: Icons.workspace_premium_outlined,
                   title: "Subscription Plan",
                   onTap: () => context.push(AppRoutes.subscriptionPlan),
                 ),
-                _buildSettingsTile(context, 
+                _buildSettingsTile(
+                  context,
                   icon: Icons.balance_outlined,
                   title: "Credits Balance",
                   onTap: () => context.push(AppRoutes.points),
                 ),
-                _buildSettingsTile(context, 
+                _buildSettingsTile(
+                  context,
                   icon: Icons.block_outlined,
                   title: "Block List",
                   onTap: () => context.push(AppRoutes.blockList),
@@ -80,7 +86,8 @@ class SettingsView extends StatelessWidget {
                 _buildNotificationTile(context),
                 SizedBox(height: 24.h),
                 _buildSectionHeader(context, "Support"),
-                _buildSettingsTile(context, 
+                _buildSettingsTile(
+                  context,
                   icon: Icons.description_outlined,
                   title: "Payment Terms",
                   onTap: () => Navigator.push(
@@ -88,12 +95,14 @@ class SettingsView extends StatelessWidget {
                     MaterialPageRoute(builder: (_) => const PaymentTermsView()),
                   ),
                 ),
-                _buildSettingsTile(context, 
+                _buildSettingsTile(
+                  context,
                   icon: Icons.help_outline,
                   title: "Help & Support",
                   onTap: () => context.push(AppRoutes.helpSupport),
                 ),
-                _buildSettingsTile(context, 
+                _buildSettingsTile(
+                  context,
                   icon: Icons.logout,
                   title: context.watchTr('sign_out'),
                   isLogout: true,
@@ -127,7 +136,8 @@ class SettingsView extends StatelessWidget {
     );
   }
 
-  Widget _buildSettingsTile(BuildContext context, {
+  Widget _buildSettingsTile(
+    BuildContext context, {
     required IconData icon,
     required String title,
     required VoidCallback onTap,
@@ -184,7 +194,10 @@ class SettingsView extends StatelessWidget {
         ),
         title: Text(
           "Notifications",
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.coachColorCCFFFFFF, fontSize: 14),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: AppColors.coachColorCCFFFFFF,
+            fontSize: 14,
+          ),
         ),
         trailing: Transform.scale(
           scale: 0.8,

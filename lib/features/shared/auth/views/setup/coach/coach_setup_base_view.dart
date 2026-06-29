@@ -68,7 +68,10 @@ class CoachSetupBaseView extends StatelessWidget {
                         child: Container(
                           decoration: BoxDecoration(
                             gradient: const LinearGradient(
-                              colors: [AppColors.buttonColor, AppColors.borderColor],
+                              colors: [
+                                AppColors.buttonColor,
+                                AppColors.borderColor,
+                              ],
                               begin: Alignment.centerLeft,
                               end: Alignment.centerRight,
                             ),
@@ -110,24 +113,28 @@ class CoachSetupBaseView extends StatelessWidget {
                           child: Text(
                             title!,
                             textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.whiteColor,
-                              fontSize: 16.sp,
-                            ),
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.whiteColor,
+                                  fontSize: 16.sp,
+                                ),
                           ),
                         )
                       else
                         Text(
                           "Step $currentStep of $totalSteps",
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.iconColor,
-                            fontSize: 16.sp,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.iconColor,
+                                fontSize: 16.sp,
+                              ),
                         ),
                       if (title != null)
-                        SizedBox(width: 85.w), // Balance out the back button width
+                        SizedBox(
+                          width: 85.w,
+                        ), // Balance out the back button width
                     ],
                   ),
                 ),

@@ -10,8 +10,8 @@ class _LoaderState {
   final ValueNotifier<double> rotateTarget;
   final ValueNotifier<double> pendulumTarget;
   _LoaderState()
-      : rotateTarget = ValueNotifier<double>(1.0),
-        pendulumTarget = ValueNotifier<double>(1.0);
+    : rotateTarget = ValueNotifier<double>(1.0),
+      pendulumTarget = ValueNotifier<double>(1.0);
 }
 
 class CustomLoader extends StatelessWidget {
@@ -41,7 +41,10 @@ class CustomLoader extends StatelessWidget {
           valueListenable: state.rotateTarget,
           builder: (context, rotateTarget, _) {
             return TweenAnimationBuilder<double>(
-              tween: Tween<double>(begin: rotateTarget - 1.0, end: rotateTarget),
+              tween: Tween<double>(
+                begin: rotateTarget - 1.0,
+                end: rotateTarget,
+              ),
               duration: rotateDuration,
               onEnd: () {
                 state.rotateTarget.value = rotateTarget + 1.0;
@@ -58,7 +61,9 @@ class CustomLoader extends StatelessWidget {
                       duration: pendulumDuration,
                       curve: Curves.easeInOutSine,
                       onEnd: () {
-                        state.pendulumTarget.value = pendulumTarget == 1.0 ? 0.0 : 1.0;
+                        state.pendulumTarget.value = pendulumTarget == 1.0
+                            ? 0.0
+                            : 1.0;
                       },
                       builder: (context, pendulumVal, _) {
                         final double rotAngle = rotateVal * 2 * pi;
@@ -77,8 +82,10 @@ class CustomLoader extends StatelessWidget {
                           child: Stack(
                             children: List.generate(4, (i) {
                               final double angle = rotAngle + i * pi / 2;
-                              final double dx = center + orbitRadius * cos(angle);
-                              final double dy = center + orbitRadius * sin(angle);
+                              final double dx =
+                                  center + orbitRadius * cos(angle);
+                              final double dy =
+                                  center + orbitRadius * sin(angle);
 
                               return Positioned(
                                 left: dx - paintArea / 2,
@@ -151,7 +158,9 @@ class _WaterDropPainter extends CustomPainter {
     if (morph > 0.05) {
       final double tipR = lerpDouble(r, r * 1.30, morph)!;
       final highlightPaint = Paint()
-        ..color = AppColors.whiteColor.withAlpha((opacity * morph * 140).round())
+        ..color = AppColors.whiteColor.withAlpha(
+          (opacity * morph * 140).round(),
+        )
         ..style = PaintingStyle.fill;
       canvas.drawOval(
         Rect.fromCenter(
@@ -208,7 +217,10 @@ class FullScreenLoader extends StatelessWidget {
               SizedBox(height: 16.h),
               Text(
                 message!,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textColor, fontSize: 14.sp),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.textColor,
+                  fontSize: 14.sp,
+                ),
               ),
             ],
           ],
@@ -266,9 +278,7 @@ class ShimmerLoader extends StatelessWidget {
                         AppColors.whiteColor.withValues(alpha: 0.15),
                         AppColors.whiteColor.withValues(alpha: 0.05),
                       ],
-                      transform: _SlidingGradientTransform(
-                        slidePercent: value,
-                      ),
+                      transform: _SlidingGradientTransform(slidePercent: value),
                     ),
                   ),
                 );

@@ -11,6 +11,7 @@ import '../../../../core/utils/validators/input_validators.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_loader.dart';
 import '../../../../core/widgets/error_widget.dart';
+import '../../../../core/widgets/glass_widget.dart';
 import '../../../../core/widgets/input_text_widget.dart';
 import '../../../../core/widgets/background_widget.dart';
 import '../../../../routes/app_router.dart';
@@ -51,17 +52,15 @@ class SignUpView extends StatelessWidget {
               child: Scaffold(
                 body: SafeArea(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 20.w,
+                      vertical: 10.h,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Row(
-                          children: [
-                            const Spacer(),
-                            const Spacer(),
-                          ],
-                        ),
+                        Row(children: [const Spacer(), const Spacer()]),
                         SizedBox(height: 10.h),
                         Expanded(
                           child: Stack(
@@ -75,7 +74,9 @@ class SignUpView extends StatelessWidget {
                                 right: 0,
                                 bottom: 0,
                                 child: ListView(
-                                  padding: EdgeInsets.symmetric(horizontal: 20.w),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 20.w,
+                                  ),
                                   children: [
                                     SizedBox(height: 20.h),
                                     Text(
@@ -114,35 +115,48 @@ class SignUpView extends StatelessWidget {
                                     Text(
                                       context.watchTr('email'),
                                       textAlign: TextAlign.left,
-                                      style: Theme.of(context).textTheme.bodyLarge
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
                                           ?.copyWith(fontFamily: 'Segoe UI'),
                                     ),
                                     SizedBox(height: 8.h),
-                                    InputTextWidget(
-                                      hintText: context.watchTr(
-                                        'enter_your_email',
-                                      ),
-                                      controller: form.emailController,
-                                      onChanged: (val) {
-                                        auth.clearError();
-                                        form.setEmailError(InputValidators.validateEmail(val));
-                                      },
-                                      keyboardType: TextInputType.emailAddress,
-                                      leadingIcon: AppAssets.email,
-                                      leadingColor: AppColors.iconColor,
-                                      leadingPadding: EdgeInsets.only(
-                                        left: 10.w,
-                                        right: 5.w,
+                                    GlassWidget(
+                                      color: Color(0xFF394C38),
+                                      height: 48.h,
+                                      child: InputTextWidget(
+                                        backgroundColor: Color(0xFF394C38),
+                                        hintText: context.watchTr(
+                                          'enter_your_email',
+                                        ),
+                                        controller: form.emailController,
+                                        onChanged: (val) {
+                                          auth.clearError();
+                                          form.setEmailError(
+                                            InputValidators.validateEmail(val),
+                                          );
+                                        },
+                                        keyboardType:
+                                            TextInputType.emailAddress,
+                                        leadingIcon: AppAssets.email,
+                                        leadingColor: AppColors.iconColor,
+                                        leadingPadding: EdgeInsets.only(
+                                          left: 10.w,
+                                          right: 5.w,
+                                        ),
                                       ),
                                     ),
                                     if (form.emailError != null) ...[
                                       SizedBox(height: 4.h),
                                       Text(
                                         form.emailError!,
-                                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                          color: AppColors.redColor,
-                                          fontSize: 11.sp,
-                                        ),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(
+                                              color: AppColors.redColor,
+                                              fontSize: 11.sp,
+                                            ),
                                       ),
                                     ],
                                     SizedBox(height: 15.h),
@@ -151,36 +165,50 @@ class SignUpView extends StatelessWidget {
                                     Text(
                                       context.watchTr('password'),
                                       textAlign: TextAlign.left,
-                                      style: Theme.of(context).textTheme.bodyLarge
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
                                           ?.copyWith(fontFamily: 'Segoe UI'),
                                     ),
                                     SizedBox(height: 8.h),
-                                    InputTextWidget(
-                                      hintText: context.watchTr(
-                                        'enter_your_password',
-                                      ),
-                                      obscureText: true,
-                                      showObscureToggle: true,
-                                      controller: form.passwordController,
-                                      onChanged: (val) {
-                                        auth.clearError();
-                                        form.setPasswordError(InputValidators.validatePassword(val));
-                                      },
-                                      leadingIcon: AppAssets.pass,
-                                      leadingColor: AppColors.iconColor,
-                                      leadingPadding: EdgeInsets.only(
-                                        left: 10.w,
-                                        right: 5.w,
+                                    GlassWidget(
+                                      color: Color(0xFF394C38),
+                                      height: 48.h,
+                                      child: InputTextWidget(
+                                        backgroundColor: Color(0xFF394C38),
+                                        hintText: context.watchTr(
+                                          'enter_your_password',
+                                        ),
+                                        obscureText: true,
+                                        showObscureToggle: true,
+                                        controller: form.passwordController,
+                                        onChanged: (val) {
+                                          auth.clearError();
+                                          form.setPasswordError(
+                                            InputValidators.validatePassword(
+                                              val,
+                                            ),
+                                          );
+                                        },
+                                        leadingIcon: AppAssets.pass,
+                                        leadingColor: AppColors.iconColor,
+                                        leadingPadding: EdgeInsets.only(
+                                          left: 10.w,
+                                          right: 5.w,
+                                        ),
                                       ),
                                     ),
                                     if (form.passwordError != null) ...[
                                       SizedBox(height: 4.h),
                                       Text(
                                         form.passwordError!,
-                                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                          color: AppColors.redColor,
-                                          fontSize: 11.sp,
-                                        ),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(
+                                              color: AppColors.redColor,
+                                              fontSize: 11.sp,
+                                            ),
                                       ),
                                     ],
                                     SizedBox(height: 15.h),
@@ -189,41 +217,56 @@ class SignUpView extends StatelessWidget {
                                     Text(
                                       context.watchTr('confirm_password'),
                                       textAlign: TextAlign.left,
-                                      style: Theme.of(context).textTheme.bodyLarge
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
                                           ?.copyWith(fontFamily: 'Segoe UI'),
                                     ),
                                     SizedBox(height: 8.h),
-                                    InputTextWidget(
-                                      hintText: context.watchTr(
-                                        'confirm_your_password',
-                                      ),
-                                      obscureText: true,
-                                      showObscureToggle: true,
-                                      controller: form.confirmPasswordController,
-                                      onChanged: (val) {
-                                        auth.clearError();
-                                        form.setConfirmPasswordError(
-                                          InputValidators.validatePasswordMatch(
-                                            form.passwordController.text,
-                                            val,
-                                          ),
-                                        );
-                                      },
-                                      leadingIcon: AppAssets.pass,
-                                      leadingColor: AppColors.iconColor,
-                                      leadingPadding: EdgeInsets.only(
-                                        left: 10.w,
-                                        right: 5.w,
+                                    GlassWidget(
+                                      color: Color(0xFF394C38),
+                                      height: 48.h,
+                                      child: InputTextWidget(
+                                        borderColor: Color(0xFF394C38),
+                                        disabledBorderColor: Color(0xFF394C38),
+                                        errorBorderColor: Color(0xFF394C38),
+                                        focusedBorderColor: Color(0xFF394C38),
+                                        backgroundColor: Color(0xFF394C38),
+                                        hintText: context.watchTr(
+                                          'confirm_your_password',
+                                        ),
+                                        obscureText: true,
+                                        showObscureToggle: true,
+                                        controller:
+                                            form.confirmPasswordController,
+                                        onChanged: (val) {
+                                          auth.clearError();
+                                          form.setConfirmPasswordError(
+                                            InputValidators.validatePasswordMatch(
+                                              form.passwordController.text,
+                                              val,
+                                            ),
+                                          );
+                                        },
+                                        leadingIcon: AppAssets.pass,
+                                        leadingColor: AppColors.iconColor,
+                                        leadingPadding: EdgeInsets.only(
+                                          left: 10.w,
+                                          right: 5.w,
+                                        ),
                                       ),
                                     ),
                                     if (form.confirmPasswordError != null) ...[
                                       SizedBox(height: 4.h),
                                       Text(
                                         form.confirmPasswordError!,
-                                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                          color: AppColors.redColor,
-                                          fontSize: 11.sp,
-                                        ),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(
+                                              color: AppColors.redColor,
+                                              fontSize: 11.sp,
+                                            ),
                                       ),
                                     ],
                                     SizedBox(height: 20.h),
@@ -236,7 +279,9 @@ class SignUpView extends StatelessWidget {
                                           child: Checkbox(
                                             value: form.agreeToTerms,
                                             onChanged: (val) {
-                                              form.setAgreeToTerms(val ?? false);
+                                              form.setAgreeToTerms(
+                                                val ?? false,
+                                              );
                                             },
                                             activeColor: Theme.of(
                                               context,
@@ -258,7 +303,8 @@ class SignUpView extends StatelessWidget {
                                       linearGradient: true,
                                       height: 48,
                                       title: context.watchTr('sign_up_caps'),
-                                      onPress: auth.isLoading || !form.isFormValid
+                                      onPress:
+                                          auth.isLoading || !form.isFormValid
                                           ? null
                                           : () async {
                                               form.validateFields();
@@ -272,7 +318,8 @@ class SignUpView extends StatelessWidget {
 
                                     // Divider
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Expanded(
                                           child: Divider(
@@ -283,20 +330,20 @@ class SignUpView extends StatelessWidget {
                                         Container(
                                           width: 50.w,
                                           height: 22.h,
-                                          alignment: Alignment.center,
                                           decoration: ShapeDecoration(
                                             color: AppColors.defaultColorLight,
                                             shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(
-                                                44.r,
-                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(44.r),
                                             ),
                                           ),
-                                          child: Text(
-                                            'or',
-                                            style: Theme.of(
-                                              context,
-                                            ).textTheme.bodyLarge,
+                                          child: Center(
+                                            child: Text(
+                                              'or',
+                                              style: Theme.of(
+                                                context,
+                                              ).textTheme.bodyLarge,
+                                            ),
                                           ),
                                         ),
                                         Expanded(
@@ -348,7 +395,8 @@ class SignUpView extends StatelessWidget {
 
                                     // Footer
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Text(
                                           "${context.watchTr('already_have_account')} ",
@@ -397,7 +445,8 @@ class SignUpView extends StatelessWidget {
 class SignUpFormNotifier extends ChangeNotifier {
   final TextEditingController emailController;
   final TextEditingController passwordController;
-  final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
 
   String? _emailError;
   String? _passwordError;
@@ -409,7 +458,10 @@ class SignUpFormNotifier extends ChangeNotifier {
   String? get confirmPasswordError => _confirmPasswordError;
   bool get agreeToTerms => _agreeToTerms;
 
-  SignUpFormNotifier({required this.emailController, required this.passwordController});
+  SignUpFormNotifier({
+    required this.emailController,
+    required this.passwordController,
+  });
 
   void setEmailError(String? val) {
     _emailError = val;

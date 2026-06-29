@@ -43,7 +43,9 @@ class CircleController extends ChangeNotifier {
   Future<void> pickMedia({bool isVideo = false}) async {
     try {
       if (isVideo) {
-        final XFile? video = await _picker.pickVideo(source: ImageSource.gallery);
+        final XFile? video = await _picker.pickVideo(
+          source: ImageSource.gallery,
+        );
         if (video != null) {
           _selectedMedia.add(video);
           notifyListeners();
@@ -99,7 +101,9 @@ class CircleController extends ChangeNotifier {
         isClapped: false,
         isOwnPost: true,
         commentsCount: 0,
-        images: _selectedMedia.isNotEmpty ? _selectedMedia.map((e) => e.path).toList() : null,
+        images: _selectedMedia.isNotEmpty
+            ? _selectedMedia.map((e) => e.path).toList()
+            : null,
       );
 
       _posts.insert(0, newPost);
@@ -126,12 +130,18 @@ class CircleController extends ChangeNotifier {
 
     try {
       await Future.delayed(const Duration(milliseconds: 1500));
-      final String jsonString = await rootBundle.loadString('assets/json/circle.json');
+      final String jsonString = await rootBundle.loadString(
+        'assets/json/circle.json',
+      );
       final Map<String, dynamic> rawData = jsonDecode(jsonString);
       final data = rawData['data'] as Map<String, dynamic>;
 
-      _posts = (data['posts'] as List).map((x) => CirclePostModel.fromJson(x)).toList();
-      _members = (data['members'] as List).map((x) => SuggestionModel.fromJson(x)).toList();
+      _posts = (data['posts'] as List)
+          .map((x) => CirclePostModel.fromJson(x))
+          .toList();
+      _members = (data['members'] as List)
+          .map((x) => SuggestionModel.fromJson(x))
+          .toList();
     } catch (e) {
       debugPrint("Error loading circle data: $e");
       // Fallback if asset missing
@@ -155,7 +165,9 @@ class CircleController extends ChangeNotifier {
     try {
       await Future.delayed(const Duration(milliseconds: 1000));
 
-      final String jsonString = await rootBundle.loadString('assets/json/circle_social.json');
+      final String jsonString = await rootBundle.loadString(
+        'assets/json/circle_social.json',
+      );
       final Map<String, dynamic> rawSocial = jsonDecode(jsonString);
 
       _friends = List<Map<String, dynamic>>.from(rawSocial['friends']);
@@ -182,10 +194,14 @@ class CircleController extends ChangeNotifier {
     try {
       await Future.delayed(const Duration(milliseconds: 800));
 
-      final String jsonString = await rootBundle.loadString('assets/json/circle_suggestions.json');
+      final String jsonString = await rootBundle.loadString(
+        'assets/json/circle_suggestions.json',
+      );
       final Map<String, dynamic> rawSuggestions = jsonDecode(jsonString);
 
-      _discoverSuggestions = (rawSuggestions['suggestions'] as List).map((x) => SuggestionModel.fromJson(x)).toList();
+      _discoverSuggestions = (rawSuggestions['suggestions'] as List)
+          .map((x) => SuggestionModel.fromJson(x))
+          .toList();
     } catch (e) {
       showErrorSnackBar(message: "Failed to fetch discover suggestions: $e");
     } finally {
@@ -212,32 +228,39 @@ class CircleController extends ChangeNotifier {
         "data": {
           "user": {
             "id": userId,
-            "name": userId == "u1" ? "Miles Esther" : (userId == "u2" ? "Thomas stieve" : "Mike Tyson"),
+            "name": userId == "u1"
+                ? "Miles Esther"
+                : (userId == "u2" ? "Thomas stieve" : "Mike Tyson"),
             "avatar": "https://i.pravatar.cc/150?u=$userId",
-            "bio": "Amazon Alexa Shopping is seeking a talented, experienced, and self-directed UX Designer to define and drive the future of shopping at Amazon.",
+            "bio":
+                "Amazon Alexa Shopping is seeking a talented, experienced, and self-directed UX Designer to define and drive the future of shopping at Amazon.",
             "stats": {
               "posts": 7,
               "friends": 128,
               "followers": 220,
-              "following": 14
+              "following": 14,
             },
-            "relationshipStatus": userId == "req1" || userId == "req2" ? "request_received" : "none",
+            "relationshipStatus": userId == "req1" || userId == "req2"
+                ? "request_received"
+                : "none",
             "media": [
               "https://picsum.photos/300/300?random=1",
               "https://picsum.photos/300/300?random=2",
               "https://picsum.photos/300/300?random=3",
               "https://picsum.photos/300/300?random=4",
-              "https://picsum.photos/300/300?random=5"
-            ]
-          }
-        }
+              "https://picsum.photos/300/300?random=5",
+            ],
+          },
+        },
       };
 
       final data = rawProfile['data'] as Map<String, dynamic>;
       final user = data['user'] as Map<String, dynamic>;
-      
+
       // Load standard dummy posts for the user profile
-      user['posts'] = CirclePostModel.dummyPosts.map((p) => p.toJson()).toList();
+      user['posts'] = CirclePostModel.dummyPosts
+          .map((p) => p.toJson())
+          .toList();
 
       _selectedUserProfile = UserProfileModel.fromJson(user);
     } catch (e) {
@@ -251,7 +274,9 @@ class CircleController extends ChangeNotifier {
 
   Future<void> updateRelationshipStatus(String userId, String newStatus) async {
     if (_selectedUserProfile != null && _selectedUserProfile!.id == userId) {
-      _selectedUserProfile = _selectedUserProfile!.copyWith(relationshipStatus: newStatus);
+      _selectedUserProfile = _selectedUserProfile!.copyWith(
+        relationshipStatus: newStatus,
+      );
       notifyListeners();
     }
   }

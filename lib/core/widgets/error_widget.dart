@@ -32,18 +32,16 @@ class ErrorDisplayWidget extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                _getErrorIcon(),
-                size: 80.w,
-                color: _getErrorColor(),
-              ),
+              Icon(_getErrorIcon(), size: 80.w, color: _getErrorColor()),
               SizedBox(height: 24.h),
               Text(
                 exception.title,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
-                  color: Theme.of(context).textTheme.titleLarge?.color ?? AppColors.textColor,
+                  color:
+                      Theme.of(context).textTheme.titleLarge?.color ??
+                      AppColors.textColor,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -52,7 +50,9 @@ class ErrorDisplayWidget extends StatelessWidget {
                 exception.message,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   fontSize: 14.sp,
-                  color: Theme.of(context).textTheme.bodyMedium?.color ?? AppColors.textColor2,
+                  color:
+                      Theme.of(context).textTheme.bodyMedium?.color ??
+                      AppColors.textColor2,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -90,11 +90,7 @@ class ErrorDisplayWidget extends StatelessWidget {
       child: IntrinsicHeight(
         child: Row(
           children: [
-            Icon(
-              _getErrorIcon(),
-              color: _getErrorColor(),
-              size: 24.w,
-            ),
+            Icon(_getErrorIcon(), color: _getErrorColor(), size: 24.w),
             SizedBox(width: 12.w),
             Expanded(
               child: Column(
@@ -114,7 +110,9 @@ class ErrorDisplayWidget extends StatelessWidget {
                     exception.message,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontSize: 12.sp,
-                      color: Theme.of(context).textTheme.bodyMedium?.color ?? AppColors.textColor2,
+                      color:
+                          Theme.of(context).textTheme.bodyMedium?.color ??
+                          AppColors.textColor2,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -126,11 +124,7 @@ class ErrorDisplayWidget extends StatelessWidget {
               SizedBox(width: 12.w),
               GestureDetector(
                 onTap: onRetry,
-                child: Icon(
-                  Icons.refresh,
-                  color: _getErrorColor(),
-                  size: 20.w,
-                ),
+                child: Icon(Icons.refresh, color: _getErrorColor(), size: 20.w),
               ),
             ],
           ],

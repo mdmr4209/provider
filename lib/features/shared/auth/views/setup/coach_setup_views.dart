@@ -366,7 +366,10 @@ class _CoachMatchViewState extends State<CoachMatchView> {
           Expanded(
             child: Text(
               fileName,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textColor, fontSize: 14.sp),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.textColor,
+                fontSize: 14.sp,
+              ),
             ),
           ),
           GestureDetector(
@@ -512,10 +515,11 @@ class _CoachMatchViewState extends State<CoachMatchView> {
                               SizedBox(width: 6.w),
                               Text(
                                 "Upload",
-                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  color: AppColors.whiteColor,
-                                  fontSize: 14.sp,
-                                ),
+                                style: Theme.of(context).textTheme.bodyMedium
+                                    ?.copyWith(
+                                      color: AppColors.whiteColor,
+                                      fontSize: 14.sp,
+                                    ),
                               ),
                             ],
                           ),
@@ -523,10 +527,11 @@ class _CoachMatchViewState extends State<CoachMatchView> {
                         SizedBox(width: 12.w),
                         Text(
                           "Click to upload files",
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.hintTextColor,
-                            fontSize: 14.sp,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: AppColors.hintTextColor,
+                                fontSize: 14.sp,
+                              ),
                         ),
                       ],
                     ),
@@ -846,7 +851,9 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                   (d) => ListTile(
                     title: Text(
                       d,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textColor),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppColors.textColor,
+                      ),
                     ),
                     onTap: () {
                       setState(() => selectedDay = d);
@@ -889,7 +896,9 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                   (t) => ListTile(
                     title: Text(
                       t,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textColor),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppColors.textColor,
+                      ),
                     ),
                     onTap: () {
                       setState(() {
@@ -949,15 +958,16 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                       children: [
                         Text(
                           "On Days",
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: isOnDays
-                                ? AppColors.iconColor
-                                : AppColors.textColor.withAlpha(150),
-                            fontSize: 16.sp,
-                            fontWeight: isOnDays
-                                ? FontWeight.bold
-                                : FontWeight.normal,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: isOnDays
+                                    ? AppColors.iconColor
+                                    : AppColors.textColor.withAlpha(150),
+                                fontSize: 16.sp,
+                                fontWeight: isOnDays
+                                    ? FontWeight.bold
+                                    : FontWeight.normal,
+                              ),
                         ),
                         SizedBox(height: 8.h),
                         Container(
@@ -977,15 +987,16 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                       children: [
                         Text(
                           "Off Days",
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: !isOnDays
-                                ? AppColors.iconColor
-                                : AppColors.textColor.withAlpha(150),
-                            fontSize: 16.sp,
-                            fontWeight: !isOnDays
-                                ? FontWeight.bold
-                                : FontWeight.normal,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: !isOnDays
+                                    ? AppColors.iconColor
+                                    : AppColors.textColor.withAlpha(150),
+                                fontSize: 16.sp,
+                                fontWeight: !isOnDays
+                                    ? FontWeight.bold
+                                    : FontWeight.normal,
+                              ),
                         ),
                         SizedBox(height: 8.h),
                         Container(
@@ -1040,7 +1051,10 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
             children: [
               Text(
                 "Days of Week",
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textColor, fontSize: 14.sp),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.textColor,
+                  fontSize: 14.sp,
+                ),
               ),
               SizedBox(height: 8.h),
               GestureDetector(
@@ -1081,10 +1095,11 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                       children: [
                         Text(
                           "Start Time",
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.textColor,
-                            fontSize: 14.sp,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: AppColors.textColor,
+                                fontSize: 14.sp,
+                              ),
                         ),
                         SizedBox(height: 8.h),
                         GestureDetector(
@@ -1109,10 +1124,11 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                                 ),
                                 Text(
                                   onStartTime,
-                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: AppColors.textColor,
-                                    fontSize: 14.sp,
-                                  ),
+                                  style: Theme.of(context).textTheme.bodyMedium
+                                      ?.copyWith(
+                                        color: AppColors.textColor,
+                                        fontSize: 14.sp,
+                                      ),
                                 ),
                               ],
                             ),
@@ -1128,10 +1144,11 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                       children: [
                         Text(
                           "End Time",
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.textColor,
-                            fontSize: 14.sp,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: AppColors.textColor,
+                                fontSize: 14.sp,
+                              ),
                         ),
                         SizedBox(height: 8.h),
                         GestureDetector(
@@ -1156,10 +1173,11 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                                 ),
                                 Text(
                                   onEndTime,
-                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: AppColors.textColor,
-                                    fontSize: 14.sp,
-                                  ),
+                                  style: Theme.of(context).textTheme.bodyMedium
+                                      ?.copyWith(
+                                        color: AppColors.textColor,
+                                        fontSize: 14.sp,
+                                      ),
                                 ),
                               ],
                             ),
@@ -1287,10 +1305,11 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                       children: [
                         Text(
                           "From",
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.textColor,
-                            fontSize: 14.sp,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: AppColors.textColor,
+                                fontSize: 14.sp,
+                              ),
                         ),
                         SizedBox(height: 8.h),
                         GestureDetector(
@@ -1315,10 +1334,11 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                                 ),
                                 Text(
                                   selectedFromDate,
-                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: AppColors.textColor,
-                                    fontSize: 12.sp,
-                                  ),
+                                  style: Theme.of(context).textTheme.bodyMedium
+                                      ?.copyWith(
+                                        color: AppColors.textColor,
+                                        fontSize: 12.sp,
+                                      ),
                                 ),
                               ],
                             ),
@@ -1334,10 +1354,11 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                       children: [
                         Text(
                           "Start Time",
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.textColor,
-                            fontSize: 14.sp,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: AppColors.textColor,
+                                fontSize: 14.sp,
+                              ),
                         ),
                         SizedBox(height: 8.h),
                         GestureDetector(
@@ -1362,10 +1383,11 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                                 ),
                                 Text(
                                   offStartTime,
-                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: AppColors.textColor,
-                                    fontSize: 12.sp,
-                                  ),
+                                  style: Theme.of(context).textTheme.bodyMedium
+                                      ?.copyWith(
+                                        color: AppColors.textColor,
+                                        fontSize: 12.sp,
+                                      ),
                                 ),
                               ],
                             ),
@@ -1385,10 +1407,11 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                       children: [
                         Text(
                           "To",
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.textColor,
-                            fontSize: 14.sp,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: AppColors.textColor,
+                                fontSize: 14.sp,
+                              ),
                         ),
                         SizedBox(height: 8.h),
                         GestureDetector(
@@ -1413,10 +1436,11 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                                 ),
                                 Text(
                                   selectedToDate,
-                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: AppColors.textColor,
-                                    fontSize: 12.sp,
-                                  ),
+                                  style: Theme.of(context).textTheme.bodyMedium
+                                      ?.copyWith(
+                                        color: AppColors.textColor,
+                                        fontSize: 12.sp,
+                                      ),
                                 ),
                               ],
                             ),
@@ -1432,10 +1456,11 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                       children: [
                         Text(
                           "End Time",
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.textColor,
-                            fontSize: 14.sp,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: AppColors.textColor,
+                                fontSize: 14.sp,
+                              ),
                         ),
                         SizedBox(height: 8.h),
                         GestureDetector(
@@ -1460,10 +1485,11 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                                 ),
                                 Text(
                                   offEndTime,
-                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: AppColors.textColor,
-                                    fontSize: 12.sp,
-                                  ),
+                                  style: Theme.of(context).textTheme.bodyMedium
+                                      ?.copyWith(
+                                        color: AppColors.textColor,
+                                        fontSize: 12.sp,
+                                      ),
                                 ),
                               ],
                             ),
@@ -1532,18 +1558,20 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                       children: [
                         Text(
                           "Starts  ",
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.textColor,
-                            fontSize: 12.sp,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: AppColors.textColor,
+                                fontSize: 12.sp,
+                              ),
                         ),
                         Text(
                           item["start"]!,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.whiteColor,
-                            fontSize: 13.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: AppColors.whiteColor,
+                                fontSize: 13.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
                         ),
                       ],
                     ),
@@ -1552,18 +1580,20 @@ class _CoachAvailabilityViewState extends State<CoachAvailabilityView> {
                       children: [
                         Text(
                           "Ends    ",
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.textColor,
-                            fontSize: 12.sp,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: AppColors.textColor,
+                                fontSize: 12.sp,
+                              ),
                         ),
                         Text(
                           item["end"]!,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.whiteColor,
-                            fontSize: 13.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: AppColors.whiteColor,
+                                fontSize: 13.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
                         ),
                       ],
                     ),
@@ -1754,10 +1784,11 @@ class _CoachRatesServicesViewState extends State<CoachRatesServicesView> {
                           SizedBox(width: 4.w),
                           Text(
                             "Add Option",
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: AppColors.textColor,
-                              fontSize: 12.sp,
-                            ),
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(
+                                  color: AppColors.textColor,
+                                  fontSize: 12.sp,
+                                ),
                           ),
                         ],
                       ),
@@ -1851,7 +1882,10 @@ class _CoachRatesServicesViewState extends State<CoachRatesServicesView> {
           SizedBox(height: 16.h),
           Text(
             "Duration",
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textColor, fontSize: 14.sp),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColors.textColor,
+              fontSize: 14.sp,
+            ),
           ),
           SizedBox(height: 6.h),
           InputTextWidget(
@@ -1862,7 +1896,10 @@ class _CoachRatesServicesViewState extends State<CoachRatesServicesView> {
           SizedBox(height: 12.h),
           Text(
             "Price",
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textColor, fontSize: 14.sp),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColors.textColor,
+              fontSize: 14.sp,
+            ),
           ),
           SizedBox(height: 6.h),
           InputTextWidget(
@@ -1919,7 +1956,9 @@ class CoachSetupCompleteView extends StatelessWidget {
                     child: Center(
                       child: Text(
                         "✨ 🎉 🥳",
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 100.sp),
+                        style: Theme.of(
+                          context,
+                        ).textTheme.bodyMedium?.copyWith(fontSize: 100.sp),
                       ),
                     ),
                   ),

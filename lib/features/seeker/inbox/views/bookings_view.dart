@@ -33,7 +33,10 @@ class BookingsView extends StatelessWidget {
           ),
           title: Text(
             "Bookings",
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 18.sp),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColors.whiteColor,
+              fontSize: 18.sp,
+            ),
           ),
           centerTitle: true,
           bottom: TabBar(
@@ -66,8 +69,16 @@ class BookingsView extends StatelessWidget {
                   child: TabBarView(
                     physics: const AlwaysScrollableScrollPhysics(),
                     children: [
-                      _buildCurrentList(context, controller, controller.currentBookings),
-                      _buildHistoryList(context, controller, controller.historyBookings),
+                      _buildCurrentList(
+                        context,
+                        controller,
+                        controller.currentBookings,
+                      ),
+                      _buildHistoryList(
+                        context,
+                        controller,
+                        controller.historyBookings,
+                      ),
                     ],
                   ),
                 ),
@@ -87,7 +98,8 @@ class BookingsView extends StatelessWidget {
   }
 
   Widget _buildCurrentList(
-    BuildContext context, InboxController controller,
+    BuildContext context,
+    InboxController controller,
     List<BookingModel> bookings,
   ) {
     if (bookings.isEmpty) {
@@ -98,7 +110,9 @@ class BookingsView extends StatelessWidget {
           Center(
             child: Text(
               "No current bookings.",
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(128)),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.whiteColor.withAlpha(128),
+              ),
             ),
           ),
         ],
@@ -119,7 +133,8 @@ class BookingsView extends StatelessWidget {
   }
 
   Widget _buildHistoryList(
-    BuildContext context, InboxController controller,
+    BuildContext context,
+    InboxController controller,
     List<BookingModel> bookings,
   ) {
     if (bookings.isEmpty) {
@@ -130,7 +145,9 @@ class BookingsView extends StatelessWidget {
           Center(
             child: Text(
               "No booking history.",
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(128)),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.whiteColor.withAlpha(128),
+              ),
             ),
           ),
         ],
@@ -167,7 +184,7 @@ class _BookingCard extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 16.h),
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: AppColors.whiteColor.withAlpha(13),
+        color: AppColors.coachColorFF1C2B19,
         borderRadius: BorderRadius.circular(16.r),
       ),
       child: Column(
@@ -190,11 +207,12 @@ class _BookingCard extends StatelessWidget {
                         SizedBox(width: 8.w),
                         Text(
                           booking.date,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.greenColor,
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: AppColors.greenColor,
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
                         ),
                       ],
                       if (isCurrent) ...[
@@ -206,10 +224,11 @@ class _BookingCard extends StatelessWidget {
                         SizedBox(width: 8.w),
                         Text(
                           booking.date,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.whiteColor.withAlpha(128),
-                            fontSize: 12.sp,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: AppColors.whiteColor.withAlpha(128),
+                                fontSize: 12.sp,
+                              ),
                         ),
                       ],
                     ],
@@ -235,33 +254,70 @@ class _BookingCard extends StatelessWidget {
                 ],
               ),
               if (isCurrent)
-                GestureDetector(
-                  onTap: () => _showCancelDialog(context),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.cancel_outlined,
-                        color: AppColors.redColor.withAlpha(179),
-                        size: 18.r,
-                      ),
-                      SizedBox(width: 4.w),
-                      Text(
-                        "Cancel",
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.redColor.withAlpha(179),
-                          fontSize: 12.sp,
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              else
-                IconButton(
+                PopupMenuButton<String>(
                   icon: Icon(
                     Icons.more_horiz,
                     color: AppColors.whiteColor.withAlpha(128),
                   ),
-                  onPressed: () => _showHistoryMenu(context),
+                  color: AppColors.coachColorFF1B2B1B,
+                  onSelected: (value) {
+                    if (value == 'cancel') {
+                      _showCancelDialog(context);
+                    } else if (value == 'reschedule') {
+                      // Handle reschedule
+                    }
+                  },
+                  itemBuilder: (context) => [
+                    _buildPopupMenuItem(
+                      context,
+                      'cancel',
+                      'Cancel',
+                      Icons.cancel_outlined,
+                    ),
+                    _buildPopupMenuItem(
+                      context,
+                      'reschedule',
+                      'Request reschedule',
+                      Icons.calendar_month_outlined,
+                    ),
+                  ],
+                )
+              else
+                PopupMenuButton<String>(
+                  icon: Icon(
+                    Icons.more_horiz,
+                    color: AppColors.whiteColor.withAlpha(128),
+                  ),
+                  color: AppColors.coachColorFF1B2B1B,
+                  onSelected: (value) {
+                    // Handle history actions
+                  },
+                  itemBuilder: (context) => [
+                    _buildPopupMenuItem(
+                      context,
+                      'view_profile',
+                      'View Profile',
+                      Icons.visibility_outlined,
+                    ),
+                    _buildPopupMenuItem(
+                      context,
+                      'review',
+                      'Give a review',
+                      Icons.star_outline,
+                    ),
+                    _buildPopupMenuItem(
+                      context,
+                      'report',
+                      'Report',
+                      Icons.report_gmailerrorred_outlined,
+                    ),
+                    _buildPopupMenuItem(
+                      context,
+                      'block',
+                      'Block',
+                      Icons.block_outlined,
+                    ),
+                  ],
                 ),
             ],
           ),
@@ -269,7 +325,7 @@ class _BookingCard extends StatelessWidget {
           Container(
             padding: EdgeInsets.all(12.r),
             decoration: BoxDecoration(
-              color: AppColors.blackColor.withAlpha(26),
+              color: AppColors.coachColorFF263523,
               borderRadius: BorderRadius.circular(12.r),
             ),
             child: Row(
@@ -315,12 +371,15 @@ class _BookingCard extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(4.r),
+        ),
         backgroundColor: Colors.transparent,
         child: Container(
           padding: EdgeInsets.all(20.r),
           decoration: BoxDecoration(
             color: AppColors.popupBackgroundColor,
-            borderRadius: BorderRadius.circular(20.r),
+            borderRadius: BorderRadius.circular(4.r),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -355,6 +414,8 @@ class _BookingCard extends StatelessWidget {
                       title: "No",
                       buttonColor: AppColors.coachColorFF334B2F,
                       borderColor: Colors.transparent,
+                      radius: 4,
+                      height: 32,
                     ),
                   ),
                   SizedBox(width: 12.w),
@@ -366,6 +427,8 @@ class _BookingCard extends StatelessWidget {
                         await controller.cancelBooking(booking.id);
                       },
                       title: "Yes",
+                      height: 32,
+                      radius: 4,
                       linearGradient: true,
                     ),
                   ),
@@ -378,56 +441,24 @@ class _BookingCard extends StatelessWidget {
     );
   }
 
-  void _showHistoryMenu(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: AppColors.coachColorFF1B2B1B,
-      builder: (context) => Column(
-        mainAxisSize: MainAxisSize.min,
+  PopupMenuItem<String> _buildPopupMenuItem(
+    BuildContext context,
+    String value,
+    String text,
+    IconData icon,
+  ) {
+    return PopupMenuItem(
+      value: value,
+      child: Row(
         children: [
-          ListTile(
-            leading: const Icon(
-              Icons.visibility_outlined,
-              color: AppColors.white70Color,
+          Icon(icon, color: AppColors.whiteColor.withAlpha(153), size: 20.r),
+          SizedBox(width: 12.w),
+          Text(
+            text,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColors.whiteColor,
+              fontSize: 14.sp,
             ),
-            title: Text(
-              "View Profile",
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor),
-            ),
-            onTap: () => Navigator.pop(context),
-          ),
-          ListTile(
-            leading: const Icon(
-              Icons.star_outline,
-              color: AppColors.white70Color,
-            ),
-            title: Text(
-              "Give a review",
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor),
-            ),
-            onTap: () => Navigator.pop(context),
-          ),
-          ListTile(
-            leading: const Icon(
-              Icons.report_gmailerrorred_outlined,
-              color: AppColors.white70Color,
-            ),
-            title: Text(
-              "Report",
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor),
-            ),
-            onTap: () => Navigator.pop(context),
-          ),
-          ListTile(
-            leading: const Icon(
-              Icons.block_outlined,
-              color: AppColors.white70Color,
-            ),
-            title: Text(
-              "Block",
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor),
-            ),
-            onTap: () => Navigator.pop(context),
           ),
         ],
       ),

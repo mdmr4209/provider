@@ -34,7 +34,9 @@ class DashboardData {
       dailyWisdom: json['dailyWisdom'] != null
           ? DailyWisdom.fromJson(json['dailyWisdom'])
           : null,
-      journal: json['journal'] != null ? JournalData.fromJson(json['journal']) : null,
+      journal: json['journal'] != null
+          ? JournalData.fromJson(json['journal'])
+          : null,
       notifications: json['notifications'] != null
           ? NotificationsData.fromJson(json['notifications'])
           : null,
@@ -49,10 +51,7 @@ class UserData {
   UserData({this.name, this.status});
 
   factory UserData.fromJson(Map<String, dynamic> json) {
-    return UserData(
-      name: json['name'],
-      status: json['status'],
-    );
+    return UserData(name: json['name'], status: json['status']);
   }
 }
 
@@ -64,7 +63,14 @@ class TimerData {
   final double? progressValue;
   final String? startDate;
 
-  TimerData({this.days, this.hours, this.mins, this.secs, this.progressValue, this.startDate});
+  TimerData({
+    this.days,
+    this.hours,
+    this.mins,
+    this.secs,
+    this.progressValue,
+    this.startDate,
+  });
 
   factory TimerData.fromJson(Map<String, dynamic> json) {
     return TimerData(
@@ -86,10 +92,14 @@ class TimerData {
   }
 
   // Use JSON values if available, but update live locally if startDate is present
-  int get displayDays => startDate != null ? _currentDuration.inDays : (days ?? 0);
-  int get displayHours => startDate != null ? (_currentDuration.inHours % 24) : (hours ?? 0);
-  int get displayMins => startDate != null ? (_currentDuration.inMinutes % 60) : (mins ?? 0);
-  int get displaySecs => startDate != null ? (_currentDuration.inSeconds % 60) : (secs ?? 0);
+  int get displayDays =>
+      startDate != null ? _currentDuration.inDays : (days ?? 0);
+  int get displayHours =>
+      startDate != null ? (_currentDuration.inHours % 24) : (hours ?? 0);
+  int get displayMins =>
+      startDate != null ? (_currentDuration.inMinutes % 60) : (mins ?? 0);
+  int get displaySecs =>
+      startDate != null ? (_currentDuration.inSeconds % 60) : (secs ?? 0);
 
   double get progress {
     return progressValue ?? 0.8;
@@ -103,10 +113,7 @@ class DailyWisdom {
   DailyWisdom({this.quote, this.author});
 
   factory DailyWisdom.fromJson(Map<String, dynamic> json) {
-    return DailyWisdom(
-      quote: json['quote'],
-      author: json['author'],
-    );
+    return DailyWisdom(quote: json['quote'], author: json['author']);
   }
 }
 
@@ -117,10 +124,7 @@ class JournalData {
   JournalData({this.prompt, this.actionText});
 
   factory JournalData.fromJson(Map<String, dynamic> json) {
-    return JournalData(
-      prompt: json['prompt'],
-      actionText: json['actionText'],
-    );
+    return JournalData(prompt: json['prompt'], actionText: json['actionText']);
   }
 }
 
@@ -130,8 +134,6 @@ class NotificationsData {
   NotificationsData({this.unreadCount});
 
   factory NotificationsData.fromJson(Map<String, dynamic> json) {
-    return NotificationsData(
-      unreadCount: json['unreadCount'],
-    );
+    return NotificationsData(unreadCount: json['unreadCount']);
   }
 }

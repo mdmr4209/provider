@@ -55,7 +55,9 @@ class ForgetPasswordView extends StatelessWidget {
                     height: 331.h,
                     clipBehavior: Clip.antiAlias,
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surface.withAlpha(200),
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.surface.withAlpha(200),
                     ),
                     child: Stack(
                       alignment: Alignment.center,

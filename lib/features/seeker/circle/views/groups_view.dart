@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import '../../../../core/widgets/background_widget.dart';
 import 'create_group_view.dart';
 import 'group_details_view.dart';
 import '../../../../core/constants/app_assets.dart';
@@ -28,119 +29,135 @@ class GroupsView extends StatelessWidget {
 
     return DefaultTabController(
       length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: AppColors.whiteColor),
-            onPressed: () => Navigator.pop(context),
-          ),
-          title: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SvgPicture.asset(
-                AppAssets.group,
-                width: 24.r,
-                colorFilter: const ColorFilter.mode(
-                  AppColors.secondaryColorLight,
-                  BlendMode.srcIn,
-                ),
+      child: BackgroundWidget(
+        imagePath: AppAssets.bgGroup,
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: AppColors.defaultColor,
+            // These two lines prevent the color change / tinting when scrolling
+            scrolledUnderElevation: 0,
+            surfaceTintColor: AppColors.defaultColor,
+
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                bottom: Radius.circular(24.r),
               ),
-              SizedBox(width: 8.w),
-              Text(
-                "Groups",
-                style: theme.textTheme.titleLarge?.copyWith(
-                  color: AppColors.whiteColor,
-                  fontWeight: FontWeight.bold,
+            ),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: AppColors.whiteColor),
+              onPressed: () => Navigator.pop(context),
+            ),
+            title: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SvgPicture.asset(AppAssets.group, width: 24.r),
+                SizedBox(width: 8.w),
+                Text(
+                  "Groups",
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    color: AppColors.whiteColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            centerTitle: true,
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const CreateGroupView()),
+                ),
+                child: Text(
+                  "Create +",
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.secondaryColorLight,
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ],
           ),
-          centerTitle: true,
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const CreateGroupView()),
-              ),
-              child: Text(
-                "Create +",
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppColors.secondaryColorLight,
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-          ],
-        ),
-        body: Consumer<GroupController>(
-          builder: (context, controller, child) {
-            return Column(
-              children: [
-                SizedBox(height: 16.h),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  child: CustomInput(
-                    height: 48,
-                    hintText: "Search groups",
-                    leadingIcon: AppAssets.feather,
-                    backgroundColor: AppColors.whiteColor.withAlpha(13),
-                    borderRadius: 24,
-                    shadow: false,
-                  ),
-                ),
-                SizedBox(height: 16.h),
-                TabBar(
-                  isScrollable: true,
-                  indicator: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20.r),
-                    border: Border.all(
-                      color: AppColors.secondaryColorLight,
-                      width: 1,
-                    ),
-                    color: AppColors.whiteColor.withAlpha(13),
-                  ),
-                  labelColor: AppColors.secondaryColorLight,
-                  unselectedLabelColor: AppColors.whiteColor.withAlpha(128),
-                  dividerColor: Colors.transparent,
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  tabAlignment: TabAlignment.start,
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  labelPadding: EdgeInsets.symmetric(horizontal: 16.w),
-                  tabs: const [
-                    Tab(text: "My Groups"),
-                    Tab(text: "Find Groups"),
-                    Tab(text: "Invitations"),
-                  ],
-                ),
-                SizedBox(height: 16.h),
-                Expanded(
-                  child: controller.isLoading
-                      ? ListView.builder(
-                          padding: EdgeInsets.symmetric(horizontal: 16.w),
-                          itemCount: 3,
-                          itemBuilder: (context, index) => Padding(
-                            padding: EdgeInsets.only(bottom: 12.h),
-                            child: ShimmerLoader(
-                              width: double.infinity,
-                              height: 130.h,
-                              borderRadius: 16.r,
-                            ),
+          body: Consumer<GroupController>(
+            builder: (context, controller, child) {
+              return Column(
+                children: [
+                  SizedBox(height: 16.h),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    child: CustomInput(
+                      height: 44,
+                      hintText: "Search groups",
+                      fontSize: 14,
+                      hintColor: AppColors.greyColor,
+                      hintStyle: Theme.of(context).textTheme.bodyLarge
+                          ?.copyWith(
+                            color: AppColors.whiteColor.withAlpha(153),
+                            fontSize: 14.sp,
                           ),
-                        )
-                      : TabBarView(
-                          children: [
-                            _buildMyGroupsList(context, controller),
-                            _buildFindGroupsList(context, controller),
-                            _buildInvitationsList(context, controller),
-                          ],
-                        ),
-                ),
-              ],
-            );
-          },
+                      shadow: true,
+                      leadingIcon: AppAssets.search,
+                      leadingPadding: EdgeInsets.only(left: 16.w, right: 8.w),
+                    ),
+                  ),
+                  SizedBox(height: 16.h),
+                  TabBar(
+                    isScrollable: true,
+                    indicator: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.r),
+                      border: Border.all(
+                        color: AppColors.coachColorF2C9A84C,
+                        width: .50,
+                      ),
+                      color: AppColors.buttonColor3,
+                    ),
+                    labelColor: AppColors.textColor,
+                    labelStyle: theme.textTheme.bodyMedium,
+                    unselectedLabelStyle: theme.textTheme.bodyMedium,
+                    unselectedLabelColor: AppColors.whiteColor.withAlpha(128),
+                    dividerColor: Colors.transparent,
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    tabAlignment: TabAlignment.start,
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    labelPadding: EdgeInsets.symmetric(
+                      horizontal: 16.w,
+                      vertical: 0.h,
+                    ),
+                    tabs: const [
+                      Tab(text: "My Groups"),
+                      Tab(text: "Find Groups"),
+                      Tab(text: "Invitations"),
+                    ],
+                  ),
+                  SizedBox(height: 16.h),
+                  Expanded(
+                    child: controller.isLoading
+                        ? ListView.builder(
+                            padding: EdgeInsets.symmetric(horizontal: 16.w),
+                            itemCount: 3,
+                            itemBuilder: (context, index) => Padding(
+                              padding: EdgeInsets.only(bottom: 12.h),
+                              child: ShimmerLoader(
+                                width: double.infinity,
+                                height: 130.h,
+                                borderRadius: 16.r,
+                              ),
+                            ),
+                          )
+                        : TabBarView(
+                            children: [
+                              _buildMyGroupsList(context, controller),
+                              _buildFindGroupsList(context, controller),
+                              _buildInvitationsList(context, controller),
+                            ],
+                          ),
+                  ),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );
@@ -163,23 +180,31 @@ class GroupsView extends StatelessWidget {
                     Center(
                       child: Text(
                         "No joined groups found",
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(128)),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.whiteColor.withAlpha(128),
+                        ),
                       ),
                     ),
                   ],
                 )
               : NotificationListener<ScrollNotification>(
                   onNotification: (ScrollNotification scrollInfo) {
-                    if (!controller.isFetchingMoreGroups && 
+                    if (!controller.isFetchingMoreGroups &&
                         controller.groupsHasMore &&
-                        scrollInfo.metrics.pixels >= scrollInfo.metrics.maxScrollExtent - 50) {
-                      controller.fetchGroupsData(isFetchMore: true, tab: 'myGroups');
+                        scrollInfo.metrics.pixels >=
+                            scrollInfo.metrics.maxScrollExtent - 50) {
+                      controller.fetchGroupsData(
+                        isFetchMore: true,
+                        tab: 'myGroups',
+                      );
                     }
                     return false;
                   },
                   child: ListView.builder(
                     padding: EdgeInsets.symmetric(horizontal: 16.w),
-                    itemCount: controller.myGroups.length + (controller.isFetchingMoreGroups ? 1 : 0),
+                    itemCount:
+                        controller.myGroups.length +
+                        (controller.isFetchingMoreGroups ? 1 : 0),
                     physics: const AlwaysScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
                       if (index == controller.myGroups.length) {
@@ -220,10 +245,29 @@ class GroupsView extends StatelessWidget {
     );
   }
 
-  Widget _buildFindGroupsList(BuildContext context, GroupController controller) {
+  Widget _buildFindGroupsList(
+    BuildContext context,
+    GroupController controller,
+  ) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildFirstGroupFreeBanner(context),
+        SizedBox(height: 16.h),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
+          child: Text(
+            'Suggestions',
+            style: TextStyle(
+              color: const Color(0xFFBBBDB1),
+              fontSize: 12,
+              fontFamily: 'Segoe UI',
+              fontWeight: FontWeight.w400,
+              height: 1.33,
+            ),
+          ),
+        ),
+        SizedBox(height: 10.h),
         Expanded(
           child: Stack(
             children: [
@@ -241,28 +285,37 @@ class GroupsView extends StatelessWidget {
                           Center(
                             child: Text(
                               "No suggested groups available",
-                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(128)),
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(
+                                    color: AppColors.whiteColor.withAlpha(128),
+                                  ),
                             ),
                           ),
                         ],
                       )
                     : NotificationListener<ScrollNotification>(
                         onNotification: (ScrollNotification scrollInfo) {
-                          if (!controller.isFetchingMoreSuggestions && 
+                          if (!controller.isFetchingMoreSuggestions &&
                               controller.suggestionsHasMore &&
-                              scrollInfo.metrics.pixels >= scrollInfo.metrics.maxScrollExtent - 50) {
-                            controller.fetchGroupsData(isFetchMore: true, tab: 'findGroups');
+                              scrollInfo.metrics.pixels >=
+                                  scrollInfo.metrics.maxScrollExtent - 50) {
+                            controller.fetchGroupsData(
+                              isFetchMore: true,
+                              tab: 'findGroups',
+                            );
                           }
                           return false;
                         },
                         child: ListView.builder(
                           padding: EdgeInsets.symmetric(horizontal: 16.w),
-                          itemCount: controller.suggestedGroups.length + (controller.isFetchingMoreSuggestions ? 1 : 0),
+                          itemCount:
+                              controller.suggestedGroups.length +
+                              (controller.isFetchingMoreSuggestions ? 1 : 0),
                           physics: const AlwaysScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
                             if (index == controller.suggestedGroups.length) {
-                              return const Padding(
-                                padding: EdgeInsets.all(16.0),
+                              return Padding(
+                                padding: EdgeInsets.all(16.r),
                                 child: Center(child: CustomLoader(size: 40)),
                               );
                             }
@@ -273,7 +326,8 @@ class GroupsView extends StatelessWidget {
                               icon: group.icon,
                               membersCount: group.memberCount,
                               description: group.description,
-                              onActionPress: () => controller.joinGroup(group.id),
+                              onActionPress: () =>
+                                  controller.joinGroup(group.id),
                             );
                           },
                         ),
@@ -293,7 +347,10 @@ class GroupsView extends StatelessWidget {
     );
   }
 
-  Widget _buildInvitationsList(BuildContext context, GroupController controller) {
+  Widget _buildInvitationsList(
+    BuildContext context,
+    GroupController controller,
+  ) {
     return Stack(
       children: [
         RefreshIndicator(
@@ -310,7 +367,9 @@ class GroupsView extends StatelessWidget {
                     Center(
                       child: Text(
                         "No group invitations",
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(128)),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.whiteColor.withAlpha(128),
+                        ),
                       ),
                     ),
                   ],
@@ -326,8 +385,10 @@ class GroupsView extends StatelessWidget {
                       name: invite.group.name,
                       icon: invite.group.icon,
                       membersCount: invite.group.memberCount,
-                      description: "Invited by ${invite.invitedBy}: ${invite.group.description}",
-                      onActionPress: () => controller.joinGroup(invite.group.id),
+                      description:
+                          "Invited by ${invite.invitedBy}: ${invite.group.description}",
+                      onActionPress: () =>
+                          controller.joinGroup(invite.group.id),
                     );
                   },
                 ),
@@ -347,9 +408,17 @@ class GroupsView extends StatelessWidget {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       padding: EdgeInsets.all(12.r),
-      decoration: BoxDecoration(
-        color: AppColors.whiteColor.withAlpha(13),
-        borderRadius: BorderRadius.circular(12.r),
+      decoration: ShapeDecoration(
+        color: const Color(0xFF1E2D1B),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        shadows: [
+          BoxShadow(
+            color: Color(0x0F000000),
+            blurRadius: 24.20,
+            offset: Offset(0, 13),
+            spreadRadius: 0,
+          ),
+        ],
       ),
       child: Row(
         children: [
@@ -406,11 +475,18 @@ class _GroupCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(bottom: 12.h),
-      padding: EdgeInsets.all(16.r),
-      decoration: BoxDecoration(
-        color: AppColors.postCardColor,
-        borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: AppColors.whiteColor.withAlpha(13)),
+      padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 15),
+      decoration: ShapeDecoration(
+        color: const Color(0xFF253523),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        shadows: [
+          BoxShadow(
+            color: Color(0x0F000000),
+            blurRadius: 24.20,
+            offset: Offset(0, 13),
+            spreadRadius: 0,
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -466,10 +542,11 @@ class _GroupCard extends StatelessWidget {
                       if (onActionPress != null) onActionPress!();
                     },
                     title: "Leave",
-                    buttonColor: Colors.transparent,
+                    buttonColor: AppColors.whiteColor.withAlpha(13),
                     borderColor: AppColors.whiteColor.withAlpha(26),
                     height: 36,
                     fontSize: 13,
+                    radius: 8,
                   ),
                 ),
                 SizedBox(width: 12.w),
@@ -477,10 +554,11 @@ class _GroupCard extends StatelessWidget {
                   child: CustomButton(
                     onPress: () async {},
                     title: "View",
-                    buttonColor: AppColors.whiteColor.withAlpha(13),
-                    borderColor: AppColors.whiteColor.withAlpha(26),
+                    buttonColor: AppColors.coachColorA5354C30,
+                    borderColor: AppColors.coachColorA5354C30,
                     height: 36,
                     fontSize: 13,
+                    radius: 8,
                   ),
                 ),
               ] else if (type == GroupCardType.findGroup) ...[
@@ -490,11 +568,11 @@ class _GroupCard extends StatelessWidget {
                       if (onActionPress != null) onActionPress!();
                     },
                     title: "Join Now",
-                    buttonColor: Colors.transparent,
-                    borderColor: AppColors.secondaryColorLight.withAlpha(128),
-                    height: 36,
-                    fontSize: 13,
-                    textColor: AppColors.secondaryColorLight,
+                    height: 44,
+                    buttonColor: AppColors.coachColor33434928,
+                    borderColor: AppColors.coachColorF2C9A84C,
+                    borderWidth: .5,
+                    radius: 8,
                   ),
                 ),
               ] else if (type == GroupCardType.invitation) ...[
@@ -505,8 +583,10 @@ class _GroupCard extends StatelessWidget {
                     },
                     title: "Join Now",
                     linearGradient: true,
-                    height: 36,
+                    height: 44,
                     fontSize: 13,
+                    borderWidth: .5,
+                    radius: 8,
                   ),
                 ),
                 SizedBox(width: 12.w),
@@ -514,10 +594,12 @@ class _GroupCard extends StatelessWidget {
                   child: CustomButton(
                     onPress: () async {},
                     title: "Ignore",
-                    buttonColor: AppColors.whiteColor.withAlpha(13),
-                    borderColor: AppColors.whiteColor.withAlpha(26),
-                    height: 36,
+                    buttonColor: AppColors.coachColorA5354C30,
+                    borderColor: AppColors.coachColorA5354C30,
+                    height: 44,
                     fontSize: 13,
+                    borderWidth: .5,
+                    radius: 8,
                   ),
                 ),
               ],
@@ -528,4 +610,3 @@ class _GroupCard extends StatelessWidget {
     );
   }
 }
-

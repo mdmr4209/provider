@@ -44,7 +44,9 @@ class CirclePostModel {
       isOwnPost: json['isOwnPost'] ?? false,
       commentsCount: json['commentsCount'] ?? 0,
       comments: json['comments'] != null
-          ? (json['comments'] as List).map((i) => CircleComment.fromJson(i)).toList()
+          ? (json['comments'] as List)
+                .map((i) => CircleComment.fromJson(i))
+                .toList()
           : null,
     );
   }
@@ -117,7 +119,8 @@ class CirclePostModel {
       userName: "Sarah M. (You)",
       userAvatar: "https://xsgames.co/randomusers/assets/avatars/female/1.jpg",
       timeAgo: "Just now",
-      content: "Feeling great today! Just reached my 30-day milestone. Persistence is key! 🌟",
+      content:
+          "Feeling great today! Just reached my 30-day milestone. Persistence is key! 🌟",
       isOwnPost: true,
       likes: 5,
       claps: 2,
@@ -128,7 +131,8 @@ class CirclePostModel {
       userName: "Sarah M.",
       userAvatar: "https://xsgames.co/randomusers/assets/avatars/female/1.jpg",
       timeAgo: "2 min ago",
-      content: "Day 14. Didn't reach out even though I wanted to. Proud of myself 💪",
+      content:
+          "Day 14. Didn't reach out even though I wanted to. Proud of myself 💪",
       likes: 47,
       claps: 12,
       commentsCount: 1,
@@ -142,7 +146,8 @@ class CirclePostModel {
         CircleComment(
           id: "comment_001",
           userName: "Mike Tyson",
-          userAvatar: "https://xsgames.co/randomusers/assets/avatars/male/2.jpg",
+          userAvatar:
+              "https://xsgames.co/randomusers/assets/avatars/male/2.jpg",
           content: "Keep going! You got this.",
         ),
       ],
@@ -153,9 +158,7 @@ class CirclePostModel {
       userAvatar: "https://xsgames.co/randomusers/assets/avatars/male/3.jpg",
       timeAgo: "15 min ago",
       content: "Just finished a great workout. Feeling refreshed! 🧘‍♂️",
-      images: [
-        "https://picsum.photos/id/10/600/400",
-      ],
+      images: ["https://picsum.photos/id/10/600/400"],
       likes: 23,
       claps: 5,
       commentsCount: 0,
@@ -168,9 +171,7 @@ class CirclePostModel {
       userAvatar: "https://xsgames.co/randomusers/assets/avatars/female/4.jpg",
       timeAgo: "1 hour ago",
       content: "Nature is so healing. 🌿✨",
-      images: [
-        "https://picsum.photos/id/11/600/400",
-      ],
+      images: ["https://picsum.photos/id/11/600/400"],
       likes: 15,
       claps: 2,
       commentsCount: 0,
@@ -244,10 +245,35 @@ class SuggestionModel {
   }
 
   static List<SuggestionModel> dummySuggestions = [
-    SuggestionModel(id: "sug_0", name: "You", avatar: "https://xsgames.co/randomusers/assets/avatars/male/5.jpg", mutualFriends: 0),
-    SuggestionModel(id: "sug_1", name: "Sarah", avatar: "https://xsgames.co/randomusers/assets/avatars/female/6.jpg", mutualFriends: 2),
-    SuggestionModel(id: "sug_2", name: "Alex", avatar: "https://xsgames.co/randomusers/assets/avatars/male/7.jpg", mutualFriends: 1),
-    SuggestionModel(id: "sug_3", name: "Jordan", avatar: "https://xsgames.co/randomusers/assets/avatars/male/8.jpg", mutualFriends: 3),
-    SuggestionModel(id: "sug_4", name: "Maya", avatar: "https://xsgames.co/randomusers/assets/avatars/female/9.jpg", mutualFriends: 2),
+    SuggestionModel(
+      id: "sug_0",
+      name: "You",
+      avatar: "https://xsgames.co/randomusers/assets/avatars/male/5.jpg",
+      mutualFriends: 0,
+    ),
+    SuggestionModel(
+      id: "sug_1",
+      name: "Sarah",
+      avatar: "https://xsgames.co/randomusers/assets/avatars/female/6.jpg",
+      mutualFriends: 2,
+    ),
+    SuggestionModel(
+      id: "sug_2",
+      name: "Alex",
+      avatar: "https://xsgames.co/randomusers/assets/avatars/male/7.jpg",
+      mutualFriends: 1,
+    ),
+    SuggestionModel(
+      id: "sug_3",
+      name: "Jordan",
+      avatar: "https://xsgames.co/randomusers/assets/avatars/male/8.jpg",
+      mutualFriends: 3,
+    ),
+    SuggestionModel(
+      id: "sug_4",
+      name: "Maya",
+      avatar: "https://xsgames.co/randomusers/assets/avatars/female/9.jpg",
+      mutualFriends: 2,
+    ),
   ];
 }

@@ -18,7 +18,10 @@ class HelpSupportView extends StatelessWidget {
         ),
         title: Text(
           "Help and Support",
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 18.sp),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: AppColors.whiteColor,
+            fontSize: 18.sp,
+          ),
         ),
         centerTitle: true,
       ),
@@ -70,8 +73,15 @@ class HelpSupportView extends StatelessWidget {
               trailingWidget: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.arrow_forward, color: AppColors.whiteColor, size: 16.r),
-                  const VerticalDivider(color: AppColors.white24Color, width: 20),
+                  Icon(
+                    Icons.arrow_forward,
+                    color: AppColors.whiteColor,
+                    size: 16.r,
+                  ),
+                  const VerticalDivider(
+                    color: AppColors.white24Color,
+                    width: 20,
+                  ),
                 ],
               ),
               leadingWidget: Icon(
@@ -79,8 +89,8 @@ class HelpSupportView extends StatelessWidget {
                 color: AppColors.whiteColor,
                 size: 20.r,
               ),
-              buttonColor: AppColors.whiteColor.withAlpha(13),
-              borderColor: AppColors.whiteColor.withAlpha(26),
+              buttonColor: AppColors.defaultColor,
+              borderColor: AppColors.defaultColor,
               radius: 12.r,
             ),
           ],

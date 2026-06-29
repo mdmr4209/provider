@@ -5,7 +5,7 @@ import '../../../../core/utils/helpers/snack_bar_helper.dart';
 class GroupPostController extends ChangeNotifier {
   final TextEditingController postTextController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
-  
+
   bool _isLoading = false;
   bool _isAnonymous = false;
   final List<XFile> _selectedMedia = [];
@@ -22,7 +22,9 @@ class GroupPostController extends ChangeNotifier {
   Future<void> pickMedia({bool isVideo = false}) async {
     try {
       if (isVideo) {
-        final XFile? video = await _picker.pickVideo(source: ImageSource.gallery);
+        final XFile? video = await _picker.pickVideo(
+          source: ImageSource.gallery,
+        );
         if (video != null) {
           _selectedMedia.add(video);
           notifyListeners();

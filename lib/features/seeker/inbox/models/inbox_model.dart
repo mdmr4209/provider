@@ -3,11 +3,7 @@ class StoryModel {
   final String avatar;
   final bool isMine;
 
-  StoryModel({
-    required this.name,
-    required this.avatar,
-    this.isMine = false,
-  });
+  StoryModel({required this.name, required this.avatar, this.isMine = false});
 
   factory StoryModel.fromJson(Map<String, dynamic> json) {
     return StoryModel(
@@ -18,11 +14,7 @@ class StoryModel {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'avatar': avatar,
-      'isMine': isMine,
-    };
+    return {'name': name, 'avatar': avatar, 'isMine': isMine};
   }
 }
 

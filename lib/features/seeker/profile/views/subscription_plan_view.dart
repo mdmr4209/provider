@@ -104,9 +104,7 @@ class SubscriptionPlanView extends StatelessWidget {
       onTap: () => _selectedPlan.value = index,
       child: Container(
         decoration: BoxDecoration(
-          color: isSelected
-              ? AppColors.whiteColor.withAlpha(8)
-              : AppColors.coachColorFF263523,
+          color:  AppColors.coachColorFF263523,
           borderRadius: BorderRadius.circular(16.r),
           border: Border.all(
             color: isSelected ? AppColors.greenColor : Colors.transparent,
@@ -151,26 +149,29 @@ class SubscriptionPlanView extends StatelessWidget {
                       children: [
                         Text(
                           title,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.whiteColor.withAlpha(128),
-                            fontSize: 14.sp,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: AppColors.whiteColor.withAlpha(128),
+                                fontSize: 14.sp,
+                              ),
                         ),
                         SizedBox(height: 8.h),
                         Text(
                           price,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.whiteColor,
-                            fontSize: 28.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: AppColors.whiteColor,
+                                fontSize: 28.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
                         ),
                         Text(
                           "USD / month",
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.whiteColor.withAlpha(102),
-                            fontSize: 12.sp,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: AppColors.whiteColor.withAlpha(102),
+                                fontSize: 12.sp,
+                              ),
                         ),
                       ],
                     ),
@@ -187,26 +188,29 @@ class SubscriptionPlanView extends StatelessWidget {
                       children: [
                         Text(
                           messages,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.whiteColor,
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: AppColors.whiteColor,
+                                fontSize: 18.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
                         ),
                         Text(
                           "Cold Start message",
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.whiteColor.withAlpha(128),
-                            fontSize: 12.sp,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: AppColors.whiteColor.withAlpha(128),
+                                fontSize: 12.sp,
+                              ),
                         ),
                         SizedBox(height: 4.h),
                         Text(
                           groups,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.whiteColor.withAlpha(128),
-                            fontSize: 12.sp,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: AppColors.whiteColor.withAlpha(128),
+                                fontSize: 12.sp,
+                              ),
                         ),
                       ],
                     ),

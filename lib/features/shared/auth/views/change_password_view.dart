@@ -55,7 +55,9 @@ class ChangePasswordView extends StatelessWidget {
                     height: 331.h,
                     clipBehavior: Clip.antiAlias,
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surface.withAlpha(200),
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.surface.withAlpha(200),
                     ),
                     child: Stack(
                       alignment: Alignment.center,
@@ -74,7 +76,9 @@ class ChangePasswordView extends StatelessWidget {
                               ),
                               SizedBox(height: 30.h),
                               InputTextWidget(
-                                hintText: context.watchTr('enter_your_password'),
+                                hintText: context.watchTr(
+                                  'enter_your_password',
+                                ),
                                 obscureText: true,
                                 onChanged: (_) {},
                                 controller: auth.setPasswordController,
@@ -100,19 +104,40 @@ class ChangePasswordView extends StatelessWidget {
                                 onPress: auth.isLoading
                                     ? null
                                     : () async {
-                                        if (auth.setPasswordController.text.length < 6) {
-                                            ScaffoldMessenger.of(context).showSnackBar(
-                                              const SnackBar(content: Text('Password must be at least 6 characters')),
-                                            );
-                                            return;
+                                        if (auth
+                                                .setPasswordController
+                                                .text
+                                                .length <
+                                            6) {
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                'Password must be at least 6 characters',
+                                              ),
+                                            ),
+                                          );
+                                          return;
                                         }
-                                        if (auth.setPasswordController.text != auth.confirmPasswordController.text) {
-                                            ScaffoldMessenger.of(context).showSnackBar(
-                                              const SnackBar(content: Text('Passwords do not match')),
-                                            );
-                                            return;
+                                        if (auth.setPasswordController.text !=
+                                            auth
+                                                .confirmPasswordController
+                                                .text) {
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                'Passwords do not match',
+                                              ),
+                                            ),
+                                          );
+                                          return;
                                         }
-                                        await auth.setPassword(origin: origin ?? 'Forget');
+                                        await auth.setPassword(
+                                          origin: origin ?? 'Forget',
+                                        );
                                       },
                                 loading: auth.isLoading,
                               ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:newproject/core/widgets/background_widget.dart';
 import 'package:provider/provider.dart';
 import '../../../../../core/constants/app_assets.dart';
 import '../../../../../core/constants/app_colors.dart';
@@ -30,273 +31,336 @@ class ProfileView extends StatelessWidget {
 
     return DefaultTabController(
       length: 2,
-      child: Scaffold(
-        body: SafeArea(
-          child: Consumer<ProfileController>(
-            builder: (context, controller, child) {
-              final details = controller.profileDetails;
+      child: BackgroundWidget(
+        imagePath: AppAssets.bgMain,
+        child: Scaffold(
+          body: SafeArea(
+            child: Consumer<ProfileController>(
+              builder: (context, controller, child) {
+                final details = controller.profileDetails;
 
-              if (controller.isLoading && details == null) {
-                return const SafeArea(child: _ProfileShimmer());
-              }
+                if (controller.isLoading && details == null) {
+                  return const SafeArea(child: _ProfileShimmer());
+                }
 
-              final user = details?.user;
+                final user = details?.user;
 
-              return Stack(
-                children: [
-                  RefreshIndicator(
-                    onRefresh: () =>
-                        controller.fetchProfileDetails(isRefresh: true),
-                    color: Colors.transparent,
-                    backgroundColor: Colors.transparent,
-                    strokeWidth: 0,
-                    elevation: 0,
-                    child: SingleChildScrollView(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // ── Header: Name & Settings Icon ──────────────────────────────
-                          Padding(
-                            padding: EdgeInsets.all(20.r),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () =>
-                                          context.push(AppRoutes.editProfile),
+                return Stack(
+                  children: [
+                    RefreshIndicator(
+                      onRefresh: () =>
+                          controller.fetchProfileDetails(isRefresh: true),
+                      color: Colors.transparent,
+                      backgroundColor: Colors.transparent,
+                      strokeWidth: 0,
+                      elevation: 0,
+                      child: SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // ── Header: Name & Settings Icon ──────────────────────────────
+                            Padding(
+                              padding: EdgeInsets.all(20.r),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () => context.push(
+                                            AppRoutes.editProfile,
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                user?.name ?? "Rahim Rehman",
+                                                style: theme
+                                                    .textTheme
+                                                    .titleSmall
+                                                    ?.copyWith(
+                                                      color:
+                                                          AppColors.whiteColor,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                              ),
+                                              SizedBox(width: 8.w),
+                                              Icon(
+                                                Icons.edit_outlined,
+                                                color: AppColors.whiteColor
+                                                    .withAlpha(128),
+                                                size: 18.r,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Text(
+                                          user?.bio ?? "",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.copyWith(
+                                                color: AppColors.whiteColor
+                                                    .withAlpha(128),
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  InkWell(
+                                    child: Icon(
+                                      Icons.settings_outlined,
+                                      color: AppColors.coachColorFFC19E5F,
+                                      size: 28.r,
+                                    ),
+                                    onTap: () =>
+                                        context.push(AppRoutes.settings),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            // ── Stats Section ───────────────────────────────────────────────
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20.w),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  _buildStatItem(
+                                    context,
+                                    user != null
+                                        ? user.stats.posts.toString().padLeft(
+                                            2,
+                                            '0',
+                                          )
+                                        : "07",
+                                    "Post",
+                                  ),
+                                  _buildStatDivider(),
+                                  _buildStatItem(
+                                    context,
+                                    user != null
+                                        ? user.stats.friends.toString()
+                                        : "128",
+                                    "Friends",
+                                  ),
+                                  _buildStatDivider(),
+                                  _buildStatItem(
+                                    context,
+                                    user != null
+                                        ? user.stats.followers.toString()
+                                        : "220",
+                                    "Followers",
+                                  ),
+                                  _buildStatDivider(),
+                                  _buildStatItem(
+                                    context,
+                                    user != null
+                                        ? user.stats.following.toString()
+                                        : "14",
+                                    "Following",
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 24.h),
+                            // ── Status Sharing ──────────────────────────────────────────────
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20.w),
+                              child: Row(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 24.r,
+                                    backgroundImage: NetworkImage(
+                                      user?.avatar ??
+                                          'https://i.pravatar.cc/150?u=me',
+                                    ),
+                                  ),
+                                  SizedBox(width: 12.w),
+                                  Expanded(
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 16.w,
+                                        vertical: 12.h,
+                                      ),
+                                      decoration: ShapeDecoration(
+                                        color: AppColors.coachColorFF21321E,
+                                        shape: RoundedRectangleBorder(
+                                          side: BorderSide(
+                                            width: 0.50.r,
+                                            color: AppColors.coachColorFF334B2F,
+                                          ),
+                                          borderRadius: BorderRadius.circular(
+                                            24.r,
+                                          ),
+                                        ),
+                                        shadows: [
+                                          BoxShadow(
+                                            color: AppColors.coachColorFF334B2F,
+                                            blurRadius: 4,
+                                            offset: Offset(0, 2),
+                                            spreadRadius: 0,
+                                          ),
+                                        ],
+                                      ),
                                       child: Row(
                                         children: [
-                                          Text(
-                                            user?.name ?? "Rahim Rehman",
-                                            style: theme.textTheme.headlineSmall
-                                                ?.copyWith(
-                                                  color: AppColors.whiteColor,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
+                                          SvgPicture.asset(
+                                            AppAssets.feather,
+                                            width: 16.r,
+                                            colorFilter: const ColorFilter.mode(
+                                              AppColors.greyColor,
+                                              BlendMode.srcIn,
+                                            ),
                                           ),
                                           SizedBox(width: 8.w),
-                                          Icon(
-                                            Icons.edit_outlined,
-                                            color: AppColors.whiteColor
-                                                .withAlpha(128),
-                                            size: 18.r,
+                                          Text(
+                                            "Share Your Status.....",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                  color: AppColors.whiteColor
+                                                      .withAlpha(77),
+                                                  fontSize: 13.sp,
+                                                ),
                                           ),
                                         ],
                                       ),
                                     ),
-                                    Text(
-                                      user?.bio ?? "Healing Journey Day 14",
-                                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                        color: AppColors.whiteColor.withAlpha(
-                                          128,
-                                        ),
-                                        fontSize: 13.sp,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 10.h),
+                            // ── Stories / Media Preview ──────────────────────────────────────
+                            Container(
+                              height: 120.h,
+                              padding: EdgeInsets.symmetric(vertical: 15.h),
+                              decoration: ShapeDecoration(
+                                color: const Color(0xFF293F25),
+                                shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                    width: 1,
+                                    color: const Color(0xFF486244),
+                                  ),
+                                  borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(8),
+                                    bottomRight: Radius.circular(8),
+                                  ),
+                                ),
+                              ),
+                              child: SizedBox(
+                                height: 90.h,
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                                  itemCount: (user?.media.length ?? 0) + 1,
+                                  itemBuilder: (context, index) {
+                                    if (index == 0) {
+                                      return _buildAddStoryButton(context);
+                                    }
+                                    final mediaUrl = user!.media[index - 1];
+                                    return _buildMediaItem(mediaUrl);
+                                  },
+                                ),
+                              ),
+                            ),
+                            // ── Tabs: Post / Journal ────────────────────────────────────────
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20.w),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: TabBar(
+                                      isScrollable: true,
+                                      indicatorColor:
+                                          AppColors.secondaryColorLight,
+                                      labelColor: AppColors.secondaryColorLight,
+                                      unselectedLabelColor: AppColors.whiteColor
+                                          .withAlpha(128),
+                                      dividerColor: Colors.transparent,
+                                      tabAlignment: TabAlignment.start,
+                                      labelPadding: EdgeInsets.only(
+                                        right: 24.w,
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                IconButton(
-                                  icon: Icon(
-                                    Icons.settings_outlined,
-                                    color: AppColors.coachColorFFC19E5F,
-                                    size: 28.r,
-                                  ),
-                                  onPressed: () =>
-                                      context.push(AppRoutes.settings),
-                                ),
-                              ],
-                            ),
-                          ),
-                          // ── Stats Section ───────────────────────────────────────────────
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20.w),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                _buildStatItem(context, 
-                                  user != null
-                                      ? user.stats.posts.toString().padLeft(
-                                          2,
-                                          '0',
-                                        )
-                                      : "07",
-                                  "Post",
-                                ),
-                                _buildStatDivider(),
-                                _buildStatItem(context, 
-                                  user != null
-                                      ? user.stats.friends.toString()
-                                      : "128",
-                                  "Friends",
-                                ),
-                                _buildStatDivider(),
-                                _buildStatItem(context, 
-                                  user != null
-                                      ? user.stats.followers.toString()
-                                      : "220",
-                                  "Followers",
-                                ),
-                                _buildStatDivider(),
-                                _buildStatItem(context, 
-                                  user != null
-                                      ? user.stats.following.toString()
-                                      : "14",
-                                  "Following",
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 24.h),
-                          // ── Status Sharing ──────────────────────────────────────────────
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20.w),
-                            child: Row(
-                              children: [
-                                CircleAvatar(
-                                  radius: 24.r,
-                                  backgroundImage: NetworkImage(
-                                    user?.avatar ??
-                                        'https://i.pravatar.cc/150?u=me',
-                                  ),
-                                ),
-                                SizedBox(width: 12.w),
-                                Expanded(
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 16.w,
-                                      vertical: 12.h,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.whiteColor.withAlpha(13),
-                                      borderRadius: BorderRadius.circular(24.r),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        SvgPicture.asset(
-                                          AppAssets.feather,
-                                          width: 16.r,
-                                          colorFilter: const ColorFilter.mode(
-                                            AppColors.greyColor,
-                                            BlendMode.srcIn,
-                                          ),
-                                        ),
-                                        SizedBox(width: 8.w),
-                                        Text(
-                                          "Share Your Status.....",
-                                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                            color: AppColors.whiteColor
-                                                .withAlpha(77),
-                                            fontSize: 13.sp,
+                                      tabs: [
+                                        const Tab(text: "Post"),
+                                        Tab(
+                                          child: Row(
+                                            children: [
+                                              const Icon(
+                                                Icons.lock_outline,
+                                                size: 14,
+                                              ),
+                                              SizedBox(width: 4.w),
+                                              const Text("Journal"),
+                                            ],
                                           ),
                                         ),
                                       ],
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 24.h),
-                          // ── Stories / Media Preview ──────────────────────────────────────
-                          SizedBox(
-                            height: 100.h,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              padding: EdgeInsets.symmetric(horizontal: 16.w),
-                              itemCount: (user?.media.length ?? 0) + 1,
-                              itemBuilder: (context, index) {
-                                if (index == 0) {
-                                  return _buildAddStoryButton(context);
-                                }
-                                final mediaUrl = user!.media[index - 1];
-                                return _buildMediaItem(mediaUrl);
-                              },
-                            ),
-                          ),
-                          SizedBox(height: 24.h),
-                          // ── Tabs: Post / Journal ────────────────────────────────────────
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20.w),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: TabBar(
-                                    isScrollable: true,
-                                    indicatorColor:
-                                        AppColors.secondaryColorLight,
-                                    labelColor: AppColors.secondaryColorLight,
-                                    unselectedLabelColor: AppColors.whiteColor
-                                        .withAlpha(128),
-                                    dividerColor: Colors.transparent,
-                                    tabAlignment: TabAlignment.start,
-                                    labelPadding: EdgeInsets.only(right: 24.w),
-                                    tabs: [
-                                      const Tab(text: "Post"),
-                                      Tab(
-                                        child: Row(
-                                          children: [
-                                            const Icon(
-                                              Icons.lock_outline,
-                                              size: 14,
-                                            ),
-                                            SizedBox(width: 4.w),
-                                            const Text("Journal"),
-                                          ],
+                                  GestureDetector(
+                                    onTap: () => _showCreatePostSheet(context),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          "Create",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.copyWith(
+                                                color: AppColors
+                                                    .coachColorFFC19E5F,
+                                                fontSize: 13.sp,
+                                              ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () => _showCreatePostSheet(context),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        "Create",
-                                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                        Icon(
+                                          Icons.add,
                                           color: AppColors.coachColorFFC19E5F,
-                                          fontSize: 13.sp,
+                                          size: 18.r,
                                         ),
-                                      ),
-                                      Icon(
-                                        Icons.add,
-                                        color: AppColors.coachColorFFC19E5F,
-                                        size: 18.r,
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                          // ── Tab View Content ───────────────────────────────────────────
-                          SizedBox(
-                            height: 500.h,
-                            child: TabBarView(
-                              children: [
-                                _buildPostList(),
-                                _buildJournalList(context, user?.journals ?? []),
-                              ],
+                            // ── Tab View Content ───────────────────────────────────────────
+                            SizedBox(
+                              height: 500.h,
+                              child: TabBarView(
+                                children: [
+                                  _buildPostList(),
+                                  _buildJournalList(
+                                    context,
+                                    user?.journals ?? [],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  if (controller.isRefreshing)
-                    Positioned(
-                      top: 16.h,
-                      left: 0,
-                      right: 0,
-                      child: const Center(child: CustomLoader(size: 150)),
-                    ),
-                ],
-              );
-            },
+                    if (controller.isRefreshing)
+                      Positioned(
+                        top: 16.h,
+                        left: 0,
+                        right: 0,
+                        child: const Center(child: CustomLoader(size: 150)),
+                      ),
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),
@@ -309,8 +373,8 @@ class ProfileView extends StatelessWidget {
         Text(
           count,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: AppColors.secondaryColorLight,
-            fontSize: 18.sp,
+            color: AppColors.coachColorFFC19E5F,
+            fontSize: 15.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -341,30 +405,22 @@ class ProfileView extends StatelessWidget {
         MaterialPageRoute(builder: (_) => const CreateStoryView()),
       ),
       child: Container(
-        width: 80.w,
+        width: 64.w,
+        height: 90.h,
         margin: EdgeInsets.only(right: 8.w),
-        decoration: BoxDecoration(
-          color: AppColors.whiteColor.withAlpha(13),
-          borderRadius: BorderRadius.circular(12.r),
-          border: Border.all(color: AppColors.whiteColor.withAlpha(26)),
-        ),
-        child: Center(
-          child: Icon(
-            Icons.add,
-            color: AppColors.whiteColor.withAlpha(128),
-            size: 30.r,
-          ),
-        ),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.r)),
+        child: SvgPicture.asset(AppAssets.addStory),
       ),
     );
   }
 
   Widget _buildMediaItem(String url) {
     return Container(
-      width: 80.w,
+      width: 64.w,
+      height: 90.h,
       margin: EdgeInsets.only(right: 8.w),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(4.r),
         image: DecorationImage(image: NetworkImage(url), fit: BoxFit.cover),
       ),
     );
@@ -384,12 +440,17 @@ class ProfileView extends StatelessWidget {
     );
   }
 
-  Widget _buildJournalList(BuildContext context, List<ProfileJournal> journals) {
+  Widget _buildJournalList(
+    BuildContext context,
+    List<ProfileJournal> journals,
+  ) {
     if (journals.isEmpty) {
       return Center(
         child: Text(
           "No journal entries yet.",
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(128)),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: AppColors.whiteColor.withAlpha(128),
+          ),
         ),
       );
     }

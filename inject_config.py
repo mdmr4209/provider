@@ -26,6 +26,18 @@ if os.path.exists(clean_config_path):
     with open(clean_config_path, 'r', encoding='utf-8') as f:
         clean_content = f.read()
 
+# ADD MATERIAL.DART IMPORTS TO TEMPLATES
+clean_content = clean_content.replace(
+    "import 'package:go_router/go_router.dart';", 
+    "import 'package:flutter/material.dart';\nimport 'package:go_router/go_router.dart';"
+)
+
+clean_content = clean_content.replace(
+    "import 'package:flutter_screenutil/flutter_screenutil.dart';", 
+    "import 'package:flutter/material.dart';\nimport 'package:flutter_screenutil/flutter_screenutil.dart';"
+)
+
+
 start_marker = 'print("📂 Creating core directories...");'
 end_marker = 'print("🛣️ Creating app_router.dart...");'
 

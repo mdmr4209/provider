@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:newproject/core/widgets/custom_input.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_colors.dart';
@@ -45,7 +46,7 @@ class GiveReviewView extends StatelessWidget {
     return ChangeNotifierProvider<ReviewController>(
       create: (_) => ReviewController(),
       child: Scaffold(
-        backgroundColor: AppColors.backgroundColor.withAlpha(240),
+        backgroundColor: AppColors.backgroundColor.withAlpha(70),
         body: Center(
           child: SingleChildScrollView(
             child: Consumer<ReviewController>(
@@ -68,9 +69,9 @@ class GiveReviewView extends StatelessWidget {
     return Container(
       key: const ValueKey('review_state'),
       margin: EdgeInsets.symmetric(horizontal: 24.w),
-      padding: EdgeInsets.all(20.r),
+      padding: EdgeInsets.only(top: 20.r),
       decoration: BoxDecoration(
-        color: AppColors.popupBackgroundColor,
+        color: AppColors.coachColorFF2A3E27,
         borderRadius: BorderRadius.circular(20.r),
         border: Border.all(
           color: AppColors.primaryColor.withAlpha(51),
@@ -89,120 +90,128 @@ class GiveReviewView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Close button at top right
-          Align(
-            alignment: Alignment.topRight,
-            child: GestureDetector(
-              onTap: () => Navigator.pop(context),
-              child: Icon(
-                Icons.close,
-                color: AppColors.whiteColor.withAlpha(128),
-                size: 20.r,
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            child: Align(
+              alignment: Alignment.topRight,
+              child: GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Icon(
+                  Icons.close,
+                  color: AppColors.whiteColor.withAlpha(128),
+                  size: 20.r,
+                ),
               ),
             ),
           ),
 
-          Text(
-            "Review",
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              fontFamily: 'Georgia',
-              color: AppColors.whiteColor,
-              fontSize: 22.sp,
-              fontWeight: FontWeight.bold,
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            child: Text(
+              "Review",
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                fontFamily: 'Georgia',
+                color: AppColors.whiteColor,
+                fontSize: 22.sp,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
 
           SizedBox(height: 20.h),
 
           // Coach Info Row
-          Row(
-            children: [
-              CircleAvatar(
-                radius: 20.r,
-                backgroundImage: NetworkImage(coachAvatar),
-                backgroundColor: AppColors.whiteColor.withAlpha(26),
-              ),
-              SizedBox(width: 12.w),
-              Text(
-                coachName,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppColors.whiteColor,
-                  fontSize: 15.sp,
-                  fontWeight: FontWeight.bold,
+          Container(
+            color: AppColors.defaultColor,
+            padding: EdgeInsets.only(top: 9.h,right: 12.w,left: 12.w,bottom: 24.h),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 20.r,
+                      backgroundImage: NetworkImage(coachAvatar),
+                      backgroundColor: AppColors.whiteColor.withAlpha(26),
+                    ),
+                    SizedBox(width: 12.w),
+                    Text(
+                      coachName,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppColors.whiteColor,
+                        fontSize: 15.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
 
-          SizedBox(height: 20.h),
+                SizedBox(height: 20.h),
 
-          // Star ratings input
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: List.generate(5, (index) {
-              final starIndex = index + 1;
-              return GestureDetector(
-                onTap: () => controller.setRating(starIndex),
-                child: Padding(
-                  padding: EdgeInsets.only(right: 12.w),
-                  child: Icon(
-                    controller.rating >= starIndex
-                        ? Icons.star
-                        : Icons.star_border,
-                    color: AppColors.amberColor,
-                    size: 32.r,
+                // Star ratings input
+                Padding(
+                  padding: EdgeInsets.only(left: 12.w,),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: List.generate(5, (index) {
+                          final starIndex = index + 1;
+                          return GestureDetector(
+                            onTap: () => controller.setRating(starIndex),
+                            child: Padding(
+                              padding: EdgeInsets.only(right: 12.w),
+                              child: Icon(
+                                controller.rating >= starIndex
+                                    ? Icons.star
+                                    : Icons.star_border,
+                                color: AppColors.amberColor,
+                                size: 32.r,
+                              ),
+                            ),
+                          );
+                        }),
+                      ),
+
+                      SizedBox(height: 20.h),
+
+                      // Comment box
+                      CustomInput(
+                        backgroundColor: AppColors.coachColorFF2A3E27,
+                        controller: controller.commentController,
+                        maxLines: 4,
+                        hintStyle: Theme.of(context).textTheme.bodyMedium
+                            ?.copyWith(
+                            color: AppColors.whiteColor.withAlpha(77),
+                            fontSize: 14.sp),
+                        hintText: "Enter your Comment",
+                        borderRadius: 8,
+                      ),
+
+                      SizedBox(height: 24.h),
+
+                      // Say it button
+                      CustomButton(
+                        onPress: () async {
+                          if (controller.rating == 0) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Please select a rating star'),
+                              ),
+                            );
+                            return;
+                          }
+                          controller.submit();
+                        },
+                        title: "Say it!",
+                        linearGradient: true,
+                        height: 48,
+                        radius: 8,
+                      ),
+                    ],
                   ),
                 ),
-              );
-            }),
-          ),
-
-          SizedBox(height: 20.h),
-
-          // Comment box
-          Container(
-            decoration: BoxDecoration(
-              color: AppColors.whiteColor.withAlpha(13),
-              borderRadius: BorderRadius.circular(12.r),
-              border: Border.all(color: AppColors.whiteColor.withAlpha(26)),
+              ],
             ),
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-            child: TextField(
-              controller: controller.commentController,
-              maxLines: 4,
-              style: Theme.of(
-                context,
-              ).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor),
-              cursorColor: AppColors.secondaryColorLight,
-              decoration: InputDecoration(
-                hintText: "Enter your Comment",
-                hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppColors.whiteColor.withAlpha(77),
-                  fontSize: 14.sp,
-                ),
-                border: InputBorder.none,
-                enabledBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
-              ),
-            ),
-          ),
-
-          SizedBox(height: 24.h),
-
-          // Say it button
-          CustomButton(
-            onPress: () async {
-              if (controller.rating == 0) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Please select a rating star')),
-                );
-                return;
-              }
-              controller.submit();
-            },
-            title: "Say it!",
-            linearGradient: true,
-            height: 48,
-            radius: 8,
           ),
         ],
       ),
@@ -215,7 +224,7 @@ class GiveReviewView extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 24.w),
       padding: EdgeInsets.all(24.r),
       decoration: BoxDecoration(
-        color: AppColors.popupBackgroundColor,
+        color: AppColors.coachColorFF2A3E27,
         borderRadius: BorderRadius.circular(20.r),
         border: Border.all(
           color: AppColors.primaryColor.withAlpha(51),

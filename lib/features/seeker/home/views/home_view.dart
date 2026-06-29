@@ -53,7 +53,7 @@ class HomeView extends StatelessWidget {
                       slivers: [
                         // ── Sliver App Bar (Header) ──────────────────────────────────────────
                         SliverAppBar(
-                          // backgroundColor: Colors.transparent,
+                          backgroundColor: Colors.transparent,
                           elevation: 0,
                           pinned: false,
                           floating: true,
@@ -348,10 +348,6 @@ class HomeView extends StatelessWidget {
                                         SvgPicture.asset(
                                           AppAssets.feather,
                                           width: 22.r,
-                                          colorFilter: const ColorFilter.mode(
-                                            AppColors.blackColor,
-                                            BlendMode.srcIn,
-                                          ),
                                         ),
                                         SizedBox(width: 8.w),
                                         Text(
@@ -390,73 +386,78 @@ class HomeView extends StatelessWidget {
                               SizedBox(height: 16.h),
 
                               // Journal Card
-                              GlassWidget(
-                                width: double.infinity,
-                                height: 72.h,
-                                child: Container(
-                                  padding: EdgeInsets.all(15.r),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.defaultColorAlpha2
-                                        .withAlpha(77),
-                                    borderRadius: BorderRadius.circular(16.r),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                SvgPicture.asset(
-                                                  AppAssets.journal,
-                                                  width: 22.w,
-                                                ),
-                                                SizedBox(width: 8.w),
-                                                Text(
-                                                  "Today's Journal",
-                                                  style: theme
-                                                      .textTheme
-                                                      .bodyLarge
-                                                      ?.copyWith(
-                                                        fontFamily: 'Georgia',
-                                                        color:
-                                                            AppColors.textColor,
-                                                      ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(height: 5.h),
-                                            Text(
-                                              journal?.prompt ??
-                                                  "Tap to write...",
-                                              style: theme.textTheme.bodyMedium
-                                                  ?.copyWith(
-                                                    fontFamily: 'Georgia',
-                                                    fontStyle: FontStyle.italic,
-                                                    color: AppColors.textColor,
+                              InkWell(
+                                onTap: () {
+                                  NavigationService.goToWriteJournal();
+                                },
+                                child: GlassWidget(
+                                  width: double.infinity,
+                                  height: .1.sh,
+                                  color: const Color(0xFF42553E),
+                                  child: Container(
+                                    padding: EdgeInsets.all(15.r),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFF42553E),
+                                      borderRadius: BorderRadius.circular(16.r),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  SvgPicture.asset(
+                                                    AppAssets.journal,
+                                                    width: 22.w,
                                                   ),
-                                            ),
-                                          ],
+                                                  SizedBox(width: 8.w),
+                                                  Text(
+                                                    "Today's Journal",
+                                                    style: theme
+                                                        .textTheme
+                                                        .bodyLarge
+                                                        ?.copyWith(
+                                                          fontFamily: 'Georgia',
+                                                          color: AppColors
+                                                              .textColor,
+                                                        ),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(height: 5.h),
+                                              Text(
+                                                journal?.prompt ??
+                                                    "Tap to write...",
+                                                style: theme
+                                                    .textTheme
+                                                    .bodyMedium
+                                                    ?.copyWith(
+                                                      fontFamily: 'Georgia',
+                                                      fontStyle:
+                                                          FontStyle.italic,
+                                                      color:
+                                                          AppColors.textColor,
+                                                    ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      InkWell(
-                                        onTap: () =>
-                                            NavigationService.goToWriteJournal(),
-                                        child: Text(
+                                        Text(
                                           journal?.actionText ?? "Write →",
                                           style: theme.textTheme.bodyMedium
                                               ?.copyWith(
                                                 color: AppColors.iconColor,
                                               ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),

@@ -42,9 +42,9 @@ class InternetExceptionsWidget extends StatelessWidget {
               child: Center(
                 child: Text(
                   'Retry',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleMedium!.copyWith(color: AppColors.whiteColor),
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    color: AppColors.whiteColor,
+                  ),
                 ),
               ),
             ),

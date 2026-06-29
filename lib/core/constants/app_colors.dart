@@ -167,6 +167,8 @@ class AppColors {
   static const Color coachColorFF354C30 = Color(0XFF354C30);
   static const Color coachColorFF354D31 = Color(0XFF354D31);
   static const Color coachColorFF355530 = Color(0XFF355530);
+  static const Color coachColorFF2A3E27 = Color(0XFF2A3E27);
+  static const Color coachColorFF253922 = Color(0XFF253922);
   static const Color coachColorFF3E5E39 = Color(0XFF3E5E39);
   static const Color coachColorFF42513B = Color(0XFF42513B);
   static const Color coachColorFF425F3D = Color(0XFF425F3D);
@@ -183,8 +185,12 @@ class AppColors {
   static const Color coachColorFF99A1AF = Color(0XFF99A1AF);
   static const Color coachColorFFB8BCB7 = Color(0XFFB8BCB7);
   static const Color coachColorFFB9BBB0 = Color(0XFFB9BBB0);
+  static const Color coachColorFF2D4229 = Color(0XFF2D4229);
+  static const Color coachColorFF263622 = Color(0XFF263622);
   static const Color coachColorFFC19E5F = Color(0XFFC19E5F);
   static const Color coachColorFFD1D1D1 = Color(0XFFD1D1D1);
+  static const Color coachColorFF253722 = Color(0XFF253722);
+  static const Color coachColorFF263823 = Color(0XFF263823);
   static const Color coachColorFFE57373 = Color(0XFFE57373);
   static const Color coachColorFFEFC348 = Color(0XFFEFC348);
   static const Color coachColorFFF4F6F0 = Color(0XFFF4F6F0);

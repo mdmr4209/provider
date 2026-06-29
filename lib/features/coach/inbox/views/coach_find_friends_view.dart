@@ -25,7 +25,13 @@ class CoachFindFriendsView extends StatelessWidget {
             icon: const Icon(Icons.arrow_back, color: AppColors.whiteColor),
             onPressed: () => Navigator.pop(context),
           ),
-          title: Text("Find Friends", style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontWeight: FontWeight.bold)),
+          title: Text(
+            "Find Friends",
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: AppColors.whiteColor,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           centerTitle: true,
         ),
         body: FutureBuilder(
@@ -36,66 +42,83 @@ class CoachFindFriendsView extends StatelessWidget {
             }
             return Column(
               children: [
-            SizedBox(height: 20.h),
-            // --- Search Bar ---
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 16.w),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).extension<AppDesignSystem>()!.panelColor,
-                  borderRadius: BorderRadius.circular(24.r),
-                ),
-                child: Row(
-                  children: [
-                    Icon(Icons.search, color: AppColors.white38Color),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: TextField(
-                        style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor),
-                        decoration: InputDecoration(
-                          hintText: "Search Friends",
-                          hintStyle: theme.textTheme.bodyMedium?.copyWith(color: AppColors.white38Color, fontSize: 14),
-                          border: InputBorder.none,
+                SizedBox(height: 20.h),
+                // --- Search Bar ---
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.w),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    decoration: BoxDecoration(
+                      color: Theme.of(
+                        context,
+                      ).extension<AppDesignSystem>()!.panelColor,
+                      borderRadius: BorderRadius.circular(24.r),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(Icons.search, color: AppColors.white38Color),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: TextField(
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: AppColors.whiteColor,
+                            ),
+                            decoration: InputDecoration(
+                              hintText: "Search Friends",
+                              hintStyle: theme.textTheme.bodyMedium?.copyWith(
+                                color: AppColors.white38Color,
+                                fontSize: 14,
+                              ),
+                              border: InputBorder.none,
+                            ),
+                          ),
                         ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 32.h),
+
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.w),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Suggestions",
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: AppColors.white70Color,
+                        fontSize: 14,
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
 
-            SizedBox(height: 32.h),
+                SizedBox(height: 16.h),
 
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text("Suggestions", style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.white70Color, fontSize: 14)),
-              ),
-            ),
-
-            SizedBox(height: 16.h),
-
-            // --- Friends Grid ---
-            Expanded(
-              child: GridView.builder(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 16.w,
-                  mainAxisSpacing: 16.h,
-                  childAspectRatio: 0.8,
+                // --- Friends Grid ---
+                Expanded(
+                  child: GridView.builder(
+                    padding: EdgeInsets.symmetric(horizontal: 20.w),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 16.w,
+                      mainAxisSpacing: 16.h,
+                      childAspectRatio: 0.8,
+                    ),
+                    itemCount: 6,
+                    itemBuilder: (context, index) {
+                      return _buildFriendCard(
+                        context,
+                        "Mike Lee",
+                        "2 mutual Friend",
+                      );
+                    },
+                  ),
                 ),
-                itemCount: 6,
-                itemBuilder: (context, index) {
-                  return _buildFriendCard(context, "Mike Lee", "2 mutual Friend");
-                },
-              ),
-            ),
-          ],
-        );
-      },
+              ],
+            );
+          },
         ),
       ),
     );
@@ -113,11 +136,26 @@ class CoachFindFriendsView extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 40.r,
-            backgroundImage: const NetworkImage('https://i.pravatar.cc/150?u=mike'),
+            backgroundImage: const NetworkImage(
+              'https://i.pravatar.cc/150?u=mike',
+            ),
           ),
           SizedBox(height: 12.h),
-          Text(name, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontWeight: FontWeight.bold, fontSize: 16)),
-          Text(mutual, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white38Color, fontSize: 11)),
+          Text(
+            name,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColors.whiteColor,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+          Text(
+            mutual,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColors.white38Color,
+              fontSize: 11,
+            ),
+          ),
           const Spacer(),
           CustomButton(
             onPress: () async {},
@@ -138,7 +176,11 @@ class CoachFindFriendsView extends StatelessWidget {
         SizedBox(height: 20.h),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
-          child: ShimmerLoader(width: double.infinity, height: 48.h, borderRadius: 24.r),
+          child: ShimmerLoader(
+            width: double.infinity,
+            height: 48.h,
+            borderRadius: 24.r,
+          ),
         ),
         SizedBox(height: 32.h),
         Padding(
@@ -163,18 +205,28 @@ class CoachFindFriendsView extends StatelessWidget {
               return Container(
                 padding: EdgeInsets.all(16.r),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).extension<AppDesignSystem>()!.panelColor,
+                  color: Theme.of(
+                    context,
+                  ).extension<AppDesignSystem>()!.panelColor,
                   borderRadius: BorderRadius.circular(16.r),
                 ),
                 child: Column(
                   children: [
-                    ShimmerLoader(width: 80.r, height: 80.r, borderRadius: 40.r),
+                    ShimmerLoader(
+                      width: 80.r,
+                      height: 80.r,
+                      borderRadius: 40.r,
+                    ),
                     SizedBox(height: 12.h),
                     ShimmerLoader(width: 100.w, height: 16.h),
                     SizedBox(height: 4.h),
                     ShimmerLoader(width: 80.w, height: 12.h),
                     const Spacer(),
-                    ShimmerLoader(width: double.infinity, height: 32.h, borderRadius: 8.r),
+                    ShimmerLoader(
+                      width: double.infinity,
+                      height: 32.h,
+                      borderRadius: 8.r,
+                    ),
                   ],
                 ),
               );

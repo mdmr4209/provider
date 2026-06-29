@@ -31,17 +31,15 @@ class OtpVerifyView extends StatelessWidget {
               child: Scaffold(
                 body: SafeArea(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 20.w,
+                      vertical: 10.h,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            const Spacer(),
-                            const Spacer(),
-                          ],
-                        ),
+                        Row(children: [const Spacer(), const Spacer()]),
                         SizedBox(height: 10.h),
                         Expanded(
                           child: Stack(
@@ -50,12 +48,14 @@ class OtpVerifyView extends StatelessWidget {
                               AnimatedPositioned(
                                 duration: const Duration(milliseconds: 200),
                                 curve: Curves.easeIn,
-                                top: isKeyboardOpen ? -50.h : 170.h,
+                                top: isKeyboardOpen ? 10.h : 170.h,
                                 left: 0,
                                 right: 0,
                                 bottom: 0,
                                 child: ListView(
-                                  padding: EdgeInsets.symmetric(horizontal: 20.w),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 20.w,
+                                  ),
                                   children: [
                                     SizedBox(height: 20.h),
                                     Text(
@@ -85,25 +85,38 @@ class OtpVerifyView extends StatelessWidget {
                                     PinCodeTextField(
                                       appContext: context,
                                       length: 4, // Set to 4 digits
-                                      textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                        fontSize: 18.sp,
-                                        color: AppColors.whiteColor,
-                                      ),
+                                      textStyle: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                            fontSize: 18.sp,
+                                            color: AppColors.whiteColor,
+                                          ),
                                       animationType: AnimationType.fade,
-                                      cursorColor: Theme.of(context).colorScheme.primary,
+                                      cursorColor: Theme.of(
+                                        context,
+                                      ).colorScheme.primary,
                                       pinTheme: PinTheme(
-                                        shape: PinCodeFieldShape.box,
+                                        shape: PinCodeFieldShape.circle,
                                         fieldHeight: 60.h,
                                         fieldWidth: 60.w,
                                         activeColor: AppColors.primaryColor,
-                                        activeFillColor: AppColors.defaultColorAlpha,
+                                        activeFillColor:
+                                            AppColors.defaultColorAlpha,
                                         selectedColor: AppColors.primaryColor,
-                                        selectedFillColor: AppColors.defaultColorAlpha,
-                                        inactiveColor: AppColors.inputBorderColor,
-                                        inactiveFillColor: AppColors.defaultColorAlpha,
-                                        borderRadius: BorderRadius.circular(8.r),
+                                        selectedFillColor:
+                                            AppColors.defaultColorAlpha,
+                                        inactiveColor:
+                                            AppColors.inputBorderColor,
+                                        inactiveFillColor:
+                                            AppColors.defaultColorAlpha,
+                                        borderRadius: BorderRadius.circular(
+                                          8.r,
+                                        ),
                                       ),
-                                      animationDuration: const Duration(milliseconds: 300),
+                                      animationDuration: const Duration(
+                                        milliseconds: 300,
+                                      ),
                                       enableActiveFill: true,
                                       keyboardType: TextInputType.number,
                                       controller: otpVal.otpController,
@@ -116,14 +129,19 @@ class OtpVerifyView extends StatelessWidget {
                                     ),
                                     SizedBox(height: 20.h),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          context.watchTr('did_not_receive_code'),
+                                          context.watchTr(
+                                            'did_not_receive_code',
+                                          ),
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyMedium
-                                              ?.copyWith(fontFamily: 'Segoe UI'),
+                                              ?.copyWith(
+                                                fontFamily: 'Segoe UI',
+                                              ),
                                         ),
                                         SizedBox(width: 5.w),
                                         InkWell(
@@ -136,7 +154,9 @@ class OtpVerifyView extends StatelessWidget {
                                                 .textTheme
                                                 .bodyMedium
                                                 ?.copyWith(
-                                                  color: otpVal.secondsRemaining == 0
+                                                  color:
+                                                      otpVal.secondsRemaining ==
+                                                          0
                                                       ? AppColors.primaryColor
                                                       : AppColors.textColor2,
                                                   fontWeight: FontWeight.bold,
@@ -166,11 +186,14 @@ class OtpVerifyView extends StatelessWidget {
                                       loading: auth.isLoading,
                                       onPress: () async {
                                         if (auth.isOtpVerified) {
-                                          auth.otpController.text = otpVal.otpController.text;
+                                          auth.otpController.text =
+                                              otpVal.otpController.text;
                                           await auth.verifyOtp(origin: origin);
                                         } else {
                                           showWarningSnackBar(
-                                            message: context.watchTr('enter_valid_otp'),
+                                            message: context.watchTr(
+                                              'enter_valid_otp',
+                                            ),
                                           );
                                         }
                                       },
@@ -230,8 +253,12 @@ class OtpVerifyController extends ChangeNotifier {
   @override
   void dispose() {
     _timer?.cancel();
-    try { pinFocusNode.dispose(); } catch (_) {}
-    try { otpController.dispose(); } catch (_) {}
+    try {
+      pinFocusNode.dispose();
+    } catch (_) {}
+    try {
+      otpController.dispose();
+    } catch (_) {}
     super.dispose();
   }
 }

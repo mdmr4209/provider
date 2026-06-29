@@ -9,6 +9,7 @@ import '../../../../../../core/services/api_service.dart';
 import '../../../../../../core/widgets/background_widget.dart';
 import '../../../../../../core/widgets/custom_button.dart';
 import '../../../../../../core/widgets/custom_dialog.dart';
+import '../../../../../../core/widgets/glass_widget.dart';
 import '../../../../../../core/widgets/input_text_widget.dart';
 import '../../../../../../routes/app_router.dart';
 import '../../../controllers/auth_controller.dart';
@@ -44,10 +45,7 @@ Widget _buildContinueButton({
 }) {
   return CustomButton(
     title: "Continue →",
-    linearGradient: isEnabled,
-    buttonColor: isEnabled ? AppColors.buttonColor3 : AppColors.buttonColor4,
-    textColor: isEnabled ? AppColors.textColor3 : AppColors.whiteColor,
-    borderColor: isEnabled ? Colors.transparent : AppColors.buttonBorderColor4,
+    linearGradient: isEnabled ? true : false,
     borderShadowColor: isEnabled
         ? Colors.transparent
         : AppColors.buttonShadowColor4,
@@ -587,10 +585,15 @@ class Setup8View extends StatelessWidget {
               ).textTheme.bodyLarge?.copyWith(color: AppColors.textColor),
             ),
             SizedBox(height: 40.h),
-            InputTextWidget(
-              hintText: "Enter Here",
-              controller: controller,
-              keyboardType: TextInputType.number,
+            GlassWidget(
+              color: Color(0xFF263525),
+              height: 48.h,
+              child: InputTextWidget(
+                backgroundColor: Color(0xFF263525),
+                hintText: "Enter Here",
+                controller: controller,
+                keyboardType: TextInputType.number,
+              ),
             ),
             const Spacer(),
             ValueListenableBuilder<TextEditingValue>(
@@ -792,7 +795,11 @@ class Setup13View extends StatelessWidget {
       totalSteps: isCoach ? 10 : 15,
       child: Stack(
         children: [
-          _buildLegalContent(context, "Medical/Legal Disclaimer", _dummyLegalText),
+          _buildLegalContent(
+            context,
+            "Medical/Legal Disclaimer",
+            _dummyLegalText,
+          ),
           Positioned(
             bottom: 40.h,
             left: 24.w,
@@ -831,39 +838,7 @@ class SetupCompleteView extends StatelessWidget {
             children: [
               const Spacer(),
               // Confetti / Logo Section
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    width: 160.r,
-                    height: 160.r,
-                    decoration: BoxDecoration(
-                      color: AppColors.iconColor.withAlpha(30),
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                  Container(
-                    width: 130.r,
-                    height: 130.r,
-                    decoration: const BoxDecoration(
-                      color: AppColors.iconColor,
-                      shape: BoxShape.circle,
-                    ),
-                    alignment: Alignment.center,
-                    child: Image.asset(AppAssets.logo, width: 80.r),
-                  ),
-                  Positioned.fill(
-                    child: Center(
-                      child: Text(
-                        "✨ 🎉 🥳",
-                        style: Theme.of(
-                          context,
-                        ).textTheme.bodyMedium?.copyWith(fontSize: 100.sp),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              Image.asset(AppAssets.complete,height: 130.h,width: 215.w,),
               SizedBox(height: 40.h),
               Text(
                 "Your Profile is Complete",
@@ -890,7 +865,7 @@ class SetupCompleteView extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 24.w),
                 child: CustomButton(
-                  height: 56.h,
+                  height: 48.h,
                   title: "Go to Home →",
                   linearGradient: true,
                   buttonColor: AppColors.iconColor,

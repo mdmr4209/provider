@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:newproject/core/widgets/background_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_assets.dart';
@@ -26,26 +27,21 @@ class BreathingView extends StatelessWidget {
       create: (_) => BreathingController(context),
       child: Consumer<BreathingController>(
         builder: (context, controller, child) {
-          return Scaffold(
-            backgroundColor: Colors.transparent,
-            body: Container(
-              width: double.infinity,
-              height: double.infinity,
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [AppColors.coachColorFF4A5D44, AppColors.defaultColor],
-                ),
-              ),
-              child: SafeArea(
+          return BackgroundWidget(
+            imagePath: AppAssets.bgHome,
+            child: Scaffold(
+              backgroundColor: Colors.transparent,
+              body: SafeArea(
                 child: Column(
                   children: [
                     Align(
                       alignment: Alignment.topLeft,
                       child: IconButton(
                         onPressed: () => context.pop(),
-                        icon: const Icon(Icons.close, color: AppColors.white70Color),
+                        icon: const Icon(
+                          Icons.close,
+                          color: AppColors.white70Color,
+                        ),
                       ),
                     ),
                     const Spacer(flex: 1),
@@ -79,7 +75,9 @@ class BreathingView extends StatelessWidget {
                         Container(
                           width: 270.r,
                           height: 270.r,
-                          decoration: const BoxDecoration(shape: BoxShape.circle),
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                          ),
                         ),
                         SizedBox(
                           width: 250.r,
@@ -236,7 +234,7 @@ class BreathingController extends ChangeNotifier {
             color: AppColors.defaultColor,
             borderRadius: BorderRadius.circular(24.r),
             border: Border.all(
-              color:  AppColors.coachColorFFD4AF37.withAlpha(102),
+              color: AppColors.coachColorFFD4AF37.withAlpha(102),
               width: 1.5,
             ),
           ),
@@ -268,12 +266,16 @@ class BreathingController extends ChangeNotifier {
               SizedBox(height: 20.h),
               TextField(
                 maxLines: 4,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor),
                 decoration: InputDecoration(
                   hintText: "Write here",
-                  hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(102)),
+                  hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.whiteColor.withAlpha(102),
+                  ),
                   filled: true,
-                  fillColor: AppColors.blackColor.withAlpha(51),
+                  fillColor: AppColors.coachColorFF21321E,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.r),
                     borderSide: BorderSide.none,
@@ -310,7 +312,7 @@ class BreathingController extends ChangeNotifier {
             color: AppColors.defaultColor,
             borderRadius: BorderRadius.circular(24.r),
             border: Border.all(
-              color:  AppColors.coachColorFFD4AF37.withAlpha(102),
+              color: AppColors.coachColorFFD4AF37.withAlpha(102),
               width: 1.5,
             ),
           ),
@@ -350,7 +352,9 @@ class BreathingController extends ChangeNotifier {
                   padding: EdgeInsets.symmetric(vertical: 14.h),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12.r),
-                    border: Border.all(color: AppColors.whiteColor.withAlpha(102)),
+                    border: Border.all(
+                      color: AppColors.whiteColor.withAlpha(102),
+                    ),
                   ),
                   child: Text(
                     "Yes, Connect me with a coach",

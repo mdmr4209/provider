@@ -152,19 +152,23 @@ class PointView extends StatelessWidget {
                         const Divider(color: AppColors.white12Color),
                         SizedBox(height: 24.h),
                         // ── Instructions ────────────────────────────────────────────────
-                        _buildNumberedText(context, 
+                        _buildNumberedText(
+                          context,
                           "1.",
                           "Welcome to Ai. By using our services, you agree to abide by the terms and conditions outlined below. These terms govern your access to and",
                         ),
-                        _buildNumberedText(context, 
+                        _buildNumberedText(
+                          context,
                           "2.",
                           "use of Ai tools and services, so please review them carefully before proceeding.",
                         ),
-                        _buildNumberedText(context, 
+                        _buildNumberedText(
+                          context,
                           "3.",
                           "Ai provides innovative tools designed to enhance how you capture and manage voice recordings. Our services include voice-to-text transcription and AI-driven summarization, which are intended",
                         ),
-                        _buildNumberedText(context, 
+                        _buildNumberedText(
+                          context,
                           "4.",
                           "for lawful, ethical purposes only. You must ensure compliance with applicable laws, including obtaining consent from all participants when recording conversations. CleverTalk disclaims liability for any misuse of its tools.",
                         ),

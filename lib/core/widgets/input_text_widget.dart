@@ -10,10 +10,7 @@ class _InputState {
   bool isFocused;
   String? errorText;
 
-  _InputState({
-    required this.isObscured,
-    required this.isFocused,
-  });
+  _InputState({required this.isObscured, required this.isFocused});
 }
 
 class InputTextWidget extends StatelessWidget {
@@ -198,10 +195,7 @@ class InputTextWidget extends StatelessWidget {
     final theme = Theme.of(context);
 
     return FormField<_InputState>(
-      initialValue: _InputState(
-        isObscured: obscureText,
-        isFocused: false,
-      ),
+      initialValue: _InputState(isObscured: obscureText, isFocused: false),
       builder: (FormFieldState<_InputState> fieldState) {
         final state = fieldState.value!;
         final hasError = state.errorText != null;
@@ -224,7 +218,8 @@ class InputTextWidget extends StatelessWidget {
       padding: EdgeInsets.only(bottom: titlePaddingBottom.h),
       child: Text(
         title!,
-        style: titleStyle ??
+        style:
+            titleStyle ??
             theme.textTheme.labelLarge?.copyWith(
               color: titleColor ?? theme.textTheme.labelLarge?.color,
               fontSize: (titleFontSize ?? 14).sp,
@@ -248,10 +243,14 @@ class InputTextWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildInputField(ThemeData theme, FormFieldState<_InputState> fieldState, _InputState state) {
+  Widget _buildInputField(
+    ThemeData theme,
+    FormFieldState<_InputState> fieldState,
+    _InputState state,
+  ) {
     final hasError = state.errorText != null;
     final isEnabled = enabled;
-    
+
     // Theme-based resolution
     final inputTheme = theme.inputDecorationTheme;
     final colorScheme = theme.colorScheme;
@@ -272,24 +271,42 @@ class InputTextWidget extends StatelessWidget {
       return BorderRadius.circular(12.r);
     }
 
-    final bg = backgroundColor ?? 
-               (isEnabled ? (inputTheme.fillColor ?? theme.cardColor) 
-                          : (theme.disabledColor.withAlpha(25)));
-    
-    final borderCol = hasError 
-        ? (errorBorderColor ?? getBorderColor(inputTheme.errorBorder, colorScheme.error))
-        : (!isEnabled 
-            ? (disabledBorderColor ?? getBorderColor(inputTheme.disabledBorder, theme.disabledColor.withAlpha(75)))
-            : (state.isFocused 
-                ? (focusedBorderColor ?? getBorderColor(inputTheme.focusedBorder, colorScheme.primary)) 
-                : (borderColor ?? getBorderColor(inputTheme.enabledBorder, AppColors.inputBorderColor))));
+    final bg =
+        backgroundColor ??
+        (isEnabled
+            ? (Color(0xFF394C38) )
+            : (Color(0xFF394C38).withAlpha(25)));
 
-    final effectiveWidth = hasError || state.isFocused 
-        ? getBorderWidth(hasError ? inputTheme.errorBorder : inputTheme.focusedBorder, 1.5) 
+    final borderCol = hasError
+        ? (errorBorderColor ??
+              getBorderColor(inputTheme.errorBorder, colorScheme.error))
+        : (!isEnabled
+              ? (disabledBorderColor ??
+                    getBorderColor(
+                      inputTheme.disabledBorder,
+                      theme.disabledColor.withAlpha(75),
+                    ))
+              : (state.isFocused
+                    ? (focusedBorderColor ??
+                          getBorderColor(
+                            inputTheme.focusedBorder,
+                            Color(0xFF394C38),
+                          ))
+                    : (borderColor ??
+                          getBorderColor(
+                            inputTheme.enabledBorder,
+                            Color(0xFF394C38),
+                          ))));
+
+    final effectiveWidth = hasError || state.isFocused
+        ? getBorderWidth(
+            hasError ? inputTheme.errorBorder : inputTheme.focusedBorder,
+            1.5,
+          )
         : getBorderWidth(inputTheme.enabledBorder, 1.0);
 
-    final effectiveRadius = borderRadius != null 
-        ? BorderRadius.circular(borderRadius!.r) 
+    final effectiveRadius = borderRadius != null
+        ? BorderRadius.circular(borderRadius!.r)
         : getBorderRadius(inputTheme.enabledBorder);
 
     return AnimatedContainer(
@@ -359,9 +376,10 @@ class InputTextWidget extends StatelessWidget {
             }
             return null;
           },
-          style: textStyle ??
+          style:
+              textStyle ??
               theme.textTheme.bodyMedium?.copyWith(
-                color: isEnabled 
+                color: isEnabled
                     ? (textColor ?? theme.textTheme.bodyMedium?.color)
                     : theme.disabledColor,
                 fontSize: (fontSize ?? 14).sp,
@@ -374,7 +392,10 @@ class InputTextWidget extends StatelessWidget {
             hintStyle: hintStyle ?? inputTheme.hintStyle,
             labelStyle: hintStyle ?? inputTheme.labelStyle,
             isDense: true,
-            contentPadding: contentPadding ?? inputTheme.contentPadding ?? EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+            contentPadding:
+                contentPadding ??
+                inputTheme.contentPadding ??
+                EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
             border: InputBorder.none,
             enabledBorder: InputBorder.none,
             focusedBorder: InputBorder.none,
@@ -383,7 +404,7 @@ class InputTextWidget extends StatelessWidget {
             prefixIcon: _buildLeading(theme, hasError),
             suffixIcon: _buildTrailing(theme, hasError, fieldState, state),
             counterText: '',
-              fillColor: backgroundColor
+            fillColor: backgroundColor,
           ),
         ),
       ),
@@ -392,54 +413,130 @@ class InputTextWidget extends StatelessWidget {
 
   Widget? _buildLeading(ThemeData theme, bool hasError) {
     if (leadingWidget == null && leadingIcon.isEmpty) return null;
-    final color = hasError ? theme.colorScheme.error : (leadingColor ?? theme.hintColor);
-    final leading = leadingWidget ??
+    final color = hasError
+        ? theme.colorScheme.error
+        : (leadingColor ?? theme.hintColor);
+    final leading =
+        leadingWidget ??
         Padding(
           padding: leadingPadding,
-          child: _buildAsset(leadingIcon, leadingIconWidth, leadingIconHeight, useLeadingColor, color),
+          child: _buildAsset(
+            leadingIcon,
+            leadingIconWidth,
+            leadingIconHeight,
+            useLeadingColor,
+            color,
+          ),
         );
-    return Row(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.center, children: [leading]);
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [leading],
+    );
   }
 
-  Widget? _buildTrailing(ThemeData theme, bool hasError, FormFieldState<_InputState> fieldState, _InputState state) {
+  Widget? _buildTrailing(
+    ThemeData theme,
+    bool hasError,
+    FormFieldState<_InputState> fieldState,
+    _InputState state,
+  ) {
     final List<Widget> children = [];
-    final color = hasError ? theme.colorScheme.error : (trailingColor ?? theme.hintColor);
+    final color = hasError
+        ? theme.colorScheme.error
+        : (trailingColor ?? theme.hintColor);
     if (showObscureToggle || obscureText) {
-      children.add(GestureDetector(
-        onTap: () {
-          state.isObscured = !state.isObscured;
-          fieldState.didChange(state);
-        }, 
-        child: _buildObscureIcon(theme, hasError, state)
-      ));
+      children.add(
+        GestureDetector(
+          onTap: () {
+            state.isObscured = !state.isObscured;
+            fieldState.didChange(state);
+          },
+          child: _buildObscureIcon(theme, hasError, state),
+        ),
+      );
     }
     if (trailingWidget != null || trailingIcon.isNotEmpty) {
-      final trailing = trailingWidget ??
+      final trailing =
+          trailingWidget ??
           Padding(
             padding: trailingPadding,
-            child: _buildAsset(trailingIcon, trailingIconWidth, trailingIconHeight, useTrailingColor, color),
+            child: _buildAsset(
+              trailingIcon,
+              trailingIconWidth,
+              trailingIconHeight,
+              useTrailingColor,
+              color,
+            ),
           );
       children.add(trailing);
     }
     if (children.isEmpty) return null;
-    return Row(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.center, children: children);
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: children,
+    );
   }
 
   Widget _buildObscureIcon(ThemeData theme, bool hasError, _InputState state) {
-    final color = hasError ? theme.colorScheme.error : (trailingColor ?? theme.hintColor);
+    final color = hasError
+        ? theme.colorScheme.error
+        : (trailingColor ?? theme.hintColor);
     if (state.isObscured) {
-      if (hiddenIcon != null) return _buildAsset(hiddenIcon!, obscureIconSize, obscureIconSize, true, color);
-      return Icon(Icons.visibility_off_outlined, size: obscureIconSize.sp, color: color);
+      if (hiddenIcon != null) {
+        return _buildAsset(
+          hiddenIcon!,
+          obscureIconSize,
+          obscureIconSize,
+          true,
+          color,
+        );
+      }
+      return Icon(
+        Icons.visibility_off_outlined,
+        size: obscureIconSize.sp,
+        color: color,
+      );
     } else {
-      if (visibleIcon != null) return _buildAsset(visibleIcon!, obscureIconSize, obscureIconSize, true, color);
-      return Icon(Icons.visibility_outlined, size: obscureIconSize.sp, color: color);
+      if (visibleIcon != null) {
+        return _buildAsset(
+          visibleIcon!,
+          obscureIconSize,
+          obscureIconSize,
+          true,
+          color,
+        );
+      }
+      return Icon(
+        Icons.visibility_outlined,
+        size: obscureIconSize.sp,
+        color: color,
+      );
     }
   }
 
-  Widget _buildAsset(String path, double width, double height, bool useColor, Color color) {
+  Widget _buildAsset(
+    String path,
+    double width,
+    double height,
+    bool useColor,
+    Color color,
+  ) {
     if (path.toLowerCase().endsWith('.svg')) {
-      return SvgPicture.asset(path, width: width.w, height: height.h, colorFilter: useColor ? ColorFilter.mode(color, BlendMode.srcIn) : null);
+      return SvgPicture.asset(
+        path,
+        width: width.w,
+        height: height.h,
+        colorFilter: useColor ? ColorFilter.mode(color, BlendMode.srcIn) : null,
+      );
     }
-    return Image.asset(path, width: width.w, height: height.h, color: useColor ? color : null, fit: BoxFit.contain);
+    return Image.asset(
+      path,
+      width: width.w,
+      height: height.h,
+      color: useColor ? color : null,
+      fit: BoxFit.contain,
+    );
   }
 }

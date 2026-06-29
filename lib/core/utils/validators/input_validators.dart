@@ -7,8 +7,7 @@ class InputValidators {
       return 'Email is required';
     }
 
-    const emailPattern =
-        r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
+    const emailPattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
     final regex = RegExp(emailPattern);
 
     if (!regex.hasMatch(value)) {
@@ -252,8 +251,7 @@ class InputValidators {
     final currentYear = now.year % 100;
     final currentMonth = now.month;
 
-    if (year < currentYear ||
-        (year == currentYear && month < currentMonth)) {
+    if (year < currentYear || (year == currentYear && month < currentMonth)) {
       return 'Card has expired';
     }
 
@@ -320,4 +318,3 @@ class InputValidators {
     return sum % 10 == 0;
   }
 }
-

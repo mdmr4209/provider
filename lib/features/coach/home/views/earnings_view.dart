@@ -108,7 +108,8 @@ class EarningsView extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(
-                      child: _buildSmallStatBox(context, 
+                      child: _buildSmallStatBox(
+                        context,
                         "Total Minutes Coached",
                         "1200 min",
                         Icons.phone_in_talk,
@@ -117,7 +118,8 @@ class EarningsView extends StatelessWidget {
                     ),
                     SizedBox(width: 16.w),
                     Expanded(
-                      child: _buildSmallStatBox(context, 
+                      child: _buildSmallStatBox(
+                        context,
                         "Avg. Client Rating",
                         "4.9 (187)",
                         Icons.star,
@@ -163,31 +165,36 @@ class EarningsView extends StatelessWidget {
                 SizedBox(height: 7.h),
 
                 // ── Earning List ────────────────────────────────────────────
-                _buildEarningItem(context, 
+                _buildEarningItem(
+                  context,
                   "Miles Esther",
                   "12 April (9:30AM - 10:00AM)",
                   "30 Minutes",
                   "400\$",
                 ),
-                _buildEarningItem(context, 
+                _buildEarningItem(
+                  context,
                   "Miles Esther",
                   "12 April (9:30AM - 10:00AM)",
                   "30 Minutes",
                   "400\$",
                 ),
-                _buildEarningItem(context, 
+                _buildEarningItem(
+                  context,
                   "Miles Esther",
                   "12 April (9:30AM - 10:00AM)",
                   "30 Minutes",
                   "400\$",
                 ),
-                _buildEarningItem(context, 
+                _buildEarningItem(
+                  context,
                   "Miles Esther",
                   "12 April (9:30AM - 10:00AM)",
                   "30 Minutes",
                   "400\$",
                 ),
-                _buildEarningItem(context, 
+                _buildEarningItem(
+                  context,
                   "Miles Esther",
                   "12 April (9:30AM - 10:00AM)",
                   "30 Minutes",
@@ -303,7 +310,8 @@ class EarningsView extends StatelessWidget {
   }
 
   Widget _buildSmallStatBox(
-    BuildContext context, String label,
+    BuildContext context,
+    String label,
     String value,
     IconData icon,
     Color iconColor,
@@ -324,7 +332,10 @@ class EarningsView extends StatelessWidget {
         children: [
           Text(
             label,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white70Color, fontSize: 10.r),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColors.white70Color,
+              fontSize: 10.r,
+            ),
           ),
           Row(
             children: [
@@ -369,7 +380,10 @@ class EarningsView extends StatelessWidget {
         children: [
           Text(
             text,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 12),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColors.whiteColor,
+              fontSize: 12,
+            ),
           ),
           const Icon(
             Icons.keyboard_arrow_down,
@@ -382,7 +396,8 @@ class EarningsView extends StatelessWidget {
   }
 
   Widget _buildEarningItem(
-    BuildContext context, String name,
+    BuildContext context,
+    String name,
     String dateTime,
     String duration,
     String amount,
@@ -435,7 +450,10 @@ class EarningsView extends StatelessWidget {
               children: [
                 Text(
                   duration,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white38Color, fontSize: 10),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.white38Color,
+                    fontSize: 10,
+                  ),
                 ),
                 Text(
                   amount,

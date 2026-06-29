@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/widgets/custom_button.dart';
+import '../../../../core/widgets/glass_widget.dart';
 import '../../../../core/widgets/input_text_widget.dart';
 import '../../../../routes/app_router.dart';
 import '../../localization/localization_extension.dart';
@@ -42,14 +43,19 @@ class NameInputView extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 40.h),
-              InputTextWidget(
-                hintText: context.watchTr('enter_your_name'),
-                controller: auth.nameController,
-                keyboardType: TextInputType.name,
-                onChanged: (_) {
-                  // This triggers rebuild of this widget to re-evaluate the button state
-                  (context as Element).markNeedsBuild();
-                },
+              GlassWidget(
+                color: Color(0xFF273526),
+                height: 48.h,
+                child: InputTextWidget(
+                  backgroundColor: Color(0xFF273526),
+                  hintText: context.watchTr('enter_your_name'),
+                  controller: auth.nameController,
+                  keyboardType: TextInputType.name,
+                  onChanged: (_) {
+                    // This triggers rebuild of this widget to re-evaluate the button state
+                    (context as Element).markNeedsBuild();
+                  },
+                ),
               ),
               const Spacer(),
               ListenableBuilder(

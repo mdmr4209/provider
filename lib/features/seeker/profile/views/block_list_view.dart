@@ -102,11 +102,13 @@ class BlockListView extends StatelessWidget {
                                   child: Center(
                                     child: Text(
                                       "No blocked users.",
-                                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                        color: AppColors.whiteColor.withAlpha(
-                                          128,
-                                        ),
-                                      ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                            color: AppColors.whiteColor
+                                                .withAlpha(128),
+                                          ),
                                     ),
                                   ),
                                 ),
@@ -201,11 +203,11 @@ class _BlockTile extends StatelessWidget {
             onPress: () async => onUnblock(),
             title: "Unblock",
             width: 105,
-            height: 32,
-            fontSize: 12,
-            buttonColor: AppColors.whiteColor.withAlpha(13),
+            height: 28,
+            fontSize:10,
+            buttonColor: AppColors.coachColorA5354C30,
             borderColor: Colors.transparent,
-            radius: 8,
+            radius: 4,
           ),
         ],
       ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:newproject/core/constants/app_assets.dart';
+import 'package:newproject/core/widgets/background_widget.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/widgets/custom_loader.dart';
 import '../controllers/coach_controller.dart';
@@ -19,84 +21,123 @@ class ReviewRatingsView extends StatelessWidget {
       controller.fetchCoachReviews(coachId);
     });
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(icon: const Icon(Icons.arrow_back, color: AppColors.whiteColor), onPressed: () => Navigator.pop(context)),
-        title: Text("Review and Ratings", style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 18.sp)),
-        centerTitle: true,
-      ),
-      body: Consumer<CoachController>(
-        builder: (context, controller, child) {
-          if (controller.isLoading && controller.reviews.isEmpty) {
-            return const _ReviewRatingsShimmer();
-          }
-
-          final rating = coach?.rating ?? 4.9;
-          final reviewsCount = coach?.reviews ?? 187;
-
-          return Stack(
-            children: [
-              RefreshIndicator(
-                onRefresh: () => controller.fetchCoachReviews(coach?.id ?? 'c1', isRefresh: true),
-                color: Colors.transparent,
-                backgroundColor: Colors.transparent,
-                strokeWidth: 0,
-                elevation: 0,
-                child: SingleChildScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  padding: EdgeInsets.all(20.r),
-                  child: Column(
-              children: [
-                _buildRatingSummary(context, rating, reviewsCount),
-                SizedBox(height: 30.h),
-                if (controller.reviews.isEmpty)
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20.h),
-                    child: Text("No reviews yet.", style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(128))),
-                  )
-                else
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: controller.reviews.length,
-                    itemBuilder: (context, index) {
-                      final review = controller.reviews[index];
-                      return _buildReviewItem(context, 
-                        review.reviewerName,
-                        review.reviewerAvatar,
-                        review.date,
-                        review.rating,
-                        review.content,
-                      );
-                    },
-                  ),
-              ],
+    return BackgroundWidget(
+      imagePath: AppAssets.bgMain,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: AppColors.whiteColor),
+            onPressed: () => Navigator.pop(context),
+          ),
+          title: Text(
+            "Review and Ratings",
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColors.whiteColor,
+              fontSize: 18.sp,
             ),
           ),
+          centerTitle: true,
         ),
-        if (controller.isRefreshing)
-          Positioned(
-            top: 16.h,
-            left: 0,
-            right: 0,
-            child: const Center(child: CustomLoader(size: 150)),
-          ),
-      ],
-    );
-  },
+        body: Consumer<CoachController>(
+          builder: (context, controller, child) {
+            if (controller.isLoading && controller.reviews.isEmpty) {
+              return const _ReviewRatingsShimmer();
+            }
+
+            final rating = coach?.rating ?? 4.9;
+            final reviewsCount = coach?.reviews ?? 187;
+
+            return Stack(
+              children: [
+                RefreshIndicator(
+                  onRefresh: () => controller.fetchCoachReviews(
+                    coach?.id ?? 'c1',
+                    isRefresh: true,
+                  ),
+                  color: Colors.transparent,
+                  backgroundColor: Colors.transparent,
+                  strokeWidth: 0,
+                  elevation: 0,
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: EdgeInsets.all(20.r),
+                    child: Column(
+                      children: [
+                        _buildRatingSummary(context, rating, reviewsCount),
+                        SizedBox(height: 30.h),
+                        if (controller.reviews.isEmpty)
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 20.h),
+                            child: Text(
+                              "No reviews yet.",
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(
+                                    color: AppColors.whiteColor.withAlpha(128),
+                                  ),
+                            ),
+                          )
+                        else
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: controller.reviews.length,
+                            itemBuilder: (context, index) {
+                              final review = controller.reviews[index];
+                              return _buildReviewItem(
+                                context,
+                                review.reviewerName,
+                                review.reviewerAvatar,
+                                review.date,
+                                review.rating,
+                                review.content,
+                              );
+                            },
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+                if (controller.isRefreshing)
+                  Positioned(
+                    top: 16.h,
+                    left: 0,
+                    right: 0,
+                    child: const Center(child: CustomLoader(size: 150)),
+                  ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
 
-  Widget _buildRatingSummary(BuildContext context, double rating, int reviewsCount) {
+  Widget _buildRatingSummary(
+    BuildContext context,
+    double rating,
+    int reviewsCount,
+  ) {
     return Row(
       children: [
         Column(
           children: [
-            Text(rating.toStringAsFixed(1), style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 32.sp, fontWeight: FontWeight.bold)),
-            Text("$reviewsCount Ratings", style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(128), fontSize: 12.sp)),
+            Text(
+              rating.toStringAsFixed(1),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.whiteColor,
+                fontSize: 32.sp,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              "$reviewsCount Ratings",
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.whiteColor.withAlpha(128),
+                fontSize: 12.sp,
+              ),
+            ),
           ],
         ),
         SizedBox(width: 30.w),
@@ -115,31 +156,68 @@ class ReviewRatingsView extends StatelessWidget {
     );
   }
 
-  Widget _buildRatingBar(BuildContext context, int stars, int count, double progress) {
+  Widget _buildRatingBar(
+    BuildContext context,
+    int stars,
+    int count,
+    double progress,
+  ) {
     return Padding(
       padding: EdgeInsets.only(bottom: 4.h),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Row(children: List.generate(stars, (index) => Icon(Icons.star, color: AppColors.amberColor, size: 10.r))),
-          const Spacer(),
+          SizedBox(
+            width: 50.w,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: List.generate(
+                stars,
+                (index) =>
+                    Icon(Icons.star, color: AppColors.amberColor, size: 10.r),
+              ),
+            ),
+          ),
+          SizedBox(width: 8.w),
           Container(
             width: 140.w,
-            height: 4.h,
-            decoration: BoxDecoration(color: AppColors.white10Color, borderRadius: BorderRadius.circular(2.r)),
+            height: 5.h,
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(2.r),
+            ),
             child: FractionallySizedBox(
               alignment: Alignment.centerLeft,
               widthFactor: progress,
-              child: Container(decoration: BoxDecoration(color: AppColors.greenColor, borderRadius: BorderRadius.circular(2.r))),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: AppColors.greenColor,
+                  borderRadius: BorderRadius.circular(2.r),
+                ),
+              ),
             ),
           ),
           SizedBox(width: 12.w),
-          Text(count.toString(), style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(128), fontSize: 11.sp)),
+          Text(
+            count.toString(),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColors.whiteColor.withAlpha(128),
+              fontSize: 11.sp,
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildReviewItem(BuildContext context, String name, String avatar, String date, double rating, String content) {
+  Widget _buildReviewItem(
+    BuildContext context,
+    String name,
+    String avatar,
+    String date,
+    double rating,
+    String content,
+  ) {
     return Padding(
       padding: EdgeInsets.only(bottom: 16.h),
       child: Row(
@@ -150,15 +228,31 @@ class ReviewRatingsView extends StatelessWidget {
           Expanded(
             child: Container(
               padding: EdgeInsets.all(16.r),
-              decoration: BoxDecoration(color: AppColors.whiteColor.withAlpha(13), borderRadius: BorderRadius.circular(16.r)),
+              decoration: BoxDecoration(
+                color: AppColors.backgroundColor,
+                borderRadius: BorderRadius.circular(16.r),
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(name, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 14.sp, fontWeight: FontWeight.bold)),
-                      Text(date, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(128), fontSize: 11.sp)),
+                      Text(
+                        name,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.whiteColor,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        date,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.whiteColor.withAlpha(128),
+                          fontSize: 11.sp,
+                        ),
+                      ),
                     ],
                   ),
                   SizedBox(height: 4.h),
@@ -167,7 +261,9 @@ class ReviewRatingsView extends StatelessWidget {
                       5,
                       (index) => Icon(
                         Icons.star,
-                        color: index < rating.round() ? AppColors.amberColor : AppColors.white10Color,
+                        color: index < rating.round()
+                            ? AppColors.amberColor
+                            : AppColors.greyColor,
                         size: 14.r,
                       ),
                     ),
@@ -175,7 +271,11 @@ class ReviewRatingsView extends StatelessWidget {
                   SizedBox(height: 12.h),
                   Text(
                     content,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor.withAlpha(179), fontSize: 12.sp, height: 1.5),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.whiteColor.withAlpha(179),
+                      fontSize: 12.sp,
+                      height: 1.5,
+                    ),
                   ),
                 ],
               ),
@@ -209,10 +309,17 @@ class _ReviewRatingsShimmer extends StatelessWidget {
               SizedBox(width: 30.w),
               Expanded(
                 child: Column(
-                  children: List.generate(5, (index) => Padding(
-                    padding: EdgeInsets.only(bottom: 6.h),
-                    child: ShimmerLoader(width: double.infinity, height: 8.h, borderRadius: 4.r),
-                  )),
+                  children: List.generate(
+                    5,
+                    (index) => Padding(
+                      padding: EdgeInsets.only(bottom: 6.h),
+                      child: ShimmerLoader(
+                        width: double.infinity,
+                        height: 8.h,
+                        borderRadius: 4.r,
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -224,7 +331,11 @@ class _ReviewRatingsShimmer extends StatelessWidget {
             itemCount: 2,
             itemBuilder: (context, index) => Padding(
               padding: EdgeInsets.only(bottom: 16.h),
-              child: ShimmerLoader(width: double.infinity, height: 100.h, borderRadius: 16.r),
+              child: ShimmerLoader(
+                width: double.infinity,
+                height: 100.h,
+                borderRadius: 16.r,
+              ),
             ),
           ),
         ],

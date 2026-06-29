@@ -27,7 +27,7 @@ class CoachBidBoardView extends StatelessWidget {
     });
 
     return Scaffold(
-appBar: AppBar(
+      appBar: AppBar(
         backgroundColor: AppColors.defaultColor,
         // These two lines prevent the color change / tinting when scrolling
         scrolledUnderElevation: 0,
@@ -68,7 +68,8 @@ appBar: AppBar(
                         SizedBox(height: 20.h),
                         // ── Top Bidders List Banner ──────────────────────────────────
                         if (controller.topBiddersInfo != null)
-                          _buildTopBiddersBanner(context,
+                          _buildTopBiddersBanner(
+                            context,
                             controller.topBiddersInfo!['title'] ??
                                 'Top Bidders List',
                             controller.topBiddersInfo!['description'] ?? '',
@@ -94,13 +95,16 @@ appBar: AppBar(
                             child: Center(
                               child: Text(
                                 "No slots available",
-                                style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.white54Color),
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  color: AppColors.white54Color,
+                                ),
                               ),
                             ),
                           )
                         else
                           ...controller.slots.map(
-                            (slot) => _buildSlotItem(context,
+                            (slot) => _buildSlotItem(
+                              context,
                               slot.rank,
                               slot.title,
                               slot.startingBid,
@@ -149,7 +153,11 @@ appBar: AppBar(
     );
   }
 
-  Widget _buildTopBiddersBanner(BuildContext context, title, String description) {
+  Widget _buildTopBiddersBanner(
+    BuildContext context,
+    title,
+    String description,
+  ) {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.only(
@@ -237,7 +245,10 @@ appBar: AppBar(
                 ),
                 Text(
                   starting,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white38Color, fontSize: 11),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.white38Color,
+                    fontSize: 11,
+                  ),
                 ),
               ],
             ),
@@ -255,7 +266,10 @@ appBar: AppBar(
               ),
               Text(
                 "Top Bid",
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white38Color, fontSize: 10),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.white38Color,
+                  fontSize: 10,
+                ),
               ),
             ],
           ),
@@ -308,7 +322,10 @@ appBar: AppBar(
                 value: controller.selectedSlot,
                 hint: Text(
                   "Select one",
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white38Color, fontSize: 14),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.white38Color,
+                    fontSize: 14,
+                  ),
                 ),
                 isExpanded: true,
                 dropdownColor: AppColors.coachColorFF21321E,
@@ -323,7 +340,9 @@ appBar: AppBar(
                     value: value,
                     child: Text(
                       value,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppColors.whiteColor,
+                      ),
                     ),
                   );
                 }).toList(),
@@ -346,14 +365,14 @@ appBar: AppBar(
             height: 44,
             hintText: "Search by Client name",
             fontSize: 14,
-hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
               color: AppColors.whiteColor.withAlpha(153),
               fontSize: 14,
             ),
             shadow: true,
-borderRadius: 4,
+            borderRadius: 4,
             borderWidth: 0.50,
-leadingIcon: AppAssets.search,
+            leadingIcon: AppAssets.search,
             leadingPadding: EdgeInsets.only(left: 16.w, right: 8.w),
           ),
           SizedBox(height: 25.h),
@@ -402,7 +421,7 @@ leadingIcon: AppAssets.search,
               ],
             ),
             SizedBox(height: 8.h),
-             Text(
+            Text(
               'Day 14 of No Contact. It was really hard today today, I almost texted him when I saw his favorite song playing. But I stayed strong!',
               textAlign: TextAlign.justify,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -431,7 +450,10 @@ leadingIcon: AppAssets.search,
           gradient: LinearGradient(
             begin: Alignment(-0.00, 0.94),
             end: Alignment(1.42, -0.62),
-            colors: [AppColors.coachColorFF102710, AppColors.coachColorFF2F432B],
+            colors: [
+              AppColors.coachColorFF102710,
+              AppColors.coachColorFF2F432B,
+            ],
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.r),
@@ -455,14 +477,20 @@ leadingIcon: AppAssets.search,
                   ),
                   Text(
                     "You Win the Spot 5",
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white70Color, fontSize: 14),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.white70Color,
+                      fontSize: 14,
+                    ),
                   ),
                 ],
               ),
             ),
             Text(
               "View →",
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.coachColorFFC19E5F, fontSize: 12),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.coachColorFFC19E5F,
+                fontSize: 12,
+              ),
             ),
           ],
         ),

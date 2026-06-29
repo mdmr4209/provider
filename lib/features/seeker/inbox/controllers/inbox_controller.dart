@@ -34,11 +34,17 @@ class InboxController extends ChangeNotifier {
 
     try {
       await Future.delayed(const Duration(milliseconds: 1000));
-      final String jsonString = await rootBundle.loadString('assets/json/inbox.json');
+      final String jsonString = await rootBundle.loadString(
+        'assets/json/inbox.json',
+      );
       final Map<String, dynamic> rawInbox = jsonDecode(jsonString);
 
-      _stories = (rawInbox['stories'] as List).map((x) => StoryModel.fromJson(x)).toList();
-      _chats = (rawInbox['chats'] as List).map((x) => ChatSummaryModel.fromJson(x)).toList();
+      _stories = (rawInbox['stories'] as List)
+          .map((x) => StoryModel.fromJson(x))
+          .toList();
+      _chats = (rawInbox['chats'] as List)
+          .map((x) => ChatSummaryModel.fromJson(x))
+          .toList();
     } catch (e) {
       showErrorSnackBar(message: "Failed to load chats: $e");
     } finally {
@@ -48,7 +54,10 @@ class InboxController extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchChatMessages(String chatId, {bool isRefresh = false}) async {
+  Future<void> fetchChatMessages(
+    String chatId, {
+    bool isRefresh = false,
+  }) async {
     if (isRefresh) {
       _isRefreshing = true;
     } else {
@@ -60,7 +69,9 @@ class InboxController extends ChangeNotifier {
     try {
       await Future.delayed(const Duration(milliseconds: 600));
 
-      final String messagesJsonString = await rootBundle.loadString('assets/json/chat_messages.json');
+      final String messagesJsonString = await rootBundle.loadString(
+        'assets/json/chat_messages.json',
+      );
       final Map<String, dynamic> rawMessages = jsonDecode(messagesJsonString);
 
       _messages = (rawMessages['messages'] as List).map((x) {
@@ -70,7 +81,9 @@ class InboxController extends ChangeNotifier {
         if (!msg.isMe) {
           return msg.copyWith(
             sender: chatId == "chat_002" ? "Thomas stieve" : "Miles Esther",
-            avatar: chatId == "chat_002" ? "https://i.pravatar.cc/150?u=thomas" : "https://i.pravatar.cc/150?u=miles",
+            avatar: chatId == "chat_002"
+                ? "https://i.pravatar.cc/150?u=thomas"
+                : "https://i.pravatar.cc/150?u=miles",
           );
         }
         return msg;
@@ -95,11 +108,17 @@ class InboxController extends ChangeNotifier {
     try {
       await Future.delayed(const Duration(milliseconds: 800));
 
-      final String bookingsJsonString = await rootBundle.loadString('assets/json/bookings.json');
+      final String bookingsJsonString = await rootBundle.loadString(
+        'assets/json/bookings.json',
+      );
       final Map<String, dynamic> rawBookings = jsonDecode(bookingsJsonString);
 
-      _currentBookings = (rawBookings['current'] as List).map((x) => BookingModel.fromJson(x)).toList();
-      _historyBookings = (rawBookings['history'] as List).map((x) => BookingModel.fromJson(x)).toList();
+      _currentBookings = (rawBookings['current'] as List)
+          .map((x) => BookingModel.fromJson(x))
+          .toList();
+      _historyBookings = (rawBookings['history'] as List)
+          .map((x) => BookingModel.fromJson(x))
+          .toList();
     } catch (e) {
       showErrorSnackBar(message: "Failed to load bookings: $e");
     } finally {
@@ -136,8 +155,8 @@ class InboxController extends ChangeNotifier {
         avatar: "",
         text: text.trim(),
         isMe: true,
-        time: "Today"
-      )
+        time: "Today",
+      ),
     );
     notifyListeners();
   }

@@ -153,7 +153,9 @@ class StoryCreatorController extends ChangeNotifier {
                 TextField(
                   controller: textController,
                   autofocus: true,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor),
                   decoration: InputDecoration(
                     hintText: "Type something...",
                     hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -381,11 +383,14 @@ class CreateStoryView extends StatelessWidget {
                                     ),
                                     child: Text(
                                       controller.text,
-                                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                        color: controller.textColor,
-                                        fontSize: controller.fontSize.sp,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                            color: controller.textColor,
+                                            fontSize: controller.fontSize.sp,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                     ),
                                   ),
                                 ),
@@ -413,20 +418,26 @@ class CreateStoryView extends StatelessWidget {
                                 children: [
                                   Text(
                                     "Mike Tyson",
-                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                      color: AppColors.whiteColor,
-                                      fontSize: 14.sp,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                          color: AppColors.whiteColor,
+                                          fontSize: 14.sp,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                   ),
                                   Text(
                                     "Create Story",
-                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                      color: AppColors.whiteColor.withAlpha(
-                                        128,
-                                      ),
-                                      fontSize: 12.sp,
-                                    ),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                          color: AppColors.whiteColor.withAlpha(
+                                            128,
+                                          ),
+                                          fontSize: 12.sp,
+                                        ),
                                   ),
                                 ],
                               ),
@@ -448,20 +459,23 @@ class CreateStoryView extends StatelessWidget {
                           top: 100.h,
                           child: Column(
                             children: [
-                              _buildSidebarButton(context, 
+                              _buildSidebarButton(
+                                context,
                                 icon: Icons.text_fields,
                                 label: "Text",
                                 onTap: () =>
                                     controller.showTextInputDialog(context),
                               ),
                               SizedBox(height: 16.h),
-                              _buildSidebarButton(context, 
+                              _buildSidebarButton(
+                                context,
                                 icon: Icons.photo_library_outlined,
                                 label: "Upload",
                                 onTap: controller.pickImage,
                               ),
                               SizedBox(height: 16.h),
-                              _buildSidebarButton(context, 
+                              _buildSidebarButton(
+                                context,
                                 icon: Icons.refresh,
                                 label: "Reset",
                                 onTap: controller.resetTransforms,
@@ -513,10 +527,13 @@ class CreateStoryView extends StatelessWidget {
                                     ),
                                     Text(
                                       "${controller.fontSize.round()}px",
-                                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                        color: AppColors.whiteColor,
-                                        fontSize: 12.sp,
-                                      ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                            color: AppColors.whiteColor,
+                                            fontSize: 12.sp,
+                                          ),
                                     ),
                                   ],
                                 ),
@@ -529,11 +546,14 @@ class CreateStoryView extends StatelessWidget {
                                   children: [
                                     Text(
                                       "Text Color Palette",
-                                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                        color: AppColors.white70Color,
-                                        fontSize: 11.sp,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                            color: AppColors.white70Color,
+                                            fontSize: 11.sp,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                     ),
                                     Container(
                                       width: 14.r,
@@ -601,11 +621,14 @@ class CreateStoryView extends StatelessWidget {
                                     children: [
                                       Text(
                                         "Background Color Palette",
-                                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                          color: AppColors.white70Color,
-                                          fontSize: 11.sp,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(
+                                              color: AppColors.white70Color,
+                                              fontSize: 11.sp,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                       ),
                                       Container(
                                         width: 14.r,
@@ -686,7 +709,8 @@ class CreateStoryView extends StatelessWidget {
     );
   }
 
-  Widget _buildSidebarButton(BuildContext context, {
+  Widget _buildSidebarButton(
+    BuildContext context, {
     required IconData icon,
     required String label,
     required VoidCallback onTap,

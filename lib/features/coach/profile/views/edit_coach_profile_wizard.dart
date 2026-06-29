@@ -52,7 +52,9 @@ class _EditCoachProfileWizardState extends State<EditCoachProfileWizard> {
             },
             child: Text(
               "← Back",
-              style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.white70Color),
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: AppColors.white70Color,
+              ),
             ),
           ),
           actions: [
@@ -60,7 +62,9 @@ class _EditCoachProfileWizardState extends State<EditCoachProfileWizard> {
               padding: EdgeInsets.only(right: 16.w, top: 16.h),
               child: Text(
                 "${controller.wizardCurrentPage + 1}/4",
-                style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.coachColorFFC19E5F),
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: AppColors.coachColorFFC19E5F,
+                ),
               ),
             ),
           ],
@@ -190,7 +194,10 @@ class _EditCoachProfileWizardState extends State<EditCoachProfileWizard> {
                 ),
                 Text(
                   "Tap to change your photo",
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white54Color, fontSize: 12),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.white54Color,
+                    fontSize: 12,
+                  ),
                 ),
               ],
             ),
@@ -242,10 +249,15 @@ class _EditCoachProfileWizardState extends State<EditCoachProfileWizard> {
                 value: controller.yearsOfExperience,
                 hint: Text(
                   "How You Want To Be Addressed?",
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white38Color, fontSize: 14),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.white38Color,
+                    fontSize: 14,
+                  ),
                 ),
                 isExpanded: true,
-                dropdownColor: Theme.of(context).extension<AppDesignSystem>()!.accentPanelColor,
+                dropdownColor: Theme.of(
+                  context,
+                ).extension<AppDesignSystem>()!.accentPanelColor,
                 items: ["1-2 Years", "3-5 Years", "5-8 Years", "8+ Years"].map((
                   String value,
                 ) {
@@ -253,7 +265,9 @@ class _EditCoachProfileWizardState extends State<EditCoachProfileWizard> {
                     value: value,
                     child: Text(
                       value,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppColors.whiteColor,
+                      ),
                     ),
                   );
                 }).toList(),
@@ -355,10 +369,16 @@ class _EditCoachProfileWizardState extends State<EditCoachProfileWizard> {
               ),
               TextButton.icon(
                 onPressed: controller.addServiceOption,
-                icon: const Icon(Icons.add, color: AppColors.white70Color, size: 18),
+                icon: const Icon(
+                  Icons.add,
+                  color: AppColors.white70Color,
+                  size: 18,
+                ),
                 label: Text(
                   "Add Option",
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white70Color),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.white70Color,
+                  ),
                 ),
               ),
             ],
@@ -379,7 +399,10 @@ class _EditCoachProfileWizardState extends State<EditCoachProfileWizard> {
       padding: EdgeInsets.only(bottom: 12.h, left: 4.w),
       child: Text(
         text,
-        style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white70Color, fontSize: 14.sp),
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          color: AppColors.white70Color,
+          fontSize: 14.sp,
+        ),
       ),
     );
   }
@@ -395,14 +418,17 @@ class _EditCoachProfileWizardState extends State<EditCoachProfileWizard> {
       maxLines: maxLines,
       hintText: hint,
       fontSize: 14,
-hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
+      hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
         color: AppColors.whiteColor.withAlpha(153),
         fontSize: 14,
       ),
       shadow: true,
-borderRadius: 12,
+      borderRadius: 12,
       borderWidth: 0.50,
-contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: maxLines == 1 ? 0 : 12.h),
+      contentPadding: EdgeInsets.symmetric(
+        horizontal: 16.w,
+        vertical: maxLines == 1 ? 0 : 12.h,
+      ),
     );
   }
 
@@ -424,14 +450,20 @@ contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: maxLines == 1 ?
                     : Colors.transparent,
               ),
               child: isSelected
-                  ? const Icon(Icons.check, color: AppColors.whiteColor, size: 14)
+                  ? const Icon(
+                      Icons.check,
+                      color: AppColors.whiteColor,
+                      size: 14,
+                    )
                   : null,
             ),
             SizedBox(width: 12.w),
             Text(
               title,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: isSelected ? AppColors.whiteColor : AppColors.white70Color,
+                color: isSelected
+                    ? AppColors.whiteColor
+                    : AppColors.white70Color,
                 fontSize: 14.sp,
               ),
             ),
@@ -446,7 +478,9 @@ contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: maxLines == 1 ?
       margin: EdgeInsets.only(bottom: 16.h),
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: Theme.of(context).extension<AppDesignSystem>()!.panelColor.withAlpha(150),
+        color: Theme.of(
+          context,
+        ).extension<AppDesignSystem>()!.panelColor.withAlpha(150),
         borderRadius: BorderRadius.circular(16.r),
         border: Border.all(color: AppColors.white10Color),
       ),
@@ -467,7 +501,10 @@ contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: maxLines == 1 ?
                 children: [
                   Text(
                     "Active",
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white54Color, fontSize: 10),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.white54Color,
+                      fontSize: 10,
+                    ),
                   ),
                   SizedBox(
                     height: 20,
@@ -481,7 +518,8 @@ contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: maxLines == 1 ?
                             );
                           },
                           activeThumbColor: AppColors.coachColorFFC19E5F,
-                          activeTrackColor: AppColors.coachColorFFC19E5F.withAlpha(80),
+                          activeTrackColor: AppColors.coachColorFFC19E5F
+                              .withAlpha(80),
                         );
                       },
                     ),

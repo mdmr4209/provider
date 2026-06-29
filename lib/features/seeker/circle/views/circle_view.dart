@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:newproject/core/widgets/background_widget.dart';
 import 'package:newproject/core/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 
@@ -35,19 +36,50 @@ class CircleView extends StatelessWidget {
       length: 2,
       child: GestureDetector(
         onTap: FocusScope.of(context).unfocus,
-        child: Scaffold(
-          body: SafeArea(
-            child: Column(
-              children: [
-                SizedBox(height: 10.h),
-                const CircleMemberList(),
+        child: BackgroundWidget(
+          imagePath: AppAssets.bgMain,
+          child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: AppColors.defaultColor,
+              // These two lines prevent the color change / tinting when scrolling
+              scrolledUnderElevation: 0,
+              surfaceTintColor: AppColors.defaultColor,
 
-                // Search/Post Input Bar
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  child: GestureDetector(
-                    onTap: () => context.push(AppRoutes.createPost),
-                    child: AbsorbPointer(
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  bottom: Radius.circular(24.r),
+                ),
+              ),
+              title: Padding(
+                padding: EdgeInsets.only(left: 28.w, right: 23.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Coachpearl",
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        color: AppColors.coachColorFFF4F6F0,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16.sp,
+                      ),
+                    ),
+                    SvgPicture.asset(AppAssets.clap),
+                  ],
+                ),
+              ),
+            ),
+            body: SafeArea(
+              child: Column(
+                children: [
+                  SizedBox(height: 10.h),
+                  const CircleMemberList(),
+
+                  // Search/Post Input Bar
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    child: GestureDetector(
+                      onTap: () => context.push(AppRoutes.createPost),
                       child: CustomInput(
                         height: 50,
                         hintText: "Word Your Thoughts",
@@ -60,102 +92,106 @@ class CircleView extends StatelessWidget {
                             ),
                         shadow: true,
                         leadingIcon: AppAssets.feather,
-                        leadingPadding: EdgeInsets.only(left: 16.w, right: 8.w),
+                        leadingPadding: EdgeInsets.only(
+                          left: 16.w,
+                          right: 8.w,
+                        ),
                       ),
                     ),
                   ),
-                ),
 
-                SizedBox(height: 11.h),
+                  SizedBox(height: 11.h),
 
-                // Tabs and Groups Action
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TabBar(
-                          isScrollable: true,
-                          indicatorColor: AppColors.secondaryColorLight,
-                          labelColor: AppColors.secondaryColorLight,
-                          unselectedLabelColor: AppColors.whiteColor.withAlpha(
-                            153,
-                          ),
-                          dividerColor: Colors.transparent,
-                          tabAlignment: TabAlignment.start,
-                          labelPadding: EdgeInsets.only(right: 24.w),
-                          labelStyle: theme.textTheme.titleMedium?.copyWith(
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          unselectedLabelStyle: theme.textTheme.titleMedium
-                              ?.copyWith(fontSize: 18.sp),
-                          tabs: [
-                            const Tab(text: "Everyone"),
-                            GestureDetector(
-                              onTap: () =>
-                                  context.push(AppRoutes.friendsCircle),
-                              child: const Tab(text: "Friends"),
+                  // Tabs and Groups Action
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TabBar(
+                            isScrollable: true,
+                            indicatorColor: AppColors.secondaryColorLight,
+                            labelColor: AppColors.secondaryColorLight,
+                            unselectedLabelColor: AppColors.whiteColor
+                                .withAlpha(153),
+                            dividerColor: Colors.transparent,
+                            tabAlignment: TabAlignment.start,
+                            labelPadding: EdgeInsets.only(right: 24.w),
+                            labelStyle: theme.textTheme.titleMedium?.copyWith(
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.bold,
                             ),
-                          ],
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => const GroupsView()),
-                        ),
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 12.w,
-                            vertical: 6.h,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.whiteColor.withAlpha(13),
-                            borderRadius: BorderRadius.circular(20.r),
-                          ),
-                          child: Row(
-                            children: [
-                              Text(
-                                "My Groups",
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: AppColors.secondaryColorLight,
-                                  fontSize: 12.sp,
-                                ),
-                              ),
-                              SizedBox(width: 4.w),
-                              SvgPicture.asset(
-                                AppAssets.group,
-                                colorFilter: const ColorFilter.mode(
-                                  AppColors.secondaryColorLight,
-                                  BlendMode.srcIn,
-                                ),
-                                width: 16.r,
+                            unselectedLabelStyle: theme.textTheme.titleMedium
+                                ?.copyWith(fontSize: 18.sp),
+                            tabs: [
+                              const Tab(text: "Everyone"),
+                              GestureDetector(
+                                onTap: () =>
+                                    context.push(AppRoutes.friendsCircle),
+                                child: const Tab(text: "Friends"),
                               ),
                             ],
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                Expanded(
-                  child: TabBarView(
-                    children: [
-                      const _PostsList(),
-                      Center(
-                        child: Text(
-                          "Friends Posts Coming Soon",
-                          style: theme.textTheme.bodyLarge?.copyWith(
-                            color: AppColors.whiteColor.withAlpha(179),
+                        GestureDetector(
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const GroupsView(),
+                            ),
+                          ),
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12.w,
+                              vertical: 6.h,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppColors.whiteColor.withAlpha(13),
+                              borderRadius: BorderRadius.circular(20.r),
+                            ),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "My Groups",
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    color: AppColors.secondaryColorLight,
+                                    fontSize: 12.sp,
+                                  ),
+                                ),
+                                SizedBox(width: 4.w),
+                                SvgPicture.asset(
+                                  AppAssets.group,
+                                  colorFilter: const ColorFilter.mode(
+                                    AppColors.secondaryColorLight,
+                                    BlendMode.srcIn,
+                                  ),
+                                  width: 16.r,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+
+                  Expanded(
+                    child: TabBarView(
+                      children: [
+                        const _PostsList(),
+                        Center(
+                          child: Text(
+                            "Friends Posts Coming Soon",
+                            style: theme.textTheme.bodyLarge?.copyWith(
+                              color: AppColors.whiteColor.withAlpha(179),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -270,50 +306,61 @@ class _SuggestionsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Suggestions",
-                style: theme.textTheme.titleMedium?.copyWith(
-                  color: AppColors.whiteColor.withAlpha(230),
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              Text(
-                "View All",
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: AppColors.secondaryColorLight,
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment(1.00, 0.01),
+          end: Alignment(0.00, 0.99),
+          colors: [const Color(0xFF273525), const Color(0xFF233B1F)],
         ),
-        SizedBox(
-          height: 150.h,
-          child: Consumer<CircleController>(
-            builder: (context, controller, child) {
-              return ListView.builder(
-                padding: EdgeInsets.only(left: 16.w, right: 8.w),
-                scrollDirection: Axis.horizontal,
-                itemCount: controller.members.length,
-                itemBuilder: (context, index) {
-                  return _SuggestionCard(suggestion: controller.members[index]);
-                },
-              );
-            },
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Suggestions",
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: AppColors.whiteColor.withAlpha(230),
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Text(
+                  "View All",
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: AppColors.secondaryColorLight,
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        SizedBox(height: 16.h),
-      ],
+          SizedBox(
+            height: 150.h,
+            child: Consumer<CircleController>(
+              builder: (context, controller, child) {
+                return ListView.builder(
+                  padding: EdgeInsets.only(left: 16.w, right: 8.w),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: controller.members.length,
+                  itemBuilder: (context, index) {
+                    return _SuggestionCard(
+                      suggestion: controller.members[index],
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+          SizedBox(height: 16.h),
+        ],
+      ),
     );
   }
 }
@@ -329,11 +376,20 @@ class _SuggestionCard extends StatelessWidget {
       width: 125.w,
       margin: EdgeInsets.only(right: 8.w),
       padding: EdgeInsets.fromLTRB(8.w, 11.h, 8.w, 9.h),
-      decoration: BoxDecoration(
-        color: AppColors
-            .postCardColor, // Dark green background matching the design
-        borderRadius: BorderRadius.circular(10.r),
-        border: Border.all(color: AppColors.whiteColor.withAlpha(13)),
+      decoration: ShapeDecoration(
+        color: const Color(0xFF283E25),
+        shape: RoundedRectangleBorder(
+          side: BorderSide(width: 0.40, color: const Color(0xFF334B2F)),
+          borderRadius: BorderRadius.circular(9.71),
+        ),
+        shadows: [
+          BoxShadow(
+            color: Color(0x0F000000),
+            blurRadius: 19.59,
+            offset: Offset(0, 10.52),
+            spreadRadius: 0,
+          ),
+        ],
       ),
       child: Column(
         children: [

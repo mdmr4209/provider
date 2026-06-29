@@ -255,7 +255,8 @@ class CoachMatchView extends StatelessWidget {
     );
   }
 
-  Widget _buildCheckbox(BuildContext context, {
+  Widget _buildCheckbox(
+    BuildContext context, {
     required String label,
     required bool isSelected,
     required VoidCallback onTap,
@@ -303,7 +304,11 @@ class CoachMatchView extends StatelessWidget {
     );
   }
 
-  Widget _buildUploadedFile(BuildContext context, String fileName, VoidCallback onDelete) {
+  Widget _buildUploadedFile(
+    BuildContext context,
+    String fileName,
+    VoidCallback onDelete,
+  ) {
     return Container(
       margin: EdgeInsets.only(top: 8.h),
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
@@ -330,7 +335,10 @@ class CoachMatchView extends StatelessWidget {
           Expanded(
             child: Text(
               fileName,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textColor, fontSize: 14.sp),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.textColor,
+                fontSize: 14.sp,
+              ),
             ),
           ),
           GestureDetector(
@@ -384,7 +392,8 @@ class CoachMatchView extends StatelessWidget {
               ),
               SizedBox(height: 16.h),
               ...specialties.map(
-                (spec) => _buildCheckbox(context,
+                (spec) => _buildCheckbox(
+                  context,
                   label: spec,
                   isSelected: controller.selectedSpecialties.contains(spec),
                   onTap: () {
@@ -548,7 +557,8 @@ class CoachStyleView extends StatelessWidget {
     "Action-Oriented",
   ];
 
-  Widget _buildCheckbox(BuildContext context, {
+  Widget _buildCheckbox(
+    BuildContext context, {
     required String label,
     required bool isSelected,
     required VoidCallback onTap,
@@ -627,7 +637,8 @@ class CoachStyleView extends StatelessWidget {
             ),
             SizedBox(height: 16.h),
             ...styles.map(
-              (style) => _buildCheckbox(context,
+              (style) => _buildCheckbox(
+                context,
                 label: style,
                 isSelected: controller.selectedCoachingStyles.contains(style),
                 onTap: () {

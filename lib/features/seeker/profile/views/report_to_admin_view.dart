@@ -60,12 +60,13 @@ class ReportToAdminView extends StatelessWidget {
                       children: [
                         Text(
                           selectedReason ?? "Choose reason",
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: selectedReason == null
-                                ? AppColors.whiteColor.withAlpha(102)
-                                : AppColors.whiteColor,
-                            fontSize: 14.sp,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: selectedReason == null
+                                    ? AppColors.whiteColor.withAlpha(102)
+                                    : AppColors.whiteColor,
+                                fontSize: 14.sp,
+                              ),
                         ),
                         Icon(
                           Icons.arrow_forward_ios,
@@ -82,7 +83,6 @@ class ReportToAdminView extends StatelessWidget {
             _buildLabel(context, "Provide Report Details"),
             CustomInput(
               hintText: "Enter here",
-              backgroundColor: AppColors.whiteColor.withAlpha(13),
               borderRadius: 16,
               shadow: false,
               height: 200,
@@ -120,7 +120,9 @@ class ReportToAdminView extends StatelessWidget {
               (reason) => ListTile(
                 title: Text(
                   reason,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor),
                 ),
                 onTap: () {
                   _selectedReason.value = reason;

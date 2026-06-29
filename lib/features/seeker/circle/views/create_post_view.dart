@@ -78,7 +78,9 @@ class CreatePostView extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: AppColors.whiteColor.withAlpha(13),
                         borderRadius: BorderRadius.circular(16.r),
-                        border: Border.all(color: AppColors.whiteColor.withAlpha(20)),
+                        border: Border.all(
+                          color: AppColors.whiteColor.withAlpha(20),
+                        ),
                       ),
                       child: Column(
                         children: [
@@ -98,17 +100,23 @@ class CreatePostView extends StatelessWidget {
                                 child: TextField(
                                   controller: controller.postTextController,
                                   maxLines: 8,
-                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor),
+                                  style: Theme.of(context).textTheme.bodyMedium
+                                      ?.copyWith(color: AppColors.whiteColor),
                                   decoration: InputDecoration(
                                     hintText: "Share Your Thoughts",
-                                    hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                      color: AppColors.whiteColor.withAlpha(128),
-                                    ),
+                                    hintStyle: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                          color: AppColors.whiteColor.withAlpha(
+                                            128,
+                                          ),
+                                        ),
                                     border: InputBorder.none,
                                     enabledBorder: InputBorder.none,
                                     focusedBorder: InputBorder.none,
                                     fillColor: Colors.transparent,
-                                    contentPadding: EdgeInsets.only()
+                                    contentPadding: EdgeInsets.only(),
                                   ),
                                 ),
                               ),
@@ -182,7 +190,9 @@ class CreatePostView extends StatelessWidget {
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(12.r),
                                       border: Border.all(
-                                        color: AppColors.whiteColor.withAlpha(26),
+                                        color: AppColors.whiteColor.withAlpha(
+                                          26,
+                                        ),
                                       ),
                                       image: isVideo
                                           ? null
@@ -212,10 +222,14 @@ class CreatePostView extends StatelessWidget {
                                   child: Container(
                                     padding: EdgeInsets.all(4.r),
                                     decoration: BoxDecoration(
-                                      color: AppColors.blackColor.withAlpha(153),
+                                      color: AppColors.blackColor.withAlpha(
+                                        153,
+                                      ),
                                       shape: BoxShape.circle,
                                       border: Border.all(
-                                        color: AppColors.whiteColor.withAlpha(51),
+                                        color: AppColors.whiteColor.withAlpha(
+                                          51,
+                                        ),
                                       ),
                                     ),
                                     child: Icon(
@@ -234,13 +248,17 @@ class CreatePostView extends StatelessWidget {
                                   child: Container(
                                     padding: EdgeInsets.all(4.r),
                                     decoration: BoxDecoration(
-                                      color: AppColors.blackColor.withAlpha(128),
+                                      color: AppColors.blackColor.withAlpha(
+                                        128,
+                                      ),
                                       borderRadius: BorderRadius.circular(4.r),
                                     ),
                                     child: Icon(
                                       Icons.fullscreen_rounded,
                                       size: 16.r,
-                                      color: AppColors.whiteColor.withAlpha(204),
+                                      color: AppColors.whiteColor.withAlpha(
+                                        204,
+                                      ),
                                     ),
                                   ),
                                 ),

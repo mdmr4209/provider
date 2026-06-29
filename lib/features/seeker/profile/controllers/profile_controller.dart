@@ -475,7 +475,9 @@ class ProfileController extends ChangeNotifier {
         'assets/json/profile_extra.json',
       );
       final Map<String, dynamic> extraData = jsonDecode(extraJsonString);
-      _blockedUsers = List<Map<String, dynamic>>.from(extraData['blockedUsers']);
+      _blockedUsers = List<Map<String, dynamic>>.from(
+        extraData['blockedUsers'],
+      );
     } catch (e) {
       debugPrint("Error loading blocked users: $e");
     } finally {

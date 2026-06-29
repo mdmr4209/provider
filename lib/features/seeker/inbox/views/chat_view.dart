@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:newproject/core/widgets/custom_input.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/constants/app_assets.dart';
 import '../../../../core/constants/app_colors.dart';
@@ -187,29 +188,7 @@ class ChatView extends StatelessWidget {
                     children: [
                       Stack(
                         alignment: Alignment.topRight,
-                        children: [
-                          Icon(
-                            Icons.person_outline,
-                            size: 50.r,
-                            color: AppColors.iconColor,
-                          ),
-                          Positioned(
-                            right: 0,
-                            top: 0,
-                            child: Container(
-                              padding: EdgeInsets.all(2.r),
-                              decoration: const BoxDecoration(
-                                color: Colors.transparent,
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                Icons.cancel,
-                                size: 20.r,
-                                color: AppColors.iconColor,
-                              ),
-                            ),
-                          ),
-                        ],
+                        children: [SvgPicture.asset(AppAssets.apologize)],
                       ),
                       Container(
                         height: 4.h,
@@ -320,141 +299,195 @@ class ChatView extends StatelessWidget {
             backgroundColor: AppColors.backgroundColor,
             appBar: AppBar(
               automaticallyImplyLeading: false,
-              backgroundColor: AppColors.popupBackgroundColor,
-              elevation: 0,
-              titleSpacing: 0,
-              title: Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(
-                      Icons.arrow_back,
-                      color: AppColors.whiteColor,
-                    ),
-                    onPressed: () => context.pop(),
-                  ),
-                  CircleAvatar(
-                    radius: 18.r,
-                    backgroundImage: NetworkImage(avatar),
-                    backgroundColor: AppColors.whiteColor.withAlpha(26),
-                  ),
-                  SizedBox(width: 8.w),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          name,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.whiteColor,
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          "Online",
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.whiteColor.withAlpha(153),
-                            fontSize: 11.sp,
-                          ),
+              backgroundColor: Colors.transparent,
+              actions: [
+                Opacity(
+                  opacity: 0.80,
+                  child: Container(
+                    margin: EdgeInsets.only(left: 16.w, right: 16.w, top: 8.h),
+                    width: 343.w, // Added .w for responsiveness consistency
+                    height: 64.h, // Added .h for responsiveness consistency
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 4.w,
+                    ), // Gives inner items breathing room
+                    decoration: ShapeDecoration(
+                      color: const Color(0xFF334B2F),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                          8.r,
+                        ), // Added .r for consistency
+                      ),
+                      shadows: const [
+                        BoxShadow(
+                          color: Color(0x111F2687),
+                          blurRadius: 12.60,
+                          offset: Offset(0, 8),
+                          spreadRadius: 0,
                         ),
                       ],
                     ),
-                  ),
-                ],
-              ),
-              actions: [
-                IconButton(
-                  icon: Icon(
-                    Icons.videocam_outlined,
-                    color: AppColors.whiteColor,
-                    size: 24.r,
-                  ),
-                  onPressed: () {
-                    if (isCoach) {
-                      _showUpgradePopup(context);
-                    } else {
-                      _navigateToCallScreen(context);
-                    }
-                  },
-                ),
-                IconButton(
-                  icon: Icon(
-                    Icons.call_outlined,
-                    color: AppColors.whiteColor,
-                    size: 22.r,
-                  ),
-                  onPressed: () {
-                    if (isCoach) {
-                      _showUnavailablePopup(context);
-                    } else {
-                      _navigateToCallScreen(context);
-                    }
-                  },
-                ),
-                PopupMenuButton<String>(
-                  icon: Icon(
-                    Icons.more_vert,
-                    color: AppColors.whiteColor,
-                    size: 22.r,
-                  ),
-                  color: AppColors.popupBackgroundColor,
-                  shape: const TooltipShapeBorder(),
-                  offset: Offset(0, 48.h),
-                  onSelected: (value) {
-                    if (value == 'profile') {
-                      if (isCoach) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const CoachProfileView(),
+                    child: Row(
+                      children: [
+                        // --- LEADING / PROFILE AREA ---
+                        IconButton(
+                          icon: const Icon(
+                            Icons.arrow_back,
+                            color: AppColors.whiteColor,
                           ),
-                        );
-                      } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => UserProfileView(
-                              userId: userId,
-                              userName: name,
-                              userAvatar: avatar,
+                          onPressed: () => context.pop(),
+                        ),
+                        CircleAvatar(
+                          radius: 18.r,
+                          backgroundImage: NetworkImage(avatar),
+                          backgroundColor: AppColors.whiteColor.withAlpha(26),
+                        ),
+                        SizedBox(width: 8.w),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                name,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: Theme.of(context).textTheme.bodyMedium
+                                    ?.copyWith(
+                                      color: AppColors.whiteColor,
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                              Text(
+                                "Online",
+                                style: Theme.of(context).textTheme.bodyMedium
+                                    ?.copyWith(
+                                      color: AppColors.whiteColor.withAlpha(
+                                        153,
+                                      ),
+                                      fontSize: 11.sp,
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        // --- ACTIONS AREA ---
+                        InkWell(
+                          onTap: () {
+                            if (isCoach) {
+                              _showUpgradePopup(context);
+                            } else {
+                              _navigateToCallScreen(context);
+                            }
+                          },
+                          child: Container(
+                            width: 35.r,
+                            height: 35.r,
+                            padding: EdgeInsets.all(8.r),
+                            decoration: ShapeDecoration(
+                              color: AppColors.coachColorFF263823,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(21.r),
+                              ),
                             ),
+                            child: SvgPicture.asset(AppAssets.videoCall),
                           ),
-                        );
-                      }
-                    } else if (value == 'review') {
-                      context.push(AppRoutes.review);
-                    } else if (value == 'report') {
-                      context.push(AppRoutes.reportToAdmin);
-                    } else if (value == 'block') {
-                      ScaffoldMessenger.of(
-                        context,
-                      ).showSnackBar(SnackBar(content: Text('$name blocked')));
-                    }
-                  },
-                  itemBuilder: (context) => [
-                    _buildPopupMenuItem(
-                      context,
-                      'profile',
-                      'View Profile',
-                      Icons.visibility_outlined,
+                        ),
+                        SizedBox(width: 8.w),
+                        InkWell(
+                          onTap: () {
+                            if (isCoach) {
+                              _showUnavailablePopup(context);
+                            } else {
+                              _navigateToCallScreen(context);
+                            }
+                          },
+                          child: Container(
+                            width: 35.r,
+                            height: 35.r,
+                            padding: EdgeInsets.all(8.r),
+                            decoration: ShapeDecoration(
+                              color: AppColors.coachColorFF263823,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(21.r),
+                              ),
+                            ),
+                            child: SvgPicture.asset(AppAssets.voiceCall),
+                          ),
+                        ),
+                        PopupMenuButton<String>(
+                          icon: Icon(
+                            Icons.more_vert,
+                            color: AppColors.whiteColor,
+                            size: 22.r,
+                          ),
+                          color: AppColors.popupBackgroundColor,
+                          shape: const TooltipShapeBorder(),
+                          offset: Offset(0, 48.h),
+                          onSelected: (value) {
+                            if (value == 'profile') {
+                              if (isCoach) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => const CoachProfileView(),
+                                  ),
+                                );
+                              } else {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => UserProfileView(
+                                      userId: userId,
+                                      userName: name,
+                                      userAvatar: avatar,
+                                    ),
+                                  ),
+                                );
+                              }
+                            } else if (value == 'review') {
+                              context.push(AppRoutes.review);
+                            } else if (value == 'report') {
+                              context.push(AppRoutes.reportToAdmin);
+                            } else if (value == 'block') {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('$name blocked')),
+                              );
+                            }
+                          },
+                          itemBuilder: (context) => [
+                            _buildPopupMenuItem(
+                              context,
+                              'profile',
+                              'View Profile',
+                              Icons.visibility_outlined,
+                            ),
+                            _buildPopupMenuItem(
+                              context,
+                              'review',
+                              'Give a review',
+                              Icons.star_border,
+                            ),
+                            _buildPopupMenuItem(
+                              context,
+                              'report',
+                              'Report',
+                              Icons.insert_chart_outlined_outlined,
+                            ),
+                            _buildPopupMenuItem(
+                              context,
+                              'block',
+                              'Block',
+                              Icons.block_outlined,
+                            ),
+                          ],
+                        ),
+                        SizedBox(width: 4.w),
+                      ],
                     ),
-                    _buildPopupMenuItem(
-                      context,
-                      'review',
-                      'Give a review',
-                      Icons.star_border,
-                    ),
-                    _buildPopupMenuItem(
-                      context,
-                      'report',
-                      'Report',
-                      Icons.insert_chart_outlined_outlined,
-                    ),
-                    _buildPopupMenuItem(context, 'block', 'Block', Icons.block_outlined),
-                  ],
+                  ),
                 ),
-                SizedBox(width: 8.w),
               ],
             ),
             body: Column(
@@ -516,11 +549,15 @@ class ChatView extends StatelessWidget {
                                               ),
                                               child: Text(
                                                 message.time,
-                                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                                  color: AppColors.whiteColor
-                                                      .withAlpha(102),
-                                                  fontSize: 12.sp,
-                                                ),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium
+                                                    ?.copyWith(
+                                                      color: AppColors
+                                                          .whiteColor
+                                                          .withAlpha(102),
+                                                      fontSize: 12.sp,
+                                                    ),
                                               ),
                                             ),
                                             Expanded(
@@ -564,6 +601,7 @@ class ChatView extends StatelessWidget {
                                             ],
                                             Flexible(
                                               child: Container(
+                                                width: 270.w,
                                                 padding: EdgeInsets.symmetric(
                                                   horizontal: 14.w,
                                                   vertical: 10.h,
@@ -602,15 +640,19 @@ class ChatView extends StatelessWidget {
                                                 ),
                                                 child: Text(
                                                   message.text,
-                                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                                    color: AppColors.whiteColor,
-                                                    fontSize: 13.5.sp,
-                                                    height: 1.4,
-                                                  ),
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium
+                                                      ?.copyWith(
+                                                        color: AppColors
+                                                            .whiteColor,
+                                                        fontSize: 13.5.sp,
+                                                        height: 1.4,
+                                                      ),
                                                 ),
                                               ),
                                             ),
-                                            if (isMe) SizedBox(width: 30.w),
+                                            // if (isMe) SizedBox(width: 30.w),
                                           ],
                                         ),
                                       ),
@@ -631,56 +673,53 @@ class ChatView extends StatelessWidget {
                 ),
                 Padding(
                   padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 20.h),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: AppColors.whiteColor.withAlpha(13),
-                            borderRadius: BorderRadius.circular(24.r),
-                            border: Border.all(
-                              color: AppColors.whiteColor.withAlpha(26),
-                            ),
-                          ),
-                          padding: EdgeInsets.symmetric(horizontal: 16.w),
-                          child: TextField(
+                  child: Container(
+                    padding: EdgeInsets.only(left: 7.w, right: 14.w),
+                    height: 52.h,
+                    decoration: ShapeDecoration(
+                      color: AppColors.coachColorFF263823,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.r),
+                      ),
+                      shadows: [
+                        BoxShadow(
+                          color: AppColors.boxShadowColor2,
+                          blurRadius: 4,
+                          offset: Offset(0, 0),
+                          spreadRadius: 0,
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: CustomInput(
+                            height: 36,
+                            fontSize: 14,
+                            hintColor: AppColors.greyColor,
+                            hintStyle: Theme.of(context).textTheme.bodyLarge
+                                ?.copyWith(
+                                  color: AppColors.whiteColor.withAlpha(153),
+                                  fontSize: 12.sp,
+                                ),
+                            shadow: false,
                             controller: chat.messageController,
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor),
-                            cursorColor: AppColors.secondaryColorLight,
-                            decoration: InputDecoration(
-                              hintText: "Type here",
-                              hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: AppColors.whiteColor.withAlpha(102),
-                                fontSize: 14.sp,
-                              ),
-                              border: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                              contentPadding: EdgeInsets.symmetric(
-                                vertical: 12.h,
-                              ),
-                            ),
-                            onSubmitted: (_) => chat.sendMessage(),
+                            hintText: "Type a message...",
+                            borderRadius: 30,
+                            textStyle: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(
+                                  color: AppColors.whiteColor,
+                                  fontSize: 12.sp,
+                                ),
                           ),
                         ),
-                      ),
-                      SizedBox(width: 8.w),
-                      GestureDetector(
-                        onTap: chat.sendMessage,
-                        child: CircleAvatar(
-                          radius: 22.r,
-                          backgroundColor: AppColors.coachColorFF1E331A,
-                          child: SvgPicture.asset(
-                            AppAssets.send,
-                            colorFilter: const ColorFilter.mode(
-                              AppColors.whiteColor,
-                              BlendMode.srcIn,
-                            ),
-                            width: 18.r,
-                          ),
+                        SizedBox(width: 8.w),
+                        GestureDetector(
+                          onTap: chat.sendMessage,
+                          child: SvgPicture.asset(AppAssets.chatSend),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -705,7 +744,10 @@ class ChatView extends StatelessWidget {
           SizedBox(width: 12.w),
           Text(
             text,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.whiteColor, fontSize: 14.sp),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColors.whiteColor,
+              fontSize: 14.sp,
+            ),
           ),
         ],
       ),

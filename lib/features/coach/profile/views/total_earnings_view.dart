@@ -27,7 +27,11 @@ class TotalEarningsView extends StatelessWidget {
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.west, color: AppColors.coachColorFF5E7958, size: 24),
+            icon: const Icon(
+              Icons.west,
+              color: AppColors.coachColorFF5E7958,
+              size: 24,
+            ),
             onPressed: () => Navigator.pop(context),
           ),
           title: Text(

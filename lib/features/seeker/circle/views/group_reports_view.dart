@@ -95,10 +95,13 @@ class GroupReportsView extends StatelessWidget {
                                       Center(
                                         child: Text(
                                           "No reports available.",
-                                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                            color: AppColors.whiteColor
-                                                .withAlpha(128),
-                                          ),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.copyWith(
+                                                color: AppColors.whiteColor
+                                                    .withAlpha(128),
+                                              ),
                                         ),
                                       ),
                                     ],

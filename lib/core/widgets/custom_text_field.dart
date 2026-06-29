@@ -8,10 +8,7 @@ class _InputState {
   bool isFocused;
   String? errorText;
 
-  _InputState({
-    required this.isObscured,
-    required this.isFocused,
-  });
+  _InputState({required this.isObscured, required this.isFocused});
 }
 
 class CustomTextField extends StatelessWidget {
@@ -188,10 +185,7 @@ class CustomTextField extends StatelessWidget {
     final theme = Theme.of(context);
 
     return FormField<_InputState>(
-      initialValue: _InputState(
-        isObscured: isPassword,
-        isFocused: false,
-      ),
+      initialValue: _InputState(isObscured: isPassword, isFocused: false),
       builder: (FormFieldState<_InputState> fieldState) {
         final state = fieldState.value!;
         final hasError = state.errorText != null;
@@ -214,7 +208,8 @@ class CustomTextField extends StatelessWidget {
       padding: EdgeInsets.only(bottom: titlePaddingBottom.h),
       child: Text(
         title!,
-        style: titleStyle ??
+        style:
+            titleStyle ??
             theme.textTheme.labelLarge?.copyWith(
               color: titleColor ?? theme.textTheme.labelLarge?.color,
               fontSize: (titleFontSize ?? 14).sp,
@@ -239,24 +234,31 @@ class CustomTextField extends StatelessWidget {
     );
   }
 
-  Widget _buildInputField(ThemeData theme, FormFieldState<_InputState> fieldState, _InputState state) {
+  Widget _buildInputField(
+    ThemeData theme,
+    FormFieldState<_InputState> fieldState,
+    _InputState state,
+  ) {
     final hasError = state.errorText != null;
     final isEnabled = enabled;
-    
+
     final inputTheme = theme.inputDecorationTheme;
     final colorScheme = theme.colorScheme;
 
-    final bg = backgroundColor ?? 
-               (isEnabled ? (inputTheme.fillColor ?? theme.cardColor) 
-                          : (theme.disabledColor.withValues(alpha: 0.05)));
-    
-    final borderCol = hasError 
+    final bg =
+        backgroundColor ??
+        (isEnabled
+            ? (inputTheme.fillColor ?? theme.cardColor)
+            : (theme.disabledColor.withValues(alpha: 0.05)));
+
+    final borderCol = hasError
         ? (errorBorderColor ?? colorScheme.error)
-        : (!isEnabled 
-            ? (disabledBorderColor ?? theme.disabledColor.withValues(alpha: 0.2))
-            : (state.isFocused 
-                ? (focusedBorderColor ?? colorScheme.primary) 
-                : (borderColor ?? theme.dividerColor)));
+        : (!isEnabled
+              ? (disabledBorderColor ??
+                    theme.disabledColor.withValues(alpha: 0.2))
+              : (state.isFocused
+                    ? (focusedBorderColor ?? colorScheme.primary)
+                    : (borderColor ?? theme.dividerColor)));
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
@@ -268,12 +270,15 @@ class CustomTextField extends StatelessWidget {
         borderRadius: BorderRadius.circular(borderRadius.r),
         border: Border.all(
           color: borderCol,
-          width: (hasError || state.isFocused) ? (borderWidth + 0.5).w : borderWidth.w,
+          width: (hasError || state.isFocused)
+              ? (borderWidth + 0.5).w
+              : borderWidth.w,
         ),
         boxShadow: shadow
             ? [
                 BoxShadow(
-                  color: shadowColor ?? theme.shadowColor.withValues(alpha: 0.08),
+                  color:
+                      shadowColor ?? theme.shadowColor.withValues(alpha: 0.08),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
@@ -325,9 +330,10 @@ class CustomTextField extends StatelessWidget {
             }
             return null;
           },
-          style: textStyle ??
+          style:
+              textStyle ??
               theme.textTheme.bodyMedium?.copyWith(
-                color: isEnabled 
+                color: isEnabled
                     ? (textColor ?? theme.textTheme.bodyMedium?.color)
                     : theme.disabledColor,
                 fontSize: (fontSize ?? 14).sp,
@@ -337,7 +343,8 @@ class CustomTextField extends StatelessWidget {
           decoration: InputDecoration(
             hintText: hintText,
             labelText: labelText,
-            hintStyle: hintStyle ??
+            hintStyle:
+                hintStyle ??
                 inputTheme.hintStyle ??
                 theme.textTheme.bodyMedium?.copyWith(
                   color: hintColor ?? theme.hintColor.withValues(alpha: 0.5),
@@ -347,7 +354,9 @@ class CustomTextField extends StatelessWidget {
                 ),
             labelStyle: hintStyle ?? inputTheme.labelStyle,
             isDense: true,
-            contentPadding: contentPadding ?? EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+            contentPadding:
+                contentPadding ??
+                EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
             border: InputBorder.none,
             enabledBorder: InputBorder.none,
             focusedBorder: InputBorder.none,
@@ -364,23 +373,37 @@ class CustomTextField extends StatelessWidget {
 
   Widget? _buildPrefix(ThemeData theme, bool hasError) {
     if (prefix == null) return null;
-    final color = hasError ? theme.colorScheme.error : (prefixColor ?? theme.hintColor);
-    
+    final color = hasError
+        ? theme.colorScheme.error
+        : (prefixColor ?? theme.hintColor);
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
           padding: prefixPadding,
-          child: _resolveAssetOrWidget(prefix, prefixSize, usePrefixColor, color),
+          child: _resolveAssetOrWidget(
+            prefix,
+            prefixSize,
+            usePrefixColor,
+            color,
+          ),
         ),
       ],
     );
   }
 
-  Widget? _buildSuffix(ThemeData theme, bool hasError, FormFieldState<_InputState> fieldState, _InputState state) {
+  Widget? _buildSuffix(
+    ThemeData theme,
+    bool hasError,
+    FormFieldState<_InputState> fieldState,
+    _InputState state,
+  ) {
     final List<Widget> children = [];
-    final color = hasError ? theme.colorScheme.error : (suffixColor ?? theme.hintColor);
+    final color = hasError
+        ? theme.colorScheme.error
+        : (suffixColor ?? theme.hintColor);
 
     if (isPassword && showObscureToggle) {
       children.add(
@@ -388,8 +411,8 @@ class CustomTextField extends StatelessWidget {
           onTap: () {
             state.isObscured = !state.isObscured;
             fieldState.didChange(state);
-          }, 
-          child: _buildObscureIcon(theme, hasError, state)
+          },
+          child: _buildObscureIcon(theme, hasError, state),
         ),
       );
     }
@@ -398,7 +421,12 @@ class CustomTextField extends StatelessWidget {
       children.add(
         Padding(
           padding: suffixPadding,
-          child: _resolveAssetOrWidget(suffix, suffixSize, useSuffixColor, color),
+          child: _resolveAssetOrWidget(
+            suffix,
+            suffixSize,
+            useSuffixColor,
+            color,
+          ),
         ),
       );
     }
@@ -414,23 +442,31 @@ class CustomTextField extends StatelessWidget {
 
   Widget _buildObscureIcon(ThemeData theme, bool hasError, _InputState state) {
     final color = hasError ? theme.colorScheme.error : theme.hintColor;
-    final icon = state.isObscured ? (hiddenIcon ?? Icons.visibility_off_outlined) 
-                             : (visibleIcon ?? Icons.visibility_outlined);
-    
+    final icon = state.isObscured
+        ? (hiddenIcon ?? Icons.visibility_off_outlined)
+        : (visibleIcon ?? Icons.visibility_outlined);
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 8.w),
       child: _resolveAssetOrWidget(icon, obscureIconSize, true, color),
     );
   }
 
-  Widget _resolveAssetOrWidget(dynamic input, double size, bool useColor, Color color) {
+  Widget _resolveAssetOrWidget(
+    dynamic input,
+    double size,
+    bool useColor,
+    Color color,
+  ) {
     if (input is String) {
       if (input.toLowerCase().endsWith('.svg')) {
         return SvgPicture.asset(
           input,
           width: size.w,
           height: size.h,
-          colorFilter: useColor ? ColorFilter.mode(color, BlendMode.srcIn) : null,
+          colorFilter: useColor
+              ? ColorFilter.mode(color, BlendMode.srcIn)
+              : null,
         );
       }
       return Image.asset(

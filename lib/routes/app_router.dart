@@ -27,8 +27,6 @@ import '../features/seeker/home/views/write_journal_view.dart';
 import '../features/seeker/inbox/views/call_view.dart';
 import '../features/seeker/inbox/views/chat_view.dart';
 import '../features/seeker/inbox/views/inbox_view.dart';
-import '../features/shared/onboarding/controllers/onboarding_controller.dart';
-import '../features/shared/onboarding/views/onboarding_view.dart';
 import '../features/seeker/profile/views/block_list_view.dart';
 import '../features/seeker/inbox/views/bookings_view.dart';
 import '../features/seeker/profile/views/edit_view.dart';
@@ -53,7 +51,6 @@ import '../features/coach/circle/views/coach_circle_view.dart';
 import '../features/coach/bid_board/views/coach_bid_board_view.dart';
 import '../features/coach/inbox/views/coach_inbox_view.dart';
 
-
 enum TransitionType {
   fadeThrough,
   slideHorizontal,
@@ -77,7 +74,6 @@ abstract class AppRoutes {
   static const createPost = '/create-post';
   static const coaches = '/coaches';
   static const inbox = '/inbox';
-  static const onboarding = '/onboarding';
   static const goToHome = '/go-home';
   static const settings = '/settings';
   static const breathing = '/breathing';
@@ -237,26 +233,18 @@ class AppRouter {
 
   static GoRouter create(
     AuthController auth,
-    OnboardingController onboard,
     GlobalKey<NavigatorState> navigatorKey,
   ) {
     return GoRouter(
       navigatorKey: navigatorKey,
       initialLocation: AppRoutes.splash,
-      refreshListenable: Listenable.merge([auth, onboard]),
+      refreshListenable: auth,
       redirect: (context, state) {
-        if (onboard.isLoading || auth.isCheckingToken) return null;
-        final bool hasOnboarded = onboard.hasCompletedOnboarding;
+        if (auth.isCheckingToken) return null;
         final bool isLoggedIn = auth.isLoggedIn;
         final String loc = state.matchedLocation;
 
         if (loc == AppRoutes.splash) return null;
-        if (!hasOnboarded && loc != AppRoutes.onboarding) {
-          return AppRoutes.onboarding;
-        }
-        if (hasOnboarded && loc == AppRoutes.onboarding) {
-          return isLoggedIn ? AppRoutes.home : AppRoutes.login;
-        }
 
         final bool isPublicOnlyScreen =
             loc == AppRoutes.login ||
@@ -324,7 +312,8 @@ class AppRouter {
                 GoRoute(
                   path: AppRoutes.home,
                   pageBuilder: (context, state) {
-                    final isCoach = context.read<AuthController>().selectedRole == 'Coach';
+                    final isCoach =
+                        context.read<AuthController>().selectedRole == 'Coach';
                     return _buildPageWithTransition(
                       context: context,
                       state: state,
@@ -339,11 +328,14 @@ class AppRouter {
                 GoRoute(
                   path: AppRoutes.circle,
                   pageBuilder: (context, state) {
-                    final isCoach = context.read<AuthController>().selectedRole == 'Coach';
+                    final isCoach =
+                        context.read<AuthController>().selectedRole == 'Coach';
                     return _buildPageWithTransition(
                       context: context,
                       state: state,
-                      child: isCoach ? const CoachCircleView() : const CircleView(),
+                      child: isCoach
+                          ? const CoachCircleView()
+                          : const CircleView(),
                     );
                   },
                 ),
@@ -354,11 +346,14 @@ class AppRouter {
                 GoRoute(
                   path: AppRoutes.coaches,
                   pageBuilder: (context, state) {
-                    final isCoach = context.read<AuthController>().selectedRole == 'Coach';
+                    final isCoach =
+                        context.read<AuthController>().selectedRole == 'Coach';
                     return _buildPageWithTransition(
                       context: context,
                       state: state,
-                      child: isCoach ? const CoachBidBoardView() : const FindCoachesView(),
+                      child: isCoach
+                          ? const CoachBidBoardView()
+                          : const FindCoachesView(),
                     );
                   },
                 ),
@@ -369,11 +364,14 @@ class AppRouter {
                 GoRoute(
                   path: AppRoutes.inbox,
                   pageBuilder: (context, state) {
-                    final isCoach = context.read<AuthController>().selectedRole == 'Coach';
+                    final isCoach =
+                        context.read<AuthController>().selectedRole == 'Coach';
                     return _buildPageWithTransition(
                       context: context,
                       state: state,
-                      child: isCoach ? const CoachInboxView() : const InboxView(),
+                      child: isCoach
+                          ? const CoachInboxView()
+                          : const InboxView(),
                     );
                   },
                 ),
@@ -384,25 +382,20 @@ class AppRouter {
                 GoRoute(
                   path: AppRoutes.profile,
                   pageBuilder: (context, state) {
-                    final isCoach = context.read<AuthController>().selectedRole == 'Coach';
+                    final isCoach =
+                        context.read<AuthController>().selectedRole == 'Coach';
                     return _buildPageWithTransition(
                       context: context,
                       state: state,
-                      child: isCoach ? const CoachSettingsView() : const ProfileView(),
+                      child: isCoach
+                          ? const CoachSettingsView()
+                          : const ProfileView(),
                     );
                   },
                 ),
               ],
             ),
           ],
-        ),
-        GoRoute(
-          path: AppRoutes.onboarding,
-          pageBuilder: (context, state) => _buildPageWithTransition(
-            context: context,
-            state: state,
-            child: OnboardingView(),
-          ),
         ),
         GoRoute(
           path: AppRoutes.login,
@@ -846,7 +839,9 @@ class AppRouter {
               state: state,
               child: GiveReviewView(
                 coachName: extra['name'] ?? 'Coach Pearl',
-                coachAvatar: extra['avatar'] ?? 'https://i.pravatar.cc/150?u=coach_pearl',
+                coachAvatar:
+                    extra['avatar'] ??
+                    'https://i.pravatar.cc/150?u=coach_pearl',
               ),
             );
           },
@@ -922,8 +917,6 @@ class _DirectionalBranchContainer extends StatefulWidget {
 
 class _DirectionalBranchContainerState
     extends State<_DirectionalBranchContainer> {
-
-
   @override
   Widget build(BuildContext context) {
     final int currentIndex = widget.navigationShell.currentIndex;

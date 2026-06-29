@@ -193,10 +193,10 @@ class _SnackBarState {
   bool isDelayStarted;
 
   _SnackBarState()
-      : slideTarget = ValueNotifier<double>(1.5),
-        pulseTarget = ValueNotifier<double>(1.25),
-        isExiting = false,
-        isDelayStarted = false;
+    : slideTarget = ValueNotifier<double>(1.5),
+      pulseTarget = ValueNotifier<double>(1.25),
+      isExiting = false,
+      isDelayStarted = false;
 }
 
 class _SnackBarOverlay extends StatelessWidget {
@@ -220,7 +220,9 @@ class _SnackBarOverlay extends StatelessWidget {
         final state = fieldState.value!;
 
         // Trigger the slide entrance animation post-frame
-        if (state.slideTarget.value == 1.5 && !state.isExiting && !state.isDelayStarted) {
+        if (state.slideTarget.value == 1.5 &&
+            !state.isExiting &&
+            !state.isDelayStarted) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             state.slideTarget.value = 0.0;
           });
@@ -229,10 +231,13 @@ class _SnackBarOverlay extends StatelessWidget {
         // Start the duration delay timer to exit
         if (!state.isDelayStarted) {
           state.isDelayStarted = true;
-          Future.delayed(config.duration + const Duration(milliseconds: 600), () {
-            state.isExiting = true;
-            state.slideTarget.value = 1.5;
-          });
+          Future.delayed(
+            config.duration + const Duration(milliseconds: 600),
+            () {
+              state.isExiting = true;
+              state.slideTarget.value = 1.5;
+            },
+          );
         }
 
         return Positioned(
@@ -243,7 +248,10 @@ class _SnackBarOverlay extends StatelessWidget {
             valueListenable: state.slideTarget,
             builder: (context, slideVal, _) {
               return TweenAnimationBuilder<double>(
-                tween: Tween<double>(begin: state.isExiting ? 0.0 : 1.5, end: slideVal),
+                tween: Tween<double>(
+                  begin: state.isExiting ? 0.0 : 1.5,
+                  end: slideVal,
+                ),
                 duration: const Duration(milliseconds: 600),
                 curve: Curves.easeOutBack,
                 onEnd: () {
@@ -267,10 +275,7 @@ class _SnackBarOverlay extends StatelessWidget {
                         gradient: LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
-                          colors: [
-                            config.backgroundColor,
-                            config.accentColor,
-                          ],
+                          colors: [config.backgroundColor, config.accentColor],
                         ),
                         borderRadius: BorderRadius.circular(16.r),
                         boxShadow: [
@@ -290,7 +295,12 @@ class _SnackBarOverlay extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Padding(
-                              padding: EdgeInsets.fromLTRB(16.w, 14.h, 8.w, 14.h),
+                              padding: EdgeInsets.fromLTRB(
+                                16.w,
+                                14.h,
+                                8.w,
+                                14.h,
+                              ),
                               child: Row(
                                 children: [
                                   // Pulse Icon Animation
@@ -298,10 +308,16 @@ class _SnackBarOverlay extends StatelessWidget {
                                     valueListenable: state.pulseTarget,
                                     builder: (context, pulseVal, child) {
                                       return TweenAnimationBuilder<double>(
-                                        tween: Tween<double>(begin: pulseVal == 1.25 ? 1.0 : 1.25, end: pulseVal),
-                                        duration: const Duration(milliseconds: 800),
+                                        tween: Tween<double>(
+                                          begin: pulseVal == 1.25 ? 1.0 : 1.25,
+                                          end: pulseVal,
+                                        ),
+                                        duration: const Duration(
+                                          milliseconds: 800,
+                                        ),
                                         onEnd: () {
-                                          state.pulseTarget.value = pulseVal == 1.25 ? 1.0 : 1.25;
+                                          state.pulseTarget.value =
+                                              pulseVal == 1.25 ? 1.0 : 1.25;
                                         },
                                         builder: (context, scale, child) {
                                           return Transform.scale(
@@ -315,11 +331,14 @@ class _SnackBarOverlay extends StatelessWidget {
                                     child: Container(
                                       padding: EdgeInsets.all(8.w),
                                       decoration: BoxDecoration(
-                                        color: AppColors.whiteColor.withValues(alpha: 0.2),
+                                        color: AppColors.whiteColor.withValues(
+                                          alpha: 0.2,
+                                        ),
                                         shape: BoxShape.circle,
                                         boxShadow: [
                                           BoxShadow(
-                                            color: AppColors.whiteColor.withValues(alpha: 0.1),
+                                            color: AppColors.whiteColor
+                                                .withValues(alpha: 0.1),
                                             blurRadius: 10,
                                             spreadRadius: 2,
                                           ),
@@ -335,28 +354,34 @@ class _SnackBarOverlay extends StatelessWidget {
                                   SizedBox(width: 14.w),
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           title,
-                                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                            color: config.textColor,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14.sp,
-                                            letterSpacing: 0.5,
-                                          ),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.copyWith(
+                                                color: config.textColor,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14.sp,
+                                                letterSpacing: 0.5,
+                                              ),
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                         SizedBox(height: 4.h),
                                         Text(
                                           message,
-                                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                            color: config.textColor.withValues(
-                                              alpha: 0.9,
-                                            ),
-                                            fontSize: 12.sp,
-                                          ),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.copyWith(
+                                                color: config.textColor
+                                                    .withValues(alpha: 0.9),
+                                                fontSize: 12.sp,
+                                              ),
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
                                         ),
@@ -390,9 +415,11 @@ class _SnackBarOverlay extends StatelessWidget {
                                 duration: config.duration,
                                 builder: (context, progressVal, _) {
                                   return LinearProgressIndicator(
-                                    value: progressVal, // Shrinks as time passes
+                                    value:
+                                        progressVal, // Shrinks as time passes
                                     minHeight: 5.h,
-                                    backgroundColor: AppColors.blackColor.withValues(alpha: 0.1),
+                                    backgroundColor: AppColors.blackColor
+                                        .withValues(alpha: 0.1),
                                     valueColor: AlwaysStoppedAnimation<Color>(
                                       config.textColor.withValues(alpha: 0.5),
                                     ),

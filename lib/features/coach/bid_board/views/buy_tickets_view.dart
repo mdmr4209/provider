@@ -20,7 +20,7 @@ class BuyTicketsView extends StatelessWidget {
     final controller = context.watch<CoachBidController>();
 
     return Scaffold(
-appBar: AppBar(
+      appBar: AppBar(
         backgroundColor: AppColors.defaultColor,
         // These two lines prevent the color change / tinting when scrolling
         scrolledUnderElevation: 0,
@@ -32,7 +32,11 @@ appBar: AppBar(
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(24.r)),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.west, color: AppColors.coachColorFF5E7958, size: 24),
+          icon: const Icon(
+            Icons.west,
+            color: AppColors.coachColorFF5E7958,
+            size: 24,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -135,14 +139,14 @@ appBar: AppBar(
                   height: 44,
                   hintText: "Enter amount of tickets",
                   fontSize: 14,
-hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: AppColors.whiteColor.withAlpha(153),
                     fontSize: 14,
                   ),
                   shadow: true,
-borderRadius: 4,
+                  borderRadius: 4,
                   borderWidth: 0.50,
-),
+                ),
 
                 const Spacer(),
 

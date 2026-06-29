@@ -170,6 +170,7 @@ class _NavbarState extends State<Navbar> {
     return Stack(
       children: [
         Scaffold(
+          resizeToAvoidBottomInset: false,
           body: widget.navigationShell,
           bottomNavigationBar: Container(
             height: 88.h,
@@ -309,12 +310,16 @@ class _NavbarState extends State<Navbar> {
                                           child: Center(
                                             child: Text(
                                               "Previous",
-                                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                                color: AppColors.whiteColor,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w600,
-                                                decoration: TextDecoration.none,
-                                              ),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium
+                                                  ?.copyWith(
+                                                    color: AppColors.whiteColor,
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w600,
+                                                    decoration:
+                                                        TextDecoration.none,
+                                                  ),
                                             ),
                                           ),
                                         ),

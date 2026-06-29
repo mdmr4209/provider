@@ -91,6 +91,7 @@ class CustomDialog extends StatelessWidget {
               linearGradient: true,
               height: 52,
               fontSize: 16,
+              horizontalPadding: 0,
             ),
 
             if (secondaryText != null) ...[

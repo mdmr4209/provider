@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:newproject/core/constants/app_colors.dart';
 import 'package:newproject/core/widgets/background_widget.dart';
+import 'package:newproject/core/widgets/custom_input.dart';
+import 'package:newproject/core/widgets/input_text_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/app_assets.dart';
@@ -51,37 +53,12 @@ class WriteJournalView extends StatelessWidget {
                     horizontal: 16.w,
                     vertical: 16.h,
                   ),
-                  child: Container(
-                    width: double.infinity,
+                  child: CustomInput(
                     height: 245.h,
-                    padding: EdgeInsets.all(20.r),
-                    decoration: BoxDecoration(
-                      color: AppColors.blackColor.withAlpha(77),
-                      borderRadius: BorderRadius.circular(20.r),
-                      border: Border.all(
-                        color: AppColors.whiteColor.withAlpha(13),
-                      ),
-                    ),
-                    child: TextField(
-                      controller: homeController.journalController,
-                      maxLines: null,
-                      autofocus: true,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppColors.whiteColor,
-                        fontSize: 13.sp,
-                        fontFamily: 'Georgia',
-                      ),
-                      decoration: InputDecoration(
-                        hintText: " 🪶  Share Your Thoughts",
-                        hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.whiteColor.withAlpha(77),
-                          fontSize: 13.sp,
-                        ),
-                        border: InputBorder.none,
-                        // isDense: true,
-                        contentPadding: EdgeInsets.zero,
-                      ),
-                    ),
+                    controller: homeController.journalController,
+                    hintText: "🪶 Write your journal here...",
+                    maxLines: 10,
+                    borderRadius: 16.r,
                   ),
                 ),
 

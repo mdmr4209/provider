@@ -58,7 +58,6 @@ class NavigationService {
 
   static void goToHome() => go(AppRoutes.home);
 
-  static void goToOnboarding() => go(AppRoutes.onboarding);
 
   static void goToSignUp() => push(AppRoutes.signup);
 
@@ -136,6 +135,8 @@ class NavigationService {
   static void logout() {
     go(AppRoutes.login);
   }
+
+  // ── Utility Methods ────────────────────────────────────────────────────
 
   /// Get current route
   static String? getCurrentRoute() {

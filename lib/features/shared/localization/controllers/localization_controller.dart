@@ -3,7 +3,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../languages/languages.dart';
 
-
 class LocalizationController with ChangeNotifier {
   static const String _localeKey = "app_locale";
   Locale _locale = const Locale('en', 'US');

@@ -9,7 +9,8 @@ class UserProfileModel {
   final int friendsCount;
   final int followersCount;
   final int followingCount;
-  final String relationshipStatus; // 'none', 'friend', 'request_sent', 'request_received'
+  final String
+  relationshipStatus; // 'none', 'friend', 'request_sent', 'request_received'
   final List<String> media;
   final List<CirclePostModel> posts;
 
@@ -44,10 +45,14 @@ class UserProfileModel {
           ? List<String>.from(json['media'])
           : (user['media'] != null ? List<String>.from(user['media']) : []),
       posts: json['posts'] != null
-          ? (json['posts'] as List).map((i) => CirclePostModel.fromJson(i)).toList()
+          ? (json['posts'] as List)
+                .map((i) => CirclePostModel.fromJson(i))
+                .toList()
           : (user['posts'] != null
-              ? (user['posts'] as List).map((i) => CirclePostModel.fromJson(i)).toList()
-              : []),
+                ? (user['posts'] as List)
+                      .map((i) => CirclePostModel.fromJson(i))
+                      .toList()
+                : []),
     );
   }
 

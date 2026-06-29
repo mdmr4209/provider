@@ -39,7 +39,11 @@ class GroupController extends ChangeNotifier {
   bool get groupsHasMore => _groupsHasMore;
   bool get suggestionsHasMore => _suggestionsHasMore;
 
-  Future<void> fetchGroupsData({bool isRefresh = false, bool isFetchMore = false, String tab = 'myGroups'}) async {
+  Future<void> fetchGroupsData({
+    bool isRefresh = false,
+    bool isFetchMore = false,
+    String tab = 'myGroups',
+  }) async {
     if (isRefresh) {
       _isRefreshing = true;
       _groupsPage = 1;
@@ -63,12 +67,16 @@ class GroupController extends ChangeNotifier {
 
     try {
       await Future.delayed(const Duration(milliseconds: 1000));
-      final String jsonString = await rootBundle.loadString('assets/json/group.json');
+      final String jsonString = await rootBundle.loadString(
+        'assets/json/group.json',
+      );
       final Map<String, dynamic> rawData = jsonDecode(jsonString);
 
       // Process My Groups
       if (tab == 'myGroups' || !isFetchMore) {
-        final allGroups = (rawData['groups']['results'] as List).map((x) => GroupModel.fromJson(x)).toList();
+        final allGroups = (rawData['groups']['results'] as List)
+            .map((x) => GroupModel.fromJson(x))
+            .toList();
         final startIndex = (_groupsPage - 1) * 10;
         final endIndex = startIndex + 10;
         final slice = allGroups.sublist(
@@ -90,11 +98,15 @@ class GroupController extends ChangeNotifier {
 
       // Process Suggested Groups
       if (tab == 'findGroups' || !isFetchMore) {
-        final allSuggestions = (rawData['suggestions']['results'] as List).map((x) => GroupModel.fromJson(x)).toList();
+        final allSuggestions = (rawData['suggestions']['results'] as List)
+            .map((x) => GroupModel.fromJson(x))
+            .toList();
         final startIndex = (_suggestionsPage - 1) * 10;
         final endIndex = startIndex + 10;
         final slice = allSuggestions.sublist(
-          startIndex > allSuggestions.length ? allSuggestions.length : startIndex,
+          startIndex > allSuggestions.length
+              ? allSuggestions.length
+              : startIndex,
           endIndex > allSuggestions.length ? allSuggestions.length : endIndex,
         );
 
@@ -112,9 +124,10 @@ class GroupController extends ChangeNotifier {
 
       // Process Invitations (no pagination implemented for simplicity, just reading the new structure)
       if (!isFetchMore) {
-        _invitations = (rawData['invitations']['results'] as List).map((x) => GroupInvitationModel.fromJson(x)).toList();
+        _invitations = (rawData['invitations']['results'] as List)
+            .map((x) => GroupInvitationModel.fromJson(x))
+            .toList();
       }
-
     } catch (e) {
       debugPrint("Error loading group data: $e");
     } finally {
@@ -126,7 +139,10 @@ class GroupController extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchGroupDetails(String groupId, {bool isRefresh = false}) async {
+  Future<void> fetchGroupDetails(
+    String groupId, {
+    bool isRefresh = false,
+  }) async {
     if (isRefresh) {
       _isRefreshing = true;
     } else {
@@ -139,15 +155,17 @@ class GroupController extends ChangeNotifier {
 
       final Map<String, dynamic> rawDetail = {
         "id": groupId,
-        "name": groupId == "group_002" ? "Healing Hearts" : "No Contact Warriors",
-        "icon": groupId == "group_002" 
-            ? "https://api.dicebear.com/7.x/avataaars/svg?seed=group2" 
+        "name": groupId == "group_002"
+            ? "Healing Hearts"
+            : "No Contact Warriors",
+        "icon": groupId == "group_002"
+            ? "https://api.dicebear.com/7.x/avataaars/svg?seed=group2"
             : "https://api.dicebear.com/7.x/avataaars/svg?seed=group1",
         "memberCount": groupId == "group_002" ? 856 : 1243,
-        "description": groupId == "group_002" 
-            ? "A safe space for those healing from heartbreak. We support each other through the journey." 
+        "description": groupId == "group_002"
+            ? "A safe space for those healing from heartbreak. We support each other through the journey."
             : "Day 14 of No Contact. It was really hard today today, I almost texted him when I saw his favorite song playing. But I stayed strong!",
-        "isJoined": true
+        "isJoined": true,
       };
 
       _activeGroupDetails = GroupModel.fromJson(rawDetail);
@@ -179,7 +197,7 @@ class GroupController extends ChangeNotifier {
             "reportedUserName": "Coach Pearl",
             "category": "Harassment",
             "content": "Amazon Alexa Shopping is seeking a talented...",
-            "status": "pending"
+            "status": "pending",
           },
           {
             "id": "rep_2",
@@ -187,12 +205,14 @@ class GroupController extends ChangeNotifier {
             "reportedUserName": "Sarah M.",
             "category": "Spam",
             "content": "Post contains repetitive unhelpful links.",
-            "status": "reviewed"
-          }
-        ]
+            "status": "reviewed",
+          },
+        ],
       };
 
-      _reports = (rawReports['reports'] as List).map((x) => GroupReportModel.fromJson(x)).toList();
+      _reports = (rawReports['reports'] as List)
+          .map((x) => GroupReportModel.fromJson(x))
+          .toList();
     } catch (e) {
       showErrorSnackBar(message: "Failed to load reports: $e");
     } finally {
@@ -214,9 +234,21 @@ class GroupController extends ChangeNotifier {
       await Future.delayed(const Duration(milliseconds: 500));
 
       _friendsToInvite = [
-        {"id": "f_1", "name": "Miles Esther", "avatar": "https://i.pravatar.cc/150?u=miles"},
-        {"id": "f_2", "name": "Sarah Jenkins", "avatar": "https://i.pravatar.cc/150?u=sarah_j"},
-        {"id": "f_3", "name": "Mike Tyson", "avatar": "https://i.pravatar.cc/150?u=mike"},
+        {
+          "id": "f_1",
+          "name": "Miles Esther",
+          "avatar": "https://i.pravatar.cc/150?u=miles",
+        },
+        {
+          "id": "f_2",
+          "name": "Sarah Jenkins",
+          "avatar": "https://i.pravatar.cc/150?u=sarah_j",
+        },
+        {
+          "id": "f_3",
+          "name": "Mike Tyson",
+          "avatar": "https://i.pravatar.cc/150?u=mike",
+        },
       ];
     } catch (e) {
       showErrorSnackBar(message: "Failed to load friends list: $e");
@@ -264,7 +296,11 @@ class GroupController extends ChangeNotifier {
     }
   }
 
-  Future<bool> createGroup(String name, String instruction, String logoUrl) async {
+  Future<bool> createGroup(
+    String name,
+    String instruction,
+    String logoUrl,
+  ) async {
     _isLoading = true;
     notifyListeners();
 

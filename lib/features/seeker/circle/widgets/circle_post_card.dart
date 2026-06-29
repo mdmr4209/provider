@@ -181,7 +181,9 @@ class CirclePostCard extends StatelessWidget {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(
-                              color: AppColors.primaryColor.withValues(alpha: 0.3),
+                              color: AppColors.primaryColor.withValues(
+                                alpha: 0.3,
+                              ),
                               width: 1.r,
                             ),
                           ),
@@ -195,17 +197,22 @@ class CirclePostCard extends StatelessWidget {
                             ),
                             child: CircleAvatar(
                               radius: 20.r,
-                              backgroundColor: AppColors.whiteColor.withValues(alpha: 0.1),
+                              backgroundColor: AppColors.whiteColor.withValues(
+                                alpha: 0.1,
+                              ),
                               backgroundImage: post.userAvatar.isNotEmpty
                                   ? NetworkImage(post.userAvatar)
                                   : null,
                               child: post.userAvatar.isEmpty
                                   ? Text(
                                       post.userName[0],
-                                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                        fontSize: 14.sp,
-                                        color: AppColors.whiteColor,
-                                      ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                            fontSize: 14.sp,
+                                            color: AppColors.whiteColor,
+                                          ),
                                     )
                                   : null,
                             ),
@@ -236,7 +243,9 @@ class CirclePostCard extends StatelessWidget {
                                 Text(
                                   post.timeAgo,
                                   style: theme.textTheme.bodySmall?.copyWith(
-                                    color: AppColors.whiteColor.withValues(alpha: 0.6),
+                                    color: AppColors.whiteColor.withValues(
+                                      alpha: 0.6,
+                                    ),
                                     fontSize: 12.sp,
                                   ),
                                 ),
@@ -255,7 +264,10 @@ class CirclePostCard extends StatelessWidget {
                           },
                           child: Padding(
                             padding: EdgeInsets.all(4.r),
-                            child: SvgPicture.asset(AppAssets.menu, width: 16.r),
+                            child: SvgPicture.asset(
+                              AppAssets.menu,
+                              width: 16.r,
+                            ),
                           ),
                         ),
                       ],
@@ -273,10 +285,14 @@ class CirclePostCard extends StatelessWidget {
                     ),
 
                     // Image/Video Grid
-                    if (post.images != null &&
-                        post.images!.isNotEmpty) ...[
+                    if (post.images != null && post.images!.isNotEmpty) ...[
                       SizedBox(height: 12.h),
-                      _buildImageGrid(context, post.images!, theme, designSystem),
+                      _buildImageGrid(
+                        context,
+                        post.images!,
+                        theme,
+                        designSystem,
+                      ),
                     ],
 
                     SizedBox(height: 16.h),
@@ -352,13 +368,17 @@ class CirclePostCard extends StatelessWidget {
                             Icon(
                               Icons.keyboard_arrow_down,
                               size: 18.sp,
-                              color: AppColors.whiteColor.withValues(alpha: 0.6),
+                              color: AppColors.whiteColor.withValues(
+                                alpha: 0.6,
+                              ),
                             ),
                             SizedBox(width: 4.w),
                             Text(
                               "Comments",
                               style: theme.textTheme.bodySmall?.copyWith(
-                                color: AppColors.whiteColor.withValues(alpha: 0.6),
+                                color: AppColors.whiteColor.withValues(
+                                  alpha: 0.6,
+                                ),
                               ),
                             ),
                           ],
@@ -383,7 +403,9 @@ class CirclePostCard extends StatelessWidget {
                               hintText: "Start typing...",
                               fontSize: 11,
                               shadow: true,
-                              contentPadding: EdgeInsets.symmetric(horizontal: 12.w),
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 12.w,
+                              ),
                             ),
                           ),
                           SizedBox(width: 12.w),
@@ -591,7 +613,9 @@ class _ActionButton extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.whiteColor.withValues(alpha: 0.05),
               shape: BoxShape.circle,
-              border: Border.all(color: AppColors.whiteColor.withValues(alpha: 0.1)),
+              border: Border.all(
+                color: AppColors.whiteColor.withValues(alpha: 0.1),
+              ),
             ),
             child: SvgPicture.asset(icon, width: 14.r),
           ),

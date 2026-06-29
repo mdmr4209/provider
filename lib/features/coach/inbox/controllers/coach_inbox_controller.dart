@@ -55,15 +55,27 @@ class CoachInboxController extends ChangeNotifier {
 
     try {
       await Future.delayed(const Duration(milliseconds: 1000));
-      final String jsonString = await rootBundle.loadString('assets/json/coach_inbox.json');
+      final String jsonString = await rootBundle.loadString(
+        'assets/json/coach_inbox.json',
+      );
       final Map<String, dynamic> data = jsonDecode(jsonString);
 
       _credits = data['credits'] ?? 15;
-      _stories = (data['stories'] as List).map((x) => StoryModel.fromJson(x)).toList();
-      _messages = (data['messages'] as List).map((x) => ChatSummaryModel.fromJson(x)).toList();
-      _clients = (data['clients'] as List).map((x) => CoachClientModel.fromJson(x)).toList();
-      _missedCalls = (data['missedCalls'] as List).map((x) => CoachMissedCallModel.fromJson(x)).toList();
-      _callbacks = (data['callBacks'] as List).map((x) => CoachCallbackModel.fromJson(x)).toList();
+      _stories = (data['stories'] as List)
+          .map((x) => StoryModel.fromJson(x))
+          .toList();
+      _messages = (data['messages'] as List)
+          .map((x) => ChatSummaryModel.fromJson(x))
+          .toList();
+      _clients = (data['clients'] as List)
+          .map((x) => CoachClientModel.fromJson(x))
+          .toList();
+      _missedCalls = (data['missedCalls'] as List)
+          .map((x) => CoachMissedCallModel.fromJson(x))
+          .toList();
+      _callbacks = (data['callBacks'] as List)
+          .map((x) => CoachCallbackModel.fromJson(x))
+          .toList();
     } catch (e) {
       showErrorSnackBar(message: "Failed to load coach inbox: $e");
     } finally {
