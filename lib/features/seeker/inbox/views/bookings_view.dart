@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_loader.dart';
 import '../controllers/inbox_controller.dart';
@@ -243,7 +244,9 @@ class _BookingCard extends StatelessWidget {
                       ),
                       SizedBox(width: 8.w),
                       Text(
-                        booking.time,
+                        booking.originalTime != null
+                            ? "${booking.originalTime} -> ${booking.time}"
+                            : booking.time,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppColors.whiteColor.withAlpha(128),
                           fontSize: 12.sp,
@@ -264,7 +267,7 @@ class _BookingCard extends StatelessWidget {
                     if (value == 'cancel') {
                       _showCancelDialog(context);
                     } else if (value == 'reschedule') {
-                      // Handle reschedule
+                      _showRescheduleDialog(context);
                     }
                   },
                   itemBuilder: (context) => [
@@ -439,6 +442,60 @@ class _BookingCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _showRescheduleDialog(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(const Duration(days: 365)),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.dark(
+              primary: AppColors.buttonColor,
+              onPrimary: AppColors.whiteColor,
+              surface: AppColors.popupBackgroundColor,
+              onSurface: AppColors.whiteColor,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (pickedDate != null) {
+      if (!context.mounted) return;
+      final TimeOfDay? pickedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+        builder: (context, child) {
+          return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: const ColorScheme.dark(
+                primary: AppColors.buttonColor,
+                onPrimary: AppColors.whiteColor,
+                surface: AppColors.popupBackgroundColor,
+                onSurface: AppColors.whiteColor,
+              ),
+            ),
+            child: child!,
+          );
+        },
+      );
+
+      if (pickedTime != null) {
+        if (!context.mounted) return;
+        final formattedDate = DateFormat('dd MMM, yyyy').format(pickedDate);
+        final formattedTime = pickedTime.format(context);
+        await controller.rescheduleBooking(
+          booking.id,
+          formattedDate,
+          formattedTime,
+        );
+      }
+    }
   }
 
   PopupMenuItem<String> _buildPopupMenuItem(

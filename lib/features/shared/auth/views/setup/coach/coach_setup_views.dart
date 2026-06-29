@@ -1829,39 +1829,8 @@ class CoachSetupCompleteView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Spacer(),
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    width: 160.r,
-                    height: 160.r,
-                    decoration: BoxDecoration(
-                      color: AppColors.iconColor.withAlpha(30),
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                  Container(
-                    width: 130.r,
-                    height: 130.r,
-                    decoration: const BoxDecoration(
-                      color: AppColors.iconColor,
-                      shape: BoxShape.circle,
-                    ),
-                    alignment: Alignment.center,
-                    child: Image.asset(AppAssets.logo, width: 80.r),
-                  ),
-                  Positioned.fill(
-                    child: Center(
-                      child: Text(
-                        "✨ 🎉 🥳",
-                        style: Theme.of(
-                          context,
-                        ).textTheme.bodyMedium?.copyWith(fontSize: 100.sp),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              // Confetti / Logo Section
+              Image.asset(AppAssets.complete, height: 130.h, width: 215.w),
               SizedBox(height: 40.h),
               Text(
                 "Your Profile is Complete",

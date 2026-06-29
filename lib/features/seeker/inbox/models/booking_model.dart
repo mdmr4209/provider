@@ -5,6 +5,8 @@ class BookingModel {
   final String date;
   final String time;
   final String amount;
+  final String? originalDate;
+  final String? originalTime;
 
   BookingModel({
     required this.id,
@@ -13,6 +15,8 @@ class BookingModel {
     required this.date,
     required this.time,
     required this.amount,
+    this.originalDate,
+    this.originalTime,
   });
 
   factory BookingModel.fromJson(Map<String, dynamic> json) {
@@ -23,6 +27,8 @@ class BookingModel {
       date: json['date'] ?? '',
       time: json['time'] ?? '',
       amount: json['amount'] ?? '',
+      originalDate: json['originalDate'],
+      originalTime: json['originalTime'],
     );
   }
 
@@ -34,6 +40,8 @@ class BookingModel {
       'date': date,
       'time': time,
       'amount': amount,
+      'originalDate': originalDate,
+      'originalTime': originalTime,
     };
   }
 }

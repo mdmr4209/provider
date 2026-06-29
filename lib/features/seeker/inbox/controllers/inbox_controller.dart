@@ -146,6 +146,37 @@ class InboxController extends ChangeNotifier {
     }
   }
 
+  Future<bool> rescheduleBooking(String bookingId, String newDate, String newTime) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      await Future.delayed(const Duration(milliseconds: 600));
+      final index = _currentBookings.indexWhere((b) => b.id == bookingId);
+      if (index != -1) {
+        final booking = _currentBookings[index];
+        _currentBookings[index] = BookingModel(
+          id: booking.id,
+          sessionName: booking.sessionName,
+          coachName: booking.coachName,
+          date: newDate,
+          time: newTime,
+          amount: booking.amount,
+          originalDate: booking.originalDate ?? booking.date,
+          originalTime: booking.originalTime ?? booking.time,
+        );
+      }
+      showSuccessSnackBar(message: "Booking rescheduled successfully.");
+      return true;
+    } catch (e) {
+      showErrorSnackBar(message: "Failed to reschedule booking: $e");
+      return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
   void sendMessage(String text, String chatId) {
     if (text.trim().isEmpty) return;
 

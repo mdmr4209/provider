@@ -9,21 +9,70 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/custom_loader.dart';
 import '../controllers/coach_home_controller.dart';
 
-class SessionListView extends StatelessWidget {
+class SessionListView extends StatefulWidget {
   const SessionListView({super.key});
+
+  @override
+  State<SessionListView> createState() => _SessionListViewState();
+}
+
+class _SessionListViewState extends State<SessionListView> {
+  String _selectedFilter = 'All Sessions';
+  final List<String> _filters = ['All Sessions', 'Upcoming', 'Requested'];
+
+  // Mock data for sessions
+  late final List<Map<String, dynamic>> _mockSessions = [
+    {
+      "title": "Session 1",
+      "date": "Mon, Mar 27",
+      "time": "01:00 PM - 01:30 PM (30Min)",
+      "name": "Miles Esther",
+      "rate": "20\$",
+      "status": "upcoming",
+    },
+    {
+      "title": "Session 2",
+      "date": "Tue, Mar 28",
+      "time": "10:00 AM - 11:00 AM (60Min)",
+      "name": "John Doe",
+      "rate": "40\$",
+      "status": "requested",
+    },
+    {
+      "title": "Session 3",
+      "date": "Wed, Mar 29",
+      "time": "02:00 PM - 02:45 PM (45Min)",
+      "name": "Jane Smith",
+      "rate": "30\$",
+      "status": "upcoming",
+    },
+    {
+      "title": "Session 4",
+      "date": "Thu, Mar 30",
+      "time": "09:00 AM - 09:30 AM (30Min)",
+      "name": "Mike Johnson",
+      "rate": "20\$",
+      "status": "requested",
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final coachHome = context.watch<CoachHomeController>();
 
+    final filteredSessions = _mockSessions.where((session) {
+      if (_selectedFilter == 'All Sessions') return true;
+      if (_selectedFilter == 'Upcoming' && session['status'] == 'upcoming') return true;
+      if (_selectedFilter == 'Requested' && session['status'] == 'requested') return true;
+      return false;
+    }).toList();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.defaultColor,
-        // These two lines prevent the color change / tinting when scrolling
         scrolledUnderElevation: 0,
         surfaceTintColor: AppColors.defaultColor,
-
         elevation: 0,
         centerTitle: true,
         shape: RoundedRectangleBorder(
@@ -53,6 +102,7 @@ class SessionListView extends StatelessWidget {
             return _buildSkeletonLoader();
           }
           return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 20.h),
               // ── Search Bar ──────────────────────────────────────────────
@@ -75,7 +125,48 @@ class SessionListView extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 13.h),
+              SizedBox(height: 20.h),
+
+              // ── Filters ──────────────────────────────────────────────────
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                child: Row(
+                  children: _filters.map((filter) {
+                    final isSelected = _selectedFilter == filter;
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _selectedFilter = filter;
+                        });
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(right: 8.w),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16.w,
+                          vertical: 8.h,
+                        ),
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? AppColors.buttonColor
+                              : AppColors.coachColorFF263424,
+                          borderRadius: BorderRadius.circular(20.r),
+                        ),
+                        child: Text(
+                          filter,
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: isSelected
+                                ? AppColors.whiteColor
+                                : AppColors.white70Color,
+                            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+              SizedBox(height: 16.h),
 
               // ── Session Filter Header ─────────────────────────────────────
               Padding(
@@ -84,7 +175,7 @@ class SessionListView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "All Sessions (4)",
+                      "$_selectedFilter (${filteredSessions.length})",
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: AppColors.white70Color,
                       ),
@@ -113,21 +204,32 @@ class SessionListView extends StatelessWidget {
 
               // ── Scrollable Session List ───────────────────────────────────
               Expanded(
-                child: ListView.builder(
-                  padding: EdgeInsets.symmetric(horizontal: 20.w),
-                  itemCount: 6,
-                  itemBuilder: (context, index) {
-                    return _buildSessionCard(
-                      context,
-                      coachHome,
-                      "Session ${index + 1}",
-                      "Mon, Mar 27",
-                      "01:00 PM - 01:03 PM (30Min)",
-                      "Miles Esther",
-                      "20\$",
-                    );
-                  },
-                ),
+                child: filteredSessions.isEmpty
+                    ? Center(
+                        child: Text(
+                          "No $_selectedFilter available.",
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: AppColors.white70Color,
+                          ),
+                        ),
+                      )
+                    : ListView.builder(
+                        padding: EdgeInsets.symmetric(horizontal: 20.w),
+                        itemCount: filteredSessions.length,
+                        itemBuilder: (context, index) {
+                          final session = filteredSessions[index];
+                          return _buildSessionCard(
+                            context,
+                            coachHome,
+                            session['title']!,
+                            session['date']!,
+                            session['time']!,
+                            session['name']!,
+                            session['rate']!,
+                            session['status']!,
+                          );
+                        },
+                      ),
               ),
             ],
           );
@@ -144,6 +246,7 @@ class SessionListView extends StatelessWidget {
     String time,
     String name,
     String rate,
+    String status,
   ) {
     return Container(
       margin: EdgeInsets.only(bottom: 12.h),
@@ -164,39 +267,80 @@ class SessionListView extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              GestureDetector(
-                onTap: () => controller.cancelSession(context, "1"),
-                child: Container(
-                  width: 68.w,
-                  height: 24.h,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 4.91.w,
-                    vertical: 2.45.h,
-                  ),
-                  decoration: ShapeDecoration(
-                    color: AppColors.coachColorFF263424,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.h),
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.cancel_outlined,
-                        color: AppColors.coachColorFFE57373,
-                        size: 16,
-                      ),
-                      SizedBox(width: 4.w),
-                      Text(
-                        "Cancel",
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.coachColorFFE57373,
-                          fontSize: 12,
+              Row(
+                children: [
+                  if (status == 'requested') ...[
+                    GestureDetector(
+                      onTap: () {
+                        // Handle accept logic
+                      },
+                      child: Container(
+                        height: 24.h,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 8.w,
+                          vertical: 2.h,
+                        ),
+                        decoration: ShapeDecoration(
+                          color: AppColors.coachColorFF263424,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.r),
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.check_circle_outline,
+                              color: AppColors.greenColor,
+                              size: 16,
+                            ),
+                            SizedBox(width: 4.w),
+                            Text(
+                              "Accept",
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                color: AppColors.greenColor,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
+                    ),
+                    SizedBox(width: 8.w),
+                  ],
+                  GestureDetector(
+                    onTap: () => controller.cancelSession(context, "1"),
+                    child: Container(
+                      height: 24.h,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 8.w,
+                        vertical: 2.h,
+                      ),
+                      decoration: ShapeDecoration(
+                        color: AppColors.coachColorFF263424,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.r),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.cancel_outlined,
+                            color: AppColors.coachColorFFE57373,
+                            size: 16,
+                          ),
+                          SizedBox(width: 4.w),
+                          Text(
+                            "Cancel",
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: AppColors.coachColorFFE57373,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
             ],
           ),
@@ -279,6 +423,7 @@ class SessionListView extends StatelessWidget {
 
   Widget _buildSkeletonLoader() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: 20.h),
         // Search Bar Skeleton
